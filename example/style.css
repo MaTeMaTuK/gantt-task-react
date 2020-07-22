@@ -1,0 +1,67 @@
+/*Styles for Example Table*/
+.Wrapper {
+  display: flex;
+  justify-content: space-around;
+  background: #ffff;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.GanttTable {
+  display: table;
+}
+
+.GanttTable-header {
+  display: table-row;
+  list-style: none;
+}
+
+.GanttTable-headerItem {
+  display: table-cell;
+  padding-top: 24px;
+  vertical-align: text-bottom;
+
+  border-left: #e6e4e4 1px solid;
+  border-top: #e6e4e4 1px solid;
+  border-bottom: #e6e4e4 1px solid;
+}
+
+.GanttTable-row {
+  display: table-row;
+  text-overflow: ellipsis;
+}
+
+.GanttTable-row:nth-of-type(odd) {
+  background-color: #f5f5f5;
+}
+
+.GanttTable-cell {
+  display: table-cell;
+  vertical-align: middle;
+  border-left: #e6e4e4 1px solid;
+}
+
+.GanttTable-icon {
+  padding-right: 2px;
+}
+
+.ViewContainer {
+  list-style: none;
+  -ms-box-orient: horizontal;
+  display: flex;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+}
+
+.Button {
+  background-color: #e7e7e7;
+  color: black;
+  border: none;
+  padding: 7px 16px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
