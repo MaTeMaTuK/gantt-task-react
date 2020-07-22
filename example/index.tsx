@@ -24,7 +24,7 @@ const App = () => {
         12,
         28
       ),
-      name: 'Redesign website',
+      name: 'Idea',
       id: 'Task 0',
       progress: 45,
       isDisabled: true,
@@ -32,7 +32,7 @@ const App = () => {
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4, 0, 0),
-      name: 'Write new content',
+      name: 'Research',
       id: 'Task 1',
       progress: 25,
       dependencies: ['Task 0'],
@@ -40,7 +40,7 @@ const App = () => {
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
-      name: 'Apply new styles',
+      name: 'Discussion with team',
       id: 'Task 2',
       progress: 10,
       dependencies: ['Task 1'],
@@ -48,15 +48,15 @@ const App = () => {
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 9, 0, 0),
-      name: 'Review',
-      id: 'Task currentDate.getMonth()',
+      name: 'Developing',
+      id: 'Task 3',
       progress: 2,
       dependencies: ['Task 2'],
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
-      name: 'Deploy',
+      name: 'Review',
       id: 'Task 4',
       progress: 70,
       dependencies: ['Task 2'],
@@ -64,7 +64,7 @@ const App = () => {
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 26),
-      name: 'Go Live!',
+      name: 'Release',
       id: 'Task 6',
       progress: currentDate.getMonth(),
       dependencies: ['Task 4'],
