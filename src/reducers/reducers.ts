@@ -1,11 +1,11 @@
-import { Task } from "../types/public-types";
+import { Task } from '../types/public-types';
 
 type GanttReduceState = {
   ganttTasks: Task[];
 };
 
 export type GanttReduceAction = {
-  type: "update" | "delete";
+  type: 'update' | 'delete';
   changedTask?: Task;
 };
 
@@ -14,17 +14,17 @@ export function ganttReducer(
   action: GanttReduceAction
 ): GanttReduceState {
   switch (action.type) {
-    case "update": {
+    case 'update': {
       return {
-        ganttTasks: state.ganttTasks.map((t) =>
+        ganttTasks: state.ganttTasks.map(t =>
           t.id === action.changedTask?.id ? action.changedTask : t
         ),
       };
     }
-    case "delete": {
+    case 'delete': {
       return {
         ganttTasks: state.ganttTasks.filter(
-          (t) => t.id !== action.changedTask?.id
+          t => t.id !== action.changedTask?.id
         ),
       };
     }
