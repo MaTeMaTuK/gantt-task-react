@@ -21,6 +21,8 @@ jobs:
           scope: '@MaTeMaTuK'
 
       - name: NPM Publish
-        run: npm publish
+        run: |
+          npm ci
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
