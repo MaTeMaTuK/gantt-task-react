@@ -20,10 +20,12 @@ jobs:
           registry-url: https://npm.pkg.github.com
           scope: '@MaTeMaTuK'
 
+      - name: NPM Login
+        run: npm login --registry=https://npm.pkg.github.com/
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
       - name: NPM Publish
-        run: |
-            npm login --registry=https://npm.pkg.github.com/
-            npm publish
-          fi
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
