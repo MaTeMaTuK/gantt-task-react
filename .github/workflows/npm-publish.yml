@@ -21,6 +21,5 @@ jobs:
 
       - name: NPM Publish
         run: npm publish --access public
-        working-directory: gantt-task-react
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
