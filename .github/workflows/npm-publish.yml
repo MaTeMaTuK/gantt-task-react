@@ -27,6 +27,7 @@ jobs:
           if [ "$LATEST" != "$CURRENT" ]
           then
             npm ci
+            npm login --registry=https://npm.pkg.github.com/
             npm publish
           fi
         env:
