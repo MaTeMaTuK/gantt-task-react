@@ -3,6 +3,7 @@
   "license": "MIT",
   "name": "gantt-task-react",
   "author": "Maksym Vikarii <maksym.vikarii@gmail.com>",
+  "homepage": "https://github.com/MaTeMaTuK/gantt-task-react",
   "module": "dist/gantt-task-react.esm.js",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -48,5 +49,10 @@
     "autoprefixer": "^9.8.5",
     "cssnano": "^4.1.10",
     "rollup-plugin-postcss": "^3.1.2"
-  }
+  },
+  "keywords": [
+    "gantt",
+    "typescript",
+    "react"
+  ]
 }
