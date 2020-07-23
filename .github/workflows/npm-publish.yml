@@ -1,4 +1,5 @@
-name: npm publish
+name: publish
+
 on:
   release:
     types: [published, created, edited]
