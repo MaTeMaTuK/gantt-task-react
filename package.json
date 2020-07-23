@@ -1,6 +1,12 @@
 {
   "version": "0.1.0",
   "license": "MIT",
+  "name": "gantt-task-react",
+  "author": "Maksym Vikarii <maksym.vikarii@gmail.com>",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "module": "dist/gantt-task-react.esm.js",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -31,9 +37,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "gantt-task-react",
-  "author": "Maksym Vikarii maksym.vikarii@gmail.com",
-  "module": "dist/gantt-task-react.esm.js",
   "devDependencies": {
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
