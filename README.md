@@ -35,6 +35,21 @@ You may handle actions
 
 ## Gantt Configuration
 
-- EventOption
+- **EventOption**
+
+| Parameter Name   | Type                              | Required | Description                                                                           |
+| ---------------- | :-------------------------------- | :------- | :------------------------------------------------------------------------------------ |
+| onDoubleClick    | (task: Task) => any               | No       | Specifies the function to be executed on the bar`s onDoubleClick event.               |
+| onTaskDelete     | (task: Task) => void/Promise<any> | No       | Specifies the function to be executed on the bar`s on Delete button press event.      |
+| onDateChange     | (task: Task) => void/Promise<any> | No       | Specifies the function to be executed when drag bar`s event on timeline has finished. |
+| onProgressChange | (task: Task) => void/Promise<any> | No       | Specifies the function to be executed when drag bar`s progress event has finished     |
+| timeStep         | number                            | No       | A time step value for onDateChange. Specify in milliseconds                           |
+
+- **DisplayOption**
+
+  | Parameter Name | Type   | Required | Description                                                                                    |
+  | -------------- | :----- | :------- | :--------------------------------------------------------------------------------------------- |
+  | viewMode       | enum   | No       | Specifies the time scale. Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month |
+  | locale         | string | No       | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                       |
 
 Work in progress
