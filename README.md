@@ -47,9 +47,9 @@ You may handle actions
 
 - **DisplayOption**
 
-  | Parameter Name | Type   | Required | Description                                                                                    |
-  | -------------- | :----- | :------- | :--------------------------------------------------------------------------------------------- |
-  | viewMode       | enum   | No       | Specifies the time scale. Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month |
-  | locale         | string | No       | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                       |
+| Parameter Name | Type   | Required | Description                                                                                    |
+| -------------- | :----- | :------- | :--------------------------------------------------------------------------------------------- |
+| viewMode       | enum   | No       | Specifies the time scale. Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month |
+| locale         | string | No       | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                       |
 
 Work in progress
