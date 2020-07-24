@@ -35,7 +35,7 @@ You may handle actions
 
 ## Gantt Configuration
 
-- **GanttProps**
+### GanttProps
 
 | Parameter Name                  | Type      | Required | Description                                                                           |
 | ------------------------------- | :-------- | :------- | :------------------------------------------------------------------------------------ |
@@ -44,7 +44,7 @@ You may handle actions
 | [DisplayOption](#DisplayOption) | interface | No       | Specifies the function to be executed when drag bar`s event on timeline has finished. |
 | StylingOption                   | interface | No       | Specifies the function to be executed when drag bar`s progress event has finished     |
 
-- **EventOption**
+### EventOption
 
 | Parameter Name   | Type                              | Required | Description                                                                           |
 | ---------------- | :-------------------------------- | :------- | :------------------------------------------------------------------------------------ |
@@ -54,7 +54,7 @@ You may handle actions
 | onProgressChange | (task: Task) => void/Promise<any> | No       | Specifies the function to be executed when drag bar`s progress event has finished     |
 | timeStep         | number                            | No       | A time step value for onDateChange. Specify in milliseconds                           |
 
-- **DisplayOption**
+### DisplayOption
 
 | Parameter Name | Type   | Required | Description                                                                                    |
 | -------------- | :----- | :------- | :--------------------------------------------------------------------------------------------- |
