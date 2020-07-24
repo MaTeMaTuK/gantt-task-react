@@ -35,6 +35,15 @@ You may handle actions
 
 ## Gantt Configuration
 
+- **GanttProps**
+
+| Parameter Name                  | Type      | Required | Description                                                                           |
+| ------------------------------- | :-------- | :------- | :------------------------------------------------------------------------------------ |
+| tasks                           | Task      | Yes      | Tasks array.                                                                          |
+| [EventOption](#EventOption)     | interface | No       | Specifies the function to be executed on the bar`s on Delete button press event.      |
+| [DisplayOption](#DisplayOption) | interface | No       | Specifies the function to be executed when drag bar`s event on timeline has finished. |
+| StylingOption                   | interface | No       | Specifies the function to be executed when drag bar`s progress event has finished     |
+
 - **EventOption**
 
 | Parameter Name   | Type                              | Required | Description                                                                           |
