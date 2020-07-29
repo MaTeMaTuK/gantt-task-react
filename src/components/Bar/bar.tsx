@@ -115,7 +115,6 @@ export const Bar: React.FC<BarProps> = ({
           <BarProgressHandle
             progressPoint={progressPoint}
             onMouseDown={e => {
-              console.log('progress');
               handleMouseEvents(e, 'progress', task);
             }}
           />

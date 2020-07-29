@@ -10,7 +10,11 @@ export const convertToBarTasks = (
   taskHeight: number,
   headerHeight: number,
   barCornerRadius: number,
-  handleWidth: number
+  handleWidth: number,
+  barProgressColor: string,
+  barProgressSelectedColor: string,
+  barBackgroundColor: string,
+  barBackgroundSelectedColor: string
 ) => {
   let barTasks = tasks.map((t, i) => {
     return convertToBarTask(
@@ -23,7 +27,11 @@ export const convertToBarTasks = (
       taskHeight,
       headerHeight,
       barCornerRadius,
-      handleWidth
+      handleWidth,
+      barProgressColor,
+      barProgressSelectedColor,
+      barBackgroundColor,
+      barBackgroundSelectedColor
     );
   });
 
@@ -51,11 +59,22 @@ export const convertToBarTask = (
   taskHeight: number,
   headerHeight: number,
   barCornerRadius: number,
-  handleWidth: number
+  handleWidth: number,
+  barProgressColor: string,
+  barProgressSelectedColor: string,
+  barBackgroundColor: string,
+  barBackgroundSelectedColor: string
 ): BarTask => {
   const x1 = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
   const x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
   const y = taskYCoordinate(index, rowHeight, taskHeight, headerHeight);
+  const styles = {
+    backgroundColor: barBackgroundColor,
+    backgroundSelectedColor: barBackgroundSelectedColor,
+    progressColor: barProgressColor,
+    progressSelectedColor: barProgressSelectedColor,
+    ...task.styles,
+  };
   return {
     ...task,
     x1,
@@ -66,6 +85,7 @@ export const convertToBarTask = (
     handleWidth,
     height: taskHeight,
     barChildren: [],
+    styles,
   };
 };
 

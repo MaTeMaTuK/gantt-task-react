@@ -57,8 +57,13 @@ export interface StylingOption {
    * From 0 to 100
    */
   barFill?: number;
+  barProgressColor?: string;
+  barProgressSelectedColor?: string;
+  barBackgroundColor?: string;
+  barBackgroundSelectedColor?: string;
   arrowColor?: string;
   arrowIndent?: number;
+  todayColor?: string;
   getTooltipContent?: (
     task: Task,
     fontSize: string,

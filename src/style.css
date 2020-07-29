@@ -87,11 +87,6 @@
   stroke: #e6e4e4;
 }
 
-.GanttGrid-todayHighlight {
-  fill: #fcf8e3;
-  opacity: 0.5;
-}
-
 .TooltipDefaultContainer {
   background: #fff;
   padding: 12px;

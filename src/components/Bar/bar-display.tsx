@@ -12,11 +12,11 @@ type BarDisplayProps = {
   text: string;
   hasChild: boolean;
   arrowIndent: number;
-  styles?: {
-    backgroundColor?: string;
-    backgroundSelectedColor?: string;
-    progressColor?: string;
-    progressSelectedColor?: string;
+  styles: {
+    backgroundColor: string;
+    backgroundSelectedColor: string;
+    progressColor: string;
+    progressSelectedColor: string;
   };
   onMouseDown: (event: React.MouseEvent<SVGPolygonElement, MouseEvent>) => void;
 };
@@ -43,19 +43,17 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   }, [textRef, width]);
 
   const getProcessColor = () => {
-    if (isSelected) {
-      return styles?.progressSelectedColor || '#8282f5';
-    } else {
-      return styles?.progressColor || '#a3a3ff';
-    }
+    return isSelected ? styles.progressSelectedColor : styles.progressColor;
   };
 
   const getBarColor = () => {
-    if (isSelected) {
-      return styles?.backgroundSelectedColor || '#aeb8c2';
-    } else {
-      return styles?.backgroundColor || '#b8c2cc';
-    }
+    return isSelected ? styles.backgroundSelectedColor : styles.backgroundColor;
+  };
+
+  const getX = () => {
+    return isTextInside
+      ? x + width * 0.5
+      : x + width + arrowIndent * +hasChild + arrowIndent * 0.2;
   };
 
   return (
@@ -80,11 +78,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         fill={getProcessColor()}
       />
       <text
-        x={
-          isTextInside
-            ? x + width * 0.5
-            : x + width + arrowIndent * +hasChild + arrowIndent * 0.2
-        }
+        x={getX()}
         y={y + height * 0.5}
         className={`GanttBar-label ${
           isTextInside ? '' : 'GanttBar-label-outside'

@@ -26,6 +26,10 @@ export type GanttContentProps = {
   barCornerRadius: number;
   columnWidth: number;
   barFill: number;
+  barProgressColor: string;
+  barProgressSelectedColor: string;
+  barBackgroundColor: string;
+  barBackgroundSelectedColor: string;
   headerHeight: number;
   handleWidth: number;
   svg: React.MutableRefObject<SVGSVGElement | null>;
@@ -56,6 +60,10 @@ export const GanttContent: React.FC<GanttContentProps> = ({
   columnWidth,
   dates,
   barFill,
+  barProgressColor,
+  barProgressSelectedColor,
+  barBackgroundColor,
+  barBackgroundSelectedColor,
   headerHeight,
   handleWidth,
   arrowColor,
@@ -107,7 +115,11 @@ export const GanttContent: React.FC<GanttContentProps> = ({
         taskHeight,
         headerHeight,
         barCornerRadius,
-        handleWidth
+        handleWidth,
+        barProgressColor,
+        barProgressSelectedColor,
+        barBackgroundColor,
+        barBackgroundSelectedColor
       )
     );
   }, [

@@ -10,6 +10,7 @@ export type GridBodyProps = {
   rowHeight: number;
   headerHeight: number;
   columnWidth: number;
+  todayColor: string;
 };
 export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
@@ -18,6 +19,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   headerHeight,
   gridWidth,
   columnWidth,
+  todayColor,
 }) => {
   let y = headerHeight;
   let gridRows: ReactChild[] = [];
@@ -82,7 +84,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           y={0}
           width={columnWidth}
           height={y}
-          className="GanttGrid-todayHighlight"
+          fill={todayColor}
         ></rect>
       );
     }
