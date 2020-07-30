@@ -4,7 +4,7 @@ import { BarProgressHandle } from './bar-progress-handle';
 import { BarDateHandle } from './bar-date-handle';
 import { BarDisplay } from './bar-display';
 import { BarTask } from '../../types/bar-task';
-import { BarEvent } from '../Gantt/gantt-content';
+import { BarAction } from '../Gantt/gantt-content';
 import {
   progressWithByParams,
   getProgressPoint,
@@ -22,7 +22,7 @@ export type BarProps = {
       | React.MouseEvent<SVGPolygonElement, MouseEvent>
       | React.MouseEvent<SVGGElement, MouseEvent>
       | React.MouseEvent<SVGRectElement, MouseEvent>,
-    eventType: BarEvent,
+    eventType: BarAction,
     task: BarTask
   ) => void;
   handleButtonSVGEvents: (
