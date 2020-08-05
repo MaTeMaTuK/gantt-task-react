@@ -357,7 +357,6 @@ export const GanttContent: React.FC<GanttContentProps> = ({
         event.stopPropagation();
         break;
       case "mouseleave":
-        console.log("mouseleave");
         if (!barEvent.action)
           setBarEvent({ ...barEvent, selectedTask: null, action: "" });
         break;
