@@ -13,6 +13,7 @@ npm install gantt-task-react
 ## How to use it
 
 ```javascript
+import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from 'gantt-task-react';
 let tasks: Task[] = [
     {
       start: new Date(2020, 1, 1),

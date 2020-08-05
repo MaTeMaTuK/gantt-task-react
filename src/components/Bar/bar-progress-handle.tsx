@@ -1,5 +1,5 @@
-import React from 'react';
-import '../../style.css';
+import React from "react";
+import styles from "./bar.module.css";
 
 type BarProgressHandleProps = {
   progressPoint: string;
@@ -11,9 +11,9 @@ export const BarProgressHandle: React.FC<BarProgressHandleProps> = ({
 }) => {
   return (
     <polygon
-      className="GanttBar-handle"
+      className={styles.barHandle}
       points={progressPoint}
       onMouseDown={onMouseDown}
-    ></polygon>
+    />
   );
 };

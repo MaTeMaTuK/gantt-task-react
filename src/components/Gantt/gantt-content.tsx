@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Task, EventOption } from '../../types/public-types';
-import { Bar } from '../Bar/bar';
-import { BarTask } from '../../types/bar-task';
-import { Arrow } from '../Other/arrow';
+import React, { useState, useEffect } from "react";
+import { Task, EventOption } from "../../types/public-types";
+import { Bar } from "../Bar/bar";
+import { BarTask } from "../../types/bar-task";
+import { Arrow } from "../Other/arrow";
 import {
   convertToBarTasks,
   progressByX,
@@ -10,8 +10,9 @@ import {
   endByX,
   moveByX,
   dateByX,
-} from '../../helpers/bar-helper';
-import { Tooltip } from '../Other/tooltip';
+} from "../../helpers/bar-helper";
+import { Tooltip } from "../Other/tooltip";
+
 export interface GanttTask extends Task {
   x1: number;
   x2: number;
@@ -46,13 +47,13 @@ export type GanttContentProps = {
 } & EventOption;
 
 export type BarAction =
-  | 'progress'
-  | 'end'
-  | 'start'
-  | 'move'
-  | 'mouseenter'
-  | 'mouseleave'
-  | '';
+  | "progress"
+  | "end"
+  | "start"
+  | "move"
+  | "mouseenter"
+  | "mouseleave"
+  | "";
 
 type BarEvent = {
   action: BarAction;
@@ -84,7 +85,7 @@ export const GanttContent: React.FC<GanttContentProps> = ({
   getTooltipContent,
 }) => {
   const [barEvent, setBarEvent] = useState<BarEvent>({
-    action: '',
+    action: "",
     selectedTask: null,
   });
   const [isSVGListen, setIsSVGListen] = useState(false);
@@ -146,19 +147,20 @@ export const GanttContent: React.FC<GanttContentProps> = ({
      * Method handles event in real time(mousemove) and on finish(mouseup)
      */
     const handleMouseSVGChangeEventsSubscribe = async (event: MouseEvent) => {
-      if (!barEvent.selectedTask || !barEvent.action) return;
+      if (!barEvent.selectedTask || !barEvent.action || !svg || !svg.current)
+        return;
 
       const selectedTask = barEvent.selectedTask;
       const changedTask = { ...selectedTask } as BarTask;
       switch (event.type) {
-        //On Event changing
-        case 'mousemove': {
+        // On Event changing
+        case "mousemove": {
           switch (barEvent.action) {
-            case 'progress':
+            case "progress":
               changedTask.progress = progressByX(event.offsetX, selectedTask);
               break;
-            case 'start':
-              let newX1 = startByX(event.offsetX, xStep, selectedTask);
+            case "start": {
+              const newX1 = startByX(event.offsetX, xStep, selectedTask);
               changedTask.x1 = newX1;
               changedTask.start = dateByX(
                 newX1,
@@ -168,8 +170,9 @@ export const GanttContent: React.FC<GanttContentProps> = ({
                 timeStep
               );
               break;
-            case 'end':
-              let newX2 = endByX(event.offsetX, xStep, selectedTask);
+            }
+            case "end": {
+              const newX2 = endByX(event.offsetX, xStep, selectedTask);
               changedTask.x2 = newX2;
               changedTask.end = dateByX(
                 newX2,
@@ -179,7 +182,8 @@ export const GanttContent: React.FC<GanttContentProps> = ({
                 timeStep
               );
               break;
-            case 'move':
+            }
+            case "move": {
               const [newMoveX1, newMoveX2] = moveByX(
                 event.offsetX - initEventX1Delta,
                 xStep,
@@ -202,8 +206,10 @@ export const GanttContent: React.FC<GanttContentProps> = ({
               changedTask.x1 = newMoveX1;
               changedTask.x2 = newMoveX2;
               break;
+            }
           }
-          //Update internal state
+
+          // Update internal state
           setBarTasks(
             barTasks.map(t => (t.id === changedTask.id ? changedTask : t))
           );
@@ -211,19 +217,19 @@ export const GanttContent: React.FC<GanttContentProps> = ({
           break;
         }
 
-        //On finish Event
-        case 'mouseup': {
+        // On finish Event
+        case "mouseup": {
           let eventForExecution: (
             task: Task
           ) => void | Promise<void> = () => {};
           switch (barEvent.action) {
-            case 'progress':
+            case "progress":
               changedTask.progress = progressByX(event.offsetX, selectedTask);
               if (onProgressChange) {
                 eventForExecution = onProgressChange;
               }
               break;
-            case 'start':
+            case "start": {
               const newX1 = startByX(event.offsetX, xStep, selectedTask);
               changedTask.start = dateByX(
                 newX1,
@@ -236,7 +242,8 @@ export const GanttContent: React.FC<GanttContentProps> = ({
                 eventForExecution = onDateChange;
               }
               break;
-            case 'end':
+            }
+            case "end": {
               const newX2 = endByX(event.offsetX, xStep, selectedTask);
               changedTask.end = dateByX(
                 newX2,
@@ -250,7 +257,8 @@ export const GanttContent: React.FC<GanttContentProps> = ({
                 eventForExecution = onDateChange;
               }
               break;
-            case 'move':
+            }
+            case "move": {
               const [newMoveX1, newMoveX2] = moveByX(
                 event.offsetX - initEventX1Delta,
                 xStep,
@@ -278,34 +286,41 @@ export const GanttContent: React.FC<GanttContentProps> = ({
                 eventForExecution = onDateChange;
               }
               break;
+            }
           }
 
-          setBarEvent({ action: '', selectedTask: null });
+          setBarEvent({ action: "", selectedTask: null });
           setIsSVGListen(false);
-          svg.current?.removeEventListener(
-            'mousemove',
+          svg.current.removeEventListener(
+            "mousemove",
             handleMouseSVGChangeEventsSubscribe
           );
-          svg.current?.removeEventListener(
-            'mouseup',
+          svg.current.removeEventListener(
+            "mouseup",
             handleMouseSVGChangeEventsSubscribe
           );
 
-          //If update successful - update Gantt state, otherwise we shell back old Bar state
+          // If update successful - update Gantt state, otherwise we shell back old Bar state
           await eventForExecution(changedTask);
           break;
         }
       }
     };
 
-    if (barEvent.selectedTask && barEvent.action && !isSVGListen) {
+    if (
+      barEvent.selectedTask &&
+      barEvent.action &&
+      !isSVGListen &&
+      svg &&
+      svg.current
+    ) {
       setIsSVGListen(true);
-      svg.current?.addEventListener(
-        'mousemove',
+      svg.current.addEventListener(
+        "mousemove",
         handleMouseSVGChangeEventsSubscribe
       );
-      svg.current?.addEventListener(
-        'mouseup',
+      svg.current.addEventListener(
+        "mouseup",
         handleMouseSVGChangeEventsSubscribe
       );
     }
@@ -336,18 +351,19 @@ export const GanttContent: React.FC<GanttContentProps> = ({
     task: BarTask
   ) => {
     switch (event.type) {
-      case 'mousedown':
+      case "mousedown":
         setBarEvent({ ...barEvent, selectedTask: task, action: eventType });
         setInitEventX1Delta(event.nativeEvent.offsetX - task.x1);
         event.stopPropagation();
         break;
-      case 'mouseleave':
+      case "mouseleave":
+        console.log("mouseleave");
         if (!barEvent.action)
-          setBarEvent({ ...barEvent, selectedTask: task, action: '' });
+          setBarEvent({ ...barEvent, selectedTask: null, action: "" });
         break;
-      case 'mouseenter':
+      case "mouseenter":
         if (!barEvent.selectedTask) {
-          setBarEvent({ ...barEvent, selectedTask: task, action: '' });
+          setBarEvent({ ...barEvent, selectedTask: task, action: "" });
         }
         break;
     }
@@ -364,7 +380,7 @@ export const GanttContent: React.FC<GanttContentProps> = ({
   ) => {
     if (task.isDisabled) return;
     switch (event.key) {
-      case 'Delete': {
+      case "Delete": {
         if (onTaskDelete) {
           onTaskDelete(task);
         }
@@ -374,8 +390,8 @@ export const GanttContent: React.FC<GanttContentProps> = ({
   };
 
   return (
-    <>
-      <g className="arrow" fill={arrowColor} stroke={arrowColor}>
+    <g className="content">
+      <g className="arrows" fill={arrowColor} stroke={arrowColor}>
         {barTasks.map(task => {
           return task.barChildren.map(child => {
             return (
@@ -408,8 +424,8 @@ export const GanttContent: React.FC<GanttContentProps> = ({
       </g>
       <g className="toolTip">
         {barEvent.selectedTask &&
-          barEvent.action !== 'end' &&
-          barEvent.action !== 'start' && (
+          barEvent.action !== "end" &&
+          barEvent.action !== "start" && (
             <Tooltip
               x={barEvent.selectedTask.x2 + columnWidth + arrowIndent}
               y={barEvent.selectedTask.y + rowHeight}
@@ -420,6 +436,6 @@ export const GanttContent: React.FC<GanttContentProps> = ({
             />
           )}
       </g>
-    </>
+    </g>
   );
 };

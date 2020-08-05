@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Task } from '../../types/public-types';
-import { BarProgressHandle } from './bar-progress-handle';
-import { BarDateHandle } from './bar-date-handle';
-import { BarDisplay } from './bar-display';
-import { BarTask } from '../../types/bar-task';
-import { BarAction } from '../Gantt/gantt-content';
+import React, { useState } from "react";
+import { Task } from "../../types/public-types";
+import { BarProgressHandle } from "./bar-progress-handle";
+import { BarDateHandle } from "./bar-date-handle";
+import { BarDisplay } from "./bar-display";
+import { BarTask } from "../../types/bar-task";
+import { BarAction } from "../Gantt/gantt-content";
 import {
   progressWithByParams,
   getProgressPoint,
-} from '../../helpers/bar-helper';
-import '../../style.css';
+} from "../../helpers/bar-helper";
+import styles from "./bar.module.css";
 
 export type BarProps = {
   task: BarTask;
@@ -51,7 +51,7 @@ export const Bar: React.FC<BarProps> = ({
 
   return (
     <g
-      className="GanttBar-wrapper"
+      className={styles.barWrapper}
       onDoubleClick={() => {
         !!onDoubleClick && onDoubleClick(task);
       }}
@@ -60,10 +60,10 @@ export const Bar: React.FC<BarProps> = ({
         handleButtonSVGEvents(e, task);
       }}
       onMouseEnter={e => {
-        handleMouseEvents(e, 'mouseenter', task);
+        handleMouseEvents(e, "mouseenter", task);
       }}
       onMouseLeave={e => {
-        handleMouseEvents(e, 'mouseleave', task);
+        handleMouseEvents(e, "mouseleave", task);
       }}
       onFocus={() => setIsSelected(true)}
       onBlur={() => setIsSelected(false)}
@@ -81,13 +81,13 @@ export const Bar: React.FC<BarProps> = ({
         styles={task.styles}
         isSelected={isSelected}
         onMouseDown={e => {
-          isDateChangeable && handleMouseEvents(e, 'move', task);
+          isDateChangeable && handleMouseEvents(e, "move", task);
         }}
       />
       <g className="handleGroup">
         {isDateChangeable && (
-          <>
-            {/*left*/}
+          <g>
+            {/* left */}
             <BarDateHandle
               x={task.x1 + 1}
               y={task.y + 1}
@@ -95,10 +95,10 @@ export const Bar: React.FC<BarProps> = ({
               height={task.height - 2}
               barCornerRadius={task.barCornerRadius}
               onMouseDown={e => {
-                handleMouseEvents(e, 'start', task);
+                handleMouseEvents(e, "start", task);
               }}
             />
-            {/*right*/}
+            {/* right */}
             <BarDateHandle
               x={task.x2 - task.handleWidth - 1}
               y={task.y + 1}
@@ -106,16 +106,16 @@ export const Bar: React.FC<BarProps> = ({
               height={task.height - 2}
               barCornerRadius={task.barCornerRadius}
               onMouseDown={e => {
-                handleMouseEvents(e, 'end', task);
+                handleMouseEvents(e, "end", task);
               }}
             />
-          </>
+          </g>
         )}
         {isProgressChangeable && (
           <BarProgressHandle
             progressPoint={progressPoint}
             onMouseDown={e => {
-              handleMouseEvents(e, 'progress', task);
+              handleMouseEvents(e, "progress", task);
             }}
           />
         )}

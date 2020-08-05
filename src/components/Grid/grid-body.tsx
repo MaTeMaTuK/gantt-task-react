@@ -1,7 +1,7 @@
-import React, { ReactChild } from 'react';
-import { Task } from '../../types/public-types';
-import { addToDate } from '../../helpers/date-helper';
-import '../../style.css';
+import React, { ReactChild } from "react";
+import { Task } from "../../types/public-types";
+import { addToDate } from "../../helpers/date-helper";
+import styles from "./grid.module.css";
 
 export type GridBodyProps = {
   tasks: Task[];
@@ -22,36 +22,36 @@ export const GridBody: React.FC<GridBodyProps> = ({
   todayColor,
 }) => {
   let y = headerHeight;
-  let gridRows: ReactChild[] = [];
-  let rowLines: ReactChild[] = [];
+  const gridRows: ReactChild[] = [];
+  const rowLines: ReactChild[] = [];
   for (const task of tasks) {
     gridRows.push(
       <rect
-        key={'Row' + task.id}
+        key={"Row" + task.id}
         x="0"
         y={y}
         width={gridWidth}
         height={rowHeight}
-        className="GanttGrid-row"
-      ></rect>
+        className={styles.gridRow}
+      />
     );
     rowLines.push(
       <line
-        key={'RowLine' + task.id}
+        key={"RowLine" + task.id}
         x="0"
         y1={y + rowHeight}
         x2={gridWidth}
         y2={y + rowHeight}
-        className="GanttGrid-rowLine"
-      ></line>
+        className={styles.gridRowLine}
+      />
     );
     y += rowHeight;
   }
 
   const now = new Date();
   let tickX = 0;
-  let ticks: ReactChild[] = [];
-  let today: ReactChild = <></>;
+  const ticks: ReactChild[] = [];
+  let today: ReactChild = <rect />;
   for (let i = 0; i < dates.length; i++) {
     const date = dates[i];
     ticks.push(
@@ -61,21 +61,21 @@ export const GridBody: React.FC<GridBodyProps> = ({
         y1={headerHeight}
         x2={tickX}
         y2={y}
-        className="GanttGrid-tick"
-      ></line>
+        className={styles.gridTick}
+      />
     );
     if (
       (i + 1 !== dates.length &&
         date.getTime() < now.getTime() &&
         dates[i + 1].getTime() >= now.getTime()) ||
-      //if current date is last
+      // if current date is last
       (i !== 0 &&
         i + 1 === dates.length &&
         date.getTime() < now.getTime() &&
         addToDate(
           date,
           date.getTime() - dates[i - 1].getTime(),
-          'millisecond'
+          "millisecond"
         ).getTime() >= now.getTime())
     ) {
       today = (
@@ -85,17 +85,17 @@ export const GridBody: React.FC<GridBodyProps> = ({
           width={columnWidth}
           height={y}
           fill={todayColor}
-        ></rect>
+        />
       );
     }
     tickX += columnWidth;
   }
   return (
-    <>
+    <g className="gridBody">
       <g className="rows">{gridRows}</g>
       <g className="rowLines">{rowLines}</g>
       <g className="ticks">{ticks}</g>
       <g className="today">{today}</g>
-    </>
+    </g>
   );
 };

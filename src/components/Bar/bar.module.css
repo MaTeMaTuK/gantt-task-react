@@ -1,0 +1,40 @@
+.barWrapper {
+  cursor: pointer;
+  outline: none;
+}
+
+.barWrapper:hover .barHandle {
+  visibility: visible;
+  opacity: 1;
+}
+
+.barHandle {
+  fill: #ddd;
+  cursor: ew-resize;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.barLabel {
+  fill: #fff;
+  text-anchor: middle;
+  font-weight: lighter;
+  dominant-baseline: central;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.barLabelOutside {
+  fill: #555;
+  text-anchor: start;
+}
+
+.barBackground {
+  user-select: none;
+  stroke-width: 0;
+}

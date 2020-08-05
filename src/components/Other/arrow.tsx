@@ -1,5 +1,5 @@
-import React from 'react';
-import { BarTask } from '../../types/bar-task';
+import React from "react";
+import { BarTask } from "../../types/bar-task";
 
 type ArrowProps = {
   taskFrom: BarTask;
@@ -26,9 +26,9 @@ export const Arrow: React.FC<ArrowProps> = ({
   ${taskTo.x1 - 5},${taskToEndPosition - 5} 
   ${taskTo.x1 - 5},${taskToEndPosition + 5}`;
   return (
-    <>
+    <g className="arrow">
       <path strokeWidth="1.5" d={path} fill="none" />
       <polygon points={trianglePoints} />
-    </>
+    </g>
   );
 };

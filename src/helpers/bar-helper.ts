@@ -1,5 +1,5 @@
-import { Task } from '../types/public-types';
-import { BarTask } from '../types/bar-task';
+import { Task } from "../types/public-types";
+import { BarTask } from "../types/bar-task";
 
 export const convertToBarTasks = (
   tasks: Task[],
@@ -168,7 +168,7 @@ export const getProgressPoint = (
     progressX,
     taskY + taskHeight - 8.66,
   ];
-  return point.join(',');
+  return point.join(",");
 };
 
 export const startByX = (x: number, xStep: number, task: BarTask) => {

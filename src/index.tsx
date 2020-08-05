@@ -1,9 +1,9 @@
-export { Gantt } from './components/Gantt/gantt';
-export {
+export { Gantt } from "./components/Gantt/gantt";
+export { ViewMode } from "./types/public-types";
+export type {
   GanttProps,
   Task,
-  ViewMode,
   StylingOption,
   DisplayOption,
   EventOption,
-} from './types/public-types';
+} from "./types/public-types";

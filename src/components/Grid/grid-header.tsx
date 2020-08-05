@@ -1,5 +1,5 @@
-import React from 'react';
-import '../../style.css';
+import React from "react";
+import styles from "./grid.module.css";
 
 export type GridHeaderProps = {
   gridWidth: number;
@@ -15,7 +15,7 @@ export const GridHeader: React.FC<GridHeaderProps> = ({
       y="0"
       width={gridWidth}
       height={headerHeight}
-      className="GanttGrid-header"
-    ></rect>
+      className={styles.gridHeader}
+    />
   );
 };

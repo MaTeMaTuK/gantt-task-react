@@ -1,11 +1,12 @@
-import React, { ReactChild } from 'react';
-import { ViewMode } from '../../types/public-types';
-import { TopPartOfCalendar } from './top-part-of-calendar';
+import React, { ReactChild } from "react";
+import { ViewMode } from "../../types/public-types";
+import { TopPartOfCalendar } from "./top-part-of-calendar";
 import {
   getLocaleMonth,
   getWeekNumberISO8601,
-} from '../../helpers/date-helper';
-import '../../style.css';
+} from "../../helpers/date-helper";
+import styles from "./calendar.module.css";
+
 export type CalendarProps = {
   dates: Date[];
   locale: string;
@@ -26,25 +27,25 @@ export const Calendar: React.FC<CalendarProps> = ({
   fontSize,
 }) => {
   const getCalendarValuesForMonth = () => {
-    let topValues: ReactChild[] = [];
-    let bottomValues: ReactChild[] = [];
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
     const topDefaultWidth = columnWidth * 6;
     const topDefaultHeight = headerHeight * 0.5;
     for (let i = 0; i < dates.length; i++) {
       const date = dates[i];
-      let bottomValue = getLocaleMonth(date, locale);
+      const bottomValue = getLocaleMonth(date, locale);
       bottomValues.push(
         <text
           key={bottomValue + date.getFullYear()}
           y={headerHeight * 0.8}
           x={columnWidth * i + columnWidth * 0.5}
-          className="GanttCalendar-bottomText"
+          className={styles.calendarBottomText}
         >
           {bottomValue}
         </text>
       );
       if (i === 0 || date.getFullYear() !== dates[i - 1].getFullYear()) {
-        let topValue = date.getFullYear().toString();
+        const topValue = date.getFullYear().toString();
         topValues.push(
           <TopPartOfCalendar
             key={topValue}
@@ -64,18 +65,18 @@ export const Calendar: React.FC<CalendarProps> = ({
   };
 
   const getCalendarValuesForWeek = () => {
-    let topValues: ReactChild[] = [];
-    let bottomValues: ReactChild[] = [];
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
     let weeksCount: number = 0;
     const topDefaultHeight = headerHeight * 0.5;
     for (let i = dates.length - 1; i >= 0; i--) {
       const date = dates[i];
-      let topValue = '';
+      let topValue = "";
       if (i === 0 || date.getMonth() !== dates[i - 1].getMonth()) {
-        //top
+        // top
         topValue = `${getLocaleMonth(date, locale)}, ${date.getFullYear()}`;
       }
-      //bottom
+      // bottom
       const bottomValue = `W${getWeekNumberISO8601(date)}`;
 
       bottomValues.push(
@@ -83,14 +84,14 @@ export const Calendar: React.FC<CalendarProps> = ({
           key={date.getTime()}
           y={headerHeight * 0.8}
           x={columnWidth * i}
-          className="GanttCalendar-bottomText"
+          className={styles.calendarBottomText}
         >
           {bottomValue}
         </text>
       );
 
       if (topValue) {
-        //if last day is new month
+        // if last day is new month
         if (i !== dates.length - 1) {
           topValues.push(
             <TopPartOfCalendar
@@ -112,8 +113,8 @@ export const Calendar: React.FC<CalendarProps> = ({
   };
 
   const getCalendarValuesForDay = () => {
-    let topValues: ReactChild[] = [];
-    let bottomValues: ReactChild[] = [];
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
     const topDefaultHeight = headerHeight * 0.5;
     for (let i = 0; i < dates.length; i++) {
       const date = dates[i];
@@ -124,7 +125,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           key={date.getTime()}
           y={headerHeight * 0.8}
           x={columnWidth * i + columnWidth * 0.5}
-          className="GanttCalendar-bottomText"
+          className={styles.calendarBottomText}
         >
           {bottomValue}
         </text>
@@ -133,7 +134,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         i + 1 !== dates.length &&
         date.getMonth() !== dates[i + 1].getMonth()
       ) {
-        let topValue = getLocaleMonth(date, locale);
+        const topValue = getLocaleMonth(date, locale);
 
         topValues.push(
           <TopPartOfCalendar
@@ -152,15 +153,15 @@ export const Calendar: React.FC<CalendarProps> = ({
   };
 
   const getCalendarValuesForOther = () => {
-    let topValues: ReactChild[] = [];
-    let bottomValues: ReactChild[] = [];
-    let ticks = viewMode === ViewMode.HalfDay ? 2 : 4;
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
+    const ticks = viewMode === ViewMode.HalfDay ? 2 : 4;
     const topDefaultHeight = headerHeight * 0.5;
 
     for (let i = 0; i < dates.length; i++) {
       const date = dates[i];
       const bottomValue = Intl.DateTimeFormat(locale, {
-        hour: 'numeric',
+        hour: "numeric",
       }).format(date);
 
       bottomValues.push(
@@ -168,7 +169,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           key={date.getTime()}
           y={headerHeight * 0.8}
           x={columnWidth * i}
-          className="GanttCalendar-bottomText"
+          className={styles.calendarBottomText}
           fontFamily={fontFamily}
         >
           {bottomValue}

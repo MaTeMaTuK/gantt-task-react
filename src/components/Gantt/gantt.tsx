@@ -1,9 +1,9 @@
-import React, { useRef } from 'react';
-import { ViewMode, GanttProps } from '../../types/public-types';
-import { Grid, GridProps } from '../Grid/grid';
-import { Calendar, CalendarProps } from '../Calendar/calendar';
-import { GanttContent, GanttContentProps } from './gantt-content';
-import { ganttDateRange, seedDates } from '../../helpers/date-helper';
+import React, { useRef } from "react";
+import { ViewMode, GanttProps } from "../../types/public-types";
+import { Grid, GridProps } from "../Grid/grid";
+import { Calendar, CalendarProps } from "../Calendar/calendar";
+import { GanttContent, GanttContentProps } from "./gantt-content";
+import { ganttDateRange, seedDates } from "../../helpers/date-helper";
 
 export const Gantt: React.SFC<GanttProps> = ({
   tasks,
@@ -11,20 +11,20 @@ export const Gantt: React.SFC<GanttProps> = ({
   columnWidth = 60,
   rowHeight = 50,
   viewMode = ViewMode.Day,
-  locale = 'en-GB',
+  locale = "en-GB",
   barFill = 60,
   barCornerRadius = 3,
-  barProgressColor = '#a3a3ff',
-  barProgressSelectedColor = '#8282f5',
-  barBackgroundColor = '#b8c2cc',
-  barBackgroundSelectedColor = '#aeb8c2',
+  barProgressColor = "#a3a3ff",
+  barProgressSelectedColor = "#8282f5",
+  barBackgroundColor = "#b8c2cc",
+  barBackgroundSelectedColor = "#aeb8c2",
   handleWidth = 8,
   timeStep = 300000,
-  arrowColor = 'grey',
-  fontFamily = 'Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
-  fontSize = '14px',
+  arrowColor = "grey",
+  fontFamily = "Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue",
+  fontSize = "14px",
   arrowIndent = 20,
-  todayColor = 'rgba(252, 248, 227, 0.5)',
+  todayColor = "rgba(252, 248, 227, 0.5)",
   onDateChange,
   onProgressChange,
   onDoubleClick,

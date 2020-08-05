@@ -1,0 +1,25 @@
+.calendarBottomText {
+  text-anchor: middle;
+  fill: #333;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.calendarTopTick {
+  stroke: #e6e4e4;
+}
+
+.calendarTopText {
+  text-anchor: middle;
+  fill: #555;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}

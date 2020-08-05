@@ -1,5 +1,5 @@
-import React from 'react';
-import '../../style.css';
+import React from "react";
+import styles from "./bar.module.css";
 
 type BarDateHandleProps = {
   x: number;
@@ -23,10 +23,10 @@ export const BarDateHandle: React.FC<BarDateHandleProps> = ({
       y={y}
       width={width}
       height={height}
-      className="GanttBar-handle"
+      className={styles.barHandle}
       ry={barCornerRadius}
       rx={barCornerRadius}
       onMouseDown={onMouseDown}
-    ></rect>
+    />
   );
 };

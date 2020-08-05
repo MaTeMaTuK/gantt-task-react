@@ -1,10 +1,10 @@
 export enum ViewMode {
-  QuarterDay = 'Quarter Day',
-  HalfDay = 'Half Day',
-  Day = 'Day',
+  QuarterDay = "Quarter Day",
+  HalfDay = "Half Day",
+  Day = "Day",
   /** ISO-8601 week */
-  Week = 'Week',
-  Month = 'Month',
+  Week = "Week",
+  Month = "Month",
 }
 export interface Task {
   id: string;

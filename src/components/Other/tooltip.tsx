@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Task } from '../../types/public-types';
-import '../../style.css';
+import React, { useRef, useEffect, useState } from "react";
+import { Task } from "../../types/public-types";
+import styles from "./tooltip.module.css";
+
 export type TooltipProps = {
   x: number;
   y: number;
@@ -36,7 +37,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   }, [tooltipRef, y]);
   return (
     <foreignObject x={x} y={relatedY} width={toolWidth} height={1000}>
-      <div ref={tooltipRef} className="TooltipDetailsContainer">
+      <div ref={tooltipRef} className={styles.tooltipDetailsContainer}>
         {getTooltipContent(task, fontSize, fontFamily)}
       </div>
     </foreignObject>
@@ -53,17 +54,21 @@ const getStandardTooltipContent = (
     fontFamily,
   };
   return (
-    <div className="TooltipDefaultContainer" style={style}>
+    <div className={styles.tooltipDefaultContainer} style={style}>
       <b style={{ fontSize: fontSize + 6 }}>{`${
         task.name
-      }: ${task.start.getDate()}-${task.start.getMonth() +
-        1}-${task.start.getFullYear()} - ${task.end.getDate()}-${task.end.getMonth() +
-        1}-${task.end.getFullYear()}`}</b>
-      <p className="TooltipDefaultContainer-paragraph">{`Duration: ${~~(
+      }: ${task.start.getDate()}-${
+        task.start.getMonth() + 1
+      }-${task.start.getFullYear()} - ${task.end.getDate()}-${
+        task.end.getMonth() + 1
+      }-${task.end.getFullYear()}`}</b>
+      <p className={styles.tooltipDefaultContainerParagraph}>{`Duration: ${~~(
         (task.end.getTime() - task.start.getTime()) /
         (1000 * 60 * 60 * 24)
       )} day(s)`}</p>
-      <p className="TooltipDefaultContainer-paragraph">{`Progress: ${task.progress} %`}</p>
+      <p
+        className={styles.tooltipDefaultContainerParagraph}
+      >{`Progress: ${task.progress} %`}</p>
     </div>
   );
 };

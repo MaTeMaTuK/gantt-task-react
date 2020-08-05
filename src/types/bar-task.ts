@@ -1,4 +1,4 @@
-import { Task } from './public-types';
+import { Task } from "./public-types";
 
 export interface BarTask extends Task {
   index: number;

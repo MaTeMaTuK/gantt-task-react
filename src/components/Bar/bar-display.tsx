@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import '../../style.css';
+import React, { useRef, useState, useEffect } from "react";
+import style from "./bar.module.css";
 
 type BarDisplayProps = {
   x: number;
@@ -66,7 +66,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         ry={barCornerRadius}
         rx={barCornerRadius}
         fill={getBarColor()}
-        className="GanttBar"
+        className={style.barBackground}
       />
       <rect
         x={x}
@@ -80,9 +80,11 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
       <text
         x={getX()}
         y={y + height * 0.5}
-        className={`GanttBar-label ${
-          isTextInside ? '' : 'GanttBar-label-outside'
-        }`}
+        className={
+          isTextInside
+            ? style.barLabel
+            : style.barLabel && style.barLabelOutside
+        }
         ref={textRef}
       >
         {text}
