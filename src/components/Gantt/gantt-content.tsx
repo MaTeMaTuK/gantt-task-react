@@ -223,7 +223,6 @@ export const GanttContent: React.FC<GanttContentProps> = ({
       }
       svg.current.removeEventListener("mousemove", handleMouseMove);
       svg.current.removeEventListener("mouseup", handleMouseUp);
-      console.log(`Start: ${changedTask.start} End: ${changedTask.end}`);
       setBarEvent({ action: "" });
       setIsMoving(false);
     };
