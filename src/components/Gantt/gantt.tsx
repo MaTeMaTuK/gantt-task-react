@@ -33,7 +33,7 @@ export const Gantt: React.SFC<GanttProps> = ({
 }) => {
   const [startDate, endDate] = ganttDateRange(tasks, viewMode);
   const dates = seedDates(startDate, endDate, viewMode);
-  const svg = useRef<SVGSVGElement | null>(null);
+  const svg = useRef<SVGSVGElement>(null);
 
   const gridProps: GridProps = {
     columnWidth,
@@ -68,24 +68,23 @@ export const Gantt: React.SFC<GanttProps> = ({
     handleWidth,
     timeStep,
     arrowColor,
-    svg,
     fontFamily,
     fontSize,
     arrowIndent,
+    svg,
     onDateChange,
     onProgressChange,
     onDoubleClick,
     onTaskDelete,
     getTooltipContent,
   };
-
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={columnWidth * dates.length}
       height={headerHeight + rowHeight * tasks.length}
-      ref={svg}
       fontFamily={fontFamily}
+      ref={svg}
     >
       <Grid {...gridProps} />
       <Calendar {...calendarProps} />

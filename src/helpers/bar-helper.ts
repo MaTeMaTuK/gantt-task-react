@@ -68,6 +68,7 @@ export const convertToBarTask = (
   const x1 = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
   const x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
   const y = taskYCoordinate(index, rowHeight, taskHeight, headerHeight);
+
   const styles = {
     backgroundColor: barBackgroundColor,
     backgroundSelectedColor: barBackgroundSelectedColor,
@@ -212,4 +213,85 @@ export const dateByX = (
       (newDate.getTimezoneOffset() - taskDate.getTimezoneOffset()) * 60000
   );
   return newDate;
+};
+
+export type BarMoveAction = "progress" | "end" | "start" | "move" | "";
+
+/**
+ * Method handles event in real time(mousemove) and on finish(mouseup)
+ */
+export const handleTaskBySVGMouseEvent = (
+  svgX: number,
+  action: BarMoveAction,
+  selectedTask: BarTask,
+  xStep: number,
+  timeStep: number,
+  initEventX1Delta: number
+) => {
+  const changedTask: BarTask = { ...selectedTask };
+  let isChanged = false;
+  switch (action) {
+    case "progress":
+      changedTask.progress = progressByX(svgX, selectedTask);
+      isChanged = changedTask.progress !== selectedTask.progress;
+      break;
+    case "start": {
+      const newX1 = startByX(svgX, xStep, selectedTask);
+      changedTask.x1 = newX1;
+      isChanged = changedTask.x1 !== selectedTask.x1;
+      if (isChanged) {
+        changedTask.start = dateByX(
+          newX1,
+          selectedTask.x1,
+          selectedTask.start,
+          xStep,
+          timeStep
+        );
+      }
+      break;
+    }
+    case "end": {
+      const newX2 = endByX(svgX, xStep, selectedTask);
+      changedTask.x2 = newX2;
+      isChanged = changedTask.x2 !== selectedTask.x2;
+      if (isChanged) {
+        changedTask.end = dateByX(
+          newX2,
+          selectedTask.x2,
+          selectedTask.end,
+          xStep,
+          timeStep
+        );
+      }
+      break;
+    }
+    case "move": {
+      const [newMoveX1, newMoveX2] = moveByX(
+        svgX - initEventX1Delta,
+        xStep,
+        selectedTask
+      );
+      isChanged = newMoveX1 !== selectedTask.x1;
+      if (isChanged) {
+        changedTask.start = dateByX(
+          newMoveX1,
+          selectedTask.x1,
+          selectedTask.start,
+          xStep,
+          timeStep
+        );
+        changedTask.end = dateByX(
+          newMoveX2,
+          selectedTask.x2,
+          selectedTask.end,
+          xStep,
+          timeStep
+        );
+        changedTask.x1 = newMoveX1;
+        changedTask.x2 = newMoveX2;
+      }
+      break;
+    }
+  }
+  return { isChanged, changedTask };
 };

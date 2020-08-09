@@ -57,8 +57,8 @@ const App = () => {
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 26),
-      name: "Release",
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 16),
+      name: "Release & Eat Burgers",
       id: "Task 6",
       progress: currentDate.getMonth(),
       dependencies: ["Task 4"],
