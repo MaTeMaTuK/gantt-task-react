@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Task } from "../../types/public-types";
 import { BarProgressHandle } from "./bar-progress-handle";
 import { BarDateHandle } from "./bar-date-handle";
 import { BarDisplay } from "./bar-display";
@@ -14,7 +13,6 @@ import { GanttContentMoveAction } from "../Gantt/gantt-content";
 export type BarProps = {
   task: BarTask;
   arrowIndent: number;
-  onDoubleClick?: (task: Task) => any;
   isProgressChangeable: boolean;
   isDateChangeable: boolean;
   isDelete: boolean;
@@ -28,7 +26,6 @@ export type BarProps = {
 export const Bar: React.FC<BarProps> = ({
   task,
   arrowIndent,
-  onDoubleClick,
   isProgressChangeable,
   isDateChangeable,
   onEventStart,
@@ -46,8 +43,8 @@ export const Bar: React.FC<BarProps> = ({
   return (
     <g
       className={styles.barWrapper}
-      onDoubleClick={() => {
-        !!onDoubleClick && onDoubleClick(task);
+      onDoubleClick={e => {
+        onEventStart(e, "dblclick", task);
       }}
       tabIndex={0}
       onKeyDown={e => {

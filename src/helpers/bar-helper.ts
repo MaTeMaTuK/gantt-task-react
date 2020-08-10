@@ -4,10 +4,9 @@ import { BarTask } from "../types/bar-task";
 export const convertToBarTasks = (
   tasks: Task[],
   dates: Date[],
-  dateDelta: number,
   columnWidth: number,
   rowHeight: number,
-  taskHeight: number,
+  barFill: number,
   headerHeight: number,
   barCornerRadius: number,
   handleWidth: number,
@@ -16,6 +15,13 @@ export const convertToBarTasks = (
   barBackgroundColor: string,
   barBackgroundSelectedColor: string
 ) => {
+  const dateDelta =
+    dates[1].getTime() -
+    dates[0].getTime() -
+    dates[1].getTimezoneOffset() * 60 * 1000 +
+    dates[0].getTimezoneOffset() * 60 * 1000;
+  const taskHeight = (rowHeight * barFill) / 100;
+
   let barTasks = tasks.map((t, i) => {
     return convertToBarTask(
       t,
@@ -35,6 +41,7 @@ export const convertToBarTasks = (
     );
   });
 
+  // set dependencies
   barTasks = barTasks.map((task, i) => {
     const dependencies = task.dependencies || [];
     for (let j = 0; j < dependencies.length; j++) {

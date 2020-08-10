@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { ViewMode, GanttProps } from "../../types/public-types";
+import React, { useRef, useState } from "react";
+import { ViewMode, GanttProps, Task } from "../../types/public-types";
 import { Grid, GridProps } from "../Grid/grid";
 import { Calendar, CalendarProps } from "../Calendar/calendar";
 import { GanttContent, GanttContentProps } from "./gantt-content";
@@ -31,14 +31,19 @@ export const Gantt: React.SFC<GanttProps> = ({
   onTaskDelete,
   getTooltipContent,
 }) => {
-  const [startDate, endDate] = ganttDateRange(tasks, viewMode);
-  const dates = seedDates(startDate, endDate, viewMode);
   const svg = useRef<SVGSVGElement>(null);
+  const [ganttTasks, setGanttTasks] = useState<Task[]>(tasks);
+  const [startDate, endDate] = ganttDateRange(ganttTasks, viewMode);
+  const dates = seedDates(startDate, endDate, viewMode);
+
+  const handleOnTasksChange = (tasks: Task[]) => {
+    setGanttTasks(tasks);
+  };
 
   const gridProps: GridProps = {
     columnWidth,
     gridWidth: dates.length * columnWidth,
-    tasks,
+    tasks: ganttTasks,
     rowHeight,
     headerHeight,
     dates,
@@ -54,7 +59,7 @@ export const Gantt: React.SFC<GanttProps> = ({
     fontSize,
   };
   const barProps: GanttContentProps = {
-    tasks,
+    tasks: ganttTasks,
     rowHeight,
     barCornerRadius,
     columnWidth,
@@ -66,12 +71,13 @@ export const Gantt: React.SFC<GanttProps> = ({
     barBackgroundSelectedColor,
     headerHeight,
     handleWidth,
-    timeStep,
     arrowColor,
+    timeStep,
     fontFamily,
     fontSize,
     arrowIndent,
     svg,
+    onTasksDateChange: handleOnTasksChange,
     onDateChange,
     onProgressChange,
     onDoubleClick,

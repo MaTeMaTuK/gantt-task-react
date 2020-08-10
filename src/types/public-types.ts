@@ -30,7 +30,7 @@ export interface EventOption {
    * Time step value for date changes.
    */
   timeStep?: number;
-  onDoubleClick?: (task: Task) => any;
+  onDoubleClick?: (task: Task) => void;
   onDateChange?: (task: Task) => void | Promise<any>;
   onProgressChange?: (task: Task) => void | Promise<any>;
   onTaskDelete?: (task: Task) => void | Promise<any>;

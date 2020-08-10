@@ -15,6 +15,7 @@ export type GanttContentMoveAction =
   | "mouseenter"
   | "mouseleave"
   | "delete"
+  | "dblclick"
   | BarMoveAction;
 export type BarEvent = {
   selectedTask?: BarTask;
@@ -44,14 +45,15 @@ export type GanttContentProps = {
     fontSize: string,
     fontFamily: string
   ) => JSX.Element;
+  onTasksDateChange: (tasks: Task[]) => void;
 } & EventOption;
 
 export const GanttContent: React.FC<GanttContentProps> = ({
   tasks,
+  dates,
   rowHeight,
   barCornerRadius,
   columnWidth,
-  dates,
   barFill,
   barProgressColor,
   barProgressSelectedColor,
@@ -59,12 +61,13 @@ export const GanttContent: React.FC<GanttContentProps> = ({
   barBackgroundSelectedColor,
   headerHeight,
   handleWidth,
-  arrowColor,
   timeStep,
+  svg,
+  arrowColor,
+  arrowIndent,
   fontFamily,
   fontSize,
-  arrowIndent,
-  svg,
+  onTasksDateChange,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -79,6 +82,7 @@ export const GanttContent: React.FC<GanttContentProps> = ({
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
+
   // create xStep
   useEffect(() => {
     const dateDelta =
@@ -94,21 +98,13 @@ export const GanttContent: React.FC<GanttContentProps> = ({
 
   // generate tasks
   useEffect(() => {
-    const dateDelta =
-      dates[1].getTime() -
-      dates[0].getTime() -
-      dates[1].getTimezoneOffset() * 60 * 1000 +
-      dates[0].getTimezoneOffset() * 60 * 1000;
-    const taskHeight = (rowHeight * barFill) / 100;
-
     setBarTasks(
       convertToBarTasks(
         tasks,
         dates,
-        dateDelta,
         columnWidth,
         rowHeight,
-        taskHeight,
+        barFill,
         headerHeight,
         barCornerRadius,
         handleWidth,
@@ -136,14 +132,20 @@ export const GanttContent: React.FC<GanttContentProps> = ({
   /**
    * Method is Start point of task change
    */
-  const handleBarEventStart = (
+  const handleBarEventStart = async (
     event: React.MouseEvent | React.KeyboardEvent,
     action: GanttContentMoveAction,
     selectedTask: BarTask
   ) => {
     if (isKeyboardEvent(event)) {
       if (action === "delete") {
-        setBarTasks(barTasks.filter(t => t.id !== barEvent.selectedTask?.id));
+        if (onTaskDelete) {
+          await onTaskDelete(selectedTask);
+          const newTasks = barTasks.filter(
+            t => t.id !== barEvent.selectedTask?.id
+          );
+          onTasksDateChange(newTasks);
+        }
       }
     } else if (action === "mouseenter") {
       if (!barEvent.action) {
@@ -161,6 +163,8 @@ export const GanttContent: React.FC<GanttContentProps> = ({
       );
       setInitEventX1Delta(cursor.x - selectedTask.x1);
       setBarEvent({ action, selectedTask });
+    } else if (action === "dblclick") {
+      !!onDoubleClick && onDoubleClick(selectedTask);
     } else {
       setBarEvent({
         action,
@@ -217,9 +221,13 @@ export const GanttContent: React.FC<GanttContentProps> = ({
         (action === "move" || action === "end" || action === "start") &&
         onDateChange
       ) {
-        onDateChange(changedTask);
+        await onDateChange(changedTask);
+        const newTasks = barTasks.map(t =>
+          t.id === changedTask.id ? changedTask : t
+        );
+        onTasksDateChange(newTasks);
       } else if (onProgressChange) {
-        onProgressChange(changedTask);
+        await onProgressChange(changedTask);
       }
       svg.current.removeEventListener("mousemove", handleMouseMove);
       svg.current.removeEventListener("mouseup", handleMouseUp);
@@ -275,7 +283,6 @@ export const GanttContent: React.FC<GanttContentProps> = ({
               task={task}
               arrowIndent={arrowIndent}
               isProgressChangeable={!!onProgressChange && !task.isDisabled}
-              onDoubleClick={onDoubleClick}
               isDateChangeable={!!onDateChange && !task.isDisabled}
               isDelete={!!onTaskDelete && !task.isDisabled}
               onEventStart={handleBarEventStart}

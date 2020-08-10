@@ -26,38 +26,6 @@ export const GanttTableExample: React.SFC<GanttTableExampleProps> = props => {
     options.columnWidth = 250;
   }
 
-  const [tasks, setTasks] = React.useState(props.tasks);
-  const onTaskDateChange = async (task: Task) => {
-    if (props.onDateChange) {
-      try {
-        await props.onDateChange(task);
-      } catch (e) {
-        throw e;
-      }
-      setTasks(tasks.map(t => (t.id === task.id ? task : t)));
-    }
-  };
-
-  const onTaskProgressChange = async (task: Task) => {
-    if (props.onProgressChange) {
-      try {
-        await props.onProgressChange(task);
-      } catch (e) {
-        setTasks(props.tasks.slice());
-        throw e;
-      }
-
-      setTasks(tasks.map(t => (t.id === task.id ? task : t)));
-    }
-  };
-
-  const onTaskItemDelete = async (task: Task) => {
-    if (props.onTaskDelete) {
-      await props.onTaskDelete(task);
-      setTasks(tasks.filter(t => t.id !== task.id));
-    }
-  };
-
   return (
     <div className="Wrapper">
       <div
@@ -107,7 +75,7 @@ export const GanttTableExample: React.SFC<GanttTableExampleProps> = props => {
             To
           </div>
         </div>
-        {tasks.map(t => {
+        {props.tasks.map(t => {
           return (
             <div
               className="GanttTable-row"
@@ -121,14 +89,7 @@ export const GanttTableExample: React.SFC<GanttTableExampleProps> = props => {
         })}
       </div>
       <div style={{ overflowX: "scroll" }}>
-        <Gantt
-          {...options}
-          {...props}
-          tasks={tasks}
-          onDateChange={onTaskDateChange}
-          onTaskDelete={onTaskItemDelete}
-          onProgressChange={onTaskProgressChange}
-        />
+        <Gantt {...props} {...options} />
       </div>
     </div>
   );
