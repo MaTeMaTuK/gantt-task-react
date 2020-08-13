@@ -91,10 +91,8 @@ export const GanttContent: React.FC<GanttContentProps> = ({
       dates[1].getTimezoneOffset() * 60 * 1000 +
       dates[0].getTimezoneOffset() * 60 * 1000;
     const newXStep = (timeStep * columnWidth) / dateDelta;
-    if (newXStep !== xStep) {
-      setXStep(newXStep);
-    }
-  }, [columnWidth, dates, timeStep, xStep]);
+    setXStep(newXStep);
+  }, [columnWidth, dates, timeStep]);
 
   // generate tasks
   useEffect(() => {

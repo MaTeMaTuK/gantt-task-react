@@ -67,6 +67,7 @@ export const ganttDateRange = (tasks: Task[], viewMode: ViewMode) => {
   switch (viewMode) {
     case ViewMode.Month:
       newStartDate = addToDate(newStartDate, -1, "month");
+      newStartDate = startOfDate(newStartDate, "month");
       newEndDate = addToDate(newEndDate, 1, "year");
       newEndDate = startOfDate(newEndDate, "year");
       break;
