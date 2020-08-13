@@ -58,28 +58,49 @@ npm start
 
 ### GanttProps
 
-| Parameter Name                  | Type      | Required | Description                                        |
-| :------------------------------ | :-------- | :------- | :------------------------------------------------- |
-| tasks                           | Task      | Yes      | Tasks array.                                       |
-| [EventOption](#EventOption)     | interface | No       | Specifies gantt events.                            |
-| [DisplayOption](#DisplayOption) | interface | No       | Specifies view type and display timeline language. |
-| StylingOption                   | interface | No       | Specifies chart and global tasks styles            |
+| Parameter Name                  | Type      | Description                                        |
+| :------------------------------ | :-------- | :------------------------------------------------- |
+| tasks (Required)                | Task      | Tasks array.                                       |
+| [EventOption](#EventOption)     | interface | Specifies gantt events.                            |
+| [DisplayOption](#DisplayOption) | interface | Specifies view type and display timeline language. |
+| StylingOption                   | interface | Specifies chart and global tasks styles            |
 
 ### EventOption
 
-| Parameter Name   | Type                              | Required | Description                                                                           |
-| :--------------- | :-------------------------------- | :------- | :------------------------------------------------------------------------------------ |
-| onDoubleClick    | (task: Task) => any               | No       | Specifies the function to be executed on the bar`s onDoubleClick event.               |
-| onTaskDelete     | (task: Task) => void/Promise<any> | No       | Specifies the function to be executed on the bar`s on Delete button press event.      |
-| onDateChange     | (task: Task) => void/Promise<any> | No       | Specifies the function to be executed when drag bar`s event on timeline has finished. |
-| onProgressChange | (task: Task) => void/Promise<any> | No       | Specifies the function to be executed when drag bar`s progress event has finished.    |
-| timeStep         | number                            | No       | A time step value for onDateChange. Specify in milliseconds.                          |
+| Parameter Name   | Type                              | Description                                                                             |
+| :--------------- | :-------------------------------- | :-------------------------------------------------------------------------------------- |
+| onDoubleClick    | (task: Task) => any               | Specifies the function to be executed on the taskbar onDoubleClick event.               |
+| onTaskDelete     | (task: Task) => void/Promise<any> | Specifies the function to be executed on the taskbar on Delete button press event.      |
+| onDateChange     | (task: Task) => void/Promise<any> | Specifies the function to be executed when drag taskbar event on timeline has finished. |
+| onProgressChange | (task: Task) => void/Promise<any> | Specifies the function to be executed when drag taskbar progress event has finished.    |
+| timeStep         | number                            | A time step value for onDateChange. Specify in milliseconds.                            |
 
 ### DisplayOption
 
-| Parameter Name | Type   | Required | Description                                                                                     |
-| :------------- | :----- | :------- | :---------------------------------------------------------------------------------------------- |
-| viewMode       | enum   | No       | Specifies the time scale. Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month. |
-| locale         | string | No       | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                        |
+| Parameter Name | Type   | Description                                                                                     |
+| :------------- | :----- | :---------------------------------------------------------------------------------------------- |
+| viewMode       | enum   | Specifies the time scale. Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month. |
+| locale         | string | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                        |
 
-Work in progress
+### StylingOption
+
+| Parameter Name             | Type   | Description                                                             |
+| :------------------------- | :----- | :---------------------------------------------------------------------- |
+| headerHeight               | number | Specifies the header height.                                            |
+| columnWidth                | number | Specifies the time period width.                                        |
+| rowHeight                  | number | Specifies the task row height.                                          |
+| barCornerRadius            | number | Specifies the taskbar corner rounding.                                  |
+| barFill                    | number | Specifies the taskbar occupation. Sets in percent from 0 to 100.        |
+| handleWidth                | number | Specifies width the taskbar drag event control for start and end dates. |
+| fontFamily                 | string | Specifies the application font.                                         |
+| fontSize                   | string | Specifies the application font size.                                    |
+| barProgressColor           | string | Specifies the taskbar progress fill color globally.                     |
+| barProgressSelectedColor   | string | Specifies the taskbar progress fill color globally on select.           |
+| barBackgroundColor         | string | Specifies the taskbar background fill color globally.                   |
+| barBackgroundSelectedColor | string | Specifies the taskbar background fill color globally on select.         |
+| arrowColor                 | string | Specifies the relationship arrow fill color.                            |
+| arrowIndent                | number | Specifies the relationship arrow right indent. Sets in px               |
+| todayColor                 | string | Specifies the current period column fill color.                         |
+| getTooltipContent          | \*     | Specifies the Tooltip for selected taskbar.                             |
+
+\*`(task:Task, fontSize:string , fontFamily:string) => JSX.Element;`
