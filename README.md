@@ -103,4 +103,4 @@ npm start
 | todayColor                 | string | Specifies the current period column fill color.                         |
 | getTooltipContent          | \*     | Specifies the Tooltip for selected taskbar.                             |
 
-\*`(task:Task, fontSize:string , fontFamily:string) => JSX.Element;`
+[\*`(task:Task, fontSize:string , fontFamily:string) => JSX.Element;`](https://github.com/MaTeMaTuK/gantt-task-react/blob/07dfeddd4d96ecc418619cad9cd9ba3c31bb82a8/src/components/Other/tooltip.tsx#L47)
