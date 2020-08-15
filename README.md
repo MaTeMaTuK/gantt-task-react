@@ -58,12 +58,12 @@ npm start
 
 ### GanttProps
 
-| Parameter Name                  | Type      | Description                                        |
-| :------------------------------ | :-------- | :------------------------------------------------- |
-| tasks (Required)                | Task      | Tasks array.                                       |
-| [EventOption](#EventOption)     | interface | Specifies gantt events.                            |
-| [DisplayOption](#DisplayOption) | interface | Specifies view type and display timeline language. |
-| StylingOption                   | interface | Specifies chart and global tasks styles            |
+| Parameter Name                  | Type          | Description                                        |
+| :------------------------------ | :------------ | :------------------------------------------------- |
+| tasks\*                         | [Task](#Task) | Tasks array.                                       |
+| [EventOption](#EventOption)     | interface     | Specifies gantt events.                            |
+| [DisplayOption](#DisplayOption) | interface     | Specifies view type and display timeline language. |
+| [StylingOption](#StylingOption) | interface     | Specifies chart and global tasks styles            |
 
 ### EventOption
 
@@ -101,6 +101,30 @@ npm start
 | arrowColor                 | string | Specifies the relationship arrow fill color.                            |
 | arrowIndent                | number | Specifies the relationship arrow right indent. Sets in px               |
 | todayColor                 | string | Specifies the current period column fill color.                         |
-| getTooltipContent          | \*     | Specifies the Tooltip for selected taskbar.                             |
+| getTooltipContent          | \*\*   | Specifies the Tooltip for selected taskbar.                             |
 
-[\*`(task:Task, fontSize:string , fontFamily:string) => JSX.Element;`](https://github.com/MaTeMaTuK/gantt-task-react/blob/07dfeddd4d96ecc418619cad9cd9ba3c31bb82a8/src/components/Other/tooltip.tsx#L47)
+[\*\*`(task:Task, fontSize:string , fontFamily:string) => JSX.Element;`](https://github.com/MaTeMaTuK/gantt-task-react/blob/07dfeddd4d96ecc418619cad9cd9ba3c31bb82a8/src/components/Other/tooltip.tsx#L47)
+
+### Task
+
+| Parameter Name | Type   | Description                                                                                     |
+| :------------- | :----- | :---------------------------------------------------------------------------------------------- |
+| id\*           | string | Task id.                                                                                        |
+| name\*         | string | Task display name.                                                                              |
+| start\*        | Date   | Task start date.                                                                                |
+| end\*          | Date   | Task end date.                                                                                  |
+| progress\*     | number | Task progress. Sets in percent from 0 to 100.                                                   |
+| styles         | object | Specifies the taskbar styling settings locally. Object is passed with the following attributes: |
+
+- backgroundColor: String. Specifies the taskbar background fill color locally.
+- backgroundSelectedColor: String. Specifies the taskbar background fill color locally on select.
+- progressColor: String. Specifies the taskbar progress fill color locally.
+- progressSelectedColor: String. Specifies the taskbar progress fill color globally on select. |
+  | isDisabled | bool | Disables all action for current task. |
+  | fontSize | string | Specifies the taskbar font size locally. |
+
+\*Required
+
+## License
+
+[MIT](https://oss.ninja/mit/jaredpalmer/)
