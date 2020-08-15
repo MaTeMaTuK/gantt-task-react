@@ -114,11 +114,11 @@ npm start
 | start\*        | Date   | Task start date.                                                                                  |
 | end\*          | Date   | Task end date.                                                                                    |
 | progress\*     | number | Task progress. Sets in percent from 0 to 100.                                                     |
-| styles         | object | Specifies the taskbar styling settings locally. Object is passed with the following attributes:   |
-|                |        | - backgroundColor: String. Specifies the taskbar background fill color locally.                   |
-|                |        | - backgroundSelectedColor: String. Specifies the taskbar background fill color locally on select. |
-|                |        | - progressColor: String. Specifies the taskbar progress fill color locally.                       |
-|                |        | - progressSelectedColor: String. Specifies the taskbar progress fill color globally on select.    |
+| styles         | object | Specifies the taskbar styling settings locally. Object is passed with the following attributes:  
+<br/>- backgroundColor: String. Specifies the taskbar background fill color locally.                   
+<br/>- backgroundSelectedColor: String. Specifies the taskbar background fill color locally on select. 
+<br/>- progressColor: String. Specifies the taskbar progress fill color locally.                       
+<br/>- progressSelectedColor: String. Specifies the taskbar progress fill color globally on select.    |
 | isDisabled     | bool   | Disables all action for current task.                                                             |
 | fontSize       | string | Specifies the taskbar font size locally.                                                          |
 
