@@ -22,6 +22,6 @@ jobs:
       - name: NPM Publish
         run: |
           npm ci
-          npm publish --access public --tag [react, gantt, typescript, chart, svg, gantt-chart, gantt chart, react-gantt, task]
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

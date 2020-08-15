@@ -12,6 +12,17 @@
   "engines": {
     "node": ">=10"
   },
+  "keywords": [
+    "react",
+    "gantt",
+    "typescript",
+    "chart",
+    "svg",
+    "gantt-chart",
+    "gantt chart",
+    "react-gantt",
+    "task"
+  ],
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
