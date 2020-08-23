@@ -12,13 +12,13 @@ export type TaskListProps = {
   locale: string;
   tasks: Task[];
   horizontalContainerClass?: string;
-  TaskListHeader: React.SFC<{
+  TaskListHeader: React.FC<{
     headerHeight: number;
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
   }>;
-  TaskListTable: React.SFC<{
+  TaskListTable: React.FC<{
     rowHeight: number;
     rowWidth: string;
     fontFamily: string;

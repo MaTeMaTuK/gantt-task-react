@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./task-list-header.module.css";
 
-export const TaskListHeaderDefault: React.SFC<{
+export const TaskListHeaderDefault: React.FC<{
   headerHeight: number;
   rowWidth: string;
   fontFamily: string;

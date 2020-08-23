@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./task-list-table.module.css";
 import { Task } from "../../types/public-types";
 
-export const TaskListTableDefault: React.SFC<{
+export const TaskListTableDefault: React.FC<{
   rowHeight: number;
   rowWidth: string;
   fontFamily: string;

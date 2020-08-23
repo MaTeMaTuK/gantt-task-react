@@ -108,8 +108,8 @@ npm start
 | TaskListTable              |        | Specifies the task list Table view                                                             |
 
 - TooltipContent: [`React.FC<{ task: Task; fontSize: string; fontFamily: string; }>;`](https://github.com/MaTeMaTuK/gantt-task-react/blob/07dfeddd4d96ecc418619cad9cd9ba3c31bb82a8/src/components/Other/tooltip.tsx#L47)
-- TaskListHeader: `React.SFC<{ headerHeight: number; rowWidth: string; fontFamily: string; fontSize: string;}>;`
-- TaskListTable: `React.SFC<{ rowHeight: number; rowWidth: string; fontFamily: string; fontSize: string; locale: string; tasks: Task[]; }>;`
+- TaskListHeader: `React.FC<{ headerHeight: number; rowWidth: string; fontFamily: string; fontSize: string;}>;`
+- TaskListTable: `React.FC<{ rowHeight: number; rowWidth: string; fontFamily: string; fontSize: string; locale: string; tasks: Task[]; }>;`
 
 ### Task
 
