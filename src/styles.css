@@ -8,6 +8,14 @@
   outline: none;
 }
 
+.GanttBar-handle {
+  fill: #ddd;
+  cursor: ew-resize;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
 .GanttBar-wrapper:hover .GanttBar-handle {
   visibility: visible;
   opacity: 1;
@@ -29,14 +37,6 @@
 .GanttBar-label-outside {
   fill: #555;
   text-anchor: start;
-}
-
-.GanttBar-handle {
-  fill: #ddd;
-  cursor: ew-resize;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease;
 }
 
 .GanttCalendar-bottomText {
@@ -66,7 +66,7 @@
 }
 
 .GanttGrid-row {
-  fill: #ffffff;
+  fill: #fff;
 }
 
 .GanttGrid-row:nth-child(even) {
@@ -74,7 +74,7 @@
 }
 
 .GanttGrid-header {
-  fill: #ffffff;
+  fill: #fff;
   stroke: #e0e0e0;
   stroke-width: 1.4;
 }

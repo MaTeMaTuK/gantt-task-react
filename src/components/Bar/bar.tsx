@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { BarProgressHandle } from "./bar-progress-handle";
-import { BarDateHandle } from "./bar-date-handle";
-import { BarDisplay } from "./bar-display";
 import { BarTask } from "../../types/bar-task";
 import {
   progressWithByParams,
   getProgressPoint,
 } from "../../helpers/bar-helper";
 import styles from "./bar.module.css";
-import { GanttContentMoveAction } from "../Gantt/gantt-content";
+import { GanttContentMoveAction } from "../gantt/task-gantt-content";
+import { BarDisplay } from "./bar-display";
+import { BarDateHandle } from "./bar-date-handle";
+import { BarProgressHandle } from "./bar-progress-handle";
 
 export type BarProps = {
   task: BarTask;

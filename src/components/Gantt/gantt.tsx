@@ -1,15 +1,24 @@
-import React, { useRef, useState } from "react";
+import React, { useState, SyntheticEvent } from "react";
 import { ViewMode, GanttProps, Task } from "../../types/public-types";
-import { Grid, GridProps } from "../Grid/grid";
-import { Calendar, CalendarProps } from "../Calendar/calendar";
-import { GanttContent, GanttContentProps } from "./gantt-content";
+import { GridProps } from "../grid/grid";
 import { ganttDateRange, seedDates } from "../../helpers/date-helper";
+import { CalendarProps } from "../calendar/calendar";
+import { TaskGanttContentProps } from "./task-gantt-content";
+import { TaskListHeaderDefault } from "../task-list/task-list-header";
+import { TaskListTableDefault } from "../task-list/task-list-table";
+import { StandardTooltipContent } from "../other/tooltip";
+import { Scroll } from "../other/scroll";
+import { TaskListProps, TaskList } from "../task-list/task-list";
+import styles from "./gantt.module.css";
+import { TaskGantt } from "./task-gantt";
 
 export const Gantt: React.SFC<GanttProps> = ({
   tasks,
   headerHeight = 50,
   columnWidth = 60,
+  listCellWidth = "150px",
   rowHeight = 50,
+  ganttHeight = 0,
   viewMode = ViewMode.Day,
   locale = "en-GB",
   barFill = 60,
@@ -25,27 +34,36 @@ export const Gantt: React.SFC<GanttProps> = ({
   fontSize = "14px",
   arrowIndent = 20,
   todayColor = "rgba(252, 248, 227, 0.5)",
+  TooltipContent = StandardTooltipContent,
+  TaskListHeader = TaskListHeaderDefault,
+  TaskListTable = TaskListTableDefault,
   onDateChange,
   onProgressChange,
   onDoubleClick,
   onTaskDelete,
-  getTooltipContent,
 }) => {
-  const svg = useRef<SVGSVGElement>(null);
   const [ganttTasks, setGanttTasks] = useState<Task[]>(tasks);
+  const [scroll, setScroll] = useState(0);
+
   const [startDate, endDate] = ganttDateRange(ganttTasks, viewMode);
   const dates = seedDates(startDate, endDate, viewMode);
 
-  const handleOnTasksChange = (tasks: Task[]) => {
+  const svgHeight = rowHeight * tasks.length;
+  const gridWidth = dates.length * columnWidth;
+
+  const onTasksDateChange = (tasks: Task[]) => {
     setGanttTasks(tasks);
+  };
+
+  const handleScroll = (event: SyntheticEvent<HTMLDivElement>) => {
+    setScroll(event.currentTarget.scrollTop);
   };
 
   const gridProps: GridProps = {
     columnWidth,
-    gridWidth: dates.length * columnWidth,
+    gridWidth,
     tasks: ganttTasks,
     rowHeight,
-    headerHeight,
     dates,
     todayColor,
   };
@@ -58,7 +76,7 @@ export const Gantt: React.SFC<GanttProps> = ({
     fontFamily,
     fontSize,
   };
-  const barProps: GanttContentProps = {
+  const barProps: TaskGanttContentProps = {
     tasks: ganttTasks,
     rowHeight,
     barCornerRadius,
@@ -69,32 +87,52 @@ export const Gantt: React.SFC<GanttProps> = ({
     barProgressSelectedColor,
     barBackgroundColor,
     barBackgroundSelectedColor,
-    headerHeight,
     handleWidth,
     arrowColor,
     timeStep,
     fontFamily,
     fontSize,
     arrowIndent,
-    svg,
-    onTasksDateChange: handleOnTasksChange,
+    svgHeight,
+    onTasksDateChange: onTasksDateChange,
     onDateChange,
     onProgressChange,
     onDoubleClick,
     onTaskDelete,
-    getTooltipContent,
+    TooltipContent,
   };
+
+  const tableProps: TaskListProps = {
+    rowHeight,
+    rowWidth: listCellWidth,
+    fontFamily,
+    fontSize,
+    tasks: ganttTasks,
+    locale,
+    headerHeight,
+    scroll,
+    ganttHeight,
+    horizontalContainerClass: styles.horizontalContainer,
+    TaskListHeader,
+    TaskListTable,
+  };
+
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={columnWidth * dates.length}
-      height={headerHeight + rowHeight * tasks.length}
-      fontFamily={fontFamily}
-      ref={svg}
-    >
-      <Grid {...gridProps} />
-      <Calendar {...calendarProps} />
-      <GanttContent {...barProps} />
-    </svg>
+    <div className={styles.wrapper}>
+      {listCellWidth && <TaskList {...tableProps} />}
+      <TaskGantt
+        gridProps={gridProps}
+        calendarProps={calendarProps}
+        barProps={barProps}
+        ganttHeight={ganttHeight}
+        scroll={scroll}
+      />
+      <Scroll
+        ganttFullHeight={ganttTasks.length * rowHeight}
+        ganttHeight={ganttHeight}
+        headerHeight={headerHeight}
+        onScroll={handleScroll}
+      />
+    </div>
   );
 };

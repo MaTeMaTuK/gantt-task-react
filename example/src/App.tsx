@@ -1,13 +1,19 @@
 import React from "react";
 import "gantt-task-react/dist/index.css";
-import { Task, ViewMode } from "gantt-task-react";
+import { Task, ViewMode, Gantt } from "gantt-task-react";
 import { ViewSwitcher } from "./components/view-switcher";
-import { GanttTableExample } from "./components/gantt-table";
 
 //Init
 const App = () => {
   const currentDate = new Date();
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
+  const [isChecked, setIsChecked] = React.useState(true);
+  let columnWidth = 60;
+  if (view === ViewMode.Month) {
+    columnWidth = 300;
+  } else if (view === ViewMode.Week) {
+    columnWidth = 250;
+  }
   let tasks: Task[] = [
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
@@ -21,7 +27,6 @@ const App = () => {
       name: "Idea",
       id: "Task 0",
       progress: 45,
-      isDisabled: true,
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
@@ -58,11 +63,19 @@ const App = () => {
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 16),
-      name: "Release & Eat Burgers",
+      name: "Release & Eat Pizza",
       id: "Task 6",
       progress: currentDate.getMonth(),
       dependencies: ["Task 4"],
       styles: { progressColor: "#ffbb54", progressSelectedColor: "#ff9e0d" },
+    },
+    {
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 24),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 25),
+      name: "Closing",
+      id: "Task 9",
+      progress: 0,
+      isDisabled: true,
     },
   ];
 
@@ -85,14 +98,33 @@ const App = () => {
 
   return (
     <div>
-      <ViewSwitcher onViewChange={viewMode => setView(viewMode)} />
-      <GanttTableExample
+      <ViewSwitcher
+        onViewModeChange={viewMode => setView(viewMode)}
+        onViewListChange={setIsChecked}
+        isChecked={isChecked}
+      />
+      <h3>Gantt With Unlimited Height</h3>
+      <Gantt
         tasks={tasks}
         viewMode={view}
         onDateChange={onTaskChange}
         onTaskDelete={onTaskDelete}
         onProgressChange={onProgressChange}
         onDoubleClick={onDblClick}
+        listCellWidth={isChecked ? "150px" : ""}
+        columnWidth={columnWidth}
+      />
+      <h3>Gantt With Limited Height</h3>
+      <Gantt
+        tasks={tasks}
+        viewMode={view}
+        onDateChange={onTaskChange}
+        onTaskDelete={onTaskDelete}
+        onProgressChange={onProgressChange}
+        onDoubleClick={onDblClick}
+        listCellWidth={isChecked ? "150px" : ""}
+        ganttHeight={300}
+        columnWidth={columnWidth}
       />
     </div>
   );

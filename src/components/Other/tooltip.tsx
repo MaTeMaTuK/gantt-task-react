@@ -1,54 +1,63 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Task } from "../../types/public-types";
+import { BarTask } from "../../types/bar-task";
 import styles from "./tooltip.module.css";
 
 export type TooltipProps = {
   x: number;
-  y: number;
-  task: Task;
+  svgHeight: number;
+  rowHeight: number;
+  task: BarTask;
   fontSize: string;
   fontFamily: string;
-  getTooltipContent?: (
-    task: Task,
-    fontSize: string,
-    fontFamily: string
-  ) => JSX.Element;
+  TooltipContent: React.FC<{
+    task: Task;
+    fontSize: string;
+    fontFamily: string;
+  }>;
 };
 export const Tooltip: React.FC<TooltipProps> = ({
   x,
-  y,
+  rowHeight,
+  svgHeight,
   task,
   fontSize,
   fontFamily,
-
-  getTooltipContent = getStandardTooltipContent,
+  TooltipContent,
 }) => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [toolWidth, setToolWidth] = useState(1000);
-  const [relatedY, setRelatedY] = useState(y);
+  const [relatedY, setRelatedY] = useState((task.index - 1) * rowHeight);
   useEffect(() => {
     if (tooltipRef.current) {
-      const height =
-        tooltipRef.current.offsetHeight +
-        tooltipRef.current.offsetHeight * 0.15;
-      setRelatedY(y - height);
+      const tooltipHeight = tooltipRef.current.offsetHeight;
+      const tooltipY = task.index * rowHeight + rowHeight;
+      if (tooltipHeight > tooltipY) {
+        setRelatedY(tooltipHeight * 0.5);
+      } else if (tooltipY + tooltipHeight > svgHeight) {
+        setRelatedY(svgHeight - tooltipHeight * 1.05);
+      }
       setToolWidth(tooltipRef.current.scrollWidth * 1.1);
     }
-  }, [tooltipRef, y]);
+  }, [tooltipRef, task]);
   return (
     <foreignObject x={x} y={relatedY} width={toolWidth} height={1000}>
       <div ref={tooltipRef} className={styles.tooltipDetailsContainer}>
-        {getTooltipContent(task, fontSize, fontFamily)}
+        <TooltipContent
+          task={task}
+          fontSize={fontSize}
+          fontFamily={fontFamily}
+        />
       </div>
     </foreignObject>
   );
 };
 
-const getStandardTooltipContent = (
-  task: Task,
-  fontSize: string,
-  fontFamily: string
-) => {
+export const StandardTooltipContent: React.FC<{
+  task: Task;
+  fontSize: string;
+  fontFamily: string;
+}> = ({ task, fontSize, fontFamily }) => {
   const style = {
     fontSize,
     fontFamily,
@@ -66,9 +75,9 @@ const getStandardTooltipContent = (
         (task.end.getTime() - task.start.getTime()) /
         (1000 * 60 * 60 * 24)
       )} day(s)`}</p>
-      <p
-        className={styles.tooltipDefaultContainerParagraph}
-      >{`Progress: ${task.progress} %`}</p>
+      <p className={styles.tooltipDefaultContainerParagraph}>
+        {!!task.progress && `Progress: ${task.progress} %`}
+      </p>
     </div>
   );
 };

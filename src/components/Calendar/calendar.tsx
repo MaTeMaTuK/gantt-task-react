@@ -67,7 +67,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   const getCalendarValuesForWeek = () => {
     const topValues: ReactChild[] = [];
     const bottomValues: ReactChild[] = [];
-    let weeksCount: number = 0;
+    let weeksCount: number = 1;
     const topDefaultHeight = headerHeight * 0.5;
     for (let i = dates.length - 1; i >= 0; i--) {
       const date = dates[i];
@@ -138,7 +138,7 @@ export const Calendar: React.FC<CalendarProps> = ({
 
         topValues.push(
           <TopPartOfCalendar
-            key={topValue}
+            key={topValue + date.getFullYear()}
             value={topValue}
             x1Line={columnWidth * (i + 1)}
             y1Line={0}
@@ -179,7 +179,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         const topValue = `${date.getDate()} ${getLocaleMonth(date, locale)}`;
         topValues.push(
           <TopPartOfCalendar
-            key={topValue}
+            key={topValue + date.getFullYear()}
             value={topValue}
             x1Line={columnWidth * i + ticks * columnWidth}
             y1Line={0}
@@ -210,6 +210,13 @@ export const Calendar: React.FC<CalendarProps> = ({
   }
   return (
     <g className="calendar" fontSize={fontSize} fontFamily={fontFamily}>
+      <rect
+        x={0}
+        y={0}
+        width={columnWidth * dates.length}
+        height={headerHeight}
+        className={styles.calendarHeader}
+      />
       {bottomValues} {topValues}
     </g>
   );

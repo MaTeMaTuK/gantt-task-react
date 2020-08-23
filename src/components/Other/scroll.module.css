@@ -1,0 +1,6 @@
+.scroll {
+  overflow: hidden auto;
+  margin-left: -17px;
+  width: 17px;
+  flex-shrink: 0;
+}

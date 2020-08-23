@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Task, EventOption } from "../../types/public-types";
-import { Bar } from "../Bar/bar";
+import { Bar } from "../bar/bar";
 import { BarTask } from "../../types/bar-task";
-import { Arrow } from "../Other/arrow";
+import { Arrow } from "../other/arrow";
 import {
   convertToBarTasks,
   handleTaskBySVGMouseEvent,
   BarMoveAction,
 } from "../../helpers/bar-helper";
-import { Tooltip } from "../Other/tooltip";
+import { Tooltip } from "../other/tooltip";
 import { isKeyboardEvent } from "../../helpers/other-helper";
 
 export type GanttContentMoveAction =
@@ -21,7 +21,7 @@ export type BarEvent = {
   selectedTask?: BarTask;
   action: GanttContentMoveAction;
 };
-export type GanttContentProps = {
+export type TaskGanttContentProps = {
   tasks: Task[];
   dates: Date[];
   rowHeight: number;
@@ -32,23 +32,23 @@ export type GanttContentProps = {
   barProgressSelectedColor: string;
   barBackgroundColor: string;
   barBackgroundSelectedColor: string;
-  headerHeight: number;
   handleWidth: number;
   timeStep: number;
-  svg: React.RefObject<SVGSVGElement>;
+  svg?: React.RefObject<SVGSVGElement>;
+  svgHeight: number;
   arrowColor: string;
   arrowIndent: number;
   fontSize: string;
   fontFamily: string;
-  getTooltipContent?: (
-    task: Task,
-    fontSize: string,
-    fontFamily: string
-  ) => JSX.Element;
+  TooltipContent: React.FC<{
+    task: Task;
+    fontSize: string;
+    fontFamily: string;
+  }>;
   onTasksDateChange: (tasks: Task[]) => void;
 } & EventOption;
 
-export const GanttContent: React.FC<GanttContentProps> = ({
+export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   tasks,
   dates,
   rowHeight,
@@ -59,10 +59,10 @@ export const GanttContent: React.FC<GanttContentProps> = ({
   barProgressSelectedColor,
   barBackgroundColor,
   barBackgroundSelectedColor,
-  headerHeight,
   handleWidth,
   timeStep,
   svg,
+  svgHeight,
   arrowColor,
   arrowIndent,
   fontFamily,
@@ -72,9 +72,9 @@ export const GanttContent: React.FC<GanttContentProps> = ({
   onProgressChange,
   onDoubleClick,
   onTaskDelete,
-  getTooltipContent,
+  TooltipContent,
 }) => {
-  const point = svg.current?.createSVGPoint();
+  const point = svg?.current?.createSVGPoint();
   const [barEvent, setBarEvent] = useState<BarEvent>({
     action: "",
   });
@@ -103,7 +103,6 @@ export const GanttContent: React.FC<GanttContentProps> = ({
         columnWidth,
         rowHeight,
         barFill,
-        headerHeight,
         barCornerRadius,
         handleWidth,
         barProgressColor,
@@ -120,7 +119,6 @@ export const GanttContent: React.FC<GanttContentProps> = ({
     dates,
     barFill,
     handleWidth,
-    headerHeight,
     barProgressColor,
     barProgressSelectedColor,
     barBackgroundColor,
@@ -139,9 +137,7 @@ export const GanttContent: React.FC<GanttContentProps> = ({
       if (action === "delete") {
         if (onTaskDelete) {
           await onTaskDelete(selectedTask);
-          const newTasks = barTasks.filter(
-            t => t.id !== barEvent.selectedTask?.id
-          );
+          const newTasks = barTasks.filter(t => t.id !== selectedTask.id);
           onTasksDateChange(newTasks);
         }
       }
@@ -154,7 +150,7 @@ export const GanttContent: React.FC<GanttContentProps> = ({
         setBarEvent({ action: "" });
       }
     } else if (action === "move") {
-      if (!svg.current || !point) return;
+      if (!svg?.current || !point) return;
       point.x = event.clientX;
       const cursor = point.matrixTransform(
         svg.current.getScreenCTM()?.inverse()
@@ -173,12 +169,12 @@ export const GanttContent: React.FC<GanttContentProps> = ({
 
   useEffect(() => {
     const handleMouseMove = async (event: MouseEvent) => {
-      if (!barEvent.selectedTask || !point || !svg.current) return;
+      if (!barEvent.selectedTask || !point || !svg?.current) return;
       event.preventDefault();
 
       point.x = event.clientX;
       const cursor = point.matrixTransform(
-        svg.current.getScreenCTM()?.inverse()
+        svg?.current.getScreenCTM()?.inverse()
       );
 
       const { isChanged, changedTask } = handleTaskBySVGMouseEvent(
@@ -199,12 +195,12 @@ export const GanttContent: React.FC<GanttContentProps> = ({
 
     const handleMouseUp = async (event: MouseEvent) => {
       const { selectedTask, action } = barEvent;
-      if (!selectedTask || !point || !svg.current) return;
+      if (!selectedTask || !point || !svg?.current) return;
       event.preventDefault();
 
       point.x = event.clientX;
       const cursor = point.matrixTransform(
-        svg.current.getScreenCTM()?.inverse()
+        svg?.current.getScreenCTM()?.inverse()
       );
 
       const { changedTask } = handleTaskBySVGMouseEvent(
@@ -239,7 +235,7 @@ export const GanttContent: React.FC<GanttContentProps> = ({
         barEvent.action === "end" ||
         barEvent.action === "start" ||
         barEvent.action === "progress") &&
-      svg.current
+      svg?.current
     ) {
       svg.current.addEventListener("mousemove", handleMouseMove);
       svg.current.addEventListener("mouseup", handleMouseUp);
@@ -282,7 +278,7 @@ export const GanttContent: React.FC<GanttContentProps> = ({
               arrowIndent={arrowIndent}
               isProgressChangeable={!!onProgressChange && !task.isDisabled}
               isDateChangeable={!!onDateChange && !task.isDisabled}
-              isDelete={!!onTaskDelete && !task.isDisabled}
+              isDelete={!task.isDisabled}
               onEventStart={handleBarEventStart}
               key={task.id}
             />
@@ -293,11 +289,12 @@ export const GanttContent: React.FC<GanttContentProps> = ({
         {barEvent.selectedTask && (
           <Tooltip
             x={barEvent.selectedTask.x2 + arrowIndent + arrowIndent * 0.5}
-            y={barEvent.selectedTask.y + rowHeight}
+            rowHeight={rowHeight}
+            svgHeight={svgHeight}
             task={barEvent.selectedTask}
             fontFamily={fontFamily}
             fontSize={fontSize}
-            getTooltipContent={getTooltipContent}
+            TooltipContent={TooltipContent}
           />
         )}
       </g>

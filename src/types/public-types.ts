@@ -47,7 +47,9 @@ export interface DisplayOption {
 export interface StylingOption {
   headerHeight?: number;
   columnWidth?: number;
+  listCellWidth?: string;
   rowHeight?: number;
+  ganttHeight?: number;
   barCornerRadius?: number;
   handleWidth?: number;
   fontFamily?: string;
@@ -64,11 +66,25 @@ export interface StylingOption {
   arrowColor?: string;
   arrowIndent?: number;
   todayColor?: string;
-  getTooltipContent?: (
-    task: Task,
-    fontSize: string,
-    fontFamily: string
-  ) => JSX.Element;
+  TooltipContent?: React.FC<{
+    task: Task;
+    fontSize: string;
+    fontFamily: string;
+  }>;
+  TaskListHeader?: React.SFC<{
+    headerHeight: number;
+    rowWidth: string;
+    fontFamily: string;
+    fontSize: string;
+  }>;
+  TaskListTable?: React.SFC<{
+    rowHeight: number;
+    rowWidth: string;
+    fontFamily: string;
+    fontSize: string;
+    locale: string;
+    tasks: Task[];
+  }>;
 }
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {

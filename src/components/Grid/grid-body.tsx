@@ -8,7 +8,6 @@ export type GridBodyProps = {
   dates: Date[];
   gridWidth: number;
   rowHeight: number;
-  headerHeight: number;
   columnWidth: number;
   todayColor: string;
 };
@@ -16,14 +15,22 @@ export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
   dates,
   rowHeight,
-  headerHeight,
   gridWidth,
   columnWidth,
   todayColor,
 }) => {
-  let y = headerHeight;
+  let y = 0;
   const gridRows: ReactChild[] = [];
-  const rowLines: ReactChild[] = [];
+  const rowLines: ReactChild[] = [
+    <line
+      key="RowLineFirst"
+      x="0"
+      y1={0}
+      x2={gridWidth}
+      y2={0}
+      className={styles.gridRowLine}
+    />,
+  ];
   for (const task of tasks) {
     gridRows.push(
       <rect
@@ -58,7 +65,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
       <line
         key={date.getTime()}
         x1={tickX}
-        y1={headerHeight}
+        y1={0}
         x2={tickX}
         y2={y}
         className={styles.gridTick}

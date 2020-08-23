@@ -1,0 +1,20 @@
+.ganttVerticalContainer {
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.horizontalContainer {
+  margin: 0;
+  padding: 0;
+  overflow-y: hidden;
+}
+
+.wrapper {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}

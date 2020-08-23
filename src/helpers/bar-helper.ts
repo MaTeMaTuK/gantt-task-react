@@ -7,7 +7,6 @@ export const convertToBarTasks = (
   columnWidth: number,
   rowHeight: number,
   barFill: number,
-  headerHeight: number,
   barCornerRadius: number,
   handleWidth: number,
   barProgressColor: string,
@@ -31,7 +30,6 @@ export const convertToBarTasks = (
       columnWidth,
       rowHeight,
       taskHeight,
-      headerHeight,
       barCornerRadius,
       handleWidth,
       barProgressColor,
@@ -64,7 +62,6 @@ export const convertToBarTask = (
   columnWidth: number,
   rowHeight: number,
   taskHeight: number,
-  headerHeight: number,
   barCornerRadius: number,
   handleWidth: number,
   barProgressColor: string,
@@ -74,7 +71,7 @@ export const convertToBarTask = (
 ): BarTask => {
   const x1 = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
   const x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
-  const y = taskYCoordinate(index, rowHeight, taskHeight, headerHeight);
+  const y = taskYCoordinate(index, rowHeight, taskHeight);
 
   const styles = {
     backgroundColor: barBackgroundColor,
@@ -125,10 +122,9 @@ export const taskXCoordinate = (
 export const taskYCoordinate = (
   index: number,
   rowHeight: number,
-  taskHeight: number,
-  headerHeight: number
+  taskHeight: number
 ) => {
-  const y = index * rowHeight + headerHeight + (rowHeight - taskHeight) / 2;
+  const y = index * rowHeight + (rowHeight - taskHeight) / 2;
   return y;
 };
 
