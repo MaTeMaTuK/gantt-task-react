@@ -43,20 +43,66 @@ export const Gantt: React.SFC<GanttProps> = ({
   onTaskDelete,
 }) => {
   const [ganttTasks, setGanttTasks] = useState<Task[]>(tasks);
-  const [scroll, setScroll] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
 
   const [startDate, endDate] = ganttDateRange(ganttTasks, viewMode);
   const dates = seedDates(startDate, endDate, viewMode);
 
   const svgHeight = rowHeight * tasks.length;
   const gridWidth = dates.length * columnWidth;
+  const ganttFullHeight = ganttTasks.length * rowHeight;
 
   const onTasksDateChange = (tasks: Task[]) => {
     setGanttTasks(tasks);
   };
 
   const handleScroll = (event: SyntheticEvent<HTMLDivElement>) => {
-    setScroll(event.currentTarget.scrollTop);
+    setScrollY(event.currentTarget.scrollTop);
+  };
+
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    const newScrollY = scrollY + event.deltaY;
+    if (newScrollY < 0) {
+      setScrollY(0);
+    } else if (newScrollY > ganttFullHeight - ganttHeight) {
+      setScrollY(ganttFullHeight - ganttHeight);
+    } else {
+      setScrollY(scrollY + event.deltaY);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    let newScrollY = 0;
+    let isX = true;
+    switch (event.key) {
+      case "Down": // IE/Edge specific value
+      case "ArrowDown":
+        newScrollY = scrollY + rowHeight;
+        isX = false;
+        break;
+      case "Up": // IE/Edge specific value
+      case "ArrowUp":
+        newScrollY = scrollY - rowHeight;
+        isX = false;
+        break;
+      case "ArrowLeft":
+        // Do something for "left arrow" key press.
+        break;
+      case "Right": // IE/Edge specific value
+      case "ArrowRight":
+        // Do something for "right arrow" key press.
+        break;
+    }
+    if (isX) {
+    } else {
+      if (newScrollY < 0) {
+        setScrollY(0);
+      } else if (newScrollY > ganttFullHeight - ganttHeight) {
+        setScrollY(ganttFullHeight - ganttHeight);
+      } else {
+        setScrollY(newScrollY);
+      }
+    }
   };
 
   const gridProps: GridProps = {
@@ -110,7 +156,7 @@ export const Gantt: React.SFC<GanttProps> = ({
     tasks: ganttTasks,
     locale,
     headerHeight,
-    scroll,
+    scrollY,
     ganttHeight,
     horizontalContainerClass: styles.horizontalContainer,
     TaskListHeader,
@@ -118,19 +164,25 @@ export const Gantt: React.SFC<GanttProps> = ({
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={styles.wrapper}
+      onWheel={handleWheel}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
       {listCellWidth && <TaskList {...tableProps} />}
       <TaskGantt
         gridProps={gridProps}
         calendarProps={calendarProps}
         barProps={barProps}
         ganttHeight={ganttHeight}
-        scroll={scroll}
+        scrollY={scrollY}
       />
       <Scroll
-        ganttFullHeight={ganttTasks.length * rowHeight}
+        ganttFullHeight={ganttFullHeight}
         ganttHeight={ganttHeight}
         headerHeight={headerHeight}
+        scroll={scrollY}
         onScroll={handleScroll}
       />
     </div>

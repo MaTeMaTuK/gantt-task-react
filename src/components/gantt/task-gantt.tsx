@@ -9,14 +9,14 @@ export type TaskGanttProps = {
   calendarProps: CalendarProps;
   barProps: TaskGanttContentProps;
   ganttHeight: number;
-  scroll: number;
+  scrollY: number;
 };
 export const TaskGantt: React.FC<TaskGanttProps> = ({
   gridProps,
   calendarProps,
   barProps,
   ganttHeight,
-  scroll,
+  scrollY,
 }) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
@@ -24,9 +24,9 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
 
   useEffect(() => {
     if (horizontalContainerRef.current) {
-      horizontalContainerRef.current.scrollTop = scroll;
+      horizontalContainerRef.current.scrollTop = scrollY;
     }
-  }, [scroll]);
+  }, [scrollY]);
 
   return (
     <div className={styles.ganttVerticalContainer}>

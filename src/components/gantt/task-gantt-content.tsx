@@ -19,6 +19,7 @@ export type GanttContentMoveAction =
   | BarMoveAction;
 export type BarEvent = {
   selectedTask?: BarTask;
+  originalTask?: BarTask;
   action: GanttContentMoveAction;
 };
 export type TaskGanttContentProps = {
@@ -143,7 +144,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       }
     } else if (action === "mouseenter") {
       if (!barEvent.action) {
-        setBarEvent({ action, selectedTask });
+        setBarEvent({ action, selectedTask, originalTask: selectedTask });
       }
     } else if (action === "mouseleave") {
       if (barEvent.action === "mouseenter") {
@@ -156,13 +157,14 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         svg.current.getScreenCTM()?.inverse()
       );
       setInitEventX1Delta(cursor.x - selectedTask.x1);
-      setBarEvent({ action, selectedTask });
+      setBarEvent({ action, selectedTask, originalTask: selectedTask });
     } else if (action === "dblclick") {
       !!onDoubleClick && onDoubleClick(selectedTask);
     } else {
       setBarEvent({
         action,
         selectedTask,
+        originalTask: selectedTask,
       });
     }
   };
@@ -194,8 +196,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     };
 
     const handleMouseUp = async (event: MouseEvent) => {
-      const { selectedTask, action } = barEvent;
-      if (!selectedTask || !point || !svg?.current) return;
+      const { selectedTask, action, originalTask } = barEvent;
+
+      if (!selectedTask || !point || !svg?.current || !originalTask) return;
       event.preventDefault();
 
       point.x = event.clientX;
@@ -211,16 +214,23 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         timeStep,
         initEventX1Delta
       );
+
+      const isNotLikeOriginal =
+        originalTask.start !== changedTask.start ||
+        originalTask.end !== changedTask.end ||
+        originalTask.progress !== changedTask.progress;
+
       if (
         (action === "move" || action === "end" || action === "start") &&
-        onDateChange
+        onDateChange &&
+        isNotLikeOriginal
       ) {
         await onDateChange(changedTask);
         const newTasks = barTasks.map(t =>
           t.id === changedTask.id ? changedTask : t
         );
         onTasksDateChange(newTasks);
-      } else if (onProgressChange) {
+      } else if (onProgressChange && isNotLikeOriginal) {
         await onProgressChange(changedTask);
       }
       svg.current.removeEventListener("mousemove", handleMouseMove);

@@ -54,6 +54,7 @@ export const Bar: React.FC<BarProps> = ({
             break;
           }
         }
+        e.stopPropagation();
       }}
       onMouseEnter={e => {
         onEventStart(e, "mouseenter", task);
