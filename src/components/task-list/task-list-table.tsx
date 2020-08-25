@@ -37,6 +37,7 @@ export const TaskListTableDefault: React.FC<{
                 minWidth: rowWidth,
                 maxWidth: rowWidth,
               }}
+              title={t.name}
             >
               &nbsp;{t.name}
             </div>
