@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, SyntheticEvent } from "react";
 import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
@@ -10,6 +10,8 @@ export type TaskGanttProps = {
   barProps: TaskGanttContentProps;
   ganttHeight: number;
   scrollY: number;
+  scrollX: number;
+  onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
 };
 export const TaskGantt: React.FC<TaskGanttProps> = ({
   gridProps,
@@ -17,9 +19,12 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   barProps,
   ganttHeight,
   scrollY,
+  scrollX,
+  onScroll,
 }) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
+  const verticalContainerRef = useRef<HTMLDivElement>(null);
   const newBarProps = { ...barProps, svg: ganttSVGRef };
 
   useEffect(() => {
@@ -28,8 +33,18 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
     }
   }, [scrollY]);
 
+  useEffect(() => {
+    if (verticalContainerRef.current) {
+      verticalContainerRef.current.scrollLeft = scrollX;
+    }
+  }, [scrollX]);
+
   return (
-    <div className={styles.ganttVerticalContainer}>
+    <div
+      className={styles.ganttVerticalContainer}
+      ref={verticalContainerRef}
+      onScroll={onScroll}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width={gridProps.gridWidth}

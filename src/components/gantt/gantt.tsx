@@ -44,6 +44,7 @@ export const Gantt: React.SFC<GanttProps> = ({
 }) => {
   const [ganttTasks, setGanttTasks] = useState<Task[]>(tasks);
   const [scrollY, setScrollY] = useState(0);
+  const [scrollX, setScrollX] = useState(0);
 
   const [startDate, endDate] = ganttDateRange(ganttTasks, viewMode);
   const dates = seedDates(startDate, endDate, viewMode);
@@ -57,7 +58,13 @@ export const Gantt: React.SFC<GanttProps> = ({
   };
 
   const handleScroll = (event: SyntheticEvent<HTMLDivElement>) => {
-    setScrollY(event.currentTarget.scrollTop);
+    if (scrollY !== event.currentTarget.scrollTop)
+      setScrollY(event.currentTarget.scrollTop);
+  };
+
+  const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
+    if (scrollX !== event.currentTarget.scrollLeft)
+      setScrollX(event.currentTarget.scrollLeft);
   };
 
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
@@ -72,28 +79,38 @@ export const Gantt: React.SFC<GanttProps> = ({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    let newScrollY = 0;
+    event.preventDefault();
+    let newScrollY = scrollY;
+    let newScrollX = scrollX;
     let isX = true;
     switch (event.key) {
       case "Down": // IE/Edge specific value
       case "ArrowDown":
-        newScrollY = scrollY + rowHeight;
+        newScrollY += rowHeight;
         isX = false;
         break;
       case "Up": // IE/Edge specific value
       case "ArrowUp":
-        newScrollY = scrollY - rowHeight;
+        newScrollY -= rowHeight;
         isX = false;
         break;
+      case "Left":
       case "ArrowLeft":
-        // Do something for "left arrow" key press.
+        newScrollX -= columnWidth;
         break;
       case "Right": // IE/Edge specific value
       case "ArrowRight":
-        // Do something for "right arrow" key press.
+        newScrollX += columnWidth;
         break;
     }
     if (isX) {
+      if (newScrollX < 0) {
+        setScrollX(0);
+      } else if (newScrollX > gridWidth) {
+        setScrollX(gridWidth);
+      } else {
+        setScrollX(newScrollX);
+      }
     } else {
       if (newScrollY < 0) {
         setScrollY(0);
@@ -177,6 +194,8 @@ export const Gantt: React.SFC<GanttProps> = ({
         barProps={barProps}
         ganttHeight={ganttHeight}
         scrollY={scrollY}
+        scrollX={scrollX}
+        onScroll={handleScrollX}
       />
       <Scroll
         ganttFullHeight={ganttFullHeight}
