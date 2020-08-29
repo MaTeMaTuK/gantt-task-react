@@ -1,4 +1,4 @@
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent, useRef, useEffect } from "react";
 import { ViewMode, GanttProps, Task } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import { ganttDateRange, seedDates } from "../../helpers/date-helper";
@@ -42,10 +42,11 @@ export const Gantt: React.SFC<GanttProps> = ({
   onDoubleClick,
   onTaskDelete,
 }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [ganttTasks, setGanttTasks] = useState<Task[]>(tasks);
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(0);
-
+  const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
   const [startDate, endDate] = ganttDateRange(ganttTasks, viewMode);
   const dates = seedDates(startDate, endDate, viewMode);
 
@@ -53,13 +54,43 @@ export const Gantt: React.SFC<GanttProps> = ({
   const gridWidth = dates.length * columnWidth;
   const ganttFullHeight = ganttTasks.length * rowHeight;
 
-  const onTasksDateChange = (tasks: Task[]) => {
-    setGanttTasks(tasks);
-  };
+  // scroll events
+  useEffect(() => {
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      const newScrollY = scrollY + event.deltaY;
+      if (newScrollY < 0) {
+        setScrollY(0);
+      } else if (newScrollY > ganttFullHeight - ganttHeight) {
+        setScrollY(ganttFullHeight - ganttHeight);
+      } else {
+        setScrollY(newScrollY);
+      }
+      setIgnoreScrollEvent(true);
+    };
 
-  const handleScroll = (event: SyntheticEvent<HTMLDivElement>) => {
-    if (scrollY !== event.currentTarget.scrollTop)
+    // subscribe if scroll is necessary
+    if (
+      wrapperRef.current &&
+      ganttHeight &&
+      ganttHeight < ganttTasks.length * rowHeight
+    ) {
+      wrapperRef.current.addEventListener("wheel", handleWheel, {
+        passive: false,
+      });
+    }
+    return () => {
+      if (wrapperRef.current) {
+        wrapperRef.current.removeEventListener("wheel", handleWheel);
+      }
+    };
+  }, [wrapperRef.current, scrollY, ganttHeight, ganttTasks, rowHeight]);
+
+  const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
+    if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
       setScrollY(event.currentTarget.scrollTop);
+    }
+    setIgnoreScrollEvent(false);
   };
 
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
@@ -67,17 +98,9 @@ export const Gantt: React.SFC<GanttProps> = ({
       setScrollX(event.currentTarget.scrollLeft);
   };
 
-  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    const newScrollY = scrollY + event.deltaY;
-    if (newScrollY < 0) {
-      setScrollY(0);
-    } else if (newScrollY > ganttFullHeight - ganttHeight) {
-      setScrollY(ganttFullHeight - ganttHeight);
-    } else {
-      setScrollY(scrollY + event.deltaY);
-    }
-  };
-
+  /**
+   * Handles arrow keys events and transform it to new scroll
+   */
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     event.preventDefault();
     let newScrollY = scrollY;
@@ -120,6 +143,12 @@ export const Gantt: React.SFC<GanttProps> = ({
         setScrollY(newScrollY);
       }
     }
+    setIgnoreScrollEvent(true);
+  };
+
+  // task change event
+  const onTasksDateChange = (tasks: Task[]) => {
+    setGanttTasks(tasks);
   };
 
   const gridProps: GridProps = {
@@ -183,9 +212,9 @@ export const Gantt: React.SFC<GanttProps> = ({
   return (
     <div
       className={styles.wrapper}
-      onWheel={handleWheel}
       onKeyDown={handleKeyDown}
       tabIndex={0}
+      ref={wrapperRef}
     >
       {listCellWidth && <TaskList {...tableProps} />}
       <TaskGantt
@@ -202,7 +231,7 @@ export const Gantt: React.SFC<GanttProps> = ({
         ganttHeight={ganttHeight}
         headerHeight={headerHeight}
         scroll={scrollY}
-        onScroll={handleScroll}
+        onScroll={handleScrollY}
       />
     </div>
   );
