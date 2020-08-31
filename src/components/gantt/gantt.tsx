@@ -54,6 +54,10 @@ export const Gantt: React.SFC<GanttProps> = ({
   const gridWidth = dates.length * columnWidth;
   const ganttFullHeight = ganttTasks.length * rowHeight;
 
+  useEffect(() => {
+    setGanttTasks(tasks);
+  }, [tasks]);
+
   // scroll events
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {

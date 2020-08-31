@@ -270,7 +270,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           return task.barChildren.map(child => {
             return (
               <Arrow
-                key={`Arrow from ${task.id} to ${tasks[child].id}`}
+                key={`Arrow from ${task.id} to ${barTasks[child].id}`}
                 taskFrom={task}
                 taskTo={barTasks[child]}
                 rowHeight={rowHeight}
