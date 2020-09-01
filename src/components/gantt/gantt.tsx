@@ -16,7 +16,7 @@ export const Gantt: React.SFC<GanttProps> = ({
   tasks,
   headerHeight = 50,
   columnWidth = 60,
-  listCellWidth = "150px",
+  listCellWidth = "155px",
   rowHeight = 50,
   ganttHeight = 0,
   viewMode = ViewMode.Day,
@@ -151,7 +151,7 @@ export const Gantt: React.SFC<GanttProps> = ({
   };
 
   // task change event
-  const onTasksDateChange = (tasks: Task[]) => {
+  const handleTasksChange = (tasks: Task[]) => {
     setGanttTasks(tasks);
   };
 
@@ -190,7 +190,7 @@ export const Gantt: React.SFC<GanttProps> = ({
     fontSize,
     arrowIndent,
     svgHeight,
-    onTasksDateChange: onTasksDateChange,
+    onTasksChange: handleTasksChange,
     onDateChange,
     onProgressChange,
     onDoubleClick,

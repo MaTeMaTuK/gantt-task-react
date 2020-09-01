@@ -45,6 +45,7 @@ export const TaskListTableDefault: React.FC<{
               className={styles.taskListCell}
               style={{
                 minWidth: rowWidth,
+                maxWidth: rowWidth,
               }}
             >
               &nbsp;{t.start.toLocaleDateString(locale, dateTimeOptions)}
@@ -53,6 +54,7 @@ export const TaskListTableDefault: React.FC<{
               className={styles.taskListCell}
               style={{
                 minWidth: rowWidth,
+                maxWidth: rowWidth,
               }}
             >
               &nbsp;{t.end.toLocaleDateString(locale, dateTimeOptions)}

@@ -46,7 +46,7 @@ export type TaskGanttContentProps = {
     fontSize: string;
     fontFamily: string;
   }>;
-  onTasksDateChange: (tasks: Task[]) => void;
+  onTasksChange: (tasks: Task[]) => void;
 } & EventOption;
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
@@ -68,7 +68,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   arrowIndent,
   fontFamily,
   fontSize,
-  onTasksDateChange,
+  onTasksChange,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -139,7 +139,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         if (onTaskDelete) {
           await onTaskDelete(selectedTask);
           const newTasks = barTasks.filter(t => t.id !== selectedTask.id);
-          onTasksDateChange(newTasks);
+          onTasksChange(newTasks);
         }
       }
     } else if (action === "mouseenter") {
@@ -226,13 +226,15 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         isNotLikeOriginal
       ) {
         await onDateChange(changedTask);
-        const newTasks = barTasks.map(t =>
-          t.id === changedTask.id ? changedTask : t
-        );
-        onTasksDateChange(newTasks);
       } else if (onProgressChange && isNotLikeOriginal) {
         await onProgressChange(changedTask);
       }
+
+      const newTasks = barTasks.map(t =>
+        t.id === changedTask.id ? changedTask : t
+      );
+      onTasksChange(newTasks);
+
       svg.current.removeEventListener("mousemove", handleMouseMove);
       svg.current.removeEventListener("mouseup", handleMouseUp);
       setBarEvent({ action: "" });

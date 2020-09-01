@@ -111,7 +111,7 @@ const App = () => {
         onTaskDelete={onTaskDelete}
         onProgressChange={onProgressChange}
         onDoubleClick={onDblClick}
-        listCellWidth={isChecked ? "150px" : ""}
+        listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
       />
       <h3>Gantt With Limited Height</h3>
@@ -122,7 +122,7 @@ const App = () => {
         onTaskDelete={onTaskDelete}
         onProgressChange={onProgressChange}
         onDoubleClick={onDblClick}
-        listCellWidth={isChecked ? "150px" : ""}
+        listCellWidth={isChecked ? "155px" : ""}
         ganttHeight={300}
         columnWidth={columnWidth}
       />
