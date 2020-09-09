@@ -79,21 +79,29 @@ const App = () => {
     },
   ];
 
+  const sleep = (milliseconds: number) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+  };
   let onTaskChange = (task: Task) => {
     console.log("On date change Id:" + task.id);
   };
 
   let onTaskDelete = (task: Task) => {
-    const conf = window.confirm("Are you sure?");
-    if (!conf) throw "No del Id:" + task.id;
+    const conf = window.confirm("Are you sure about " + task.name + " ?");
+    return conf;
   };
 
-  let onProgressChange = (task: Task) => {
+  let onProgressChange = async (task: Task) => {
+    await sleep(5000);
     console.log("On progress change Id:" + task.id);
   };
 
   let onDblClick = (task: Task) => {
     alert("On Double Click event Id:" + task.id);
+  };
+
+  let onSelect = (task: Task, isSelected: boolean) => {
+    console.log(task.name + " has " + (isSelected ? "selected" : "unselected"));
   };
 
   return (
@@ -111,6 +119,7 @@ const App = () => {
         onTaskDelete={onTaskDelete}
         onProgressChange={onProgressChange}
         onDoubleClick={onDblClick}
+        onSelect={onSelect}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
       />
@@ -122,6 +131,7 @@ const App = () => {
         onTaskDelete={onTaskDelete}
         onProgressChange={onProgressChange}
         onDoubleClick={onDblClick}
+        onSelect={onSelect}
         listCellWidth={isChecked ? "155px" : ""}
         ganttHeight={300}
         columnWidth={columnWidth}

@@ -30,10 +30,32 @@ export interface EventOption {
    * Time step value for date changes.
    */
   timeStep?: number;
+  /**
+   * Invokes on bar select on unselect.
+   */
+  onSelect?: (task: Task, isSelected: boolean) => void;
+  /**
+   * Invokes on bar double click.
+   */
   onDoubleClick?: (task: Task) => void;
-  onDateChange?: (task: Task) => void | Promise<any>;
-  onProgressChange?: (task: Task) => void | Promise<any>;
-  onTaskDelete?: (task: Task) => void | Promise<any>;
+  /**
+   * Invokes on end and start time change. Chart undoes operation if method return false or error.
+   */
+  onDateChange?: (
+    task: Task
+  ) => void | boolean | Promise<void> | Promise<boolean>;
+  /**
+   * Invokes on progress change. Chart undoes operation if method return false or error.
+   */
+  onProgressChange?: (
+    task: Task
+  ) => void | boolean | Promise<void> | Promise<boolean>;
+  /**
+   * Invokes on delete selected task. Chart undoes operation if method return false or error.
+   */
+  onTaskDelete?: (
+    task: Task
+  ) => void | boolean | Promise<void> | Promise<boolean>;
 }
 
 export interface DisplayOption {

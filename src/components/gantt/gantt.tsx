@@ -41,6 +41,7 @@ export const Gantt: React.SFC<GanttProps> = ({
   onProgressChange,
   onDoubleClick,
   onTaskDelete,
+  onSelect,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [ganttTasks, setGanttTasks] = useState<Task[]>(tasks);
@@ -98,8 +99,10 @@ export const Gantt: React.SFC<GanttProps> = ({
   };
 
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
-    if (scrollX !== event.currentTarget.scrollLeft)
+    if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
       setScrollX(event.currentTarget.scrollLeft);
+    }
+    setIgnoreScrollEvent(false);
   };
 
   /**
@@ -195,6 +198,7 @@ export const Gantt: React.SFC<GanttProps> = ({
     onProgressChange,
     onDoubleClick,
     onTaskDelete,
+    onSelect,
     TooltipContent,
   };
 

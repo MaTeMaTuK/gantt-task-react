@@ -17,7 +17,7 @@ export type BarProps = {
   isDateChangeable: boolean;
   isDelete: boolean;
   onEventStart: (
-    event: React.MouseEvent | React.KeyboardEvent,
+    event: React.MouseEvent | React.KeyboardEvent | React.FocusEvent,
     action: GanttContentMoveAction,
     selectedTask: BarTask
   ) => any;
@@ -43,9 +43,6 @@ export const Bar: React.FC<BarProps> = ({
   return (
     <g
       className={styles.barWrapper}
-      onDoubleClick={e => {
-        onEventStart(e, "dblclick", task);
-      }}
       tabIndex={0}
       onKeyDown={e => {
         switch (e.key) {
@@ -62,8 +59,17 @@ export const Bar: React.FC<BarProps> = ({
       onMouseLeave={e => {
         onEventStart(e, "mouseleave", task);
       }}
-      onFocus={() => setIsSelected(true)}
-      onBlur={() => setIsSelected(false)}
+      onDoubleClick={e => {
+        onEventStart(e, "dblclick", task);
+      }}
+      onFocus={e => {
+        setIsSelected(true);
+        onEventStart(e, "select", task);
+      }}
+      onBlur={e => {
+        setIsSelected(false);
+        onEventStart(e, "unselect", task);
+      }}
     >
       <BarDisplay
         x={task.x1}

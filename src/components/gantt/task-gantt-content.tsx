@@ -9,13 +9,15 @@ import {
   BarMoveAction,
 } from "../../helpers/bar-helper";
 import { Tooltip } from "../other/tooltip";
-import { isKeyboardEvent } from "../../helpers/other-helper";
+import { isKeyboardEvent, isMouseEvent } from "../../helpers/other-helper";
 
 export type GanttContentMoveAction =
   | "mouseenter"
   | "mouseleave"
   | "delete"
   | "dblclick"
+  | "select"
+  | "unselect"
   | BarMoveAction;
 export type BarEvent = {
   selectedTask?: BarTask;
@@ -73,6 +75,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onProgressChange,
   onDoubleClick,
   onTaskDelete,
+  onSelect,
   TooltipContent,
 }) => {
   const point = svg?.current?.createSVGPoint();
@@ -80,6 +83,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     action: "",
   });
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
+  const [failedTask, setFailedTask] = useState<BarTask | null>(null);
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
@@ -126,48 +130,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     barBackgroundSelectedColor,
   ]);
 
-  /**
-   * Method is Start point of task change
-   */
-  const handleBarEventStart = async (
-    event: React.MouseEvent | React.KeyboardEvent,
-    action: GanttContentMoveAction,
-    selectedTask: BarTask
-  ) => {
-    if (isKeyboardEvent(event)) {
-      if (action === "delete") {
-        if (onTaskDelete) {
-          await onTaskDelete(selectedTask);
-          const newTasks = barTasks.filter(t => t.id !== selectedTask.id);
-          onTasksChange(newTasks);
-        }
-      }
-    } else if (action === "mouseenter") {
-      if (!barEvent.action) {
-        setBarEvent({ action, selectedTask, originalTask: selectedTask });
-      }
-    } else if (action === "mouseleave") {
-      if (barEvent.action === "mouseenter") {
-        setBarEvent({ action: "" });
-      }
-    } else if (action === "move") {
-      if (!svg?.current || !point) return;
-      point.x = event.clientX;
-      const cursor = point.matrixTransform(
-        svg.current.getScreenCTM()?.inverse()
+  // on failed task update
+  useEffect(() => {
+    if (failedTask) {
+      const newTasks = barTasks.map(t =>
+        t.id === failedTask.id ? failedTask : t
       );
-      setInitEventX1Delta(cursor.x - selectedTask.x1);
-      setBarEvent({ action, selectedTask, originalTask: selectedTask });
-    } else if (action === "dblclick") {
-      !!onDoubleClick && onDoubleClick(selectedTask);
-    } else {
-      setBarEvent({
-        action,
-        selectedTask,
-        originalTask: selectedTask,
-      });
+      onTasksChange(newTasks);
+      setFailedTask(null);
     }
-  };
+  }, [failedTask, barTasks]);
 
   useEffect(() => {
     const handleMouseMove = async (event: MouseEvent) => {
@@ -220,25 +192,46 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         originalTask.end !== changedTask.end ||
         originalTask.progress !== changedTask.progress;
 
-      if (
-        (action === "move" || action === "end" || action === "start") &&
-        onDateChange &&
-        isNotLikeOriginal
-      ) {
-        await onDateChange(changedTask);
-      } else if (onProgressChange && isNotLikeOriginal) {
-        await onProgressChange(changedTask);
-      }
-
+      // remove listeners
+      svg.current.removeEventListener("mousemove", handleMouseMove);
+      svg.current.removeEventListener("mouseup", handleMouseUp);
+      setBarEvent({ action: "" });
+      setIsMoving(false);
       const newTasks = barTasks.map(t =>
         t.id === changedTask.id ? changedTask : t
       );
       onTasksChange(newTasks);
 
-      svg.current.removeEventListener("mousemove", handleMouseMove);
-      svg.current.removeEventListener("mouseup", handleMouseUp);
-      setBarEvent({ action: "" });
-      setIsMoving(false);
+      // custom operation start
+      let operationSuccess = true;
+      if (
+        (action === "move" || action === "end" || action === "start") &&
+        onDateChange &&
+        isNotLikeOriginal
+      ) {
+        try {
+          const result = await onDateChange(changedTask);
+          if (result !== undefined) {
+            operationSuccess = result;
+          }
+        } catch (error) {
+          operationSuccess = false;
+        }
+      } else if (onProgressChange && isNotLikeOriginal) {
+        try {
+          const result = await onProgressChange(changedTask);
+          if (result !== undefined) {
+            operationSuccess = result;
+          }
+        } catch (error) {
+          operationSuccess = false;
+        }
+      }
+
+      // If operation is failed - return old state
+      if (!operationSuccess) {
+        setFailedTask(originalTask);
+      }
     };
 
     if (
@@ -264,6 +257,67 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     svg,
     isMoving,
   ]);
+
+  /**
+   * Method is Start point of task change
+   */
+  const handleBarEventStart = async (
+    event: React.MouseEvent | React.KeyboardEvent | React.FocusEvent,
+    action: GanttContentMoveAction,
+    selectedTask: BarTask
+  ) => {
+    // Keyboard events
+    if (isKeyboardEvent(event)) {
+      if (action === "delete") {
+        if (onTaskDelete) {
+          try {
+            const result = await onTaskDelete(selectedTask);
+            if (result !== undefined && result) {
+              const newTasks = barTasks.filter(t => t.id !== selectedTask.id);
+              onTasksChange(newTasks);
+              !!onSelect && onSelect(selectedTask, false);
+            }
+          } catch (error) {
+            console.error("Error on Delete. " + error);
+          }
+        }
+      }
+    } else if (!isMouseEvent(event)) {
+      if (action === "select") {
+        !!onSelect && onSelect(selectedTask, true);
+      } else if (action === "unselect") {
+        !!onSelect && onSelect(selectedTask, false);
+      }
+    }
+    // Mouse Events
+    else if (action === "mouseenter") {
+      if (!barEvent.action) {
+        setBarEvent({ action, selectedTask, originalTask: selectedTask });
+      }
+    } else if (action === "mouseleave") {
+      if (barEvent.action === "mouseenter") {
+        setBarEvent({ action: "" });
+      }
+    } else if (action === "dblclick") {
+      !!onDoubleClick && onDoubleClick(selectedTask);
+    }
+    // Change task event start
+    else if (action === "move") {
+      if (!svg?.current || !point) return;
+      point.x = event.clientX;
+      const cursor = point.matrixTransform(
+        svg.current.getScreenCTM()?.inverse()
+      );
+      setInitEventX1Delta(cursor.x - selectedTask.x1);
+      setBarEvent({ action, selectedTask, originalTask: selectedTask });
+    } else {
+      setBarEvent({
+        action,
+        selectedTask,
+        originalTask: selectedTask,
+      });
+    }
+  };
 
   return (
     <g className="content">
