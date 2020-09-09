@@ -67,13 +67,16 @@ npm start
 
 ### EventOption
 
-| Parameter Name   | Type                              | Description                                                                             |
-| :--------------- | :-------------------------------- | :-------------------------------------------------------------------------------------- |
-| onDoubleClick    | (task: Task) => any               | Specifies the function to be executed on the taskbar onDoubleClick event.               |
-| onTaskDelete     | (task: Task) => void/Promise<any> | Specifies the function to be executed on the taskbar on Delete button press event.      |
-| onDateChange     | (task: Task) => void/Promise<any> | Specifies the function to be executed when drag taskbar event on timeline has finished. |
-| onProgressChange | (task: Task) => void/Promise<any> | Specifies the function to be executed when drag taskbar progress event has finished.    |
-| timeStep         | number                            | A time step value for onDateChange. Specify in milliseconds.                            |
+| Parameter Name     | Type                                        | Description                                                                             |
+| :----------------- | :------------------------------------------ | :-------------------------------------------------------------------------------------- |
+| onSelect           | (task: Task, isSelected: boolean) => void   | Specifies the function to be executed on the taskbar select or unselect event.          |
+| onDoubleClick      | (task: Task) => void                        | Specifies the function to be executed on the taskbar onDoubleClick event.               |
+| onTaskDelete\*     | void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed on the taskbar on Delete button press event.      |
+| onDateChange\*     | void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar event on timeline has finished. |
+| onProgressChange\* | void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar progress event has finished.    |
+| timeStep           | number                                      | A time step value for onDateChange. Specify in milliseconds.                            |
+
+\* Chart undoes operation if method return false or error.
 
 ### DisplayOption
 
