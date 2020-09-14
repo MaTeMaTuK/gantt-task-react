@@ -9,7 +9,7 @@ import {
   BarMoveAction,
 } from "../../helpers/bar-helper";
 import { Tooltip } from "../other/tooltip";
-import { isKeyboardEvent, isMouseEvent } from "../../helpers/other-helper";
+import { isKeyboardEvent } from "../../helpers/other-helper";
 
 export type GanttContentMoveAction =
   | "mouseenter"
@@ -17,10 +17,9 @@ export type GanttContentMoveAction =
   | "delete"
   | "dblclick"
   | "select"
-  | "unselect"
   | BarMoveAction;
 export type BarEvent = {
-  selectedTask?: BarTask;
+  changedTask?: BarTask;
   originalTask?: BarTask;
   action: GanttContentMoveAction;
 };
@@ -83,6 +82,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     action: "",
   });
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
+  const [selectedTask, setSelectedTask] = useState<BarTask | null>(null);
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
@@ -143,7 +143,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   useEffect(() => {
     const handleMouseMove = async (event: MouseEvent) => {
-      if (!barEvent.selectedTask || !point || !svg?.current) return;
+      if (!barEvent.changedTask || !point || !svg?.current) return;
       event.preventDefault();
 
       point.x = event.clientX;
@@ -154,7 +154,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       const { isChanged, changedTask } = handleTaskBySVGMouseEvent(
         cursor.x,
         barEvent.action as BarMoveAction,
-        barEvent.selectedTask,
+        barEvent.changedTask,
         xStep,
         timeStep,
         initEventX1Delta
@@ -163,12 +163,12 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         setBarTasks(
           barTasks.map(t => (t.id === changedTask.id ? changedTask : t))
         );
-        setBarEvent({ ...barEvent, selectedTask: changedTask });
+        setBarEvent({ ...barEvent, changedTask: changedTask });
       }
     };
 
     const handleMouseUp = async (event: MouseEvent) => {
-      const { selectedTask, action, originalTask } = barEvent;
+      const { changedTask: selectedTask, action, originalTask } = barEvent;
 
       if (!selectedTask || !point || !svg?.current || !originalTask) return;
       event.preventDefault();
@@ -262,44 +262,53 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
    * Method is Start point of task change
    */
   const handleBarEventStart = async (
-    event: React.MouseEvent | React.KeyboardEvent | React.FocusEvent,
     action: GanttContentMoveAction,
-    selectedTask: BarTask
+    task: BarTask,
+    event?: React.MouseEvent | React.KeyboardEvent
   ) => {
+    if (!event) {
+      if (action === "select") {
+        if (selectedTask && onSelect) {
+          onSelect(selectedTask, false);
+        }
+        setSelectedTask(task);
+        if (onSelect) {
+          onSelect(task, true);
+        }
+      }
+    }
     // Keyboard events
-    if (isKeyboardEvent(event)) {
+    else if (isKeyboardEvent(event)) {
       if (action === "delete") {
         if (onTaskDelete) {
           try {
-            const result = await onTaskDelete(selectedTask);
+            const result = await onTaskDelete(task);
             if (result !== undefined && result) {
-              const newTasks = barTasks.filter(t => t.id !== selectedTask.id);
+              const newTasks = barTasks.filter(t => t.id !== task.id);
               onTasksChange(newTasks);
-              !!onSelect && onSelect(selectedTask, false);
+              !!onSelect && onSelect(task, false);
             }
           } catch (error) {
             console.error("Error on Delete. " + error);
           }
         }
       }
-    } else if (!isMouseEvent(event)) {
-      if (action === "select") {
-        !!onSelect && onSelect(selectedTask, true);
-      } else if (action === "unselect") {
-        !!onSelect && onSelect(selectedTask, false);
-      }
     }
     // Mouse Events
     else if (action === "mouseenter") {
       if (!barEvent.action) {
-        setBarEvent({ action, selectedTask, originalTask: selectedTask });
+        setBarEvent({
+          action,
+          changedTask: task,
+          originalTask: task,
+        });
       }
     } else if (action === "mouseleave") {
       if (barEvent.action === "mouseenter") {
         setBarEvent({ action: "" });
       }
     } else if (action === "dblclick") {
-      !!onDoubleClick && onDoubleClick(selectedTask);
+      !!onDoubleClick && onDoubleClick(task);
     }
     // Change task event start
     else if (action === "move") {
@@ -308,13 +317,17 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       const cursor = point.matrixTransform(
         svg.current.getScreenCTM()?.inverse()
       );
-      setInitEventX1Delta(cursor.x - selectedTask.x1);
-      setBarEvent({ action, selectedTask, originalTask: selectedTask });
+      setInitEventX1Delta(cursor.x - task.x1);
+      setBarEvent({
+        action,
+        changedTask: task,
+        originalTask: task,
+      });
     } else {
       setBarEvent({
         action,
-        selectedTask,
-        originalTask: selectedTask,
+        changedTask: task,
+        originalTask: task,
       });
     }
   };
@@ -347,17 +360,18 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               isDelete={!task.isDisabled}
               onEventStart={handleBarEventStart}
               key={task.id}
+              isSelected={task.id === selectedTask?.id}
             />
           );
         })}
       </g>
       <g className="toolTip">
-        {barEvent.selectedTask && (
+        {barEvent.changedTask && (
           <Tooltip
-            x={barEvent.selectedTask.x2 + arrowIndent + arrowIndent * 0.5}
+            x={barEvent.changedTask.x2 + arrowIndent + arrowIndent * 0.5}
             rowHeight={rowHeight}
             svgHeight={svgHeight}
-            task={barEvent.selectedTask}
+            task={barEvent.changedTask}
             fontFamily={fontFamily}
             fontSize={fontSize}
             TooltipContent={TooltipContent}

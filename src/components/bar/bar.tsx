@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BarTask } from "../../types/bar-task";
 import {
   progressWithByParams,
@@ -16,10 +16,11 @@ export type BarProps = {
   isProgressChangeable: boolean;
   isDateChangeable: boolean;
   isDelete: boolean;
+  isSelected: boolean;
   onEventStart: (
-    event: React.MouseEvent | React.KeyboardEvent | React.FocusEvent,
     action: GanttContentMoveAction,
-    selectedTask: BarTask
+    selectedTask: BarTask,
+    event?: React.MouseEvent | React.KeyboardEvent
   ) => any;
 };
 
@@ -30,9 +31,8 @@ export const Bar: React.FC<BarProps> = ({
   isDateChangeable,
   onEventStart,
   isDelete,
+  isSelected,
 }) => {
-  const [isSelected, setIsSelected] = useState(false);
-
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const progressPoint = getProgressPoint(
     progressWidth + task.x1,
@@ -47,28 +47,23 @@ export const Bar: React.FC<BarProps> = ({
       onKeyDown={e => {
         switch (e.key) {
           case "Delete": {
-            if (isDelete) onEventStart(e, "delete", task);
+            if (isDelete) onEventStart("delete", task, e);
             break;
           }
         }
         e.stopPropagation();
       }}
       onMouseEnter={e => {
-        onEventStart(e, "mouseenter", task);
+        onEventStart("mouseenter", task, e);
       }}
       onMouseLeave={e => {
-        onEventStart(e, "mouseleave", task);
+        onEventStart("mouseleave", task, e);
       }}
       onDoubleClick={e => {
-        onEventStart(e, "dblclick", task);
+        onEventStart("dblclick", task, e);
       }}
-      onFocus={e => {
-        setIsSelected(true);
-        onEventStart(e, "select", task);
-      }}
-      onBlur={e => {
-        setIsSelected(false);
-        onEventStart(e, "unselect", task);
+      onFocus={() => {
+        onEventStart("select", task);
       }}
     >
       <BarDisplay
@@ -84,7 +79,7 @@ export const Bar: React.FC<BarProps> = ({
         styles={task.styles}
         isSelected={isSelected}
         onMouseDown={e => {
-          isDateChangeable && onEventStart(e, "move", task);
+          isDateChangeable && onEventStart("move", task, e);
         }}
       />
       <g className="handleGroup">
@@ -98,7 +93,7 @@ export const Bar: React.FC<BarProps> = ({
               height={task.height - 2}
               barCornerRadius={task.barCornerRadius}
               onMouseDown={e => {
-                onEventStart(e, "start", task);
+                onEventStart("start", task, e);
               }}
             />
             {/* right */}
@@ -109,7 +104,7 @@ export const Bar: React.FC<BarProps> = ({
               height={task.height - 2}
               barCornerRadius={task.barCornerRadius}
               onMouseDown={e => {
-                onEventStart(e, "end", task);
+                onEventStart("end", task, e);
               }}
             />
           </g>
@@ -118,7 +113,7 @@ export const Bar: React.FC<BarProps> = ({
           <BarProgressHandle
             progressPoint={progressPoint}
             onMouseDown={e => {
-              onEventStart(e, "progress", task);
+              onEventStart("progress", task, e);
             }}
           />
         )}
