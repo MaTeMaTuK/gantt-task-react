@@ -26,6 +26,7 @@ export type BarEvent = {
 export type TaskGanttContentProps = {
   tasks: Task[];
   dates: Date[];
+  selectedTask: string;
   rowHeight: number;
   barCornerRadius: number;
   columnWidth: number;
@@ -42,6 +43,7 @@ export type TaskGanttContentProps = {
   arrowIndent: number;
   fontSize: string;
   fontFamily: string;
+  setSelectedTask: (taskId: string) => void;
   TooltipContent: React.FC<{
     task: Task;
     fontSize: string;
@@ -53,6 +55,7 @@ export type TaskGanttContentProps = {
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   tasks,
   dates,
+  selectedTask,
   rowHeight,
   barCornerRadius,
   columnWidth,
@@ -69,12 +72,12 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   arrowIndent,
   fontFamily,
   fontSize,
+  setSelectedTask,
   onTasksChange,
   onDateChange,
   onProgressChange,
   onDoubleClick,
   onTaskDelete,
-  onSelect,
   TooltipContent,
 }) => {
   const point = svg?.current?.createSVGPoint();
@@ -82,7 +85,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     action: "",
   });
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
-  const [selectedTask, setSelectedTask] = useState<BarTask | null>(null);
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
@@ -268,13 +270,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   ) => {
     if (!event) {
       if (action === "select") {
-        if (selectedTask && onSelect) {
-          onSelect(selectedTask, false);
-        }
-        setSelectedTask(task);
-        if (onSelect) {
-          onSelect(task, true);
-        }
+        setSelectedTask(task.id);
       }
     }
     // Keyboard events
@@ -286,7 +282,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
             if (result !== undefined && result) {
               const newTasks = barTasks.filter(t => t.id !== task.id);
               onTasksChange(newTasks);
-              !!onSelect && onSelect(task, false);
+              setSelectedTask("");
             }
           } catch (error) {
             console.error("Error on Delete. " + error);
@@ -360,7 +356,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               isDelete={!task.isDisabled}
               onEventStart={handleBarEventStart}
               key={task.id}
-              isSelected={task.id === selectedTask?.id}
+              isSelected={task.id === selectedTask}
             />
           );
         })}

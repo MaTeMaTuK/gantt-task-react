@@ -45,6 +45,7 @@ export const Gantt: React.SFC<GanttProps> = ({
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [ganttTasks, setGanttTasks] = useState<Task[]>(tasks);
+  const [selectedTask, setSelectedTask] = useState<string>("");
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(0);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
@@ -158,6 +159,31 @@ export const Gantt: React.SFC<GanttProps> = ({
     setGanttTasks(tasks);
   };
 
+  /**
+   * Task select event
+   */
+  const handleSelectedTask = (taskId: string) => {
+    const newSelectedTask = ganttTasks.find(t => t.id === taskId);
+    if (newSelectedTask) {
+      if (onSelect) {
+        const oldSelectedTask = ganttTasks.find(t => t.id === selectedTask);
+        if (oldSelectedTask) {
+          onSelect(oldSelectedTask, false);
+        }
+        onSelect(newSelectedTask, true);
+      }
+      setSelectedTask(newSelectedTask.id);
+    } else {
+      if (onSelect) {
+        const oldSelectedTask = ganttTasks.find(t => t.id === selectedTask);
+        if (oldSelectedTask) {
+          onSelect(oldSelectedTask, false);
+        }
+      }
+      setSelectedTask("");
+    }
+  };
+
   const gridProps: GridProps = {
     columnWidth,
     gridWidth,
@@ -177,6 +203,8 @@ export const Gantt: React.SFC<GanttProps> = ({
   };
   const barProps: TaskGanttContentProps = {
     tasks: ganttTasks,
+    selectedTask,
+    setSelectedTask: handleSelectedTask,
     rowHeight,
     barCornerRadius,
     columnWidth,
@@ -198,7 +226,6 @@ export const Gantt: React.SFC<GanttProps> = ({
     onProgressChange,
     onDoubleClick,
     onTaskDelete,
-    onSelect,
     TooltipContent,
   };
 
@@ -213,6 +240,8 @@ export const Gantt: React.SFC<GanttProps> = ({
     scrollY,
     ganttHeight,
     horizontalContainerClass: styles.horizontalContainer,
+    selectedTaskId: selectedTask,
+    setSelectedTask,
     TaskListHeader,
     TaskListTable,
   };

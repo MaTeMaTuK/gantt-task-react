@@ -9,6 +9,8 @@ export const TaskListTableDefault: React.FC<{
   fontSize: string;
   locale: string;
   tasks: Task[];
+  selectedTaskId: string;
+  setSelectedTask: (taskId: string) => void;
 }> = ({ rowHeight, rowWidth, tasks, fontFamily, fontSize, locale }) => {
   const dateTimeOptions = {
     weekday: "short",

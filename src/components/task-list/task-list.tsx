@@ -12,6 +12,8 @@ export type TaskListProps = {
   locale: string;
   tasks: Task[];
   horizontalContainerClass?: string;
+  selectedTaskId: string;
+  setSelectedTask: (taskId: string) => void;
   TaskListHeader: React.FC<{
     headerHeight: number;
     rowWidth: string;
@@ -25,6 +27,8 @@ export type TaskListProps = {
     fontSize: string;
     locale: string;
     tasks: Task[];
+    selectedTaskId: string;
+    setSelectedTask: (taskId: string) => void;
   }>;
 };
 
@@ -36,6 +40,8 @@ export const TaskList: React.FC<TaskListProps> = ({
   rowHeight,
   scrollY,
   tasks,
+  selectedTaskId,
+  setSelectedTask,
   locale,
   ganttHeight,
   horizontalContainerClass,
@@ -62,7 +68,10 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontSize,
     tasks,
     locale,
+    selectedTaskId,
+    setSelectedTask,
   };
+
   return (
     <div>
       <TaskListHeader {...headerProps} />
