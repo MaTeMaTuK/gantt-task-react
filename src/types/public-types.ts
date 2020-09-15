@@ -107,6 +107,9 @@ export interface StylingOption {
     locale: string;
     tasks: Task[];
     selectedTaskId: string;
+    /**
+     * Sets selected task by id
+     */
     setSelectedTask: (taskId: string) => void;
   }>;
 }
