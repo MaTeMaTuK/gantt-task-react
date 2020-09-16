@@ -241,7 +241,7 @@ export const Gantt: React.SFC<GanttProps> = ({
     ganttHeight,
     horizontalContainerClass: styles.horizontalContainer,
     selectedTaskId: selectedTask,
-    setSelectedTask,
+    setSelectedTask: handleSelectedTask,
     TaskListHeader,
     TaskListTable,
   };
