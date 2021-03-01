@@ -1,5 +1,5 @@
 import React, { useState, SyntheticEvent, useRef, useEffect } from "react";
-import { ViewMode, GanttProps, Task } from "../../types/public-types";
+import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import { ganttDateRange, seedDates } from "../../helpers/date-helper";
 import { CalendarProps } from "../calendar/calendar";
@@ -11,8 +11,11 @@ import { Scroll } from "../other/scroll";
 import { TaskListProps, TaskList } from "../task-list/task-list";
 import styles from "./gantt.module.css";
 import { TaskGantt } from "./task-gantt";
+import { BarTask } from "../../types/bar-task";
+import { convertToBarTasks } from "../../helpers/bar-helper";
+import { GanttEvent } from "../../types/gantt-task-actions";
 
-export const Gantt: React.SFC<GanttProps> = ({
+export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   headerHeight = 50,
   columnWidth = 60,
@@ -27,6 +30,8 @@ export const Gantt: React.SFC<GanttProps> = ({
   barProgressSelectedColor = "#8282f5",
   barBackgroundColor = "#b8c2cc",
   barBackgroundSelectedColor = "#aeb8c2",
+  milestoneBackgroundColor = "#f1c453",
+  milestoneBackgroundSelectedColor = "#f29e4c",
   handleWidth = 8,
   timeStep = 300000,
   arrowColor = "grey",
@@ -44,21 +49,106 @@ export const Gantt: React.SFC<GanttProps> = ({
   onSelect,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [ganttTasks, setGanttTasks] = useState<Task[]>(tasks);
-  const [selectedTask, setSelectedTask] = useState<string>("");
+  const [dates, setDates] = useState<Date[]>(() => {
+    const [startDate, endDate] = ganttDateRange(tasks, viewMode);
+    return seedDates(startDate, endDate, viewMode);
+  });
+
+  const [taskHeight, setTaskHeight] = useState((rowHeight * barFill) / 100);
+  const [barTasks, setBarTasks] = useState<BarTask[]>([]);
+
+  const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
+    action: "",
+  });
+
+  const [selectedTask, setSelectedTask] = useState<BarTask>();
+  const [failedTask, setFailedTask] = useState<BarTask | null>(null);
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(0);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
-  const [startDate, endDate] = ganttDateRange(ganttTasks, viewMode);
-  const dates = seedDates(startDate, endDate, viewMode);
 
-  const svgHeight = rowHeight * ganttTasks.length;
+  const svgHeight = rowHeight * barTasks.length;
   const gridWidth = dates.length * columnWidth;
-  const ganttFullHeight = ganttTasks.length * rowHeight;
+  const ganttFullHeight = barTasks.length * rowHeight;
+
+  // task change events
+  useEffect(() => {
+    const [startDate, endDate] = ganttDateRange(tasks, viewMode);
+    const newDates = seedDates(startDate, endDate, viewMode);
+    setDates(newDates);
+    setBarTasks(
+      convertToBarTasks(
+        tasks,
+        newDates,
+        columnWidth,
+        rowHeight,
+        taskHeight,
+        barCornerRadius,
+        handleWidth,
+        barProgressColor,
+        barProgressSelectedColor,
+        barBackgroundColor,
+        barBackgroundSelectedColor,
+        milestoneBackgroundColor,
+        milestoneBackgroundSelectedColor
+      )
+    );
+  }, [
+    tasks,
+    viewMode,
+    rowHeight,
+    barCornerRadius,
+    columnWidth,
+    taskHeight,
+    handleWidth,
+    barProgressColor,
+    barProgressSelectedColor,
+    barBackgroundColor,
+    barBackgroundSelectedColor,
+  ]);
 
   useEffect(() => {
-    setGanttTasks(tasks);
-  }, [tasks]);
+    const { changedTask, action } = ganttEvent;
+    if (changedTask) {
+      if (action === "delete") {
+        setGanttEvent({ action: "" });
+        setBarTasks(barTasks.filter(t => t.id !== changedTask.id));
+      } else if (
+        action === "move" ||
+        action === "end" ||
+        action === "start" ||
+        action === "progress"
+      ) {
+        const prevStateTask = barTasks.find(t => t.id === changedTask.id);
+        if (
+          prevStateTask &&
+          (prevStateTask.start.getTime() !== changedTask.start.getTime() ||
+            prevStateTask.end.getTime() !== changedTask.end.getTime() ||
+            prevStateTask.progress !== changedTask.progress)
+        ) {
+          // actions for change
+          const newTaskList = barTasks.map(t =>
+            t.id === changedTask.id ? changedTask : t
+          );
+          setBarTasks(newTaskList);
+        }
+      }
+    }
+  }, [ganttEvent, barTasks]);
+
+  useEffect(() => {
+    if (failedTask) {
+      setBarTasks(barTasks.map(t => (t.id !== failedTask.id ? t : failedTask)));
+      setFailedTask(null);
+    }
+  }, [failedTask, barTasks]);
+
+  useEffect(() => {
+    const newTaskHeight = (rowHeight * barFill) / 100;
+    if (newTaskHeight !== taskHeight) {
+      setTaskHeight(newTaskHeight);
+    }
+  }, [rowHeight, barFill, taskHeight]);
 
   // scroll events
   useEffect(() => {
@@ -79,7 +169,7 @@ export const Gantt: React.SFC<GanttProps> = ({
     if (
       wrapperRef.current &&
       ganttHeight &&
-      ganttHeight < ganttTasks.length * rowHeight
+      ganttHeight < barTasks.length * rowHeight
     ) {
       wrapperRef.current.addEventListener("wheel", handleWheel, {
         passive: false,
@@ -90,7 +180,7 @@ export const Gantt: React.SFC<GanttProps> = ({
         wrapperRef.current.removeEventListener("wheel", handleWheel);
       }
     };
-  }, [wrapperRef.current, scrollY, ganttHeight, ganttTasks, rowHeight]);
+  }, [wrapperRef.current, scrollY, ganttHeight, barTasks, rowHeight]);
 
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
@@ -154,40 +244,29 @@ export const Gantt: React.SFC<GanttProps> = ({
     setIgnoreScrollEvent(true);
   };
 
-  // task change event
-  const handleTasksChange = (tasks: Task[]) => {
-    setGanttTasks(tasks);
-  };
-
   /**
    * Task select event
    */
   const handleSelectedTask = (taskId: string) => {
-    const newSelectedTask = ganttTasks.find(t => t.id === taskId);
-    if (newSelectedTask) {
-      if (onSelect) {
-        const oldSelectedTask = ganttTasks.find(t => t.id === selectedTask);
-        if (oldSelectedTask) {
-          onSelect(oldSelectedTask, false);
-        }
+    const newSelectedTask = barTasks.find(t => t.id === taskId);
+    const oldSelectedTask = barTasks.find(
+      t => !!selectedTask && t.id === selectedTask.id
+    );
+    if (onSelect) {
+      if (oldSelectedTask) {
+        onSelect(oldSelectedTask, false);
+      }
+      if (newSelectedTask) {
         onSelect(newSelectedTask, true);
       }
-      setSelectedTask(newSelectedTask.id);
-    } else {
-      if (onSelect) {
-        const oldSelectedTask = ganttTasks.find(t => t.id === selectedTask);
-        if (oldSelectedTask) {
-          onSelect(oldSelectedTask, false);
-        }
-      }
-      setSelectedTask("");
     }
+    setSelectedTask(newSelectedTask);
   };
 
   const gridProps: GridProps = {
     columnWidth,
     gridWidth,
-    tasks: ganttTasks,
+    tasks: tasks,
     rowHeight,
     dates,
     todayColor,
@@ -202,26 +281,22 @@ export const Gantt: React.SFC<GanttProps> = ({
     fontSize,
   };
   const barProps: TaskGanttContentProps = {
-    tasks: ganttTasks,
-    selectedTask,
-    setSelectedTask: handleSelectedTask,
-    rowHeight,
-    barCornerRadius,
-    columnWidth,
+    tasks: barTasks,
     dates,
-    barFill,
-    barProgressColor,
-    barProgressSelectedColor,
-    barBackgroundColor,
-    barBackgroundSelectedColor,
-    handleWidth,
+    ganttEvent,
+    selectedTask,
+    rowHeight,
+    taskHeight,
+    columnWidth,
     arrowColor,
     timeStep,
     fontFamily,
     fontSize,
     arrowIndent,
     svgHeight,
-    onTasksChange: handleTasksChange,
+    setGanttEvent,
+    setFailedTask,
+    setSelectedTask: handleSelectedTask,
     onDateChange,
     onProgressChange,
     onDoubleClick,
@@ -234,13 +309,13 @@ export const Gantt: React.SFC<GanttProps> = ({
     rowWidth: listCellWidth,
     fontFamily,
     fontSize,
-    tasks: ganttTasks,
+    tasks: barTasks,
     locale,
     headerHeight,
     scrollY,
     ganttHeight,
     horizontalContainerClass: styles.horizontalContainer,
-    selectedTaskId: selectedTask,
+    selectedTask,
     setSelectedTask: handleSelectedTask,
     TaskListHeader,
     TaskListTable,

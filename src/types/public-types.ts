@@ -6,8 +6,10 @@ export enum ViewMode {
   Week = "Week",
   Month = "Month",
 }
+export type TaskType = "task" | "milestone";
 export interface Task {
   id: string;
+  type: TaskType;
   name: string;
   start: Date;
   end: Date;
@@ -85,6 +87,8 @@ export interface StylingOption {
   barProgressSelectedColor?: string;
   barBackgroundColor?: string;
   barBackgroundSelectedColor?: string;
+  milestoneBackgroundColor?: string;
+  milestoneBackgroundSelectedColor?: string;
   arrowColor?: string;
   arrowIndent?: number;
   todayColor?: string;
