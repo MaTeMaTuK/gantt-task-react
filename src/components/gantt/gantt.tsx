@@ -56,7 +56,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const [taskHeight, setTaskHeight] = useState((rowHeight * barFill) / 100);
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
-
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
   });
