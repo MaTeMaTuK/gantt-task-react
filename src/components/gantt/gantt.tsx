@@ -14,6 +14,7 @@ import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
 import { convertToBarTasks } from "../../helpers/bar-helper";
 import { GanttEvent } from "../../types/gantt-task-actions";
+import { DateSetup } from "../../types/date-setup";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
@@ -49,9 +50,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onSelect,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [dates, setDates] = useState<Date[]>(() => {
+  const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
     const [startDate, endDate] = ganttDateRange(tasks, viewMode);
-    return seedDates(startDate, endDate, viewMode);
+    return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
 
   const [taskHeight, setTaskHeight] = useState((rowHeight * barFill) / 100);
@@ -67,14 +68,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
 
   const svgHeight = rowHeight * barTasks.length;
-  const gridWidth = dates.length * columnWidth;
+  const gridWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
 
   // task change events
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(tasks, viewMode);
     const newDates = seedDates(startDate, endDate, viewMode);
-    setDates(newDates);
+    setDateSetup({ dates: newDates, viewMode });
     setBarTasks(
       convertToBarTasks(
         tasks,
@@ -267,11 +268,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     gridWidth,
     tasks: tasks,
     rowHeight,
-    dates,
+    dates: dateSetup.dates,
     todayColor,
   };
   const calendarProps: CalendarProps = {
-    dates,
+    dateSetup,
     locale,
     viewMode,
     headerHeight,
@@ -281,7 +282,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,
-    dates,
+    dates: dateSetup.dates,
     ganttEvent,
     selectedTask,
     rowHeight,
@@ -319,7 +320,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     TaskListHeader,
     TaskListTable,
   };
-
+  debugger;
   return (
     <div
       className={styles.wrapper}
