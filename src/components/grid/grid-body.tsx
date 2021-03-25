@@ -6,7 +6,7 @@ import styles from "./grid.module.css";
 export type GridBodyProps = {
   tasks: Task[];
   dates: Date[];
-  gridWidth: number;
+  svgWidth: number;
   rowHeight: number;
   columnWidth: number;
   todayColor: string;
@@ -15,7 +15,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
   dates,
   rowHeight,
-  gridWidth,
+  svgWidth,
   columnWidth,
   todayColor,
 }) => {
@@ -26,7 +26,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
       key="RowLineFirst"
       x="0"
       y1={0}
-      x2={gridWidth}
+      x2={svgWidth}
       y2={0}
       className={styles.gridRowLine}
     />,
@@ -37,7 +37,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         key={"Row" + task.id}
         x="0"
         y={y}
-        width={gridWidth}
+        width={svgWidth}
         height={rowHeight}
         className={styles.gridRow}
       />
@@ -47,7 +47,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         key={"RowLine" + task.id}
         x="0"
         y1={y + rowHeight}
-        x2={gridWidth}
+        x2={svgWidth}
         y2={y + rowHeight}
         className={styles.gridRowLine}
       />

@@ -4,10 +4,11 @@ import { BarTask } from "../../types/bar-task";
 import styles from "./tooltip.module.css";
 
 export type TooltipProps = {
-  x: number;
-  svgHeight: number;
-  rowHeight: number;
   task: BarTask;
+  arrowIndent: number;
+  svgHeight: number;
+  displayXEndpoint: number;
+  rowHeight: number;
   fontSize: string;
   fontFamily: string;
   TooltipContent: React.FC<{
@@ -17,31 +18,37 @@ export type TooltipProps = {
   }>;
 };
 export const Tooltip: React.FC<TooltipProps> = ({
-  x,
+  task,
   rowHeight,
   svgHeight,
-  task,
+  displayXEndpoint,
+  arrowIndent,
   fontSize,
   fontFamily,
   TooltipContent,
 }) => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [toolWidth, setToolWidth] = useState(1000);
-  const [relatedY, setRelatedY] = useState((task.index - 1) * rowHeight);
+  const [relatedY, setRelatedY] = useState(task.index * rowHeight);
+  const [relatedX, setRelatedX] = useState(displayXEndpoint);
   useEffect(() => {
     if (tooltipRef.current) {
       const tooltipHeight = tooltipRef.current.offsetHeight;
-      const tooltipY = task.index * rowHeight + rowHeight;
-      if (tooltipHeight > tooltipY) {
-        setRelatedY(tooltipHeight * 0.5);
-      } else if (tooltipY + tooltipHeight > svgHeight) {
+      const tooltipY = task.index * rowHeight;
+      if (tooltipY + tooltipHeight > svgHeight) {
         setRelatedY(svgHeight - tooltipHeight * 1.05);
       }
-      setToolWidth(tooltipRef.current.scrollWidth * 1.1);
+      const newWidth = tooltipRef.current.scrollWidth * 1.1;
+      let newRelatedX = task.x2 + arrowIndent + arrowIndent * 0.5;
+      if (newWidth + newRelatedX > displayXEndpoint) {
+        newRelatedX = task.x1 - arrowIndent - arrowIndent * 0.5 - newWidth;
+      }
+      setToolWidth(newWidth);
+      setRelatedX(newRelatedX);
     }
-  }, [tooltipRef, task]);
+  }, [tooltipRef, task, arrowIndent, displayXEndpoint]);
   return (
-    <foreignObject x={x} y={relatedY} width={toolWidth} height={1000}>
+    <foreignObject x={relatedX} y={relatedY} width={toolWidth} height={1000}>
       <div ref={tooltipRef} className={styles.tooltipDetailsContainer}>
         <TooltipContent
           task={task}

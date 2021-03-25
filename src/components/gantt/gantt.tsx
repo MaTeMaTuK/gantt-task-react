@@ -9,12 +9,12 @@ import { TaskListTableDefault } from "../task-list/task-list-table";
 import { StandardTooltipContent } from "../other/tooltip";
 import { Scroll } from "../other/scroll";
 import { TaskListProps, TaskList } from "../task-list/task-list";
-import styles from "./gantt.module.css";
 import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
 import { convertToBarTasks } from "../../helpers/bar-helper";
 import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
+import styles from "./gantt.module.css";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
@@ -63,12 +63,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const [selectedTask, setSelectedTask] = useState<BarTask>();
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
+
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(0);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
 
   const svgHeight = rowHeight * barTasks.length;
-  const gridWidth = dateSetup.dates.length * columnWidth;
+  const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
 
   // task change events
@@ -226,20 +227,18 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     if (isX) {
       if (newScrollX < 0) {
-        setScrollX(0);
-      } else if (newScrollX > gridWidth) {
-        setScrollX(gridWidth);
-      } else {
-        setScrollX(newScrollX);
+        newScrollX = 0;
+      } else if (newScrollX > svgWidth) {
+        newScrollX = svgWidth;
       }
+      setScrollX(newScrollX);
     } else {
       if (newScrollY < 0) {
-        setScrollY(0);
+        newScrollY = 0;
       } else if (newScrollY > ganttFullHeight - ganttHeight) {
-        setScrollY(ganttFullHeight - ganttHeight);
-      } else {
-        setScrollY(newScrollY);
+        newScrollY = ganttFullHeight - ganttHeight;
       }
+      setScrollY(newScrollY);
     }
     setIgnoreScrollEvent(true);
   };
@@ -265,7 +264,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const gridProps: GridProps = {
     columnWidth,
-    gridWidth,
+    svgWidth,
     tasks: tasks,
     rowHeight,
     dates: dateSetup.dates,
@@ -294,6 +293,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     fontSize,
     arrowIndent,
     svgHeight,
+    svgWidth,
     setGanttEvent,
     setFailedTask,
     setSelectedTask: handleSelectedTask,
@@ -320,7 +320,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     TaskListHeader,
     TaskListTable,
   };
-  debugger;
   return (
     <div
       className={styles.wrapper}
