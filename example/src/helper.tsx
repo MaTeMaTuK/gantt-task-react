@@ -5,6 +5,14 @@ export function initTasks() {
   const tasks: Task[] = [
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+      name: "Some Project",
+      id: "ProjectSample",
+      progress: 25,
+      type: "project",
+    },
+    {
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
       end: new Date(
         currentDate.getFullYear(),
         currentDate.getMonth(),
@@ -16,6 +24,7 @@ export function initTasks() {
       id: "Task 0",
       progress: 45,
       type: "task",
+      project: "ProjectSample",
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
@@ -25,6 +34,7 @@ export function initTasks() {
       progress: 25,
       dependencies: ["Task 0"],
       type: "task",
+      project: "ProjectSample",
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
@@ -34,6 +44,7 @@ export function initTasks() {
       progress: 10,
       dependencies: ["Task 1"],
       type: "task",
+      project: "ProjectSample",
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
@@ -43,6 +54,7 @@ export function initTasks() {
       progress: 2,
       dependencies: ["Task 2"],
       type: "task",
+      project: "ProjectSample",
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
@@ -52,20 +64,21 @@ export function initTasks() {
       type: "task",
       progress: 70,
       dependencies: ["Task 2"],
+      project: "ProjectSample",
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 16),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
       name: "Release",
       id: "Task 6",
       progress: currentDate.getMonth(),
       type: "milestone",
       dependencies: ["Task 4"],
-      styles: { progressColor: "#ffbb54", progressSelectedColor: "#ff9e0d" },
+      project: "ProjectSample",
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 24),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 25),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 19),
       name: "Party Time",
       id: "Task 9",
       progress: 0,
@@ -74,4 +87,21 @@ export function initTasks() {
     },
   ];
   return tasks;
+}
+
+export function getStartEndDateForProject(tasks: Task[], projectId: string) {
+  const projectTasks = tasks.filter(t => t.project === projectId);
+  let start = projectTasks[0].start;
+  let end = projectTasks[0].end;
+
+  for (let i = 0; i < projectTasks.length; i++) {
+    const task = projectTasks[i];
+    if (start.getTime() > task.start.getTime()) {
+      start = task.start;
+    }
+    if (end.getTime() < task.end.getTime()) {
+      end = task.end;
+    }
+  }
+  return [start, end];
 }

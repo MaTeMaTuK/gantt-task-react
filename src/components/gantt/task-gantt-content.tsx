@@ -61,7 +61,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onDateChange,
   onProgressChange,
   onDoubleClick,
-  onTaskDelete,
+  onDelete,
   TooltipContent,
 }) => {
   const point = svg?.current?.createSVGPoint();
@@ -204,9 +204,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     // Keyboard events
     else if (isKeyboardEvent(event)) {
       if (action === "delete") {
-        if (onTaskDelete) {
+        if (onDelete) {
           try {
-            const result = await onTaskDelete(task);
+            const result = await onDelete(task);
             if (result !== undefined && result) {
               setGanttEvent({ action, changedTask: task });
             }

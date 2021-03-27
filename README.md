@@ -71,7 +71,7 @@ npm start
 | :----------------- | :---------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
 | onSelect           | (task: Task, isSelected: boolean) => void                   | Specifies the function to be executed on the taskbar select or unselect event.          |
 | onDoubleClick      | (task: Task) => void                                        | Specifies the function to be executed on the taskbar onDoubleClick event.               |
-| onTaskDelete\*     | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed on the taskbar on Delete button press event.      |
+| onDelete\*         | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed on the taskbar on Delete button press event.      |
 | onDateChange\*     | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar event on timeline has finished. |
 | onProgressChange\* | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar progress event has finished.    |
 | timeStep           | (task: Task) => number                                      | A time step value for onDateChange. Specify in milliseconds.                            |
@@ -131,6 +131,7 @@ npm start
 |                |          | - **progressSelectedColor**: String. Specifies the taskbar progress fill color globally on select.    |
 | isDisabled     | bool     | Disables all action for current task.                                                                 |
 | fontSize       | string   | Specifies the taskbar font size locally.                                                              |
+| project        | string   | Task project name                                                                                     |
 
 \*Required
 

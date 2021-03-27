@@ -1,7 +1,7 @@
 import React from "react";
 import { Task, ViewMode, Gantt } from "gantt-task-react";
 import { ViewSwitcher } from "./components/view-switcher";
-import { initTasks } from "./helper";
+import { getStartEndDateForProject, initTasks } from "./helper";
 import "gantt-task-react/dist/index.css";
 
 //Init
@@ -18,7 +18,20 @@ const App = () => {
 
   const onTaskChange = (task: Task) => {
     console.log("On date change Id:" + task.id);
-    const newTasks = tasks.map(t => (t.id === task.id ? task : t));
+    let newTasks = tasks.map(t => (t.id === task.id ? task : t));
+    if (task.project) {
+      const [start, end] = getStartEndDateForProject(newTasks, task.project);
+      const project = newTasks[newTasks.findIndex(t => t.id === task.project)];
+      if (
+        project.start.getTime() !== start.getTime() ||
+        project.end.getTime() !== end.getTime()
+      ) {
+        const changedProject = { ...project, start, end };
+        newTasks = newTasks.map(t =>
+          t.id === task.project ? changedProject : t
+        );
+      }
+    }
     setTasks(newTasks);
   };
 
@@ -55,20 +68,22 @@ const App = () => {
         tasks={tasks}
         viewMode={view}
         onDateChange={onTaskChange}
-        onTaskDelete={onTaskDelete}
+        onDelete={onTaskDelete}
         onProgressChange={onProgressChange}
         onDoubleClick={onDblClick}
         onSelect={onSelect}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
       />
-      <h3 style={{ color: "#e56b6f" }}>Milestones are not available</h3>
+      <h3 style={{ color: "#e56b6f" }}>
+        Milestones and projects are not available
+      </h3>
       <h3>Gantt With Limited Height</h3>
       <Gantt
         tasks={tasks}
         viewMode={view}
         onDateChange={onTaskChange}
-        onTaskDelete={onTaskDelete}
+        onDelete={onTaskDelete}
         onProgressChange={onProgressChange}
         onDoubleClick={onDblClick}
         onSelect={onSelect}

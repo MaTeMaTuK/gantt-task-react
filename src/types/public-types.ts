@@ -6,7 +6,7 @@ export enum ViewMode {
   Week = "Week",
   Month = "Month",
 }
-export type TaskType = "task" | "milestone";
+export type TaskType = "task" | "milestone" | "project";
 export interface Task {
   id: string;
   type: TaskType;
@@ -24,6 +24,7 @@ export interface Task {
     progressSelectedColor?: string;
   };
   isDisabled?: boolean;
+  project?: string;
   dependencies?: string[];
 }
 
@@ -55,9 +56,7 @@ export interface EventOption {
   /**
    * Invokes on delete selected task. Chart undoes operation if method return false or error.
    */
-  onTaskDelete?: (
-    task: Task
-  ) => void | boolean | Promise<void> | Promise<boolean>;
+  onDelete?: (task: Task) => void | boolean | Promise<void> | Promise<boolean>;
 }
 
 export interface DisplayOption {

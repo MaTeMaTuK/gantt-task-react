@@ -3,6 +3,7 @@ import { BarTask } from "../../types/bar-task";
 import { GanttContentMoveAction } from "../../types/gantt-task-actions";
 import { Bar } from "./bar/bar";
 import { Milestone } from "./milestone/milestone";
+import { Project } from "./project/project";
 import style from "./task-list.module.css";
 
 export type TaskItemProps = {
@@ -39,6 +40,9 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     switch (task.type) {
       case "milestone":
         setTaskItem(<Milestone {...props} />);
+        break;
+      case "project":
+        setTaskItem(<Project {...props} />);
         break;
       default:
         setTaskItem(<Bar {...props} />);

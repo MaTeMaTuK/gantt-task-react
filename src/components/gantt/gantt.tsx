@@ -46,7 +46,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDateChange,
   onProgressChange,
   onDoubleClick,
-  onTaskDelete,
+  onDelete,
   onSelect,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -300,7 +300,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onDateChange,
     onProgressChange,
     onDoubleClick,
-    onTaskDelete,
+    onDelete,
     TooltipContent,
   };
 
