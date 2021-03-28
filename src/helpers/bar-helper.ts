@@ -14,6 +14,10 @@ export const convertToBarTasks = (
   barProgressSelectedColor: string,
   barBackgroundColor: string,
   barBackgroundSelectedColor: string,
+  projectProgressColor: string,
+  projectProgressSelectedColor: string,
+  projectBackgroundColor: string,
+  projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
   milestoneBackgroundSelectedColor: string
 ) => {
@@ -37,6 +41,10 @@ export const convertToBarTasks = (
       barProgressSelectedColor,
       barBackgroundColor,
       barBackgroundSelectedColor,
+      projectProgressColor,
+      projectProgressSelectedColor,
+      projectBackgroundColor,
+      projectBackgroundSelectedColor,
       milestoneBackgroundColor,
       milestoneBackgroundSelectedColor
     );
@@ -71,6 +79,10 @@ const convertToBarTask = (
   barProgressSelectedColor: string,
   barBackgroundColor: string,
   barBackgroundSelectedColor: string,
+  projectProgressColor: string,
+  projectProgressSelectedColor: string,
+  projectBackgroundColor: string,
+  projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
   milestoneBackgroundSelectedColor: string
 ): BarTask => {
@@ -89,6 +101,23 @@ const convertToBarTask = (
         handleWidth,
         milestoneBackgroundColor,
         milestoneBackgroundSelectedColor
+      );
+      break;
+    case "project":
+      barTask = convertToBar(
+        task,
+        index,
+        dates,
+        dateDelta,
+        columnWidth,
+        rowHeight,
+        taskHeight,
+        barCornerRadius,
+        handleWidth,
+        projectProgressColor,
+        projectProgressSelectedColor,
+        projectBackgroundColor,
+        projectBackgroundSelectedColor
       );
       break;
     default:
@@ -127,6 +156,7 @@ const convertToBar = (
   barBackgroundColor: string,
   barBackgroundSelectedColor: string
 ): BarTask => {
+  debugger;
   const x1 = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
   const x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
   const y = taskYCoordinate(index, rowHeight, taskHeight);

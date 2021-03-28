@@ -86,6 +86,10 @@ export interface StylingOption {
   barProgressSelectedColor?: string;
   barBackgroundColor?: string;
   barBackgroundSelectedColor?: string;
+  projectProgressColor?: string;
+  projectProgressSelectedColor?: string;
+  projectBackgroundColor?: string;
+  projectBackgroundSelectedColor?: string;
   milestoneBackgroundColor?: string;
   milestoneBackgroundSelectedColor?: string;
   arrowColor?: string;

@@ -7,7 +7,10 @@ export type TooltipProps = {
   task: BarTask;
   arrowIndent: number;
   svgHeight: number;
-  displayXEndpoint: number;
+  displayXStartEndpoint: {
+    start: number;
+    end: number;
+  };
   rowHeight: number;
   fontSize: string;
   fontFamily: string;
@@ -21,7 +24,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   task,
   rowHeight,
   svgHeight,
-  displayXEndpoint,
+  displayXStartEndpoint,
   arrowIndent,
   fontSize,
   fontFamily,
@@ -29,26 +32,66 @@ export const Tooltip: React.FC<TooltipProps> = ({
 }) => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [toolWidth, setToolWidth] = useState(1000);
+  const [toolHeight, setToolHeight] = useState(1000);
   const [relatedY, setRelatedY] = useState(task.index * rowHeight);
-  const [relatedX, setRelatedX] = useState(displayXEndpoint);
+  const [relatedX, setRelatedX] = useState(displayXStartEndpoint.end);
   useEffect(() => {
     if (tooltipRef.current) {
-      const tooltipHeight = tooltipRef.current.offsetHeight;
-      const tooltipY = task.index * rowHeight;
-      if (tooltipY + tooltipHeight > svgHeight) {
-        setRelatedY(svgHeight - tooltipHeight * 1.05);
-      }
+      const tooltipHeight = tooltipRef.current.offsetHeight * 1.1;
+      let tooltipY = task.index * rowHeight;
       const newWidth = tooltipRef.current.scrollWidth * 1.1;
       let newRelatedX = task.x2 + arrowIndent + arrowIndent * 0.5;
-      if (newWidth + newRelatedX > displayXEndpoint) {
+      if (newWidth + newRelatedX > displayXStartEndpoint.end) {
         newRelatedX = task.x1 - arrowIndent - arrowIndent * 0.5 - newWidth;
       }
+      const tooltipLowerPoint = tooltipHeight + tooltipY;
+
+      if (
+        newRelatedX < displayXStartEndpoint.start &&
+        tooltipLowerPoint > svgHeight
+      ) {
+        tooltipY -= tooltipHeight;
+        newRelatedX = (task.x1 + task.x2 - newWidth) * 0.5;
+        if (newRelatedX + newWidth > displayXStartEndpoint.end) {
+          newRelatedX = displayXStartEndpoint.end - newWidth;
+        }
+        if (
+          newRelatedX + newWidth > displayXStartEndpoint.end ||
+          newRelatedX - newWidth < displayXStartEndpoint.start
+        ) {
+          newRelatedX = displayXStartEndpoint.end - newWidth;
+        }
+      } else if (
+        newRelatedX < displayXStartEndpoint.start &&
+        tooltipLowerPoint < svgHeight
+      ) {
+        tooltipY += rowHeight;
+        newRelatedX = (task.x1 + task.x2 - newWidth) * 0.5;
+        if (
+          newRelatedX + newWidth > displayXStartEndpoint.end ||
+          newRelatedX - newWidth < displayXStartEndpoint.start
+        ) {
+          newRelatedX = displayXStartEndpoint.end - newWidth;
+        }
+      } else if (tooltipLowerPoint > svgHeight) {
+        tooltipY = svgHeight - tooltipHeight;
+      }
+
+      setRelatedY(tooltipY);
       setToolWidth(newWidth);
       setRelatedX(newRelatedX);
+      if (tooltipHeight !== 1000) {
+        setToolHeight(tooltipHeight);
+      }
     }
-  }, [tooltipRef, task, arrowIndent, displayXEndpoint]);
+  }, [tooltipRef, task, arrowIndent, displayXStartEndpoint]);
   return (
-    <foreignObject x={relatedX} y={relatedY} width={toolWidth} height={1000}>
+    <foreignObject
+      x={relatedX}
+      y={relatedY}
+      width={toolWidth}
+      height={toolHeight}
+    >
       <div ref={tooltipRef} className={styles.tooltipDetailsContainer}>
         <TooltipContent
           task={task}

@@ -23,7 +23,10 @@ export type TaskGanttContentProps = {
   svg?: React.RefObject<SVGSVGElement>;
   svgHeight: number;
   svgWidth: number;
-  displayXEndpoint?: number;
+  displayXStartEndpoint?: {
+    start: number;
+    end: number;
+  };
   taskHeight: number;
   arrowColor: string;
   arrowIndent: number;
@@ -49,7 +52,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   timeStep,
   svg,
   svgHeight,
-  displayXEndpoint,
+  displayXStartEndpoint,
   taskHeight,
   arrowColor,
   arrowIndent,
@@ -290,12 +293,12 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         })}
       </g>
       <g className="toolTip">
-        {ganttEvent.changedTask && displayXEndpoint && (
+        {ganttEvent.changedTask && displayXStartEndpoint && (
           <Tooltip
             arrowIndent={arrowIndent}
             rowHeight={rowHeight}
             svgHeight={svgHeight}
-            displayXEndpoint={displayXEndpoint}
+            displayXStartEndpoint={displayXStartEndpoint}
             task={ganttEvent.changedTask}
             fontFamily={fontFamily}
             fontSize={fontSize}

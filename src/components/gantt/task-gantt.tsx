@@ -25,8 +25,11 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalContainerRef = useRef<HTMLDivElement>(null);
-  const [displayXEndpoint, setDisplayXEndpoint] = useState(0);
-  const newBarProps = { ...barProps, svg: ganttSVGRef, displayXEndpoint };
+  const [displayXStartEndpoint, setDisplayXStartEndpoint] = useState({
+    start: 0,
+    end: 0,
+  });
+  const newBarProps = { ...barProps, svg: ganttSVGRef, displayXStartEndpoint };
 
   useEffect(() => {
     if (horizontalContainerRef.current) {
@@ -37,7 +40,10 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   useEffect(() => {
     if (verticalContainerRef.current) {
       verticalContainerRef.current.scrollLeft = scrollX;
-      setDisplayXEndpoint(verticalContainerRef.current.clientWidth + scrollX);
+      setDisplayXStartEndpoint({
+        start: scrollX,
+        end: verticalContainerRef.current.clientWidth + scrollX,
+      });
     }
     // verticalContainerRef.current?.clientWidth need for resize window tracking
   }, [scrollX, verticalContainerRef.current?.clientWidth]);
