@@ -1,36 +1,19 @@
 import React from "react";
-import { BarTask } from "../../types/bar-task";
 import {
   progressWithByParams,
   getProgressPoint,
-} from "../../helpers/bar-helper";
-import styles from "./bar.module.css";
-import { GanttContentMoveAction } from "../gantt/task-gantt-content";
+} from "../../../helpers/bar-helper";
 import { BarDisplay } from "./bar-display";
 import { BarDateHandle } from "./bar-date-handle";
 import { BarProgressHandle } from "./bar-progress-handle";
+import { TaskItemProps } from "../task-item";
+import styles from "./bar.module.css";
 
-export type BarProps = {
-  task: BarTask;
-  arrowIndent: number;
-  isProgressChangeable: boolean;
-  isDateChangeable: boolean;
-  isDelete: boolean;
-  isSelected: boolean;
-  onEventStart: (
-    action: GanttContentMoveAction,
-    selectedTask: BarTask,
-    event?: React.MouseEvent | React.KeyboardEvent
-  ) => any;
-};
-
-export const Bar: React.FC<BarProps> = ({
+export const Bar: React.FC<TaskItemProps> = ({
   task,
-  arrowIndent,
   isProgressChangeable,
   isDateChangeable,
   onEventStart,
-  isDelete,
   isSelected,
 }) => {
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
@@ -39,33 +22,9 @@ export const Bar: React.FC<BarProps> = ({
     task.y,
     task.height
   );
-
+  const handleHeight = task.height - 2;
   return (
-    <g
-      className={styles.barWrapper}
-      tabIndex={0}
-      onKeyDown={e => {
-        switch (e.key) {
-          case "Delete": {
-            if (isDelete) onEventStart("delete", task, e);
-            break;
-          }
-        }
-        e.stopPropagation();
-      }}
-      onMouseEnter={e => {
-        onEventStart("mouseenter", task, e);
-      }}
-      onMouseLeave={e => {
-        onEventStart("mouseleave", task, e);
-      }}
-      onDoubleClick={e => {
-        onEventStart("dblclick", task, e);
-      }}
-      onFocus={() => {
-        onEventStart("select", task);
-      }}
-    >
+    <g className={styles.barWrapper} tabIndex={0}>
       <BarDisplay
         x={task.x1}
         y={task.y}
@@ -73,9 +32,6 @@ export const Bar: React.FC<BarProps> = ({
         height={task.height}
         progressWidth={progressWidth}
         barCornerRadius={task.barCornerRadius}
-        text={task.name}
-        hasChild={task.barChildren.length > 0}
-        arrowIndent={arrowIndent}
         styles={task.styles}
         isSelected={isSelected}
         onMouseDown={e => {
@@ -90,7 +46,7 @@ export const Bar: React.FC<BarProps> = ({
               x={task.x1 + 1}
               y={task.y + 1}
               width={task.handleWidth}
-              height={task.height - 2}
+              height={handleHeight}
               barCornerRadius={task.barCornerRadius}
               onMouseDown={e => {
                 onEventStart("start", task, e);
@@ -101,7 +57,7 @@ export const Bar: React.FC<BarProps> = ({
               x={task.x2 - task.handleWidth - 1}
               y={task.y + 1}
               width={task.handleWidth}
-              height={task.height - 2}
+              height={handleHeight}
               barCornerRadius={task.barCornerRadius}
               onMouseDown={e => {
                 onEventStart("end", task, e);

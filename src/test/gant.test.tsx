@@ -14,6 +14,7 @@ describe("gantt", () => {
             name: "Redesign website",
             id: "Task 0",
             progress: 45,
+            type: "task",
           },
         ]}
       />,

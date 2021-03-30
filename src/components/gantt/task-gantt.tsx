@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, SyntheticEvent } from "react";
+import React, { useRef, useEffect, SyntheticEvent, useState } from "react";
 import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
@@ -25,7 +25,11 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalContainerRef = useRef<HTMLDivElement>(null);
-  const newBarProps = { ...barProps, svg: ganttSVGRef };
+  const [displayXStartEndpoint, setDisplayXStartEndpoint] = useState({
+    start: 0,
+    end: 0,
+  });
+  const newBarProps = { ...barProps, svg: ganttSVGRef, displayXStartEndpoint };
 
   useEffect(() => {
     if (horizontalContainerRef.current) {
@@ -36,8 +40,13 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   useEffect(() => {
     if (verticalContainerRef.current) {
       verticalContainerRef.current.scrollLeft = scrollX;
+      setDisplayXStartEndpoint({
+        start: scrollX,
+        end: verticalContainerRef.current.clientWidth + scrollX,
+      });
     }
-  }, [scrollX]);
+    // verticalContainerRef.current?.clientWidth need for resize window tracking
+  }, [scrollX, verticalContainerRef.current?.clientWidth]);
 
   return (
     <div
@@ -47,7 +56,7 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width={gridProps.gridWidth}
+        width={gridProps.svgWidth}
         height={calendarProps.headerHeight}
         fontFamily={barProps.fontFamily}
       >
@@ -58,13 +67,13 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
         className={styles.horizontalContainer}
         style={
           ganttHeight
-            ? { height: ganttHeight, width: gridProps.gridWidth }
-            : { width: gridProps.gridWidth }
+            ? { height: ganttHeight, width: gridProps.svgWidth }
+            : { width: gridProps.svgWidth }
         }
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width={gridProps.gridWidth}
+          width={gridProps.svgWidth}
           height={barProps.rowHeight * barProps.tasks.length}
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}

@@ -1,91 +1,73 @@
 import React, { useEffect, useState } from "react";
 import { Task, EventOption } from "../../types/public-types";
-import { Bar } from "../bar/bar";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
-import {
-  convertToBarTasks,
-  handleTaskBySVGMouseEvent,
-  BarMoveAction,
-} from "../../helpers/bar-helper";
+import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
 import { Tooltip } from "../other/tooltip";
 import { isKeyboardEvent } from "../../helpers/other-helper";
+import { TaskItem } from "../task-item/task-item";
+import {
+  BarMoveAction,
+  GanttContentMoveAction,
+  GanttEvent,
+} from "../../types/gantt-task-actions";
 
-export type GanttContentMoveAction =
-  | "mouseenter"
-  | "mouseleave"
-  | "delete"
-  | "dblclick"
-  | "select"
-  | BarMoveAction;
-export type BarEvent = {
-  changedTask?: BarTask;
-  originalTask?: BarTask;
-  action: GanttContentMoveAction;
-};
 export type TaskGanttContentProps = {
-  tasks: Task[];
+  tasks: BarTask[];
   dates: Date[];
-  selectedTask: string;
+  ganttEvent: GanttEvent;
+  selectedTask: BarTask | undefined;
   rowHeight: number;
-  barCornerRadius: number;
   columnWidth: number;
-  barFill: number;
-  barProgressColor: string;
-  barProgressSelectedColor: string;
-  barBackgroundColor: string;
-  barBackgroundSelectedColor: string;
-  handleWidth: number;
   timeStep: number;
   svg?: React.RefObject<SVGSVGElement>;
   svgHeight: number;
+  svgWidth: number;
+  displayXStartEndpoint?: {
+    start: number;
+    end: number;
+  };
+  taskHeight: number;
   arrowColor: string;
   arrowIndent: number;
   fontSize: string;
   fontFamily: string;
+  setGanttEvent: (value: GanttEvent) => void;
+  setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
   TooltipContent: React.FC<{
     task: Task;
     fontSize: string;
     fontFamily: string;
   }>;
-  onTasksChange: (tasks: Task[]) => void;
 } & EventOption;
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   tasks,
   dates,
+  ganttEvent,
   selectedTask,
   rowHeight,
-  barCornerRadius,
   columnWidth,
-  barFill,
-  barProgressColor,
-  barProgressSelectedColor,
-  barBackgroundColor,
-  barBackgroundSelectedColor,
-  handleWidth,
   timeStep,
   svg,
   svgHeight,
+  displayXStartEndpoint,
+  taskHeight,
   arrowColor,
   arrowIndent,
   fontFamily,
   fontSize,
+  setGanttEvent,
+  setFailedTask,
   setSelectedTask,
-  onTasksChange,
   onDateChange,
   onProgressChange,
   onDoubleClick,
-  onTaskDelete,
+  onDelete,
   TooltipContent,
 }) => {
   const point = svg?.current?.createSVGPoint();
-  const [barEvent, setBarEvent] = useState<BarEvent>({
-    action: "",
-  });
-  const [barTasks, setBarTasks] = useState<BarTask[]>([]);
-  const [failedTask, setFailedTask] = useState<BarTask | null>(null);
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
@@ -101,51 +83,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     setXStep(newXStep);
   }, [columnWidth, dates, timeStep]);
 
-  // generate tasks
-  useEffect(() => {
-    setBarTasks(
-      convertToBarTasks(
-        tasks,
-        dates,
-        columnWidth,
-        rowHeight,
-        barFill,
-        barCornerRadius,
-        handleWidth,
-        barProgressColor,
-        barProgressSelectedColor,
-        barBackgroundColor,
-        barBackgroundSelectedColor
-      )
-    );
-  }, [
-    tasks,
-    rowHeight,
-    barCornerRadius,
-    columnWidth,
-    dates,
-    barFill,
-    handleWidth,
-    barProgressColor,
-    barProgressSelectedColor,
-    barBackgroundColor,
-    barBackgroundSelectedColor,
-  ]);
-
-  // on failed task update
-  useEffect(() => {
-    if (failedTask) {
-      const newTasks = barTasks.map(t =>
-        t.id === failedTask.id ? failedTask : t
-      );
-      onTasksChange(newTasks);
-      setFailedTask(null);
-    }
-  }, [failedTask, barTasks]);
-
   useEffect(() => {
     const handleMouseMove = async (event: MouseEvent) => {
-      if (!barEvent.changedTask || !point || !svg?.current) return;
+      if (!ganttEvent.changedTask || !point || !svg?.current) return;
       event.preventDefault();
 
       point.x = event.clientX;
@@ -155,54 +95,46 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
       const { isChanged, changedTask } = handleTaskBySVGMouseEvent(
         cursor.x,
-        barEvent.action as BarMoveAction,
-        barEvent.changedTask,
+        ganttEvent.action as BarMoveAction,
+        ganttEvent.changedTask,
         xStep,
         timeStep,
         initEventX1Delta
       );
       if (isChanged) {
-        setBarTasks(
-          barTasks.map(t => (t.id === changedTask.id ? changedTask : t))
-        );
-        setBarEvent({ ...barEvent, changedTask: changedTask });
+        setGanttEvent({ action: ganttEvent.action, changedTask });
       }
     };
 
     const handleMouseUp = async (event: MouseEvent) => {
-      const { changedTask: selectedTask, action, originalTask } = barEvent;
-
-      if (!selectedTask || !point || !svg?.current || !originalTask) return;
+      const { action, originalSelectedTask, changedTask } = ganttEvent;
+      if (!changedTask || !point || !svg?.current || !originalSelectedTask)
+        return;
       event.preventDefault();
 
       point.x = event.clientX;
       const cursor = point.matrixTransform(
         svg?.current.getScreenCTM()?.inverse()
       );
-
-      const { changedTask } = handleTaskBySVGMouseEvent(
+      const { changedTask: newChangedTask } = handleTaskBySVGMouseEvent(
         cursor.x,
         action as BarMoveAction,
-        selectedTask,
+        changedTask,
         xStep,
         timeStep,
         initEventX1Delta
       );
 
       const isNotLikeOriginal =
-        originalTask.start !== changedTask.start ||
-        originalTask.end !== changedTask.end ||
-        originalTask.progress !== changedTask.progress;
+        originalSelectedTask.start !== newChangedTask.start ||
+        originalSelectedTask.end !== newChangedTask.end ||
+        originalSelectedTask.progress !== newChangedTask.progress;
 
       // remove listeners
       svg.current.removeEventListener("mousemove", handleMouseMove);
       svg.current.removeEventListener("mouseup", handleMouseUp);
-      setBarEvent({ action: "" });
+      setGanttEvent({ action: "" });
       setIsMoving(false);
-      const newTasks = barTasks.map(t =>
-        t.id === changedTask.id ? changedTask : t
-      );
-      onTasksChange(newTasks);
 
       // custom operation start
       let operationSuccess = true;
@@ -212,7 +144,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         isNotLikeOriginal
       ) {
         try {
-          const result = await onDateChange(changedTask);
+          const result = await onDateChange(newChangedTask);
           if (result !== undefined) {
             operationSuccess = result;
           }
@@ -221,7 +153,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         }
       } else if (onProgressChange && isNotLikeOriginal) {
         try {
-          const result = await onProgressChange(changedTask);
+          const result = await onProgressChange(newChangedTask);
           if (result !== undefined) {
             operationSuccess = result;
           }
@@ -232,16 +164,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
       // If operation is failed - return old state
       if (!operationSuccess) {
-        setFailedTask(originalTask);
+        setFailedTask(originalSelectedTask);
       }
     };
 
     if (
       !isMoving &&
-      (barEvent.action === "move" ||
-        barEvent.action === "end" ||
-        barEvent.action === "start" ||
-        barEvent.action === "progress") &&
+      (ganttEvent.action === "move" ||
+        ganttEvent.action === "end" ||
+        ganttEvent.action === "start" ||
+        ganttEvent.action === "progress") &&
       svg?.current
     ) {
       svg.current.addEventListener("mousemove", handleMouseMove);
@@ -249,8 +181,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       setIsMoving(true);
     }
   }, [
-    barTasks,
-    barEvent,
+    ganttEvent,
     xStep,
     initEventX1Delta,
     onProgressChange,
@@ -276,13 +207,11 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     // Keyboard events
     else if (isKeyboardEvent(event)) {
       if (action === "delete") {
-        if (onTaskDelete) {
+        if (onDelete) {
           try {
-            const result = await onTaskDelete(task);
+            const result = await onDelete(task);
             if (result !== undefined && result) {
-              const newTasks = barTasks.filter(t => t.id !== task.id);
-              onTasksChange(newTasks);
-              setSelectedTask("");
+              setGanttEvent({ action, changedTask: task });
             }
           } catch (error) {
             console.error("Error on Delete. " + error);
@@ -292,16 +221,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     }
     // Mouse Events
     else if (action === "mouseenter") {
-      if (!barEvent.action) {
-        setBarEvent({
+      if (!ganttEvent.action) {
+        setGanttEvent({
           action,
           changedTask: task,
-          originalTask: task,
+          originalSelectedTask: task,
         });
       }
     } else if (action === "mouseleave") {
-      if (barEvent.action === "mouseenter") {
-        setBarEvent({ action: "" });
+      if (ganttEvent.action === "mouseenter") {
+        setGanttEvent({ action: "" });
       }
     } else if (action === "dblclick") {
       !!onDoubleClick && onDoubleClick(task);
@@ -314,16 +243,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         svg.current.getScreenCTM()?.inverse()
       );
       setInitEventX1Delta(cursor.x - task.x1);
-      setBarEvent({
+      setGanttEvent({
         action,
         changedTask: task,
-        originalTask: task,
+        originalSelectedTask: task,
       });
     } else {
-      setBarEvent({
+      setGanttEvent({
         action,
         changedTask: task,
-        originalTask: task,
+        originalSelectedTask: task,
       });
     }
   };
@@ -331,14 +260,15 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   return (
     <g className="content">
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>
-        {barTasks.map(task => {
+        {tasks.map(task => {
           return task.barChildren.map(child => {
             return (
               <Arrow
-                key={`Arrow from ${task.id} to ${barTasks[child].id}`}
+                key={`Arrow from ${task.id} to ${tasks[child].id}`}
                 taskFrom={task}
-                taskTo={barTasks[child]}
+                taskTo={tasks[child]}
                 rowHeight={rowHeight}
+                taskHeight={taskHeight}
                 arrowIndent={arrowIndent}
               />
             );
@@ -346,28 +276,30 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         })}
       </g>
       <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
-        {barTasks.map(task => {
+        {tasks.map(task => {
           return (
-            <Bar
+            <TaskItem
               task={task}
               arrowIndent={arrowIndent}
+              taskHeight={taskHeight}
               isProgressChangeable={!!onProgressChange && !task.isDisabled}
               isDateChangeable={!!onDateChange && !task.isDisabled}
               isDelete={!task.isDisabled}
               onEventStart={handleBarEventStart}
               key={task.id}
-              isSelected={task.id === selectedTask}
+              isSelected={!!selectedTask && task.id === selectedTask.id}
             />
           );
         })}
       </g>
       <g className="toolTip">
-        {barEvent.changedTask && (
+        {ganttEvent.changedTask && displayXStartEndpoint && (
           <Tooltip
-            x={barEvent.changedTask.x2 + arrowIndent + arrowIndent * 0.5}
+            arrowIndent={arrowIndent}
             rowHeight={rowHeight}
             svgHeight={svgHeight}
-            task={barEvent.changedTask}
+            displayXStartEndpoint={displayXStartEndpoint}
+            task={ganttEvent.changedTask}
             fontFamily={fontFamily}
             fontSize={fontSize}
             TooltipContent={TooltipContent}

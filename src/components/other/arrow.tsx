@@ -5,18 +5,20 @@ type ArrowProps = {
   taskFrom: BarTask;
   taskTo: BarTask;
   rowHeight: number;
+  taskHeight: number;
   arrowIndent: number;
 };
 export const Arrow: React.FC<ArrowProps> = ({
   taskFrom,
   taskTo,
   rowHeight,
+  taskHeight,
   arrowIndent,
 }) => {
   const indexCompare = taskFrom.index > taskTo.index ? -1 : 1;
-  const taskToEndPosition = taskTo.y + taskTo.height / 2;
+  const taskToEndPosition = taskTo.y + taskHeight / 2;
 
-  const path = `M ${taskFrom.x2} ${taskFrom.y + taskFrom.height / 2} 
+  const path = `M ${taskFrom.x2} ${taskFrom.y + taskHeight / 2} 
   h ${arrowIndent} 
   v ${(indexCompare * rowHeight) / 2} 
   H ${taskTo.x1 - arrowIndent} 

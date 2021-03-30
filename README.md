@@ -24,6 +24,7 @@ let tasks: Task[] = [
       end: new Date(2020, 1, 2),
       name: 'Idea',
       id: 'Task 0',
+      type:'task'
       progress: 45,
       isDisabled: true,
       styles: { progressColor: '#ffbb54', progressSelectedColor: '#ff9e0d' },
@@ -71,7 +72,7 @@ npm start
 | :----------------- | :---------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
 | onSelect           | (task: Task, isSelected: boolean) => void                   | Specifies the function to be executed on the taskbar select or unselect event.          |
 | onDoubleClick      | (task: Task) => void                                        | Specifies the function to be executed on the taskbar onDoubleClick event.               |
-| onTaskDelete\*     | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed on the taskbar on Delete button press event.      |
+| onDelete\*         | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed on the taskbar on Delete button press event.      |
 | onDateChange\*     | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar event on timeline has finished. |
 | onProgressChange\* | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar progress event has finished.    |
 | timeStep           | (task: Task) => number                                      | A time step value for onDateChange. Specify in milliseconds.                            |
@@ -120,6 +121,7 @@ npm start
 | :------------- | :------- | :---------------------------------------------------------------------------------------------------- |
 | id\*           | string   | Task id.                                                                                              |
 | name\*         | string   | Task display name.                                                                                    |
+| type\*         | string   | Task display type: **task**, **milestone**, **project**                                               |
 | start\*        | Date     | Task start date.                                                                                      |
 | end\*          | Date     | Task end date.                                                                                        |
 | progress\*     | number   | Task progress. Sets in percent from 0 to 100.                                                         |
@@ -131,6 +133,7 @@ npm start
 |                |          | - **progressSelectedColor**: String. Specifies the taskbar progress fill color globally on select.    |
 | isDisabled     | bool     | Disables all action for current task.                                                                 |
 | fontSize       | string   | Specifies the taskbar font size locally.                                                              |
+| project        | string   | Task project name                                                                                     |
 
 \*Required
 
