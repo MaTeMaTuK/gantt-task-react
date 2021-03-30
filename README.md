@@ -24,6 +24,7 @@ let tasks: Task[] = [
       end: new Date(2020, 1, 2),
       name: 'Idea',
       id: 'Task 0',
+      type:'task'
       progress: 45,
       isDisabled: true,
       styles: { progressColor: '#ffbb54', progressSelectedColor: '#ff9e0d' },
@@ -120,6 +121,7 @@ npm start
 | :------------- | :------- | :---------------------------------------------------------------------------------------------------- |
 | id\*           | string   | Task id.                                                                                              |
 | name\*         | string   | Task display name.                                                                                    |
+| type           | string   | Task display type: "task", "milestone", "project"                                                     |
 | start\*        | Date     | Task start date.                                                                                      |
 | end\*          | Date     | Task end date.                                                                                        |
 | progress\*     | number   | Task progress. Sets in percent from 0 to 100.                                                         |

@@ -87,7 +87,7 @@ export const ganttDateRange = (tasks: Task[], viewMode: ViewMode) => {
       newStartDate = startOfDate(newStartDate, "day");
       newEndDate = startOfDate(newEndDate, "day");
       newStartDate = addToDate(newStartDate, -1, "day");
-      newEndDate = addToDate(newEndDate, 5, "day");
+      newEndDate = addToDate(newEndDate, 3, "day");
       break;
   }
   return [newStartDate, newEndDate];
