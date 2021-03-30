@@ -1,5 +1,5 @@
 import { Task } from "../types/public-types";
-import { BarTask } from "../types/bar-task";
+import { BarTask, TaskTypeInternal } from "../types/bar-task";
 import { BarMoveAction } from "../types/gantt-task-actions";
 
 export const convertToBarTasks = (
@@ -158,7 +158,7 @@ const convertToBar = (
 ): BarTask => {
   debugger;
   const x1 = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
-  const x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
+  let x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
   const y = taskYCoordinate(index, rowHeight, taskHeight);
 
   const styles = {
@@ -168,8 +168,14 @@ const convertToBar = (
     progressSelectedColor: barProgressSelectedColor,
     ...task.styles,
   };
+  let typeInternal: TaskTypeInternal = task.type;
+  if (typeInternal === "task" && x2 - x1 < handleWidth * 2) {
+    typeInternal = "smalltask";
+    x2 = x1 + handleWidth * 2;
+  }
   return {
     ...task,
+    typeInternal,
     x1,
     x2,
     y,
@@ -218,6 +224,7 @@ const convertToMilestone = (
     index,
     barCornerRadius,
     handleWidth,
+    typeInternal: task.type,
     progress: 0,
     height: rotatedHeight,
     barChildren: [],
