@@ -121,7 +121,7 @@ npm start
 | :------------- | :------- | :---------------------------------------------------------------------------------------------------- |
 | id\*           | string   | Task id.                                                                                              |
 | name\*         | string   | Task display name.                                                                                    |
-| type           | string   | Task display type: "task", "milestone", "project"                                                     |
+| type\*         | string   | Task display type: **task**, **milestone**, **project**                                               |
 | start\*        | Date     | Task start date.                                                                                      |
 | end\*          | Date     | Task end date.                                                                                        |
 | progress\*     | number   | Task progress. Sets in percent from 0 to 100.                                                         |
