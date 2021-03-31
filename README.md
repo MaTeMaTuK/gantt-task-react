@@ -24,7 +24,7 @@ let tasks: Task[] = [
       end: new Date(2020, 1, 2),
       name: 'Idea',
       id: 'Task 0',
-      type:'task'
+      type:'task',
       progress: 45,
       isDisabled: true,
       styles: { progressColor: '#ffbb54', progressSelectedColor: '#ff9e0d' },
