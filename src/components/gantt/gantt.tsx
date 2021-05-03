@@ -362,7 +362,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         onKeyDown={handleKeyDown}
         tabIndex={0}
         ref={wrapperRef}
-        // onWheel={handleWheel}
       >
         {listCellWidth && <TaskList {...tableProps} />}
         <TaskGantt
