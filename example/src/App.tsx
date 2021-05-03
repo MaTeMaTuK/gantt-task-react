@@ -75,9 +75,6 @@ const App = () => {
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
       />
-      <h3 style={{ color: "#e56b6f" }}>
-        Milestones and projects are not available
-      </h3>
       <h3>Gantt With Limited Height</h3>
       <Gantt
         tasks={tasks}
