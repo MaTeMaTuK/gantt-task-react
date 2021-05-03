@@ -1,29 +1,28 @@
 import React, { SyntheticEvent, useRef, useEffect } from "react";
-import styles from "./scroll.module.css";
+import styles from "./horizontal-scroll.module.css";
 
-export const Scroll: React.FC<{
+export const HorizontalScroll: React.FC<{
   scroll: number;
-  ganttHeight: number;
-  ganttFullHeight: number;
-  headerHeight: number;
+  svgWidth: number;
+  taskListWidth: number;
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
-}> = ({ scroll, ganttHeight, ganttFullHeight, headerHeight, onScroll }) => {
+}> = ({ scroll, svgWidth, taskListWidth, onScroll }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scroll;
+      scrollRef.current.scrollLeft = scroll;
     }
   }, [scroll]);
 
   return (
     <div
-      style={{ height: ganttHeight, marginTop: headerHeight }}
+      style={{ marginLeft: taskListWidth }}
       className={styles.scroll}
       onScroll={onScroll}
       ref={scrollRef}
     >
-      <div style={{ height: ganttFullHeight, width: 1 }} />
+      <div style={{ width: svgWidth, height: 1 }} />
     </div>
   );
 };

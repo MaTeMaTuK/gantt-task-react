@@ -156,7 +156,6 @@ const convertToBar = (
   barBackgroundColor: string,
   barBackgroundSelectedColor: string
 ): BarTask => {
-  debugger;
   const x1 = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
   let x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
   const y = taskYCoordinate(index, rowHeight, taskHeight);

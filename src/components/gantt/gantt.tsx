@@ -7,7 +7,7 @@ import { TaskGanttContentProps } from "./task-gantt-content";
 import { TaskListHeaderDefault } from "../task-list/task-list-header";
 import { TaskListTableDefault } from "../task-list/task-list-table";
 import { StandardTooltipContent } from "../other/tooltip";
-import { Scroll } from "../other/scroll";
+import { VerticalScroll } from "../other/vertical-scroll";
 import { TaskListProps, TaskList } from "../task-list/task-list";
 import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
@@ -15,6 +15,7 @@ import { convertToBarTasks } from "../../helpers/bar-helper";
 import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./gantt.module.css";
+import { HorizontalScroll } from "../other/horizontal-scroll";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
@@ -54,12 +55,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onSelect,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const taskListRef = useRef<HTMLDivElement>(null);
+  const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
     const [startDate, endDate] = ganttDateRange(tasks, viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
 
   const [taskHeight, setTaskHeight] = useState((rowHeight * barFill) / 100);
+  const [taskListWidth, setTaskListWidth] = useState(0);
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
@@ -165,27 +169,43 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
   }, [rowHeight, barFill, taskHeight]);
 
+  useEffect(() => {
+    if (taskListRef.current) {
+      setTaskListWidth(taskListRef.current.offsetWidth);
+    }
+  }, [taskListRef]);
+
   // scroll events
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      event.preventDefault();
-      const newScrollY = scrollY + event.deltaY;
-      if (newScrollY < 0) {
-        setScrollY(0);
-      } else if (newScrollY > ganttFullHeight - ganttHeight) {
-        setScrollY(ganttFullHeight - ganttHeight);
+      if (event.shiftKey || event.deltaX) {
+        const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
+        let newScrollX = scrollX + scrollMove;
+        if (newScrollX < 0) {
+          newScrollX = 0;
+        } else if (newScrollX > svgWidth) {
+          newScrollX = svgWidth;
+        }
+        setScrollX(newScrollX);
+        event.preventDefault();
       } else {
-        setScrollY(newScrollY);
+        let newScrollY = scrollY + event.deltaY;
+        if (newScrollY < 0) {
+          newScrollY = 0;
+        } else if (newScrollY > ganttFullHeight - ganttHeight) {
+          newScrollY = ganttFullHeight - ganttHeight;
+        }
+        if (newScrollY !== scrollY) {
+          setScrollY(newScrollY);
+          event.preventDefault();
+        }
       }
+
       setIgnoreScrollEvent(true);
     };
 
     // subscribe if scroll is necessary
-    if (
-      wrapperRef.current &&
-      ganttHeight &&
-      ganttHeight < barTasks.length * rowHeight
-    ) {
+    if (wrapperRef.current) {
       wrapperRef.current.addEventListener("wheel", handleWheel, {
         passive: false,
       });
@@ -195,7 +215,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         wrapperRef.current.removeEventListener("wheel", handleWheel);
       }
     };
-  }, [wrapperRef.current, scrollY, ganttHeight, barTasks, rowHeight]);
+  }, [wrapperRef.current, scrollY, scrollX, ganttHeight, svgWidth]);
 
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
@@ -330,33 +350,42 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     ganttHeight,
     horizontalContainerClass: styles.horizontalContainer,
     selectedTask,
+    taskListRef,
     setSelectedTask: handleSelectedTask,
     TaskListHeader,
     TaskListTable,
   };
   return (
-    <div
-      className={styles.wrapper}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-      ref={wrapperRef}
-    >
-      {listCellWidth && <TaskList {...tableProps} />}
-      <TaskGantt
-        gridProps={gridProps}
-        calendarProps={calendarProps}
-        barProps={barProps}
-        ganttHeight={ganttHeight}
-        scrollY={scrollY}
-        scrollX={scrollX}
+    <div>
+      <div
+        className={styles.wrapper}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        ref={wrapperRef}
+      >
+        {listCellWidth && <TaskList {...tableProps} />}
+        <TaskGantt
+          gridProps={gridProps}
+          calendarProps={calendarProps}
+          barProps={barProps}
+          ganttHeight={ganttHeight}
+          scrollY={scrollY}
+          scrollX={scrollX}
+          verticalGanttContainerRef={verticalGanttContainerRef}
+        />
+        <VerticalScroll
+          ganttFullHeight={ganttFullHeight}
+          ganttHeight={ganttHeight}
+          headerHeight={headerHeight}
+          scroll={scrollY}
+          onScroll={handleScrollY}
+        />
+      </div>
+      <HorizontalScroll
+        svgWidth={svgWidth}
+        taskListWidth={taskListWidth}
+        scroll={scrollX}
         onScroll={handleScrollX}
-      />
-      <Scroll
-        ganttFullHeight={ganttFullHeight}
-        ganttHeight={ganttHeight}
-        headerHeight={headerHeight}
-        scroll={scrollY}
-        onScroll={handleScrollY}
       />
     </div>
   );

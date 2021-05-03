@@ -12,6 +12,7 @@ export type TaskListProps = {
   scrollY: number;
   locale: string;
   tasks: Task[];
+  taskListRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
   selectedTask: BarTask | undefined;
   setSelectedTask: (task: string) => void;
@@ -45,6 +46,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   setSelectedTask,
   locale,
   ganttHeight,
+  taskListRef,
   horizontalContainerClass,
   TaskListHeader,
   TaskListTable,
@@ -75,7 +77,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   };
 
   return (
-    <div>
+    <div ref={taskListRef}>
       <TaskListHeader {...headerProps} />
       <div
         ref={horizontalContainerRef}

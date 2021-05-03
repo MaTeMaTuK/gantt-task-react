@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, SyntheticEvent, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
@@ -11,7 +11,7 @@ export type TaskGanttProps = {
   ganttHeight: number;
   scrollY: number;
   scrollX: number;
-  onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
+  verticalGanttContainerRef: React.RefObject<HTMLDivElement>;
 };
 export const TaskGantt: React.FC<TaskGanttProps> = ({
   gridProps,
@@ -20,11 +20,10 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   ganttHeight,
   scrollY,
   scrollX,
-  onScroll,
+  verticalGanttContainerRef,
 }) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
-  const verticalContainerRef = useRef<HTMLDivElement>(null);
   const [displayXStartEndpoint, setDisplayXStartEndpoint] = useState({
     start: 0,
     end: 0,
@@ -38,21 +37,20 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   }, [scrollY]);
 
   useEffect(() => {
-    if (verticalContainerRef.current) {
-      verticalContainerRef.current.scrollLeft = scrollX;
+    if (verticalGanttContainerRef.current) {
+      verticalGanttContainerRef.current.scrollLeft = scrollX;
       setDisplayXStartEndpoint({
         start: scrollX,
-        end: verticalContainerRef.current.clientWidth + scrollX,
+        end: verticalGanttContainerRef.current.clientWidth + scrollX,
       });
     }
     // verticalContainerRef.current?.clientWidth need for resize window tracking
-  }, [scrollX, verticalContainerRef.current?.clientWidth]);
+  }, [scrollX, verticalGanttContainerRef.current?.clientWidth]);
 
   return (
     <div
       className={styles.ganttVerticalContainer}
-      ref={verticalContainerRef}
-      onScroll={onScroll}
+      ref={verticalGanttContainerRef}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
