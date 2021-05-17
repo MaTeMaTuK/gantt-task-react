@@ -6,11 +6,12 @@ import styles from "./tooltip.module.css";
 export type TooltipProps = {
   task: BarTask;
   arrowIndent: number;
-  svgHeight: number;
-  displayXStartEndpoint: {
-    start: number;
-    end: number;
-  };
+  svgContainerHeight: number;
+  svgContainerWidth: number;
+  headerHeight: number;
+  taskListWidth: number;
+  scrollX: number;
+  scrollY: number;
   rowHeight: number;
   fontSize: string;
   fontFamily: string;
@@ -23,83 +24,76 @@ export type TooltipProps = {
 export const Tooltip: React.FC<TooltipProps> = ({
   task,
   rowHeight,
-  svgHeight,
-  displayXStartEndpoint,
+  svgContainerHeight,
+  svgContainerWidth,
+  scrollX,
+  scrollY,
   arrowIndent,
   fontSize,
   fontFamily,
+  headerHeight,
+  taskListWidth,
   TooltipContent,
 }) => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);
-  const [toolWidth, setToolWidth] = useState(1000);
-  const [toolHeight, setToolHeight] = useState(1000);
-  const [relatedY, setRelatedY] = useState(task.index * rowHeight);
-  const [relatedX, setRelatedX] = useState(displayXStartEndpoint.end);
+  const [relatedY, setRelatedY] = useState(0);
+  const [relatedX, setRelatedX] = useState(0);
   useEffect(() => {
     if (tooltipRef.current) {
+      let newRelatedX =
+        task.x2 + arrowIndent + arrowIndent * 0.5 + taskListWidth - scrollX;
+      let newRelatedY = task.index * rowHeight - scrollY + headerHeight;
+
       const tooltipHeight = tooltipRef.current.offsetHeight * 1.1;
-      let tooltipY = task.index * rowHeight;
-      const newWidth = tooltipRef.current.scrollWidth * 1.1;
-      let newRelatedX = task.x2 + arrowIndent + arrowIndent * 0.5;
-      if (newWidth + newRelatedX > displayXStartEndpoint.end) {
-        newRelatedX = task.x1 - arrowIndent - arrowIndent * 0.5 - newWidth;
-      }
-      const tooltipLowerPoint = tooltipHeight + tooltipY;
+      const tooltipWidth = tooltipRef.current.offsetWidth * 1.1;
 
-      if (
-        newRelatedX < displayXStartEndpoint.start &&
-        tooltipLowerPoint > svgHeight
-      ) {
-        tooltipY -= tooltipHeight;
-        newRelatedX = (task.x1 + task.x2 - newWidth) * 0.5;
-        if (newRelatedX + newWidth > displayXStartEndpoint.end) {
-          newRelatedX = displayXStartEndpoint.end - newWidth;
-        }
-        if (
-          newRelatedX + newWidth > displayXStartEndpoint.end ||
-          newRelatedX - newWidth < displayXStartEndpoint.start
-        ) {
-          newRelatedX = displayXStartEndpoint.end - newWidth;
-        }
-      } else if (
-        newRelatedX < displayXStartEndpoint.start &&
-        tooltipLowerPoint < svgHeight
-      ) {
-        tooltipY += rowHeight;
-        newRelatedX = (task.x1 + task.x2 - newWidth) * 0.5;
-        if (
-          newRelatedX + newWidth > displayXStartEndpoint.end ||
-          newRelatedX - newWidth < displayXStartEndpoint.start
-        ) {
-          newRelatedX = displayXStartEndpoint.end - newWidth;
-        }
-      } else if (tooltipLowerPoint > svgHeight) {
-        tooltipY = svgHeight - tooltipHeight;
-      }
+      const tooltipLowerPoint = tooltipHeight + newRelatedY - scrollY;
+      const tooltipLeftmostPoint = tooltipWidth + newRelatedX;
+      const fullChartWidth = taskListWidth + svgContainerWidth;
 
-      setRelatedY(tooltipY);
-      setToolWidth(newWidth);
+      if (tooltipLeftmostPoint > fullChartWidth) {
+        newRelatedX =
+          task.x1 +
+          taskListWidth -
+          arrowIndent -
+          arrowIndent * 0.5 -
+          scrollX -
+          tooltipWidth;
+      }
+      if (newRelatedX < taskListWidth) {
+        newRelatedX = svgContainerWidth + taskListWidth - tooltipWidth;
+        newRelatedY += rowHeight;
+      } else if (tooltipLowerPoint > svgContainerHeight - scrollY) {
+        newRelatedY = svgContainerHeight - tooltipHeight;
+      }
+      setRelatedY(newRelatedY);
       setRelatedX(newRelatedX);
-      if (tooltipHeight !== 1000) {
-        setToolHeight(tooltipHeight);
-      }
     }
-  }, [tooltipRef, task, arrowIndent, displayXStartEndpoint]);
+  }, [
+    tooltipRef.current,
+    task,
+    arrowIndent,
+    scrollX,
+    scrollY,
+    headerHeight,
+    taskListWidth,
+    rowHeight,
+    svgContainerHeight,
+    svgContainerWidth,
+  ]);
+
   return (
-    <foreignObject
-      x={relatedX}
-      y={relatedY}
-      width={toolWidth}
-      height={toolHeight}
+    <div
+      ref={tooltipRef}
+      className={
+        relatedX
+          ? styles.tooltipDetailsContainer
+          : styles.tooltipDetailsContainerHidden
+      }
+      style={{ left: relatedX, top: relatedY }}
     >
-      <div ref={tooltipRef} className={styles.tooltipDetailsContainer}>
-        <TooltipContent
-          task={task}
-          fontSize={fontSize}
-          fontFamily={fontFamily}
-        />
-      </div>
-    </foreignObject>
+      <TooltipContent task={task} fontSize={fontSize} fontFamily={fontFamily} />
+    </div>
   );
 };
 

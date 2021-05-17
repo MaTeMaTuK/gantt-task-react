@@ -11,5 +11,20 @@
 }
 
 .tooltipDetailsContainer {
-  display: table;
+  position: absolute;
+  display: flex;
+  flex-shrink: 0;
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.tooltipDetailsContainerHidden {
+  visibility: hidden;
+  position: absolute;
+  display: flex;
+  pointer-events: none;
 }

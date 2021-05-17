@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
@@ -11,7 +11,6 @@ export type TaskGanttProps = {
   ganttHeight: number;
   scrollY: number;
   scrollX: number;
-  verticalGanttContainerRef: React.RefObject<HTMLDivElement>;
 };
 export const TaskGantt: React.FC<TaskGanttProps> = ({
   gridProps,
@@ -20,15 +19,11 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   ganttHeight,
   scrollY,
   scrollX,
-  verticalGanttContainerRef,
 }) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
-  const [displayXStartEndpoint, setDisplayXStartEndpoint] = useState({
-    start: 0,
-    end: 0,
-  });
-  const newBarProps = { ...barProps, svg: ganttSVGRef, displayXStartEndpoint };
+  const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
+  const newBarProps = { ...barProps, svg: ganttSVGRef };
 
   useEffect(() => {
     if (horizontalContainerRef.current) {
@@ -39,13 +34,8 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   useEffect(() => {
     if (verticalGanttContainerRef.current) {
       verticalGanttContainerRef.current.scrollLeft = scrollX;
-      setDisplayXStartEndpoint({
-        start: scrollX,
-        end: verticalGanttContainerRef.current.clientWidth + scrollX,
-      });
     }
-    // verticalContainerRef.current?.clientWidth need for resize window tracking
-  }, [scrollX, verticalGanttContainerRef.current?.clientWidth]);
+  }, [scrollX]);
 
   return (
     <div
