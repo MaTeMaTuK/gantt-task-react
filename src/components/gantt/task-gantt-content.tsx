@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Task, EventOption } from "../../types/public-types";
+import { EventOption } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
-import { Tooltip } from "../other/tooltip";
 import { isKeyboardEvent } from "../../helpers/other-helper";
 import { TaskItem } from "../task-item/task-item";
 import {
@@ -21,12 +20,7 @@ export type TaskGanttContentProps = {
   columnWidth: number;
   timeStep: number;
   svg?: React.RefObject<SVGSVGElement>;
-  svgHeight: number;
   svgWidth: number;
-  displayXStartEndpoint?: {
-    start: number;
-    end: number;
-  };
   taskHeight: number;
   arrowColor: string;
   arrowIndent: number;
@@ -35,11 +29,6 @@ export type TaskGanttContentProps = {
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
-  TooltipContent: React.FC<{
-    task: Task;
-    fontSize: string;
-    fontFamily: string;
-  }>;
 } & EventOption;
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
@@ -51,8 +40,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   columnWidth,
   timeStep,
   svg,
-  svgHeight,
-  displayXStartEndpoint,
   taskHeight,
   arrowColor,
   arrowIndent,
@@ -65,7 +52,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onProgressChange,
   onDoubleClick,
   onDelete,
-  TooltipContent,
 }) => {
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
@@ -291,20 +277,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
             />
           );
         })}
-      </g>
-      <g className="toolTip">
-        {ganttEvent.changedTask && displayXStartEndpoint && (
-          <Tooltip
-            arrowIndent={arrowIndent}
-            rowHeight={rowHeight}
-            svgHeight={svgHeight}
-            displayXStartEndpoint={displayXStartEndpoint}
-            task={ganttEvent.changedTask}
-            fontFamily={fontFamily}
-            fontSize={fontSize}
-            TooltipContent={TooltipContent}
-          />
-        )}
       </g>
     </g>
   );
