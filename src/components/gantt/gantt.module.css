@@ -1,6 +1,6 @@
 .ganttVerticalContainer {
   flex: 1;
-  overflow: hidden;
+  overflow: auto;
   font-size: 0;
   margin: 0;
   padding: 0;
@@ -12,11 +12,16 @@
   overflow: hidden;
 }
 
+.box {
+  height: 100%;
+}
+
 .wrapper {
+  position: relative;
   display: flex;
   padding: 0;
   margin: 0;
   list-style: none;
   outline: none;
-  position: relative;
+  height: 100%;
 }

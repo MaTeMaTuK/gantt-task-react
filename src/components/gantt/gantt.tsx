@@ -188,48 +188,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
   }, [ganttHeight, tasks]);
 
-  // scroll events
-  useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      if (event.shiftKey || event.deltaX) {
-        const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
-        let newScrollX = scrollX + scrollMove;
-        if (newScrollX < 0) {
-          newScrollX = 0;
-        } else if (newScrollX > svgWidth) {
-          newScrollX = svgWidth;
-        }
-        setScrollX(newScrollX);
-        event.preventDefault();
-      } else {
-        let newScrollY = scrollY + event.deltaY;
-        if (newScrollY < 0) {
-          newScrollY = 0;
-        } else if (newScrollY > ganttFullHeight - ganttHeight) {
-          newScrollY = ganttFullHeight - ganttHeight;
-        }
-        if (newScrollY !== scrollY) {
-          setScrollY(newScrollY);
-          event.preventDefault();
-        }
-      }
-
-      setIgnoreScrollEvent(true);
-    };
-
-    // subscribe if scroll is necessary
-    if (wrapperRef.current) {
-      wrapperRef.current.addEventListener("wheel", handleWheel, {
-        passive: false,
-      });
-    }
-    return () => {
-      if (wrapperRef.current) {
-        wrapperRef.current.removeEventListener("wheel", handleWheel);
-      }
-    };
-  }, [wrapperRef.current, scrollY, scrollX, ganttHeight, svgWidth]);
-
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
       setScrollY(event.currentTarget.scrollTop);
@@ -357,7 +315,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   }, [renderTaskListComponent]);
 
   return (
-    <div>
+    <div className={styles.box}>
       <div
         className={styles.wrapper}
         onKeyDown={handleKeyDown}
