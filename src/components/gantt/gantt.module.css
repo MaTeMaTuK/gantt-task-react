@@ -1,4 +1,5 @@
 .ganttVerticalContainer {
+  flex: 1;
   overflow: hidden;
   font-size: 0;
   margin: 0;
