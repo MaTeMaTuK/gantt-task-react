@@ -1,28 +1,53 @@
 .ganttVerticalContainer {
   flex: 1;
-  overflow: hidden;
+  overflow: auto;
   font-size: 0;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 48px;
+  border-bottom: 1px solid #eee;
 }
 
 .horizontalContainer {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  will-change: transform;
+  direction: ltr;
+}
+
+.box {
+  height: 100%;
 }
 
 .wrapper {
+  position: relative;
   display: flex;
   padding: 0;
   margin: 0;
   list-style: none;
   outline: none;
-  position: relative;
+  height: 100%;
 }
+
+.task-gantt-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.calendarWrapper {
+  height: 50px;
+}
+
 .handleBtn {
   text-align: right;
   padding: 20px 0;
+  position: absolute;
+  right: 0;
+  z-index: 2;
 }
 .toToday {
   background-color: #e7e7e7;

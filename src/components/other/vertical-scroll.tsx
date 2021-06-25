@@ -18,7 +18,7 @@ export const VerticalScroll: React.FC<{
 
   return (
     <div
-      style={{ height: ganttHeight, marginTop: headerHeight }}
+      style={{ height: ganttHeight || 'auto', marginTop: headerHeight, marginBottom: 48 }}
       className={styles.scroll}
       onScroll={onScroll}
       ref={scrollRef}

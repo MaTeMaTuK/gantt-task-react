@@ -63,7 +63,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
-    const [startDate, endDate] = ganttDateRange(tasks, viewMode);
+    const [startDate, endDate] = ganttDateRange();
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
 
@@ -87,9 +87,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
 
+  const eleListTableBody = typeof window === 'undefined' ? null : document.querySelector('.BaseTable__table-main .BaseTable__body');
+
   // task change events
   useEffect(() => {
-    const [startDate, endDate] = ganttDateRange(tasks, viewMode);
+    const [startDate, endDate] = ganttDateRange();
     const newDates = seedDates(startDate, endDate, viewMode);
     setDateSetup({ dates: newDates, viewMode });
     setBarTasks(
@@ -199,46 +201,39 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   }, [ganttHeight, tasks]);
 
   // scroll events
-  useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      if (event.shiftKey || event.deltaX) {
-        const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
-        let newScrollX = scrollX + scrollMove;
-        if (newScrollX < 0) {
-          newScrollX = 0;
-        } else if (newScrollX > svgWidth) {
-          newScrollX = svgWidth;
-        }
-        setScrollX(newScrollX);
-        event.preventDefault();
-      } else {
-        let newScrollY = scrollY + event.deltaY;
-        if (newScrollY < 0) {
-          newScrollY = 0;
-        } else if (newScrollY > ganttFullHeight - ganttHeight) {
-          newScrollY = ganttFullHeight - ganttHeight;
-        }
-        if (newScrollY !== scrollY) {
-          setScrollY(newScrollY);
-          event.preventDefault();
-        }
-      }
+  // useEffect(() => {
+  //   const handleWheel = (event: WheelEvent) => {
+  //     if (!(event.shiftKey || event.deltaX)) {
+  //       console.log(scrollY);
+  //       // Y轴滚动处理
+  //       let newScrollY = scrollY + event.deltaY;
+  //       if (newScrollY < 0) {
+  //         newScrollY = 0;
+  //       } else if (newScrollY > ganttFullHeight - ganttHeight) {
+  //         newScrollY = ganttFullHeight - ganttHeight;
+  //       }
+  //       if (newScrollY !== scrollY) {
+  //         setScrollY(newScrollY);
+  //         event.preventDefault();
+  //       }
+  //     }
 
-      setIgnoreScrollEvent(true);
-    };
+  //     setIgnoreScrollEvent(true);
+  //   };
 
-    // subscribe if scroll is necessary
-    if (wrapperRef.current) {
-      wrapperRef.current.addEventListener("wheel", handleWheel, {
-        passive: false,
-      });
-    }
-    return () => {
-      if (wrapperRef.current) {
-        wrapperRef.current.removeEventListener("wheel", handleWheel);
-      }
-    };
-  }, [wrapperRef.current, scrollY, scrollX, ganttHeight, svgWidth]);
+  //   // subscribe if scroll is necessary
+  //   if (wrapperRef.current) {
+  //     wrapperRef.current.addEventListener("wheel", handleWheel, {
+  //       passive: false,
+  //     });
+  //   }
+  //   return () => {
+  //     if (wrapperRef.current) {
+  //       wrapperRef.current.removeEventListener("wheel", handleWheel);
+  //     }
+  //   };
+  // }, [wrapperRef.current, scrollY, ganttHeight]);
+
   useEffect(() => {
     if (viewMode === ViewMode.Day) {
       setTimeout(() => {
@@ -246,6 +241,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       }, 0);
     }
   }, [wrapperRef.current, svgContainerWidth]);
+
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
       setScrollY(event.currentTarget.scrollTop);
@@ -371,6 +367,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     return null;
   }, [renderTaskListComponent]);
+
   const toToday = () => {
     // 之前考虑通过context， 在grid-body中setState 传递移动的距离，但是页面会抖动
     const now = new Date();
@@ -412,8 +409,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     setScrollX(newTickX - svgContainerWidth / 2);
   };
+
+  // 修改列表scrollTop,待优化
+  useEffect(() => {
+    eleListTableBody && (eleListTableBody.scrollTop = scrollY);
+  }, [eleListTableBody, scrollY]);
+  
   return (
-    <div>
+    <div className={styles.box}>
       <div className={styles.handleBtn}>
         <button onClick={toToday} className={styles.toDoday}>
           今天
