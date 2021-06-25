@@ -27,6 +27,46 @@ export const Calendar: React.FC<CalendarProps> = ({
   fontFamily,
   fontSize,
 }) => {
+  const getCalendarValuesForYear = () => {
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
+    // const topDefaultWidth = columnWidth * 6;
+    // const topDefaultHeight = headerHeight * 0.5;
+    for (let i = 0; i < dateSetup.dates.length; i++) {
+      const date = dateSetup.dates[i];
+      const bottomValue = date.getFullYear().toString();
+      bottomValues.push(
+        <text
+          key={bottomValue + date.getFullYear()}
+          y={headerHeight * 0.8}
+          x={columnWidth * i + columnWidth * 0.5}
+          className={styles.calendarBottomText}
+        >
+          {bottomValue}
+        </text>
+      );
+      // if (
+      //   i === 0 ||
+      //   date.getFullYear() !== dateSetup.dates[i - 1].getFullYear()
+      // ) {
+      //   const topValue = date.getFullYear().toString();
+      //   topValues.push(
+      //     <TopPartOfCalendar
+      //       key={topValue}
+      //       value={topValue}
+      //       x1Line={columnWidth * i}
+      //       y1Line={0}
+      //       y2Line={topDefaultHeight}
+      //       xText={
+      //         topDefaultWidth + columnWidth * i - date.getMonth() * columnWidth
+      //       }
+      //       yText={topDefaultHeight * 0.9}
+      //     />
+      //   );
+      // }
+    }
+    return [topValues, bottomValues];
+  };
   const getCalendarValuesForMonth = () => {
     const topValues: ReactChild[] = [];
     const bottomValues: ReactChild[] = [];
@@ -210,6 +250,9 @@ export const Calendar: React.FC<CalendarProps> = ({
     case ViewMode.Day:
       [topValues, bottomValues] = getCalendarValuesForDay();
       break;
+    case ViewMode.Year:
+      [topValues, bottomValues] = getCalendarValuesForYear();
+      break;
     default:
       [topValues, bottomValues] = getCalendarValuesForOther();
       break;
@@ -223,7 +266,8 @@ export const Calendar: React.FC<CalendarProps> = ({
         height={headerHeight}
         className={styles.calendarHeader}
       />
-      {bottomValues} {topValues}
+      {bottomValues}
+      {topValues}
     </g>
   );
 };
