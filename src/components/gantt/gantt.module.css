@@ -45,6 +45,9 @@
 .handleBtn {
   text-align: right;
   padding: 20px 0;
+  position: absolute;
+  right: 0;
+  z-index: 2;
 }
 .toToday {
   background-color: #e7e7e7;

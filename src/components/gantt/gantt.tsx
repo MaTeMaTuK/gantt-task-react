@@ -201,38 +201,38 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   }, [ganttHeight, tasks]);
 
   // scroll events
-  useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      if (!(event.shiftKey || event.deltaX)) {
-        console.log(scrollY);
-        // Y轴滚动处理
-        let newScrollY = scrollY + event.deltaY;
-        if (newScrollY < 0) {
-          newScrollY = 0;
-        } else if (newScrollY > ganttFullHeight - ganttHeight) {
-          newScrollY = ganttFullHeight - ganttHeight;
-        }
-        if (newScrollY !== scrollY) {
-          setScrollY(newScrollY);
-          event.preventDefault();
-        }
-      }
+  // useEffect(() => {
+  //   const handleWheel = (event: WheelEvent) => {
+  //     if (!(event.shiftKey || event.deltaX)) {
+  //       console.log(scrollY);
+  //       // Y轴滚动处理
+  //       let newScrollY = scrollY + event.deltaY;
+  //       if (newScrollY < 0) {
+  //         newScrollY = 0;
+  //       } else if (newScrollY > ganttFullHeight - ganttHeight) {
+  //         newScrollY = ganttFullHeight - ganttHeight;
+  //       }
+  //       if (newScrollY !== scrollY) {
+  //         setScrollY(newScrollY);
+  //         event.preventDefault();
+  //       }
+  //     }
 
-      setIgnoreScrollEvent(true);
-    };
+  //     setIgnoreScrollEvent(true);
+  //   };
 
-    // subscribe if scroll is necessary
-    if (wrapperRef.current) {
-      wrapperRef.current.addEventListener("wheel", handleWheel, {
-        passive: false,
-      });
-    }
-    return () => {
-      if (wrapperRef.current) {
-        wrapperRef.current.removeEventListener("wheel", handleWheel);
-      }
-    };
-  }, [wrapperRef.current, scrollY, ganttHeight]);
+  //   // subscribe if scroll is necessary
+  //   if (wrapperRef.current) {
+  //     wrapperRef.current.addEventListener("wheel", handleWheel, {
+  //       passive: false,
+  //     });
+  //   }
+  //   return () => {
+  //     if (wrapperRef.current) {
+  //       wrapperRef.current.removeEventListener("wheel", handleWheel);
+  //     }
+  //   };
+  // }, [wrapperRef.current, scrollY, ganttHeight]);
 
   useEffect(() => {
     if (viewMode === ViewMode.Day) {
