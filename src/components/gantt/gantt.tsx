@@ -53,7 +53,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
-    const [startDate, endDate] = ganttDateRange(tasks, viewMode);
+    const [startDate, endDate] = ganttDateRange();
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
 
@@ -76,9 +76,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
 
+  const eleListTableBody = typeof window === 'undefined' ? null : document.querySelector('.BaseTable__table-main .BaseTable__body');
+
   // task change events
   useEffect(() => {
-    const [startDate, endDate] = ganttDateRange(tasks, viewMode);
+    const [startDate, endDate] = ganttDateRange();
     const newDates = seedDates(startDate, endDate, viewMode);
     setDateSetup({ dates: newDates, viewMode });
     setBarTasks(
@@ -187,6 +189,41 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       setSvgContainerHeight(tasks.length * rowHeight + headerHeight);
     }
   }, [ganttHeight, tasks]);
+
+  // scroll events
+  useEffect(() => {
+    const handleWheel = (event: WheelEvent) => {
+      if (!(event.shiftKey || event.deltaX)) {
+        console.log(scrollY);
+        // Y轴滚动处理
+        let newScrollY = scrollY + event.deltaY;
+        if (newScrollY < 0) {
+          newScrollY = 0;
+        } else if (newScrollY > ganttFullHeight - ganttHeight) {
+          newScrollY = ganttFullHeight - ganttHeight;
+        }
+        if (newScrollY !== scrollY) {
+          setScrollY(newScrollY);
+          event.preventDefault();
+        }
+      }
+
+      setIgnoreScrollEvent(true);
+    };
+
+    // subscribe if scroll is necessary
+    if (wrapperRef.current) {
+      wrapperRef.current.addEventListener("wheel", handleWheel, {
+        passive: false,
+      });
+    }
+    return () => {
+      if (wrapperRef.current) {
+        wrapperRef.current.removeEventListener("wheel", handleWheel);
+      }
+    };
+  }, [wrapperRef.current, scrollY, ganttHeight]);
+
 
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
@@ -313,6 +350,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     return null;
   }, [renderTaskListComponent]);
+
+  // 修改列表scrollTop,待优化
+  useEffect(() => {
+    eleListTableBody && (eleListTableBody.scrollTop = scrollY);
+  }, [eleListTableBody, scrollY]);
 
   return (
     <div className={styles.box}>

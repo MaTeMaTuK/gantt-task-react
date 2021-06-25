@@ -4,12 +4,18 @@
   font-size: 0;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 48px;
+  border-bottom: 1px solid #eee;
 }
 
 .horizontalContainer {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  will-change: transform;
+  direction: ltr;
 }
 
 .box {
@@ -24,4 +30,14 @@
   list-style: none;
   outline: none;
   height: 100%;
+}
+
+.task-gantt-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.calendarWrapper {
+  height: 50px;
 }

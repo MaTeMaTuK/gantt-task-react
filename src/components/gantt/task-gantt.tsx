@@ -42,14 +42,16 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
       className={styles.ganttVerticalContainer}
       ref={verticalGanttContainerRef}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={gridProps.svgWidth}
-        height={calendarProps.headerHeight}
-        fontFamily={barProps.fontFamily}
-      >
-        <Calendar {...calendarProps} />
-      </svg>
+      <div className={styles.calendarWrapper}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={gridProps.svgWidth}
+          height={calendarProps.headerHeight}
+          fontFamily={barProps.fontFamily}
+        >
+          <Calendar {...calendarProps} />
+        </svg>
+      </div>
       <div
         ref={horizontalContainerRef}
         className={styles.horizontalContainer}
