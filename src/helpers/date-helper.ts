@@ -14,6 +14,7 @@ export const addToDate = (
   quantity: number,
   scale: DateHelperScales
 ) => {
+  // debugger
   const newDate = new Date(
     date.getFullYear() + (scale === "year" ? quantity : 0),
     date.getMonth() + (scale === "month" ? quantity : 0),
@@ -54,8 +55,8 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
 };
 
 export const ganttDateRange = (tasks: Task[], viewMode: ViewMode) => {
-  let newStartDate: Date = tasks[0] ? tasks[0].start : new Date(Date.now());
-  let newEndDate: Date = tasks[0] ? tasks[0].start : new Date(Date.now());
+  let newStartDate: Date = tasks[0].start;
+  let newEndDate: Date = tasks[0].start;
   for (const task of tasks) {
     if (task.start < newStartDate) {
       newStartDate = task.start;
@@ -83,6 +84,12 @@ export const ganttDateRange = (tasks: Task[], viewMode: ViewMode) => {
       newStartDate = addToDate(newStartDate, -1, "day");
       newEndDate = addToDate(newEndDate, 19, "day");
       break;
+    case ViewMode.Year:
+      newStartDate = addToDate(newStartDate, -1, "year");
+      newStartDate = startOfDate(newStartDate, "year");
+      newEndDate = addToDate(newEndDate, 6, "year");
+      newEndDate = startOfDate(newEndDate, "year");
+      break;
     default:
       newStartDate = startOfDate(newStartDate, "day");
       newEndDate = startOfDate(newEndDate, "day");
@@ -102,6 +109,9 @@ export const seedDates = (
   const dates: Date[] = [currentDate];
   while (currentDate < endDate) {
     switch (viewMode) {
+      case ViewMode.Year:
+        currentDate = addToDate(currentDate, 1, "year");
+        break;
       case ViewMode.Month:
         currentDate = addToDate(currentDate, 1, "month");
         break;

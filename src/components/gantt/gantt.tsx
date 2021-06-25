@@ -1,7 +1,17 @@
-import React, { useState, SyntheticEvent, useRef, useEffect, useMemo } from "react";
+import React, {
+  useState,
+  SyntheticEvent,
+  useRef,
+  useEffect,
+  useMemo,
+} from "react";
 import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
-import { ganttDateRange, seedDates } from "../../helpers/date-helper";
+import {
+  ganttDateRange,
+  seedDates,
+  addToDate,
+} from "../../helpers/date-helper";
 import { CalendarProps } from "../calendar/calendar";
 import { TaskGanttContentProps } from "./task-gantt-content";
 import { StandardTooltipContent, Tooltip } from "../other/tooltip";
@@ -13,7 +23,6 @@ import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
-
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   headerHeight = 50,
@@ -23,6 +32,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ganttHeight = 0,
   viewMode = ViewMode.Day,
   locale = "en-GB",
+  //locale = "zh-cn",
   barFill = 60,
   barCornerRadius = 3,
   barProgressColor = "#a3a3ff",
@@ -72,7 +82,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(0);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
-
+  // 到今天移动的距离
+  // const [todayDistance, setTodayDistance] = useState(0);
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
 
@@ -121,7 +132,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     milestoneBackgroundColor,
     milestoneBackgroundSelectedColor,
   ]);
-
   useEffect(() => {
     const { changedTask, action } = ganttEvent;
     if (changedTask) {
@@ -229,7 +239,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       }
     };
   }, [wrapperRef.current, scrollY, scrollX, ganttHeight, svgWidth]);
-
+  useEffect(() => {
+    if (viewMode === ViewMode.Day) {
+      setTimeout(() => {
+        toToday();
+      }, 0);
+    }
+  }, [wrapperRef.current, svgContainerWidth]);
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
       setScrollY(event.currentTarget.scrollTop);
@@ -350,14 +366,59 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   const TaskListComponent = useMemo(() => {
-    if (typeof renderTaskListComponent === 'function') {
+    if (typeof renderTaskListComponent === "function") {
       return renderTaskListComponent();
     }
     return null;
   }, [renderTaskListComponent]);
-
+  const toToday = () => {
+    // 之前考虑通过context， 在grid-body中setState 传递移动的距离，但是页面会抖动
+    const now = new Date();
+    let tickX = 0;
+    let newTickX = 0;
+    for (let i = 0; i < dateSetup.dates.length; i++) {
+      const date = dateSetup.dates[i];
+      if (
+        (i + 1 !== dateSetup.dates.length &&
+          date.getTime() < now.getTime() &&
+          dateSetup.dates[i + 1].getTime() >= now.getTime()) ||
+        // if current date is last
+        (i !== 0 &&
+          i + 1 === dateSetup.dates.length &&
+          date.getTime() < now.getTime() &&
+          addToDate(
+            date,
+            date.getTime() - dateSetup.dates[i - 1].getTime(),
+            "millisecond"
+          ).getTime() >= now.getTime())
+      ) {
+        // 当天的零点的时间戳（毫秒）
+        const currentStamp = new Date(
+          new Date().toLocaleDateString()
+        ).getTime();
+        // 当天和上一个时间的差
+        const currentMinus =
+          (currentStamp + 86400000 - dateSetup.dates[i].getTime()) / 86400000;
+        // 前后时间差
+        const totalMinus =
+          (dateSetup.dates[i + 1].getTime() - dateSetup.dates[i].getTime()) /
+          86400000;
+        newTickX =
+          tickX +
+          columnWidth * (currentMinus / totalMinus) -
+          columnWidth / totalMinus / 2;
+      }
+      tickX += columnWidth;
+    }
+    setScrollX(newTickX - svgContainerWidth / 2);
+  };
   return (
     <div>
+      <div className={styles.handleBtn}>
+        <button onClick={toToday} className={styles.toDoday}>
+          今天
+        </button>
+      </div>
       <div
         className={styles.wrapper}
         onKeyDown={handleKeyDown}
@@ -365,18 +426,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         ref={wrapperRef}
       >
         {listCellWidth && TaskListComponent}
-        {
-          tasks.length > 0 && (
-            <TaskGantt
-              gridProps={gridProps}
-              calendarProps={calendarProps}
-              barProps={barProps}
-              ganttHeight={ganttHeight}
-              scrollY={scrollY}
-              scrollX={scrollX}
-            />
-          )
-        }
+        {tasks.length > 0 && (
+          <TaskGantt
+            gridProps={gridProps}
+            calendarProps={calendarProps}
+            barProps={barProps}
+            ganttHeight={ganttHeight}
+            scrollY={scrollY}
+            scrollX={scrollX}
+          />
+        )}
         {ganttEvent.changedTask && (
           <Tooltip
             arrowIndent={arrowIndent}
