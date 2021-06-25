@@ -68,7 +68,7 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
         >
-          <Grid {...gridProps} />
+          <Grid {...gridProps} viewMode={calendarProps.viewMode} />
           <TaskGanttContent {...newBarProps} />
         </svg>
       </div>

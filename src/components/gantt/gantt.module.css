@@ -41,3 +41,19 @@
 .calendarWrapper {
   height: 50px;
 }
+
+.handleBtn {
+  text-align: right;
+  padding: 20px 0;
+}
+.toToday {
+  background-color: #e7e7e7;
+  color: black;
+  border: none;
+  padding: 7px 16px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}

@@ -14,10 +14,10 @@ const App = () => {
     columnWidth = 300;
   } else if (view === ViewMode.Week) {
     columnWidth = 250;
+  } else if(view === ViewMode.Year) {
+    columnWidth = 250;
   }
-
   const onTaskChange = (task: Task) => {
-    console.log("On date change Id:" + task.id);
     let newTasks = tasks.map(t => (t.id === task.id ? task : t));
     if (task.project) {
       const [start, end] = getStartEndDateForProject(newTasks, task.project);
@@ -45,7 +45,6 @@ const App = () => {
 
   const onProgressChange = async (task: Task) => {
     setTasks(tasks.map(t => (t.id === task.id ? task : t)));
-    console.log("On progress change Id:" + task.id);
   };
 
   const onDblClick = (task: Task) => {
@@ -55,13 +54,15 @@ const App = () => {
   const onSelect = (task: Task, isSelected: boolean) => {
     console.log(task.name + " has " + (isSelected ? "selected" : "unselected"));
   };
-
+  const onReturnDay = () => {
+  };
   return (
     <div>
       <ViewSwitcher
         onViewModeChange={viewMode => setView(viewMode)}
         onViewListChange={setIsChecked}
         isChecked={isChecked}
+        onReturnDay={onReturnDay}
       />
       <h3>Gantt With Unlimited Height</h3>
       <Gantt
@@ -74,6 +75,7 @@ const App = () => {
         onSelect={onSelect}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
+        todayColor="#A3A3FF"
       />
       <h3>Gantt With Limited Height</h3>
       <Gantt
