@@ -7,6 +7,8 @@ type BarDisplayProps = {
   width: number;
   height: number;
   isSelected: boolean;
+  /* progress start point */
+  progressX: number;
   progressWidth: number;
   barCornerRadius: number;
   styles: {
@@ -23,6 +25,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   width,
   height,
   isSelected,
+  progressX,
   progressWidth,
   barCornerRadius,
   styles,
@@ -49,7 +52,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         className={style.barBackground}
       />
       <rect
-        x={x}
+        x={progressX}
         width={progressWidth}
         y={y}
         height={height}

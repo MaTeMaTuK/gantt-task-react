@@ -65,6 +65,7 @@ export interface DisplayOption {
    * Specifies the month name language. Able formats: ISO 639-2, Java Locale
    */
   locale?: string;
+  rtl?: boolean;
 }
 
 export interface StylingOption {

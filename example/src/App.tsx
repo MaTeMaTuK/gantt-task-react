@@ -64,17 +64,20 @@ const App = () => {
         isChecked={isChecked}
       />
       <h3>Gantt With Unlimited Height</h3>
-      <Gantt
-        tasks={tasks}
-        viewMode={view}
-        onDateChange={onTaskChange}
-        onDelete={onTaskDelete}
-        onProgressChange={onProgressChange}
-        onDoubleClick={onDblClick}
-        onSelect={onSelect}
-        listCellWidth={isChecked ? "155px" : ""}
-        columnWidth={columnWidth}
-      />
+      <div dir="rtl">
+        <Gantt
+          tasks={tasks}
+          viewMode={view}
+          onDateChange={onTaskChange}
+          onDelete={onTaskDelete}
+          onProgressChange={onProgressChange}
+          onDoubleClick={onDblClick}
+          onSelect={onSelect}
+          listCellWidth={isChecked ? "155px" : ""}
+          columnWidth={columnWidth}
+          rtl={true}
+        />
+      </div>
       <h3>Gantt With Limited Height</h3>
       <Gantt
         tasks={tasks}

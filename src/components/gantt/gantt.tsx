@@ -38,6 +38,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   projectBackgroundSelectedColor = "#f7bb53",
   milestoneBackgroundColor = "#f1c453",
   milestoneBackgroundSelectedColor = "#f29e4c",
+  rtl = false,
   handleWidth = 8,
   timeStep = 300000,
   arrowColor = "grey",
@@ -83,7 +84,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // task change events
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(tasks, viewMode);
-    const newDates = seedDates(startDate, endDate, viewMode);
+    let newDates = seedDates(startDate, endDate, viewMode);
+    if (rtl) {
+      newDates = newDates.reverse();
+    }
     setDateSetup({ dates: newDates, viewMode });
     setBarTasks(
       convertToBarTasks(
@@ -94,6 +98,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         taskHeight,
         barCornerRadius,
         handleWidth,
+        rtl,
         barProgressColor,
         barProgressSelectedColor,
         barBackgroundColor,
@@ -124,6 +129,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     projectBackgroundSelectedColor,
     milestoneBackgroundColor,
     milestoneBackgroundSelectedColor,
+    rtl,
   ]);
 
   useEffect(() => {
@@ -344,6 +350,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     fontSize,
     arrowIndent,
     svgWidth,
+    rtl,
     setGanttEvent,
     setFailedTask,
     setSelectedTask: handleSelectedTask,
@@ -415,6 +422,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         svgWidth={svgWidth}
         taskListWidth={taskListWidth}
         scroll={scrollX}
+        rtl={rtl}
         onScroll={handleScrollX}
       />
     </div>

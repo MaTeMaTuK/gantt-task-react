@@ -26,6 +26,7 @@ export type TaskGanttContentProps = {
   arrowIndent: number;
   fontSize: string;
   fontFamily: string;
+  rtl: boolean;
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
@@ -45,6 +46,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   arrowIndent,
   fontFamily,
   fontSize,
+  rtl,
   setGanttEvent,
   setFailedTask,
   setSelectedTask,
@@ -85,7 +87,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         ganttEvent.changedTask,
         xStep,
         timeStep,
-        initEventX1Delta
+        initEventX1Delta,
+        rtl
       );
       if (isChanged) {
         setGanttEvent({ action: ganttEvent.action, changedTask });
@@ -108,7 +111,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         changedTask,
         xStep,
         timeStep,
-        initEventX1Delta
+        initEventX1Delta,
+        rtl
       );
 
       const isNotLikeOriginal =

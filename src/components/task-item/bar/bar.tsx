@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  progressWithByParams,
-  getProgressPoint,
-} from "../../../helpers/bar-helper";
+import { getProgressPoint } from "../../../helpers/bar-helper";
 import { BarDisplay } from "./bar-display";
 import { BarDateHandle } from "./bar-date-handle";
 import { BarProgressHandle } from "./bar-progress-handle";
@@ -16,9 +13,8 @@ export const Bar: React.FC<TaskItemProps> = ({
   onEventStart,
   isSelected,
 }) => {
-  const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const progressPoint = getProgressPoint(
-    progressWidth + task.x1,
+    task.progressWidth + task.x1,
     task.y,
     task.height
   );
@@ -30,7 +26,8 @@ export const Bar: React.FC<TaskItemProps> = ({
         y={task.y}
         width={task.x2 - task.x1}
         height={task.height}
-        progressWidth={progressWidth}
+        progressX={task.progressX}
+        progressWidth={task.progressWidth}
         barCornerRadius={task.barCornerRadius}
         styles={task.styles}
         isSelected={isSelected}
