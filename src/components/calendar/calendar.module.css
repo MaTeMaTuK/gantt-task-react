@@ -1,6 +1,6 @@
 .calendarBottomText {
   text-anchor: middle;
-  fill: #333;
+  fill: #eeeeee;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -10,12 +10,12 @@
 }
 
 .calendarTopTick {
-  stroke: #e6e4e4;
+  stroke: #393e46;
 }
 
 .calendarTopText {
   text-anchor: middle;
-  fill: #555;
+  fill: #eeeeee;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -25,7 +25,7 @@
 }
 
 .calendarHeader {
-  fill: #ffffff;
-  stroke: #e0e0e0;
+  fill:   fill: #171b21;
+  stroke: #393e46;
   stroke-width: 1.4;
 }
