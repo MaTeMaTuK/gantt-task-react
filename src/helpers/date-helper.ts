@@ -57,7 +57,7 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
 export const ganttDateRange = () => {
   let newStartDate: Date = new Date(Date.now());
   let newEndDate: Date = new Date(Date.now());
-  const year = 10; // 前后10年
+  const year = 1; // 前后10年
   newStartDate = startOfDate(newStartDate, "day");
   newEndDate = startOfDate(newEndDate, "day");
   newStartDate = addToDate(newStartDate, -year * 12 * 30, "day");

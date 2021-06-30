@@ -1,28 +1,23 @@
-import React, { SyntheticEvent, useRef, useEffect } from "react";
+import React, { SyntheticEvent, forwardRef } from "react";
 import styles from "./horizontal-scroll.module.css";
 
-export const HorizontalScroll: React.FC<{
-  scroll: number;
+export const HorizontalScrollComponent: React.ForwardRefRenderFunction<any, {
   svgWidth: number;
   taskListWidth: number;
+  listBottomHeight: number;
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
-}> = ({ scroll, svgWidth, taskListWidth, onScroll }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollLeft = scroll;
-    }
-  }, [scroll]);
+}> = ({ svgWidth, taskListWidth, onScroll, listBottomHeight }, ref) => {
 
   return (
     <div
-      style={{ marginLeft: taskListWidth, display: 'none' }}
+      style={{ marginLeft: taskListWidth, width: `calc(100% - ${taskListWidth}px)`, bottom: `${listBottomHeight}px`}}
       className={styles.scroll}
       onScroll={onScroll}
-      ref={scrollRef}
+      ref={ref}
     >
       <div style={{ width: svgWidth, height: 1 }} />
     </div>
   );
 };
+
+export const HorizontalScroll = forwardRef(HorizontalScrollComponent);

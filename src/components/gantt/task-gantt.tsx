@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, forwardRef, useImperativeHandle } from "react";
 import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
@@ -9,33 +9,22 @@ export type TaskGanttProps = {
   calendarProps: CalendarProps;
   barProps: TaskGanttContentProps;
   ganttHeight: number;
-  scrollY: number;
-  scrollX: number;
 };
-export const TaskGantt: React.FC<TaskGanttProps> = ({
+const TaskGanttComponent: React.ForwardRefRenderFunction<any, TaskGanttProps> = ({
   gridProps,
   calendarProps,
   barProps,
-  ganttHeight,
-  scrollY,
-  scrollX,
-}) => {
+  ganttHeight
+}, ref) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
   const newBarProps = { ...barProps, svg: ganttSVGRef };
 
-  useEffect(() => {
-    if (horizontalContainerRef.current) {
-      horizontalContainerRef.current.scrollTop = scrollY;
-    }
-  }, [scrollY]);
-
-  useEffect(() => {
-    if (verticalGanttContainerRef.current) {
-      verticalGanttContainerRef.current.scrollLeft = scrollX;
-    }
-  }, [scrollX]);
+  useImperativeHandle(ref, () => ({
+    horizontalContainerRef: horizontalContainerRef.current,
+    verticalGanttContainerRef: verticalGanttContainerRef.current
+  }));
 
   return (
     <div
@@ -75,3 +64,5 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
     </div>
   );
 };
+
+export const TaskGantt = forwardRef(TaskGanttComponent);

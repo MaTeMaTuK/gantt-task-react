@@ -1,29 +1,24 @@
-import React, { SyntheticEvent, useRef, useEffect } from "react";
+import React, { SyntheticEvent, forwardRef } from "react";
 import styles from "./vertical-scroll.module.css";
 
-export const VerticalScroll: React.FC<{
-  scroll: number;
+const VerticalScrollComponent: React.ForwardRefRenderFunction<any, {
   ganttHeight: number;
   ganttFullHeight: number;
   headerHeight: number;
+  listBottomHeight: number;
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
-}> = ({ scroll, ganttHeight, ganttFullHeight, headerHeight, onScroll }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scroll;
-    }
-  }, [scroll]);
-
+}> = ({ ganttHeight, ganttFullHeight, headerHeight, onScroll, listBottomHeight }, ref) => {
+  const scrollHeight = 16;
   return (
     <div
-      style={{ height: ganttHeight || 'auto', marginTop: headerHeight, marginBottom: 48 }}
+      style={{ height: ganttHeight || 'auto', marginTop: headerHeight, marginBottom: `${listBottomHeight + scrollHeight}px` }}
       className={styles.scroll}
       onScroll={onScroll}
-      ref={scrollRef}
+      ref={ref}
     >
       <div style={{ height: ganttFullHeight, width: 1 }} />
     </div>
   );
 };
+
+export const VerticalScroll = forwardRef(VerticalScrollComponent);

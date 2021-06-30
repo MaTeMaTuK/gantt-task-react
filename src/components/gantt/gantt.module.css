@@ -1,6 +1,6 @@
 .ganttVerticalContainer {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
   font-size: 0;
   margin: 0;
   padding: 0;
@@ -19,6 +19,8 @@
 }
 
 .box {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
@@ -30,6 +32,8 @@
   list-style: none;
   outline: none;
   height: 100%;
+  flex: 1;
+  overflow: hidden;
 }
 
 .task-gantt-wrapper {
@@ -45,9 +49,6 @@
 .handleBtn {
   text-align: right;
   padding: 20px 0;
-  position: absolute;
-  right: 0;
-  z-index: 2;
 }
 .toToday {
   background-color: #e7e7e7;
@@ -59,4 +60,17 @@
   cursor: pointer;
   font-size: 14px;
   text-align: center;
+}
+
+.taskListWrapper {
+  position: relative;
+}
+
+.taskListWrapper .mask {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16px;
+  background: #fff;
+  height: calc(100% - 48px);
 }
