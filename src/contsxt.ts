@@ -1,2 +1,2 @@
 import { createContext } from "react";
-export const GanttContext = createContext<any>(null);
+export const OptionContext = createContext<any>(null);

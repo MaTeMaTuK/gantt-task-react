@@ -53,7 +53,6 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
   );
   return newDate;
 };
-
 export const ganttDateRange = () => {
   let newStartDate: Date = new Date(Date.now());
   let newEndDate: Date = new Date(Date.now());
@@ -64,7 +63,6 @@ export const ganttDateRange = () => {
   newEndDate = addToDate(newEndDate, year * 12 * 30, "day");
   return [newStartDate, newEndDate];
 };
-
 export const seedDates = (
   startDate: Date,
   endDate: Date,
@@ -76,6 +74,9 @@ export const seedDates = (
     switch (viewMode) {
       case ViewMode.Year:
         currentDate = addToDate(currentDate, 1, "year");
+        break;
+      case ViewMode.Quarter:
+        currentDate = addToDate(currentDate, 3, "month");
         break;
       case ViewMode.Month:
         currentDate = addToDate(currentDate, 1, "month");
@@ -108,7 +109,11 @@ export const getLocaleMonth = (date: Date, locale: string) => {
   );
   return bottomValue;
 };
-
+// const getMonday = (date: Date) => {
+//   const day = date.getDay();
+//   const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+//   return new Date(date.setDate(diff));
+// };
 export const getWeekNumberISO8601 = (date: Date) => {
   const tmpDate = new Date(date.valueOf());
   const dayNumber = (tmpDate.getDay() + 6) % 7;

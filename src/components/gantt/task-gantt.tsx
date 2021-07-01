@@ -9,17 +9,25 @@ export type TaskGanttProps = {
   calendarProps: CalendarProps;
   barProps: TaskGanttContentProps;
   ganttHeight: number;
+  scrollX: number;
+  // onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
+  // onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 const TaskGanttComponent: React.ForwardRefRenderFunction<any, TaskGanttProps> = ({
   gridProps,
   calendarProps,
   barProps,
-  ganttHeight
+  ganttHeight,
+  scrollX,
+  // onScroll,
+  // onMouseMove,
 }, ref) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
   const newBarProps = { ...barProps, svg: ganttSVGRef };
+
+  // const [scrollLeft, setScrollLeft] = useState(0);
 
   useImperativeHandle(ref, () => ({
     horizontalContainerRef: horizontalContainerRef.current,
@@ -57,7 +65,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<any, TaskGanttProps> = 
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
         >
-          <Grid {...gridProps} viewMode={calendarProps.viewMode} />
+          <Grid {...gridProps} viewMode={calendarProps.viewMode} scrollX={scrollX}/>
           <TaskGanttContent {...newBarProps} />
         </svg>
       </div>

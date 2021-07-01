@@ -77,12 +77,15 @@ export function initTasks() {
       project: "ProjectSample",
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 30),
+      // TODO: start 和 end 为null 时ts校验不通过，尝试在public-types中修改Task 的 interface， 但是文件保存不上
+      // @ts-ignore
+      start: null,
+      // @ts-ignore
+      end: null,
       name: "Party Time",
       id: "Task 9",
       progress: 0,
-      isDisabled: true,
+      // isDisabled: true,
       type: "task",
     },
   ];
@@ -90,17 +93,20 @@ export function initTasks() {
 }
 
 export function getStartEndDateForProject(tasks: Task[], projectId: string) {
+  const currentDate = new Date();
   const projectTasks = tasks.filter(t => t.project === projectId);
-  let start = projectTasks[0].start;
-  let end = projectTasks[0].end;
-
+  // 当startTime\endTime为空是处理
+  let start = projectTasks[0].start || currentDate;
+  let end = projectTasks[0].end || currentDate;
   for (let i = 0; i < projectTasks.length; i++) {
     const task = projectTasks[i];
-    if (start.getTime() > task.start.getTime()) {
-      start = task.start;
+    const invalidStart = task.start ? task.start : currentDate;
+    const invalidEnd = task.end ? task.end : currentDate;
+    if (start.getTime() > invalidStart.getTime()) {
+      start = invalidStart;
     }
-    if (end.getTime() < task.end.getTime()) {
-      end = task.end;
+    if (end.getTime() < invalidEnd.getTime()) {
+      end = invalidEnd;
     }
   }
   return [start, end];
