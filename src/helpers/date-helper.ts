@@ -53,18 +53,45 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
   );
   return newDate;
 };
-
-export const ganttDateRange = () => {
+export const ganttDateRange = (viewMode: ViewMode) => {
   let newStartDate: Date = new Date(Date.now());
   let newEndDate: Date = new Date(Date.now());
-  const year = 10; // 前后10年
-  newStartDate = startOfDate(newStartDate, "day");
-  newEndDate = startOfDate(newEndDate, "day");
-  newStartDate = addToDate(newStartDate, -year * 12 * 30, "day");
-  newEndDate = addToDate(newEndDate, year * 12 * 30, "day");
+  const Years = 1; // 前后10年
+  switch (viewMode) {
+    case ViewMode.Month:
+      newStartDate = addToDate(newStartDate, -Years, "year");
+      newStartDate = startOfDate(newStartDate, "month");
+      newEndDate = addToDate(newEndDate, Years, "year");
+      newEndDate = startOfDate(newEndDate, "year");
+      break;
+    case ViewMode.Week:
+    case ViewMode.Day:
+      newStartDate = startOfDate(newStartDate, "day");
+      newEndDate = startOfDate(newEndDate, "day");
+      newStartDate = addToDate(newStartDate, -Years * 12 * 30, "day");
+      newEndDate = addToDate(newEndDate, Years * 12 * 30, "day");
+      break;
+    case ViewMode.Year:
+      newStartDate = addToDate(newStartDate, -Years, "year");
+      newStartDate = startOfDate(newStartDate, "year");
+      newEndDate = addToDate(newEndDate, Years, "year");
+      newEndDate = startOfDate(newEndDate, "year");
+      break;
+    case ViewMode.Quarter:
+      newStartDate = addToDate(newStartDate, -Years, "year");
+      newStartDate = startOfDate(newStartDate, "year");
+      newEndDate = addToDate(newEndDate, Years, "year");
+      newEndDate = startOfDate(newEndDate, "year");
+      break;
+    default:
+      newStartDate = startOfDate(newStartDate, "day");
+      newEndDate = startOfDate(newEndDate, "day");
+      newStartDate = addToDate(newStartDate, -Years * 12 * 30, "day");
+      newEndDate = addToDate(newEndDate, Years * 12 * 30, "day");
+      break;
+  }
   return [newStartDate, newEndDate];
 };
-
 export const seedDates = (
   startDate: Date,
   endDate: Date,
@@ -76,6 +103,9 @@ export const seedDates = (
     switch (viewMode) {
       case ViewMode.Year:
         currentDate = addToDate(currentDate, 1, "year");
+        break;
+      case ViewMode.Quarter:
+        currentDate = addToDate(currentDate, 3, "month");
         break;
       case ViewMode.Month:
         currentDate = addToDate(currentDate, 1, "month");
@@ -108,7 +138,11 @@ export const getLocaleMonth = (date: Date, locale: string) => {
   );
   return bottomValue;
 };
-
+// const getMonday = (date: Date) => {
+//   const day = date.getDay();
+//   const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+//   return new Date(date.setDate(diff));
+// };
 export const getWeekNumberISO8601 = (date: Date) => {
   const tmpDate = new Date(date.valueOf());
   const dayNumber = (tmpDate.getDay() + 6) % 7;

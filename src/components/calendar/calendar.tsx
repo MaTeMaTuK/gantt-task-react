@@ -38,6 +38,32 @@ export const Calendar: React.FC<CalendarProps> = ({
       bottomValues.push(
         <text
           key={bottomValue + date.getFullYear()}
+          y={headerHeight * 0.6}
+          x={columnWidth * i + columnWidth * 0.5}
+          className={styles.calendarBottomText}
+        >
+          {bottomValue}
+        </text>
+      );
+    }
+    return [topValues, bottomValues];
+  };
+  const getCalendarValuesForQuarter = () => {
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
+    const topDefaultWidth = columnWidth * 3;
+    const topDefaultHeight = headerHeight * 0.5;
+    for (let i = 0; i < dateSetup.dates.length; i++) {
+      const date = dateSetup.dates[i];
+      const currentQuarter = Math.floor(
+        date.getMonth() % 3 === 0
+          ? date.getMonth() / 3 + 1
+          : date.getMonth() / 3 + 1
+      );
+      const bottomValue = `第${currentQuarter}季`;
+      bottomValues.push(
+        <text
+          key={bottomValue + date.getFullYear()}
           y={headerHeight * 0.8}
           x={columnWidth * i + columnWidth * 0.5}
           className={styles.calendarBottomText}
@@ -45,25 +71,25 @@ export const Calendar: React.FC<CalendarProps> = ({
           {bottomValue}
         </text>
       );
-      // if (
-      //   i === 0 ||
-      //   date.getFullYear() !== dateSetup.dates[i - 1].getFullYear()
-      // ) {
-      //   const topValue = date.getFullYear().toString();
-      //   topValues.push(
-      //     <TopPartOfCalendar
-      //       key={topValue}
-      //       value={topValue}
-      //       x1Line={columnWidth * i}
-      //       y1Line={0}
-      //       y2Line={topDefaultHeight}
-      //       xText={
-      //         topDefaultWidth + columnWidth * i - date.getMonth() * columnWidth
-      //       }
-      //       yText={topDefaultHeight * 0.9}
-      //     />
-      //   );
-      // }
+      if (
+        i === 0 ||
+        date.getFullYear() !== dateSetup.dates[i - 1].getFullYear()
+      ) {
+        const topValue = date.getFullYear().toString();
+        topValues.push(
+          <TopPartOfCalendar
+            key={topValue}
+            value={topValue}
+            x1Line={columnWidth * i}
+            y1Line={0}
+            y2Line={topDefaultHeight}
+            xText={
+              topDefaultWidth + columnWidth * i - currentQuarter * columnWidth
+            }
+            yText={topDefaultHeight * 0.9}
+          />
+        );
+      }
     }
     return [topValues, bottomValues];
   };
@@ -252,6 +278,9 @@ export const Calendar: React.FC<CalendarProps> = ({
       break;
     case ViewMode.Year:
       [topValues, bottomValues] = getCalendarValuesForYear();
+      break;
+    case ViewMode.Quarter:
+      [topValues, bottomValues] = getCalendarValuesForQuarter();
       break;
     default:
       [topValues, bottomValues] = getCalendarValuesForOther();

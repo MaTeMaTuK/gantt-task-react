@@ -17,7 +17,7 @@ export const HorizontalScroll: React.FC<{
 
   return (
     <div
-      style={{ marginLeft: taskListWidth, display: 'none' }}
+      style={{ marginLeft: taskListWidth, display: "none" }}
       className={styles.scroll}
       onScroll={onScroll}
       ref={scrollRef}

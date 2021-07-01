@@ -11,6 +11,8 @@ export type TaskGanttProps = {
   ganttHeight: number;
   scrollY: number;
   scrollX: number;
+  // onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
+  // onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 export const TaskGantt: React.FC<TaskGanttProps> = ({
   gridProps,
@@ -19,12 +21,14 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   ganttHeight,
   scrollY,
   scrollX,
+  // onScroll,
+  // onMouseMove,
 }) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
   const newBarProps = { ...barProps, svg: ganttSVGRef };
-
+  // const [scrollLeft, setScrollLeft] = useState(0);
   useEffect(() => {
     if (horizontalContainerRef.current) {
       horizontalContainerRef.current.scrollTop = scrollY;
@@ -68,7 +72,11 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
         >
-          <Grid {...gridProps} viewMode={calendarProps.viewMode} />
+          <Grid
+            {...gridProps}
+            viewMode={calendarProps.viewMode}
+            scrollX={scrollX}
+          />
           <TaskGanttContent {...newBarProps} />
         </svg>
       </div>
