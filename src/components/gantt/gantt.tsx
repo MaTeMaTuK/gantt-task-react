@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useMemo,
 } from "react";
+import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import {
@@ -23,6 +24,9 @@ import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
+import GanttHeader from "./gantt-header";
+import GanttConfig from "../gantt-config/index";
+import { OptionContext } from "../../contsxt";
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   headerHeight = 50,
@@ -59,11 +63,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDelete,
   onSelect,
   renderTaskListComponent,
+  itemTypeData, // 卡片类型
+  itemRelationData, // 卡片关联
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
-    const [startDate, endDate] = ganttDateRange();
+    const [startDate, endDate] = ganttDateRange(viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
 
@@ -81,19 +87,24 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(0);
+  const [visible, setVisible] = useState(false);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
   // 到今天移动的距离
   // const [todayDistance, setTodayDistance] = useState(0);
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
 
-  const eleListTableBody = typeof window === 'undefined' ? null : document.querySelector('.BaseTable__table-main .BaseTable__body');
+  const eleListTableBody =
+    typeof window === "undefined"
+      ? null
+      : document.querySelector(".BaseTable__table-main .BaseTable__body");
 
   // task change events
   useEffect(() => {
-    const [startDate, endDate] = ganttDateRange();
+    const [startDate, endDate] = ganttDateRange(viewMode);
     const newDates = seedDates(startDate, endDate, viewMode);
     setDateSetup({ dates: newDates, viewMode });
+    console.log(tasks, "tasks");
     setBarTasks(
       convertToBarTasks(
         tasks,
@@ -188,6 +199,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     if (wrapperRef.current) {
+      console.log(wrapperRef.current);
+      console.log(wrapperRef.current.offsetTop);
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
     }
   }, [wrapperRef, taskListWidth]);
@@ -328,6 +341,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     rowHeight,
     dates: dateSetup.dates,
     todayColor,
+    scrollX,
+    onDateChange,
   };
   const calendarProps: CalendarProps = {
     dateSetup,
@@ -414,14 +429,18 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     eleListTableBody && (eleListTableBody.scrollTop = scrollY);
   }, [eleListTableBody, scrollY]);
-  
+  const toConfig = () => {
+    setVisible(true);
+  };
+  const toGantt = () => {
+    setVisible(false);
+  };
   return (
     <div className={styles.box}>
-      <div className={styles.handleBtn}>
-        <button onClick={toToday} className={styles.toDoday}>
-          今天
-        </button>
-      </div>
+      <OptionContext.Provider value={{ itemTypeData, itemRelationData }}>
+        <GanttConfig toGantt={toGantt} visible={visible} />
+        <GanttHeader toToday={toToday} toConfig={toConfig} />
+      </OptionContext.Provider>
       <div
         className={styles.wrapper}
         onKeyDown={handleKeyDown}

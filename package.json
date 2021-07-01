@@ -72,6 +72,7 @@
     "dist"
   ],
   "dependencies": {
+    "antd": "4.15.4",
     "dayjs": "^1.10.5"
   }
 }

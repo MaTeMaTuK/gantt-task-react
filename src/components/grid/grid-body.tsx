@@ -1,5 +1,5 @@
-import React, { ReactChild } from "react";
-import { Task, ViewMode } from "../../types/public-types";
+import React, { ReactChild, useState } from "react";
+import { Task, ViewMode, EventOption } from "../../types/public-types";
 import { addToDate } from "../../helpers/date-helper";
 import styles from "./grid.module.css";
 // import { GanttContext } from "../../contsxt";
@@ -14,11 +14,13 @@ export type GridBodyProps = {
   columnWidth: number;
   todayColor: string;
   viewMode?: string;
-};
+  scrollX: number;
+} & EventOption;
 // 判断是否为周末
 export const isRestDay = (date: Date) => {
   return [0, 6].includes(dayjs(date).weekday());
 };
+
 export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
   dates,
@@ -27,8 +29,14 @@ export const GridBody: React.FC<GridBodyProps> = ({
   columnWidth,
   todayColor,
   viewMode,
+  scrollX,
+  onDateChange,
 }) => {
+  const [translateX, setTranslateX] = useState(-500);
+  const [translateY, setTranslateY] = useState(-500);
+  const [isShow, setIsShow] = useState(false);
   let y = 0;
+  const invalidColumn: ReactChild[] = [];
   const gridRows: ReactChild[] = [];
   const rowLines: ReactChild[] = [
     <line
@@ -40,20 +48,50 @@ export const GridBody: React.FC<GridBodyProps> = ({
       className={styles.gridRowLine}
     />,
   ];
-  for (const task of tasks) {
+  const handleMouseMove = (event: any, index: number) => {
+    const pointerX = event.clientX;
+    const date = dayjs(
+      dates[0].valueOf() + ((pointerX + scrollX) / columnWidth) * 86400000
+    );
+    const stAmp = date.startOf("day");
+    const dateDuring = (stAmp.valueOf() - dates[0].valueOf()) / 86400000;
+
+    setTranslateX(dateDuring * columnWidth);
+    setTranslateY(index * rowHeight);
+  };
+  const handleInvalidColumnMouseMove = (index: number, row: any) => {
+    setTranslateY(index * rowHeight);
+    setIsShow(!row.start);
+  };
+  for (let i = 0; i < tasks.length; i++) {
     gridRows.push(
       <rect
-        key={"Row" + task.id}
+        key={"Row" + tasks[i].id}
         x="0"
         y={y}
         width={svgWidth}
         height={rowHeight}
         className={styles.gridRow}
+        onMouseMove={e => {
+          handleMouseMove(e, i);
+        }}
+      />
+    );
+    invalidColumn.push(
+      <rect
+        x={translateX + 0.5}
+        y={y}
+        width={columnWidth - 1}
+        height={rowHeight}
+        fill="#DAE0FF"
+        onMouseMove={() => {
+          handleInvalidColumnMouseMove(i, tasks[i]);
+        }}
       />
     );
     rowLines.push(
       <line
-        key={"RowLine" + task.id}
+        key={"RowLine" + tasks[i].id}
         x="0"
         y1={y + rowHeight}
         x2={svgWidth}
@@ -114,15 +152,10 @@ export const GridBody: React.FC<GridBodyProps> = ({
       // 前后时间差
       const totalMinus =
         (dates[i + 1].getTime() - dates[i].getTime()) / 86400000;
-
       const newTickX =
         tickX +
         columnWidth * (currentMinus / totalMinus) -
         columnWidth / totalMinus / 2;
-      //解决render报错的问题
-      // setTimeout(() => {
-      //   setTodayDistance(newTickX);
-      // }, 0);
       today = (
         <g>
           {/* <rect
@@ -159,12 +192,45 @@ export const GridBody: React.FC<GridBodyProps> = ({
     }
     tickX += columnWidth;
   }
+  const invalidBarClick = () => {
+    const taskIndex = translateY / rowHeight;
+    const startDate = dayjs(
+      dates[0].valueOf() + (translateX / columnWidth) * 86400000
+    );
+    const endDate = dayjs(
+      dates[0].valueOf() + (translateX / columnWidth) * 86400000 + 86400000
+    );
+    onDateChange?.(
+      Object.assign(tasks[taskIndex], {
+        start: startDate.startOf("day").toDate(),
+        end: endDate.startOf("day").toDate(),
+      })
+    );
+  };
+  const invalidBar = (
+    <g>
+      <rect
+        x={translateX}
+        y={translateY + rowHeight / 2 - 30 / 2}
+        width={columnWidth}
+        height={30}
+        fill="#7B90FF"
+        onClick={invalidBarClick}
+        cursor="pointer"
+      />
+    </g>
+  );
   return (
     <g className="gridBody">
-      {/* <g className="rows">{gridRows}</g>
-      <g className="rowLines">{rowLines}</g> */}
+      <g className="rows">{gridRows}</g>
       <g className="ticks">{ticks}</g>
+      <g className="rowLines">{rowLines}</g>
+      <g className="invalidColumn">{invalidColumn}</g>
+      {isShow && <g className="invalidBar">{invalidBar}</g>}
       <g className="today">{today}</g>
     </g>
   );
+};
+GridBody.defaultProps = {
+  scrollX: 0,
 };
