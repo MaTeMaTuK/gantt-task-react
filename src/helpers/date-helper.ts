@@ -53,43 +53,14 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
   );
   return newDate;
 };
-export const ganttDateRange = (viewMode: ViewMode) => {
+export const ganttDateRange = () => {
   let newStartDate: Date = new Date(Date.now());
   let newEndDate: Date = new Date(Date.now());
-  const Years = 1; // 前后10年
-  switch (viewMode) {
-    case ViewMode.Month:
-      newStartDate = addToDate(newStartDate, -Years, "year");
-      newStartDate = startOfDate(newStartDate, "month");
-      newEndDate = addToDate(newEndDate, Years, "year");
-      newEndDate = startOfDate(newEndDate, "year");
-      break;
-    case ViewMode.Week:
-    case ViewMode.Day:
-      newStartDate = startOfDate(newStartDate, "day");
-      newEndDate = startOfDate(newEndDate, "day");
-      newStartDate = addToDate(newStartDate, -Years * 12 * 30, "day");
-      newEndDate = addToDate(newEndDate, Years * 12 * 30, "day");
-      break;
-    case ViewMode.Year:
-      newStartDate = addToDate(newStartDate, -Years, "year");
-      newStartDate = startOfDate(newStartDate, "year");
-      newEndDate = addToDate(newEndDate, Years, "year");
-      newEndDate = startOfDate(newEndDate, "year");
-      break;
-    case ViewMode.Quarter:
-      newStartDate = addToDate(newStartDate, -Years, "year");
-      newStartDate = startOfDate(newStartDate, "year");
-      newEndDate = addToDate(newEndDate, Years, "year");
-      newEndDate = startOfDate(newEndDate, "year");
-      break;
-    default:
-      newStartDate = startOfDate(newStartDate, "day");
-      newEndDate = startOfDate(newEndDate, "day");
-      newStartDate = addToDate(newStartDate, -Years * 12 * 30, "day");
-      newEndDate = addToDate(newEndDate, Years * 12 * 30, "day");
-      break;
-  }
+  const year = 1; // 前后10年
+  newStartDate = startOfDate(newStartDate, "day");
+  newEndDate = startOfDate(newEndDate, "day");
+  newStartDate = addToDate(newStartDate, -year * 12 * 30, "day");
+  newEndDate = addToDate(newEndDate, year * 12 * 30, "day");
   return [newStartDate, newEndDate];
 };
 export const seedDates = (

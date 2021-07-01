@@ -1,6 +1,6 @@
 .ganttVerticalContainer {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
   font-size: 0;
   margin: 0;
   padding: 0;
@@ -19,6 +19,8 @@
 }
 
 .box {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
@@ -30,6 +32,8 @@
   list-style: none;
   outline: none;
   height: 100%;
+  flex: 1;
+  overflow: hidden;
 }
 
 .task-gantt-wrapper {
@@ -48,4 +52,17 @@
 }
 .cursor {
   cursor: pointer;
+}
+
+.taskListWrapper {
+  position: relative;
+}
+
+.taskListWrapper .mask {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16px;
+  background: #fff;
+  height: calc(100% - 48px);
 }

@@ -1,4 +1,8 @@
 .scroll {
   overflow: auto;
-  max-width: 100%;
+  width: 100%;
+  height: 16px;
+  position: absolute;
+  bottom: 38px;
+  left: 0;
 }

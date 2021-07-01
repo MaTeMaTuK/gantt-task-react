@@ -184,7 +184,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
             x1={newTickX}
             y1="0"
             x2={newTickX}
-            y2="500"
+            y2={y}
             style={{ stroke: todayColor, strokeWidth: "1" }}
           />
         </g>
