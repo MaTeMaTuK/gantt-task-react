@@ -61,7 +61,6 @@ export const convertToBarTasks = (
     }
     return task;
   });
-
   return barTasks;
 };
 
@@ -156,6 +155,7 @@ const convertToBar = (
   barBackgroundColor: string,
   barBackgroundSelectedColor: string
 ): BarTask => {
+  console.log(task.start, 'task.start')
   const x1: any = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
   let x2: any = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
   const y = taskYCoordinate(index, rowHeight, taskHeight);
@@ -238,6 +238,7 @@ const taskXCoordinate = (
   columnWidth: number
 ) => {
   if (!xDate) return;
+  // debugger
   const index = ~~(
     (xDate.getTime() -
       dates[0].getTime() +

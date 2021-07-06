@@ -8,6 +8,29 @@ export enum ViewMode {
   Year = "Year",
   Quarter = "Quarter",
 }
+export const viewModeOptions = [
+  {
+    label: "日",
+    value: "Day",
+  },
+  {
+    label: "周",
+    value: "Week",
+  },
+  {
+    label: "月",
+    value: "Month",
+  },
+  {
+    label: "季",
+    value: "Quarter",
+  },
+  
+  {
+    label: "年",
+    value: "Year",
+  },
+];
 export type TaskType = "task" | "milestone" | "project";
 export interface Task {
   id: string;
