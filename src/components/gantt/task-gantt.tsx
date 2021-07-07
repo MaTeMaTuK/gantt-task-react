@@ -54,6 +54,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
         </svg>
       </div>
       <div
+        id="horizontalContainer"
         ref={horizontalContainerRef}
         className={styles.horizontalContainer}
         style={

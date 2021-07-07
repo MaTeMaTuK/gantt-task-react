@@ -25,7 +25,7 @@ export const viewModeOptions = [
     label: "季",
     value: "Quarter",
   },
-  
+
   {
     label: "年",
     value: "Year",
@@ -152,6 +152,9 @@ export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
   itemTypeData?: OptionsProp[];
   itemRelationData?: OptionsProp[];
+  customeFieldData?: OptionsProp[];
+  ganttConfig?: any;
+  configHandle?: (value: any) => void;
   renderTaskListComponent?: () => JSX.Element;
 }
 export interface OptionsProp {

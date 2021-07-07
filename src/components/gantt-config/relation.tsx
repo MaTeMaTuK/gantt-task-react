@@ -1,27 +1,48 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useMemo } from "react";
 import { Form, Select, Button } from "antd";
 import styles from "./index.module.css";
-import { OptionContext } from "../../contsxt";
+import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
+import { omit } from "lodash";
 const { Option } = Select;
 
 interface RelationProps {
   currentTab: string;
 }
-
+interface RelationValueProps {
+  FS: string;
+  FF: string;
+  SS: string;
+  SF: string;
+}
 const Relation: React.FC<RelationProps> = ({ currentTab }) => {
   const [form] = Form.useForm();
+  const { itemRelationData } = useContext(GanttConfigContext);
+  const { ganttConfig } = useContext(GanttConfigContext);
+  const { configHandle } = useContext(ConfigHandelContext);
+  const relationValue = useMemo(
+    () => (ganttConfig.relation ? ganttConfig.relation : {}),
+    [ganttConfig?.relation]
+  );
   useEffect(() => {
-    console.log(123);
     if (currentTab === "relation") {
       form.resetFields();
-      // form.setFieldsValue({
-      //   FS: "1",
-      // });
+      form.setFieldsValue({
+        ...relationValue,
+      });
     }
   }, [currentTab]);
-  const { itemRelationData } = useContext(OptionContext);
-  const onFinish = (values: any) => {
-    console.log(values);
+  const onFinish = (values: RelationValueProps) => {
+    configHandle({
+      ...omit(ganttConfig, [
+        "ACl",
+        "tennat",
+        "updateAt",
+        "createdAt",
+        "updatedAt",
+        "createdBy",
+      ]),
+      relation: values,
+    });
   };
   return (
     <div>

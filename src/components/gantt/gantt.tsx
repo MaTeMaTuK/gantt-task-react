@@ -7,6 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
+// import jsplumb from "jsplumb";
 import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import {
@@ -27,7 +28,8 @@ import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttHeader from "./gantt-header";
 import GanttConfig from "../gantt-config/index";
-import { OptionContext } from "../../contsxt";
+import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
+// const jsPlumb = jsplumb.jsPlumb;
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   headerHeight = 50,
@@ -67,17 +69,21 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   renderTaskListComponent,
   itemTypeData, // 卡片类型
   itemRelationData, // 卡片关联
+  customeFieldData, // 字段
+  configHandle, //配置事件
+  ganttConfig, //配置详情
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const taskGanttContainerRef = useRef<any>({});
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // const [jsPlumbForword, setJsPlumbForword] = useState(null)
   const [viewMode, setViewMode] = useState(ViewMode.Month);
   const [columnWidth, setColumnWidth] = useState(300);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
-    //const [startDate, endDate] = ganttDateRange(tasks, viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
 
@@ -109,7 +115,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // task change events
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
-    //const [startDate, endDate] = ganttDateRange(tasks, viewMode);
     const newDates = seedDates(startDate, endDate, viewMode);
     setDateSetup({ dates: newDates, viewMode });
     console.log(tasks, "tasks");
@@ -153,6 +158,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     milestoneBackgroundColor,
     milestoneBackgroundSelectedColor,
   ]);
+  // const jsPlumbInstance = jsPlumb.getInstance();
+  // useEffect(() => {
+  //   if (wrapperRef.current) {
+  //     console.log(jsPlumbInstance, "jsPlumbInstance");
+  //     jsPlumbInstance.ready(() => {
+  //       jsPlumbInstance.setContainer("horizontalContainer");
+  //     });
+  //   }
+  // }, [wrapperRef]);
   useEffect(() => {
     const { changedTask, action } = ganttEvent;
     if (changedTask) {
@@ -525,14 +539,23 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
   return (
     <div className={styles.box}>
-      <OptionContext.Provider value={{ itemTypeData, itemRelationData }}>
-        <GanttConfig toGantt={toGantt} visible={visible} />
-        <GanttHeader
-          toToday={toToday}
-          toConfig={toConfig}
-          modeChange={modeChange}
-        />
-      </OptionContext.Provider>
+      <GanttConfigContext.Provider
+        value={{
+          itemTypeData,
+          itemRelationData,
+          customeFieldData,
+          ganttConfig,
+        }}
+      >
+        <ConfigHandelContext.Provider value={{ configHandle }}>
+          <GanttConfig toGantt={toGantt} visible={visible} />
+          <GanttHeader
+            toToday={toToday}
+            toConfig={toConfig}
+            modeChange={modeChange}
+          />
+        </ConfigHandelContext.Provider>
+      </GanttConfigContext.Provider>
       <div
         className={styles.wrapper}
         onKeyDown={handleKeyDown}

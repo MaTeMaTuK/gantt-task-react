@@ -1924,6 +1924,11 @@
   "resolved" "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   "version" "0.0.29"
 
+"@types/lodash@^4.14.171":
+  "integrity" "sha512-7eQ2xYLLI/LsicL2nejW9Wyko3lcpN6O/z0ZLHrEQsg280zIdCv1t/0m6UtBjUHokCGBQ3gYTbHzDkZ1xOBwwg=="
+  "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.171.tgz"
+  "version" "4.14.171"
+
 "@types/minimatch@*":
   "integrity" "sha512-1z8k4wzFnNjVK/tlxvrWuK5WMt6mydWWP7+zvH5eFep4oj+UkrfiJTRtjCeBXNpwaA/FYqqtb4/QS4ianFpIRA=="
   "resolved" "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.4.tgz"
@@ -5486,11 +5491,6 @@
     "loader-utils" "^2.0.0"
     "schema-utils" "^3.0.0"
 
-"file-uri-to-path@1.0.0":
-  "integrity" "sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw=="
-  "resolved" "https://registry.npmjs.org/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz"
-  "version" "1.0.0"
-
 "filename-reserved-regex@^1.0.0":
   "integrity" "sha1-5hz4BfDeHJhFZ9A4bcXfUO5a9+Q="
   "resolved" "https://registry.npmjs.org/filename-reserved-regex/-/filename-reserved-regex-1.0.0.tgz"
@@ -7460,6 +7460,11 @@
     "universalify" "^2.0.0"
   optionalDependencies:
     "graceful-fs" "^4.1.6"
+
+"jsplumb@^2.15.6":
+  "integrity" "sha512-sIpbpz5eMVM+vV+MQzFCidlaa1RsknrQs6LOTKYDjYUDdTAi2AN2bFi94TxB33TifcIsRNV1jebcaxg0tCoPzg=="
+  "resolved" "https://registry.npmjs.org/jsplumb/-/jsplumb-2.15.6.tgz"
+  "version" "2.15.6"
 
 "jsprim@^1.2.2":
   "integrity" "sha1-MT5mvB5cwG5Di8G3SZwuXFastqI="
