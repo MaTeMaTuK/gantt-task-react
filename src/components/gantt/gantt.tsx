@@ -80,8 +80,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
 
   // const [jsPlumbForword, setJsPlumbForword] = useState(null)
-  const [viewMode, setViewMode] = useState(ViewMode.Month);
-  const [columnWidth, setColumnWidth] = useState(300);
+  const [viewMode, setViewMode] = useState(ViewMode.Day);
+  const [columnWidth, setColumnWidth] = useState(60);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };

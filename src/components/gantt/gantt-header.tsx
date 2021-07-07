@@ -36,7 +36,7 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
         <Select
           style={{ width: 60 }}
           onChange={handleChange}
-          defaultValue={ViewMode.Month}
+          defaultValue={ViewMode.Day}
         >
           {viewModeOptions.map(ele => {
             return (
