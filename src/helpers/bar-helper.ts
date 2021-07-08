@@ -61,7 +61,6 @@ export const convertToBarTasks = (
     }
     return task;
   });
-
   return barTasks;
 };
 
@@ -238,6 +237,7 @@ const taskXCoordinate = (
   columnWidth: number
 ) => {
   if (!xDate) return;
+  // debugger
   const index = ~~(
     (xDate.getTime() -
       dates[0].getTime() +

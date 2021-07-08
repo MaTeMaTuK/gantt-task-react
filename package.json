@@ -43,6 +43,7 @@
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^13.1.8",
     "@types/jest": "^26.0.23",
+    "@types/lodash": "^4.14.171",
     "@types/node": "^15.0.1",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
@@ -73,6 +74,8 @@
   ],
   "dependencies": {
     "antd": "4.15.4",
-    "dayjs": "^1.10.5"
+    "dayjs": "^1.10.5",
+    "jsplumb": "^2.15.6",
+    "lodash": "^4.17.21"
   }
 }

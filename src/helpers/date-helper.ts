@@ -1,3 +1,4 @@
+// import { Task, ViewMode } from "../types/public-types";
 import { ViewMode } from "../types/public-types";
 
 type DateHelperScales =
@@ -14,7 +15,6 @@ export const addToDate = (
   quantity: number,
   scale: DateHelperScales
 ) => {
-  // debugger
   const newDate = new Date(
     date.getFullYear() + (scale === "year" ? quantity : 0),
     date.getMonth() + (scale === "month" ? quantity : 0),
@@ -53,7 +53,8 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
   );
   return newDate;
 };
-export const ganttDateRange = (viewMode: string) => {
+// tasks: Task[], viewMode: ViewMode
+export const ganttDateRange = (viewMode: ViewMode) => {
   let newStartDate: Date = new Date(Date.now());
   let newEndDate: Date = new Date(Date.now());
   let year = 1; // 1年
@@ -65,13 +66,11 @@ export const ganttDateRange = (viewMode: string) => {
       break;
     case ViewMode.Week:
     case ViewMode.Day:
-    case ViewMode.HalfDay:
       break;
   }
   newStartDate = startOfDate(newStartDate, "day");
   newEndDate = startOfDate(newEndDate, "day");
   newStartDate = addToDate(newStartDate, -year * 12 * 30, "day");
-  newEndDate = addToDate(newEndDate, year * 12 * 30, "day");
   return [newStartDate, newEndDate];
 };
 export const seedDates = (
@@ -120,11 +119,7 @@ export const getLocaleMonth = (date: Date, locale: string) => {
   );
   return bottomValue;
 };
-// const getMonday = (date: Date) => {
-//   const day = date.getDay();
-//   const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-//   return new Date(date.setDate(diff));
-// };
+
 export const getWeekNumberISO8601 = (date: Date) => {
   const tmpDate = new Date(date.valueOf());
   const dayNumber = (tmpDate.getDay() + 6) % 7;
