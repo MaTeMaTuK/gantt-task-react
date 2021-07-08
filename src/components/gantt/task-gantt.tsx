@@ -2,6 +2,7 @@ import React, { useRef, forwardRef, useImperativeHandle } from "react";
 import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
+import { TaskGanttArrows } from "./task-gantt-arrows";
 import styles from "./gantt.module.css";
 
 export type TaskGanttProps = {
@@ -63,11 +64,37 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<any, TaskGanttProps> = 
           width={gridProps.svgWidth}
           height={barProps.rowHeight * barProps.tasks.length}
           fontFamily={barProps.fontFamily}
-          ref={ganttSVGRef}
+          className={styles.backgroundSvg}
         >
+          <defs>
+            <pattern id="grid" patternUnits="userSpaceOnUse" height={gridProps.rowHeight} width={gridProps.columnWidth}>
+              <path fill="none" d={`m 0 0 h ${gridProps.columnWidth}`} stroke-width="2" stroke="#ebecf0"></path>
+              <path fill="none" d={`m 0 0 v ${gridProps.rowHeight}`} stroke-width="2" stroke="#ebecf0"></path>
+            </pattern>
+          </defs>
+          <rect fill="url(#grid)" height={barProps.rowHeight * barProps.tasks.length} width={gridProps.svgWidth}></rect>
           <Grid {...gridProps} viewMode={calendarProps.viewMode} scrollX={scrollX}/>
+        </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={gridProps.svgWidth}
+          height={barProps.rowHeight * barProps.tasks.length}
+          fontFamily={barProps.fontFamily}
+          ref={ganttSVGRef}
+          style={{position: 'relative'}}
+        >
           <TaskGanttContent {...newBarProps} />
         </svg>
+        <div className={styles.contextContainer}>
+          {
+            newBarProps.tasks.map(task => {
+              if (!task.start || !task.end) {
+                return null;
+              }
+              return <TaskGanttArrows key={task.id} {...newBarProps} task={task} />;
+            })
+          }
+        </div>
       </div>
     </div>
   );

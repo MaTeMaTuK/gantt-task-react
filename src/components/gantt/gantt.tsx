@@ -75,7 +75,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
 
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
-    const [startDate, endDate] = ganttDateRange();
+    const [startDate, endDate] = ganttDateRange(viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
 
@@ -106,7 +106,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   // task change events
   useEffect(() => {
-    const [startDate, endDate] = ganttDateRange();
+    const [startDate, endDate] = ganttDateRange(viewMode);
     const newDates = seedDates(startDate, endDate, viewMode);
     setDateSetup({ dates: newDates, viewMode });
     console.log(tasks, "tasks");

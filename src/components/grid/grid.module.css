@@ -2,9 +2,9 @@
   fill: #fff;
 }
 
-.gridRow:nth-child(even) {
+/* .gridRow:nth-child(even) {
   fill: #f5f5f5;
-}
+} */
 
 .gridRowLine {
   stroke: #eeeeee;

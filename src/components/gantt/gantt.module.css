@@ -16,6 +16,7 @@
   overflow: hidden;
   will-change: transform;
   direction: ltr;
+  position: relative;
 }
 
 .box {
@@ -65,4 +66,16 @@
   width: 16px;
   background: #fff;
   height: calc(100% - 48px);
+}
+
+.backgroundSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.contextContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
 }

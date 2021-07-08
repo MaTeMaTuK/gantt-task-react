@@ -222,9 +222,6 @@ export const GridBody: React.FC<GridBodyProps> = ({
   );
   return (
     <g className="gridBody">
-      <g className="rows">{gridRows}</g>
-      <g className="ticks">{ticks}</g>
-      <g className="rowLines">{rowLines}</g>
       <g className="invalidColumn">{invalidColumn}</g>
       {isShow && <g className="invalidBar">{invalidBar}</g>}
       <g className="today">{today}</g>

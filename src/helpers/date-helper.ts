@@ -53,10 +53,21 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
   );
   return newDate;
 };
-export const ganttDateRange = () => {
+export const ganttDateRange = (viewMode: string) => {
   let newStartDate: Date = new Date(Date.now());
   let newEndDate: Date = new Date(Date.now());
-  const year = 1; // 前后10年
+  let year = 1; // 1年
+  switch (viewMode) {
+    case ViewMode.Year:
+    case ViewMode.Quarter:
+    case ViewMode.Month:
+      year = 10;
+      break;
+    case ViewMode.Week:
+    case ViewMode.Day:
+    case ViewMode.HalfDay:
+      break;
+  }
   newStartDate = startOfDate(newStartDate, "day");
   newEndDate = startOfDate(newEndDate, "day");
   newStartDate = addToDate(newStartDate, -year * 12 * 30, "day");
