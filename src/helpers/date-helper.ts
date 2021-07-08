@@ -1,3 +1,4 @@
+// import { Task, ViewMode } from "../types/public-types";
 import { ViewMode } from "../types/public-types";
 
 type DateHelperScales =
@@ -14,7 +15,6 @@ export const addToDate = (
   quantity: number,
   scale: DateHelperScales
 ) => {
-  // debugger
   const newDate = new Date(
     date.getFullYear() + (scale === "year" ? quantity : 0),
     date.getMonth() + (scale === "month" ? quantity : 0),
@@ -53,14 +53,45 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
   );
   return newDate;
 };
-export const ganttDateRange = () => {
+// tasks: Task[], viewMode: ViewMode
+export const ganttDateRange = (viewMode: ViewMode) => {
   let newStartDate: Date = new Date(Date.now());
   let newEndDate: Date = new Date(Date.now());
   const year = 1; // 前后10年
-  newStartDate = startOfDate(newStartDate, "day");
-  newEndDate = startOfDate(newEndDate, "day");
-  newStartDate = addToDate(newStartDate, -year * 12 * 30, "day");
-  newEndDate = addToDate(newEndDate, year * 12 * 30, "day");
+  switch (viewMode) {
+    case ViewMode.Month:
+      newStartDate = addToDate(newStartDate, -year * 12 - 1, "month");
+      newStartDate = startOfDate(newStartDate, "month");
+      newEndDate = addToDate(newEndDate, year + 1, "year");
+      newEndDate = startOfDate(newEndDate, "year");
+      break;
+    case ViewMode.Week: // 周要是7的倍速，否则会显示不准确
+      newStartDate = startOfDate(newStartDate, "day");
+      newEndDate = startOfDate(newEndDate, "day");
+      newStartDate = addToDate(getMonday(newStartDate), -7 * 52 * year, "day");
+      newEndDate = addToDate(newEndDate, year + 1, "year");
+      break;
+    case ViewMode.Day:
+      newStartDate = startOfDate(newStartDate, "day");
+      newEndDate = startOfDate(newEndDate, "day");
+      newStartDate = addToDate(newStartDate, -year, "year");
+      newEndDate = addToDate(newStartDate, year + 1, "year");
+      break;
+    case ViewMode.Quarter:
+    case ViewMode.Year:
+      newStartDate = addToDate(newStartDate, -year, "year");
+      newEndDate = addToDate(newEndDate, year + 1, "year");
+      newStartDate = startOfDate(newStartDate, "year");
+      newEndDate = startOfDate(newEndDate, "year");
+      break;
+    default:
+      newStartDate = startOfDate(newStartDate, "day");
+      newEndDate = startOfDate(newEndDate, "day");
+      newStartDate = addToDate(newStartDate, -1, "day");
+      newEndDate = addToDate(newEndDate, 5, "day");
+      break;
+  }
+
   return [newStartDate, newEndDate];
 };
 export const seedDates = (
@@ -109,11 +140,11 @@ export const getLocaleMonth = (date: Date, locale: string) => {
   );
   return bottomValue;
 };
-// const getMonday = (date: Date) => {
-//   const day = date.getDay();
-//   const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-//   return new Date(date.setDate(diff));
-// };
+const getMonday = (date: Date) => {
+  const day = date.getDay();
+  const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+  return new Date(date.setDate(diff));
+};
 export const getWeekNumberISO8601 = (date: Date) => {
   const tmpDate = new Date(date.valueOf());
   const dayNumber = (tmpDate.getDay() + 6) % 7;

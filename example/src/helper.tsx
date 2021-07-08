@@ -47,8 +47,8 @@ export function initTasks() {
       project: "ProjectSample",
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 9, 0, 0),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth() , 8, 0,0),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth() , 30, 0, 0),
       name: "Developing",
       id: "Task 3",
       progress: 2,
@@ -84,6 +84,18 @@ export function initTasks() {
       end: null,
       name: "Party Time",
       id: "Task 9",
+      progress: 0,
+      // isDisabled: true,
+      type: "task",
+    },
+    {
+      // TODO: start 和 end 为null 时ts校验不通过，尝试在public-types中修改Task 的 interface， 但是文件保存不上
+      // @ts-ignore
+      start: null,
+      // @ts-ignore
+      end: null,
+      name: "Party Time",
+      id: "Task 11",
       progress: 0,
       // isDisabled: true,
       type: "task",

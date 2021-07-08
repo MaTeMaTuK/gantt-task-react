@@ -6,7 +6,7 @@ import "gantt-task-react/dist/index.css";
 
 //Init
 const App = () => {
-  const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
+  const [view, setView] = React.useState<ViewMode>(ViewMode.Year);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
   const [isChecked, setIsChecked] = React.useState(true);
   let columnWidth = 60;

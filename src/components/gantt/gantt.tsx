@@ -7,6 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
+// import jsplumb from "jsplumb";
 import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import {
@@ -27,16 +28,17 @@ import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttHeader from "./gantt-header";
 import GanttConfig from "../gantt-config/index";
-import { OptionContext } from "../../contsxt";
+import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
+// const jsPlumb = jsplumb.jsPlumb;
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   headerHeight = 50,
-  columnWidth = 60,
+  //columnWidth = 60,
   listCellWidth = "155px",
   listWidth = 500,
   listBottomHeight = 48,
   rowHeight = 50,
-  viewMode = ViewMode.Day,
+  //viewMode = ViewMode.Day,
   locale = "en-GB",
   //locale = "zh-cn",
   barFill = 60,
@@ -51,7 +53,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   projectBackgroundSelectedColor = "#f7bb53",
   milestoneBackgroundColor = "#f1c453",
   milestoneBackgroundSelectedColor = "#f29e4c",
-  handleWidth = 8,
+  handleWidth = 2,
   timeStep = 300000,
   arrowColor = "grey",
   fontFamily = "Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue",
@@ -67,6 +69,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   renderTaskListComponent,
   itemTypeData, // 卡片类型
   itemRelationData, // 卡片关联
+  customeFieldData, // 字段
+  configHandle, //配置事件
+  ganttConfig, //配置详情
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -74,8 +79,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
 
+  // const [jsPlumbForword, setJsPlumbForword] = useState(null)
+  const [viewMode, setViewMode] = useState(ViewMode.Day);
+  const [columnWidth, setColumnWidth] = useState(60);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
-    const [startDate, endDate] = ganttDateRange();
+    const [startDate, endDate] = ganttDateRange(viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
 
@@ -106,7 +114,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   // task change events
   useEffect(() => {
-    const [startDate, endDate] = ganttDateRange();
+    const [startDate, endDate] = ganttDateRange(viewMode);
     const newDates = seedDates(startDate, endDate, viewMode);
     setDateSetup({ dates: newDates, viewMode });
     console.log(tasks, "tasks");
@@ -150,6 +158,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     milestoneBackgroundColor,
     milestoneBackgroundSelectedColor,
   ]);
+  // const jsPlumbInstance = jsPlumb.getInstance();
+  // useEffect(() => {
+  //   if (wrapperRef.current) {
+  //     console.log(jsPlumbInstance, "jsPlumbInstance");
+  //     jsPlumbInstance.ready(() => {
+  //       jsPlumbInstance.setContainer("horizontalContainer");
+  //     });
+  //   }
+  // }, [wrapperRef]);
   useEffect(() => {
     const { changedTask, action } = ganttEvent;
     if (changedTask) {
@@ -204,8 +221,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     if (wrapperRef.current) {
-      console.log(wrapperRef.current);
-      console.log(wrapperRef.current.offsetTop);
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
     }
   }, [wrapperRef, taskListWidth]);
@@ -226,51 +241,66 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   }, [taskGanttContainerRef?.current?.horizontalContainerRef]);
 
   const setElementsScrollY = () => {
-    eleListTableBodyRef.current && (eleListTableBodyRef.current.scrollTop = refScrollY.current);
-    taskGanttContainerRef?.current?.horizontalContainerRef && (taskGanttContainerRef.current.horizontalContainerRef.scrollTop = refScrollY.current);
-    verticalScrollContainerRef?.current && (verticalScrollContainerRef.current.scrollTop = refScrollY.current);
+    eleListTableBodyRef.current &&
+      (eleListTableBodyRef.current.scrollTop = refScrollY.current);
+    taskGanttContainerRef?.current?.horizontalContainerRef &&
+      (taskGanttContainerRef.current.horizontalContainerRef.scrollTop =
+        refScrollY.current);
+    verticalScrollContainerRef?.current &&
+      (verticalScrollContainerRef.current.scrollTop = refScrollY.current);
   };
 
   const setElementsScrollX = () => {
-    taskGanttContainerRef?.current?.verticalGanttContainerRef && (taskGanttContainerRef.current.verticalGanttContainerRef.scrollLeft = refScrollX.current);
-    horizontalScrollContainerRef?.current && (horizontalScrollContainerRef.current.scrollLeft = refScrollX.current);
+    taskGanttContainerRef?.current?.verticalGanttContainerRef &&
+      (taskGanttContainerRef.current.verticalGanttContainerRef.scrollLeft =
+        refScrollX.current);
+    horizontalScrollContainerRef?.current &&
+      (horizontalScrollContainerRef.current.scrollLeft = refScrollX.current);
   };
 
-  const handleWheel = useCallback((event: WheelEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-    console.log(event.deltaX, event.deltaY)
-    if (Math.abs(event.deltaX) >= Math.abs(event.deltaY)) {
-      if (event.deltaX !== 0) {
-        const scrollX = refScrollX.current;
-        const scrollMove = event.deltaX;
-        let newScrollX = scrollX + scrollMove;
-        if (newScrollX < 0) {
-          newScrollX = 0;
-        } else if (newScrollX > svgWidth) {
-          newScrollX = svgWidth;
+  const handleWheel = useCallback(
+    (event: WheelEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log(event.deltaX, event.deltaY);
+      if (Math.abs(event.deltaX) >= Math.abs(event.deltaY)) {
+        if (event.deltaX !== 0) {
+          const scrollX = refScrollX.current;
+          const scrollMove = event.deltaX;
+          let newScrollX = scrollX + scrollMove;
+          if (newScrollX < 0) {
+            newScrollX = 0;
+          } else if (newScrollX > svgWidth) {
+            newScrollX = svgWidth;
+          }
+          refScrollX.current = newScrollX;
+          setElementsScrollX();
         }
-        refScrollX.current = newScrollX;
-        setElementsScrollX();
-      }
-    }
-    else {
-      if (event.deltaY !== 0) {
-        // Y轴滚动处理
-        const max = ganttFullHeight - ganttHeight;
-        const scrollY = refScrollY.current;
-        let newScrollY = scrollY + event.deltaY;
-        if (newScrollY < 0) {
-          newScrollY = 0;
-        } else if (newScrollY > max) {
-          newScrollY = max;
+      } else {
+        if (event.deltaY !== 0) {
+          // Y轴滚动处理
+          const max = ganttFullHeight - ganttHeight;
+          const scrollY = refScrollY.current;
+          let newScrollY = scrollY + event.deltaY;
+          if (newScrollY < 0) {
+            newScrollY = 0;
+          } else if (newScrollY > max) {
+            newScrollY = max;
+          }
+          refScrollY.current = newScrollY;
+          setElementsScrollY();
         }
-        refScrollY.current = newScrollY;
-        setElementsScrollY();
       }
-    }
-    setIgnoreScrollEvent(true);
-  }, [refScrollX.current, refScrollY.current, ganttHeight, setElementsScrollY, setElementsScrollX]);
+      setIgnoreScrollEvent(true);
+    },
+    [
+      refScrollX.current,
+      refScrollY.current,
+      ganttHeight,
+      setElementsScrollY,
+      setElementsScrollX,
+    ]
+  );
 
   useEffect(() => {
     // subscribe if scroll is necessary
@@ -298,8 +328,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
     const scrollX = refScrollX.current;
     if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
+      console.log(refScrollX.current, "refScrollX.current");
       refScrollX.current = event.currentTarget.scrollLeft;
       setElementsScrollX();
+      //setScrollX(scrollX);
     }
     setIgnoreScrollEvent(false);
   };
@@ -372,7 +404,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     setSelectedTask(newSelectedTask);
   };
-
+  const boundLeft = wrapperRef.current?.getBoundingClientRect().left || 0;
+  const offsetLeft = taskListRef.current?.clientWidth || 0;
   const gridProps: GridProps = {
     columnWidth,
     svgWidth,
@@ -381,6 +414,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     dates: dateSetup.dates,
     todayColor,
     scrollX,
+    //offsetLeft: 750,
+    offsetLeft: boundLeft + offsetLeft,
     onDateChange,
   };
   const calendarProps: CalendarProps = {
@@ -424,7 +459,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     if (TaskListComponent) {
-      eleListTableBodyRef.current = document.querySelector('.BaseTable__table-main .BaseTable__body');
+      eleListTableBodyRef.current = document.querySelector(
+        ".BaseTable__table-main .BaseTable__body"
+      );
     }
   }, [TaskListComponent]);
 
@@ -469,20 +506,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     refScrollX.current = newTickX - svgContainerWidth / 2;
     setElementsScrollX();
-  }, [dateSetup]);
+  }, [dateSetup, viewMode, wrapperRef.current, svgContainerWidth]);
 
   useEffect(() => {
     setScrollX(refScrollX.current);
     setScrollY(refScrollY.current);
-  }, [refScrollX.current, refScrollY.current]);
+  }, [refScrollX.current, refScrollY.current, refScrollX]);
 
   useEffect(() => {
-    if (viewMode === ViewMode.Day) {
-      setTimeout(() => {
-        toToday();
-      }, 0);
-    }
-  }, [wrapperRef.current, svgContainerWidth, toToday]);
+    toToday();
+  }, [wrapperRef.current, svgContainerWidth, viewMode]);
 
   const toConfig = () => {
     setVisible(true);
@@ -490,12 +523,39 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const toGantt = () => {
     setVisible(false);
   };
+  const modeChange = (val: ViewMode) => {
+    setViewMode(val);
+    if (val === ViewMode.Month) {
+      setColumnWidth(300);
+    } else if (val === ViewMode.Week) {
+      setColumnWidth(210);
+    } else if (val === ViewMode.Year) {
+      setColumnWidth(240);
+    } else if (val === ViewMode.Quarter) {
+      setColumnWidth(180);
+    } else {
+      setColumnWidth(60);
+    }
+  };
   return (
     <div className={styles.box}>
-      <OptionContext.Provider value={{ itemTypeData, itemRelationData }}>
-        <GanttConfig toGantt={toGantt} visible={visible} />
-        <GanttHeader toToday={toToday} toConfig={toConfig} />
-      </OptionContext.Provider>
+      <GanttConfigContext.Provider
+        value={{
+          itemTypeData,
+          itemRelationData,
+          customeFieldData,
+          ganttConfig,
+        }}
+      >
+        <ConfigHandelContext.Provider value={{ configHandle }}>
+          <GanttConfig toGantt={toGantt} visible={visible} />
+          <GanttHeader
+            toToday={toToday}
+            toConfig={toConfig}
+            modeChange={modeChange}
+          />
+        </ConfigHandelContext.Provider>
+      </GanttConfigContext.Provider>
       <div
         className={styles.wrapper}
         onKeyDown={handleKeyDown}
@@ -503,7 +563,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         ref={wrapperRef}
       >
         {listCellWidth && TaskListComponent && (
-          <div ref={taskListRef} className={styles.taskListWrapper} style={{width: `${taskListWidth}px`}}>
+          <div
+            ref={taskListRef}
+            className={styles.taskListWrapper}
+            style={{ width: `${taskListWidth}px` }}
+          >
             {TaskListComponent}
             <div className={styles.mask} />
           </div>
@@ -516,6 +580,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             barProps={barProps}
             ganttHeight={ganttHeight}
             scrollX={scrollX}
+            onScroll={handleScrollX}
           />
         )}
         {ganttEvent.changedTask && (

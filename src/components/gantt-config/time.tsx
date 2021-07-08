@@ -1,72 +1,132 @@
-import React, { useState } from "react";
-import { Button, Table, Space } from "antd";
+import React, { useState, useContext, useMemo } from "react";
+import { Button, Table, Space, Modal } from "antd";
 import styles from "./index.module.css";
-import ItemModal from "./item-modal";
+import TimeModal from "./time-modal";
+import { ConfigHandelContext, GanttConfigContext } from "../../contsxt";
+import { omit } from "lodash";
 interface TimeProps {}
+export interface TimeItemProps {
+  itemType?: string;
+  startDate?: string;
+  endDate?: string;
+  baseLineStartDate?: string;
+  baseLineEndDate?: string;
+  percentage?: number;
+}
 const Time: React.FC<TimeProps> = () => {
   const [visible, setVisible] = useState(false);
   const columns = [
     {
       title: "卡片类型",
-      dataIndex: "name",
+      dataIndex: "itemType",
       key: "name",
+      render: (text: string) => {
+        const res =
+          itemTypeData &&
+          itemTypeData.filter((ele: { label: string; value: string }) => {
+            return ele.value === text;
+          });
+        return res && res[0]?.label;
+      },
     },
     {
       title: "操作",
       key: "action",
       width: 120,
-      render: () => (
+      // @ts-ignore
+      render: (text: string, record: TimeItemProps, index: number) => (
         <Space>
-          <a>配置</a>
-          <a>删除</a>
+          <a onClick={() => editTime(index)}>配置</a>
+          <a onClick={() => del(index)}>删除</a>
         </Space>
       ),
     },
   ];
-  const data = [
-    {
-      key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"],
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park",
-      tags: ["cool", "teacher"],
-    },
-  ];
+  const { configHandle } = useContext(ConfigHandelContext);
+  const { ganttConfig } = useContext(GanttConfigContext);
+  const { itemTypeData } = useContext(GanttConfigContext);
+  const [currentItem, setCurrentItem] = useState({});
+  const [index, setIndex] = useState(0);
+  const timeList = useMemo(() => (ganttConfig?.time ? ganttConfig?.time : []), [
+    ganttConfig?.time,
+  ]);
   const handleCancel = () => {
     setVisible(false);
   };
-  const handleOk = () => {};
+  const handleOk = (values: TimeItemProps) => {
+    let newTimeList;
+    if (Object.keys(currentItem).length) {
+      newTimeList = [...timeList];
+      newTimeList[index] = values;
+      // 编辑
+    } else {
+      // 新增
+      newTimeList = [...timeList, values];
+    }
+    setVisible(false);
+    configHandle({
+      ...omit(ganttConfig, [
+        "ACl",
+        "tennat",
+        "updateAt",
+        "createdAt",
+        "updatedAt",
+        "createdBy",
+      ]),
+      time: newTimeList,
+    });
+  };
+  const addTime = () => {
+    setVisible(true);
+    setCurrentItem({});
+  };
+  const editTime = (index: number) => {
+    setIndex(index);
+    setCurrentItem(timeList[index]);
+    setVisible(true);
+  };
+  const del = (index: number) => {
+    Modal.confirm({
+      title: "删除该配置",
+      content: "删除后无法恢复。您确定删除吗？",
+      okText: "确认",
+      cancelText: "取消",
+      onOk: () => delConfig(index),
+    });
+  };
+  const delConfig = (index: number) => {
+    const newTimeList = [...timeList];
+    newTimeList.splice(index, 1);
+    configHandle({
+      ...omit(ganttConfig, [
+        "ACl",
+        "tennat",
+        "updateAt",
+        "createdAt",
+        "updatedAt",
+        "createdBy",
+      ]),
+      time: newTimeList,
+    });
+  };
   return (
     <div>
-      <ItemModal
+      <TimeModal
         visible={visible}
         handleCancel={handleCancel}
         handleOk={handleOk}
+        currentItem={currentItem}
       />
       <h4 className={styles.mb20}>
         为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应卡片的哪个时间字段
       </h4>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={timeList}
         pagination={false}
         className={styles.mb20}
       />
-      <Button type="primary" onClick={() => setVisible(true)}>
+      <Button type="primary" onClick={addTime}>
         添加卡片类型
       </Button>
     </div>

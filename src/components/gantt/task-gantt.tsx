@@ -1,4 +1,9 @@
-import React, { useRef, forwardRef, useImperativeHandle } from "react";
+import React, {
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+  SyntheticEvent,
+} from "react";
 import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
@@ -10,18 +15,16 @@ export type TaskGanttProps = {
   barProps: TaskGanttContentProps;
   ganttHeight: number;
   scrollX: number;
-  // onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
+  onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
   // onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
-const TaskGanttComponent: React.ForwardRefRenderFunction<any, TaskGanttProps> = ({
-  gridProps,
-  calendarProps,
-  barProps,
-  ganttHeight,
-  scrollX,
-  // onScroll,
-  // onMouseMove,
-}, ref) => {
+const TaskGanttComponent: React.ForwardRefRenderFunction<
+  any,
+  TaskGanttProps
+> = (
+  { gridProps, calendarProps, barProps, ganttHeight, scrollX, onScroll },
+  ref
+) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
@@ -31,13 +34,14 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<any, TaskGanttProps> = 
 
   useImperativeHandle(ref, () => ({
     horizontalContainerRef: horizontalContainerRef.current,
-    verticalGanttContainerRef: verticalGanttContainerRef.current
+    verticalGanttContainerRef: verticalGanttContainerRef.current,
   }));
 
   return (
     <div
       className={styles.ganttVerticalContainer}
       ref={verticalGanttContainerRef}
+      onScroll={onScroll}
     >
       <div className={styles.calendarWrapper}>
         <svg
@@ -50,6 +54,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<any, TaskGanttProps> = 
         </svg>
       </div>
       <div
+        id="horizontalContainer"
         ref={horizontalContainerRef}
         className={styles.horizontalContainer}
         style={
@@ -65,7 +70,11 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<any, TaskGanttProps> = 
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
         >
-          <Grid {...gridProps} viewMode={calendarProps.viewMode} scrollX={scrollX}/>
+          <Grid
+            {...gridProps}
+            viewMode={calendarProps.viewMode}
+            scrollX={scrollX}
+          />
           <TaskGanttContent {...newBarProps} />
         </svg>
       </div>

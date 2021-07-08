@@ -1,4 +1,4 @@
-import React, { ReactChild, useState } from "react";
+import React, { ReactChild, useState, useEffect } from "react";
 import { Task, ViewMode, EventOption } from "../../types/public-types";
 import { addToDate } from "../../helpers/date-helper";
 import styles from "./grid.module.css";
@@ -15,6 +15,7 @@ export type GridBodyProps = {
   todayColor: string;
   viewMode?: string;
   scrollX: number;
+  offsetLeft: number;
 } & EventOption;
 // 判断是否为周末
 export const isRestDay = (date: Date) => {
@@ -30,11 +31,23 @@ export const GridBody: React.FC<GridBodyProps> = ({
   todayColor,
   viewMode,
   scrollX,
+  offsetLeft,
   onDateChange,
 }) => {
   const [translateX, setTranslateX] = useState(-500);
   const [translateY, setTranslateY] = useState(-500);
   const [isShow, setIsShow] = useState(false);
+  const [parts, setParts] = useState(1);
+  // 余的天数
+  const [remainderDays, setRemainderDays] = useState(0);
+  //
+  const [currentIndex, setCurrentDataIndex] = useState(0);
+  useEffect(() => {
+    setParts(1);
+    setRemainderDays(0);
+    setCurrentDataIndex(0);
+    // 一个时间刻度分成多少小份： 一月分为28、29、30、31份
+  }, [viewMode]);
   let y = 0;
   const invalidColumn: ReactChild[] = [];
   const gridRows: ReactChild[] = [];
@@ -49,19 +62,115 @@ export const GridBody: React.FC<GridBodyProps> = ({
     />,
   ];
   const handleMouseMove = (event: any, index: number) => {
-    const pointerX = event.clientX;
-    const date = dayjs(
-      dates[0].valueOf() + ((pointerX + scrollX) / columnWidth) * 86400000
-    );
-    const stAmp = date.startOf("day");
-    const dateDuring = (stAmp.valueOf() - dates[0].valueOf()) / 86400000;
-
-    setTranslateX(dateDuring * columnWidth);
+    const pointerX = event.clientX - offsetLeft;
+    // 整数
+    const currentDataIndex = Math.floor((pointerX + scrollX) / columnWidth);
+    setCurrentDataIndex(currentDataIndex);
+    let translateX = 0;
+    // 天或周
+    if (viewMode === ViewMode.Day || viewMode === ViewMode.Week) {
+      setParts(1);
+      setRemainderDays(0);
+      translateX = currentDataIndex * columnWidth;
+    }
+    // 月
+    if (viewMode === ViewMode.Month) {
+      // 余数
+      const dateRemainder = pointerX + scrollX - currentDataIndex * columnWidth;
+      // 获取当前月下的天数
+      const parts = new Date(
+        dates[currentDataIndex]?.getFullYear(),
+        dates[currentDataIndex]?.getMonth() + 1,
+        0
+      ).getDate();
+      setParts(parts);
+      // 一天对应的宽度
+      const dayWidth = columnWidth / parts;
+      const remainder = Math.floor(dateRemainder / dayWidth);
+      setRemainderDays(remainder);
+      translateX =
+        currentDataIndex * columnWidth + (remainder / parts) * columnWidth;
+    }
+    // 季度
+    if (viewMode === ViewMode.Quarter) {
+      const dateRemainder = pointerX + scrollX - currentDataIndex * columnWidth;
+      const parts = 3;
+      setParts(3);
+      // 一天对应的宽度
+      const dayWidth = columnWidth / parts;
+      const remainder = Math.floor(dateRemainder / dayWidth);
+      setRemainderDays(remainder);
+      translateX =
+        currentDataIndex * columnWidth + (remainder / parts) * columnWidth;
+    }
+    // 年
+    if (viewMode === ViewMode.Year) {
+      const dateRemainder = pointerX + scrollX - currentDataIndex * columnWidth;
+      const parts = 12;
+      setParts(12);
+      // 一天对应的宽度
+      const dayWidth = columnWidth / parts;
+      const remainder = Math.floor(dateRemainder / dayWidth);
+      setRemainderDays(remainder);
+      translateX =
+        currentDataIndex * columnWidth + (remainder / parts) * columnWidth;
+    }
+    setTranslateX(translateX);
     setTranslateY(index * rowHeight);
   };
   const handleInvalidColumnMouseMove = (index: number, row: any) => {
     setTranslateY(index * rowHeight);
     setIsShow(!row.start);
+  };
+  const invalidBarClick = () => {
+    const taskIndex = translateY / rowHeight;
+    let startDate, endDate;
+    if (viewMode === ViewMode.Day) {
+      startDate = dayjs(
+        dates[0].valueOf() + (translateX / columnWidth) * 86400000
+      );
+      endDate = dayjs(
+        dates[0].valueOf() + (translateX / columnWidth) * 86400000 + 86400000
+      );
+    }
+    if (viewMode === ViewMode.Week) {
+      startDate = dayjs(
+        dates[0].valueOf() + (translateX / columnWidth) * 86400000 * 7
+      );
+      endDate = dayjs(
+        dates[0].valueOf() +
+          (translateX / columnWidth) * 86400000 * 7 +
+          86400000 * 7
+      );
+    }
+    if (viewMode === ViewMode.Month) {
+      startDate = dayjs(
+        dates[currentIndex].valueOf() + remainderDays * 86400000
+      );
+      endDate = dayjs(
+        dates[currentIndex].valueOf() + remainderDays * 86400000 + 86400000
+      );
+    }
+    if (viewMode === ViewMode.Quarter || viewMode === ViewMode.Year) {
+      startDate = dayjs(
+        new Date(
+          dates[currentIndex].getFullYear(),
+          dates[currentIndex].getMonth() + remainderDays
+        )
+      );
+      endDate = dayjs(
+        new Date(
+          dates[currentIndex].getFullYear(),
+          dates[currentIndex].getMonth() + remainderDays + 1
+        )
+      );
+    }
+    onDateChange?.(
+      Object.assign(tasks[taskIndex], {
+        start: startDate?.startOf("day").toDate(),
+        end: endDate?.startOf("day").toDate(),
+      })
+    );
   };
   for (let i = 0; i < tasks.length; i++) {
     gridRows.push(
@@ -81,9 +190,9 @@ export const GridBody: React.FC<GridBodyProps> = ({
       <rect
         x={translateX + 0.5}
         y={y}
-        width={columnWidth - 1}
+        width={columnWidth / parts}
         height={rowHeight}
-        fill="#DAE0FF"
+        fill={isShow ? "#DAE0FF" : "transparent"}
         onMouseMove={() => {
           handleInvalidColumnMouseMove(i, tasks[i]);
         }}
@@ -118,7 +227,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           y2={y}
           className={styles.gridTick}
         />
-        {isRestDay(date) && viewMode === ViewMode.Day && (
+        {/* {isRestDay(date) && viewMode === ViewMode.Day && (
           <rect
             key={date.getTime() + date.getTime()}
             x={tickX + 1}
@@ -127,7 +236,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
             height={y}
             className={styles.gridTickWeekday}
           />
-        )}
+        )} */}
       </g>
     );
     if (
@@ -192,27 +301,12 @@ export const GridBody: React.FC<GridBodyProps> = ({
     }
     tickX += columnWidth;
   }
-  const invalidBarClick = () => {
-    const taskIndex = translateY / rowHeight;
-    const startDate = dayjs(
-      dates[0].valueOf() + (translateX / columnWidth) * 86400000
-    );
-    const endDate = dayjs(
-      dates[0].valueOf() + (translateX / columnWidth) * 86400000 + 86400000
-    );
-    onDateChange?.(
-      Object.assign(tasks[taskIndex], {
-        start: startDate.startOf("day").toDate(),
-        end: endDate.startOf("day").toDate(),
-      })
-    );
-  };
   const invalidBar = (
     <g>
       <rect
         x={translateX}
         y={translateY + rowHeight / 2 - 30 / 2}
-        width={columnWidth}
+        width={columnWidth / parts}
         height={30}
         fill="#7B90FF"
         onClick={invalidBarClick}
@@ -221,7 +315,12 @@ export const GridBody: React.FC<GridBodyProps> = ({
     </g>
   );
   return (
-    <g className="gridBody">
+    <g
+      className="gridBody"
+      onMouseLeave={() => {
+        setTranslateX(-500);
+      }}
+    >
       <g className="rows">{gridRows}</g>
       <g className="ticks">{ticks}</g>
       <g className="rowLines">{rowLines}</g>
