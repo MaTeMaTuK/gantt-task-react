@@ -98,7 +98,6 @@ const Time: React.FC<TimeProps> = () => {
     setIndex(index);
     setCurrentItem(timeList[index]);
     setVisible(true);
-    console.log(timeList[index], "timeList[index]");
   };
   const del = (index: number) => {
     Modal.confirm({
