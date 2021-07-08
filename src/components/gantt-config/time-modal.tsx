@@ -58,21 +58,23 @@ const ItemModal: React.FC<ItemModalProps> = ({
         wrapperCol={{ span: 24 }}
         layout="vertical"
       >
-        <Form.Item
-          label="卡片类型"
-          name="itemType"
-          rules={[{ required: true, message: "请选择卡片类型" }]}
-        >
-          <Select placeholder="请选择" allowClear>
-            {itemTypeData.map((ele: any) => {
-              return (
-                <Option value={ele.value} key={ele.value}>
-                  {ele.label}
-                </Option>
-              );
-            })}
-          </Select>
-        </Form.Item>
+        {!currentItem?.isDefault && (
+          <Form.Item
+            label="卡片类型"
+            name="itemType"
+            rules={[{ required: true, message: "请选择卡片类型" }]}
+          >
+            <Select placeholder="请选择" allowClear>
+              {itemTypeData.map((ele: any) => {
+                return (
+                  <Option value={ele.value} key={ele.value}>
+                    {ele.label}
+                  </Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+        )}
 
         <Form.Item
           label="开始日期"
