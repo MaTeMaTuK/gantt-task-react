@@ -175,7 +175,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   for (let i = 0; i < tasks.length; i++) {
     gridRows.push(
       <rect
-        key={"Row" + tasks[i].id}
+        key={"Row" + tasks[i].id + i}
         x="0"
         y={y}
         width={svgWidth}
@@ -200,7 +200,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     );
     rowLines.push(
       <line
-        key={"RowLine" + tasks[i].id}
+        key={"RowLine" + tasks[i].id + i}
         x="0"
         y1={y + rowHeight}
         x2={svgWidth}

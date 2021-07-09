@@ -67,3 +67,15 @@
   background: #fff;
   height: calc(100% - 48px);
 }
+
+.backgroundSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.contextContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
