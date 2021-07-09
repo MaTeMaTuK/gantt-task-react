@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   progressWithByParams,
   getProgressPoint,
@@ -8,13 +8,14 @@ import { BarDateHandle } from "./bar-date-handle";
 import { BarProgressHandle } from "./bar-progress-handle";
 import { TaskItemProps } from "../task-item";
 import styles from "./bar.module.css";
-
+import { commonConfig } from "../../../helpers/jsPlumbConfig";
 export const Bar: React.FC<TaskItemProps> = ({
   task,
   isProgressChangeable,
   isDateChangeable,
   onEventStart,
   isSelected,
+  jsPlumb,
 }) => {
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const progressPoint = getProgressPoint(
@@ -22,7 +23,32 @@ export const Bar: React.FC<TaskItemProps> = ({
     task.y,
     task.height
   );
+
   const handleHeight = task.height - 2;
+
+  useEffect(() => {
+    if (jsPlumb) {
+      // @ts-ignore
+      jsPlumb.addEndpoint(
+        task.id,
+        {
+          anchors: ["Right"],
+        },
+        commonConfig
+      );
+      // @ts-ignore
+      jsPlumb.addEndpoint(
+        task.id,
+        {
+          anchor: "Left",
+        },
+        commonConfig
+      );
+      jsPlumb.bind("click", function (conn: any) {
+        console.log(conn, "conn");
+      });
+    }
+  }, [jsPlumb]);
   return (
     <g className={styles.barWrapper} tabIndex={0}>
       <BarDisplay
@@ -35,6 +61,7 @@ export const Bar: React.FC<TaskItemProps> = ({
         barCornerRadius={task.barCornerRadius}
         styles={task.styles}
         isSelected={isSelected}
+        id={task.id}
         onMouseDown={e => {
           isDateChangeable && onEventStart("move", task, e);
         }}

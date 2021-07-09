@@ -11,7 +11,7 @@ export interface TimeItemProps {
   endDate?: string;
   baseLineStartDate?: string;
   baseLineEndDate?: string;
-  percentage?: number;
+  percentage?: string;
   isDefault?: boolean;
 }
 const Time: React.FC<TimeProps> = () => {
@@ -27,7 +27,6 @@ const Time: React.FC<TimeProps> = () => {
           itemTypeData.filter((ele: { label: string; value: string }) => {
             return ele.value === text;
           });
-        console.log(res, "res");
         return res[0]?.label || "默认";
       },
     },
