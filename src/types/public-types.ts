@@ -31,7 +31,7 @@ export const viewModeOptions = [
     value: "Year",
   },
 ];
-export type TaskType = "task" | "milestone" | "project";
+export type TaskType = "task" | "milestone" | "project" | "parent";
 export interface Task {
   id: string;
   type: TaskType;

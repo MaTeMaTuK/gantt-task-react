@@ -33,14 +33,14 @@ import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   headerHeight = 50,
-  //columnWidth = 60,
+  // columnWidth = 60,
   listCellWidth = "155px",
   listWidth = 500,
   listBottomHeight = 48,
   rowHeight = 50,
-  //viewMode = ViewMode.Day,
+  // viewMode = ViewMode.Day,
   locale = "en-GB",
-  //locale = "zh-cn",
+  // locale = "zh-cn",
   barFill = 60,
   barCornerRadius = 3,
   barProgressColor = "#a3a3ff",
@@ -70,8 +70,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   itemTypeData, // 卡片类型
   itemRelationData, // 卡片关联
   customeFieldData, // 字段
-  configHandle, //配置事件
-  ganttConfig, //配置详情
+  configHandle, // 配置事件
+  ganttConfig, // 配置详情
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -331,7 +331,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       console.log(refScrollX.current, "refScrollX.current");
       refScrollX.current = event.currentTarget.scrollLeft;
       setElementsScrollX();
-      //setScrollX(scrollX);
+      // setScrollX(scrollX);
     }
     setIgnoreScrollEvent(false);
   };
@@ -414,7 +414,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     dates: dateSetup.dates,
     todayColor,
     scrollX,
-    //offsetLeft: 750,
+    // offsetLeft: 750,
     offsetLeft: boundLeft + offsetLeft,
     onDateChange,
   };
@@ -506,7 +506,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     refScrollX.current = newTickX - svgContainerWidth / 2;
     setElementsScrollX();
-  }, [dateSetup, viewMode, wrapperRef.current, svgContainerWidth]);
+  }, [
+    dateSetup,
+    viewMode,
+    wrapperRef.current,
+    svgContainerWidth,
+    setElementsScrollX,
+  ]);
 
   useEffect(() => {
     setScrollX(refScrollX.current);
@@ -515,7 +521,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     toToday();
-  }, [wrapperRef.current, svgContainerWidth, viewMode]);
+  }, [
+    wrapperRef.current,
+    svgContainerWidth,
+    viewMode,
+    taskGanttContainerRef?.current?.verticalGanttContainerRef,
+  ]);
 
   const toConfig = () => {
     setVisible(true);
