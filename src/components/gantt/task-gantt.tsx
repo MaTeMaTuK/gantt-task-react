@@ -64,7 +64,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
             : { width: gridProps.svgWidth }
         }
       >
-        <svg
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
           height={barProps.rowHeight * barProps.tasks.length}
@@ -102,7 +102,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
             viewMode={calendarProps.viewMode}
             scrollX={scrollX}
           />
-        </svg>
+        </svg> */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
@@ -111,6 +111,11 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
           ref={ganttSVGRef}
           style={{ position: "relative" }}
         >
+          <Grid
+            {...gridProps}
+            viewMode={calendarProps.viewMode}
+            scrollX={scrollX}
+          />
           <TaskGanttContent {...newBarProps} />
         </svg>
         {false && (

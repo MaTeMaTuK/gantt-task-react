@@ -175,7 +175,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   for (let i = 0; i < tasks.length; i++) {
     gridRows.push(
       <rect
-        key={"Row" + tasks[i].id}
+        key={"Row" + tasks[i].id + i}
         x="0"
         y={y}
         width={svgWidth}
@@ -200,7 +200,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     );
     rowLines.push(
       <line
-        key={"RowLine" + tasks[i].id}
+        key={"RowLine" + tasks[i].id + i}
         x="0"
         y1={y + rowHeight}
         x2={svgWidth}
@@ -321,6 +321,9 @@ export const GridBody: React.FC<GridBodyProps> = ({
         setTranslateX(-500);
       }}
     >
+      <g className="rows">{gridRows}</g>
+      <g className="ticks">{ticks}</g>
+      <g className="rowLines">{rowLines}</g>
       <g className="invalidColumn">{invalidColumn}</g>
       {isShow && <g className="invalidBar">{invalidBar}</g>}
       <g className="today">{today}</g>

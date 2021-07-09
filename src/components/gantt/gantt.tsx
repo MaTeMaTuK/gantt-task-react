@@ -506,7 +506,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     refScrollX.current = newTickX - svgContainerWidth / 2;
     setElementsScrollX();
-  }, [dateSetup, viewMode, wrapperRef.current, svgContainerWidth]);
+  }, [
+    dateSetup,
+    viewMode,
+    wrapperRef.current,
+    svgContainerWidth,
+    setElementsScrollX,
+  ]);
 
   useEffect(() => {
     setScrollX(refScrollX.current);
@@ -515,7 +521,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     toToday();
-  }, [wrapperRef.current, svgContainerWidth, viewMode]);
+  }, [
+    wrapperRef.current,
+    svgContainerWidth,
+    viewMode,
+    taskGanttContainerRef?.current?.verticalGanttContainerRef,
+  ]);
 
   const toConfig = () => {
     setVisible(true);
