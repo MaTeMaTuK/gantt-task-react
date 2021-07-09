@@ -16,6 +16,7 @@
   overflow: hidden;
   will-change: transform;
   direction: ltr;
+  position: relative;
 }
 
 .box {

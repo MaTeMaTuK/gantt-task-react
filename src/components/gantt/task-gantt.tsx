@@ -36,7 +36,6 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
     horizontalContainerRef: horizontalContainerRef.current,
     verticalGanttContainerRef: verticalGanttContainerRef.current,
   }));
-
   return (
     <div
       className={styles.ganttVerticalContainer}
