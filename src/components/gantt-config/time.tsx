@@ -12,6 +12,7 @@ export interface TimeItemProps {
   baseLineStartDate?: string;
   baseLineEndDate?: string;
   percentage?: number;
+  isDefault?: boolean;
 }
 const Time: React.FC<TimeProps> = () => {
   const [visible, setVisible] = useState(false);
@@ -26,7 +27,8 @@ const Time: React.FC<TimeProps> = () => {
           itemTypeData.filter((ele: { label: string; value: string }) => {
             return ele.value === text;
           });
-        return res && res[0]?.label;
+        console.log(res, "res");
+        return res[0]?.label || "默认";
       },
     },
     {
@@ -36,8 +38,14 @@ const Time: React.FC<TimeProps> = () => {
       // @ts-ignore
       render: (text: string, record: TimeItemProps, index: number) => (
         <Space>
-          <a onClick={() => editTime(index)}>配置</a>
-          <a onClick={() => del(index)}>删除</a>
+          <a type="link" onClick={() => editTime(index)}>
+            配置
+          </a>
+          {!record?.isDefault && (
+            <a type="link" onClick={() => del(index)}>
+              删除
+            </a>
+          )}
         </Space>
       ),
     },
@@ -47,9 +55,10 @@ const Time: React.FC<TimeProps> = () => {
   const { itemTypeData } = useContext(GanttConfigContext);
   const [currentItem, setCurrentItem] = useState({});
   const [index, setIndex] = useState(0);
-  const timeList = useMemo(() => (ganttConfig?.time ? ganttConfig?.time : []), [
-    ganttConfig?.time,
-  ]);
+  const timeList = useMemo(
+    () => (ganttConfig?.time ? ganttConfig?.time : [{ isDefault: true }]),
+    [ganttConfig?.time]
+  );
   const handleCancel = () => {
     setVisible(false);
   };
@@ -57,6 +66,11 @@ const Time: React.FC<TimeProps> = () => {
     let newTimeList;
     if (Object.keys(currentItem).length) {
       newTimeList = [...timeList];
+      // @ts-ignore
+      if (currentItem?.isDefault) {
+        // @ts-ignore
+        values.isDefault = currentItem?.isDefault;
+      }
       newTimeList[index] = values;
       // 编辑
     } else {
