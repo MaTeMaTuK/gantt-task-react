@@ -3,13 +3,13 @@ import {
   progressWithByParams,
   getProgressPoint,
 } from "../../../helpers/bar-helper";
-import { BarDisplay } from "./bar-display";
+import { BarDisplay } from "./parent-bar-display";
 import { BarDateHandle } from "./bar-date-handle";
 import { BarProgressHandle } from "./bar-progress-handle";
 import { TaskItemProps } from "../task-item";
 import styles from "./bar.module.css";
 
-export const Bar: React.FC<TaskItemProps> = ({
+export const BarParent: React.FC<TaskItemProps> = ({
   task,
   isProgressChangeable,
   isDateChangeable,

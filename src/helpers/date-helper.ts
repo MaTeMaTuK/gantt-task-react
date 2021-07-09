@@ -71,6 +71,7 @@ export const ganttDateRange = (viewMode: ViewMode) => {
   newStartDate = startOfDate(newStartDate, "day");
   newEndDate = startOfDate(newEndDate, "day");
   newStartDate = addToDate(newStartDate, -year * 12 * 30, "day");
+  newEndDate = addToDate(newEndDate, year * 12 * 30, "day");
   return [newStartDate, newEndDate];
 };
 export const seedDates = (

@@ -3,6 +3,7 @@ import { BarTask } from "../../types/bar-task";
 import { GanttContentMoveAction } from "../../types/gantt-task-actions";
 import { Bar } from "./bar/bar";
 import { BarSmall } from "./bar/bar-small";
+import { BarParent } from "./bar/bar-parent";
 import { Milestone } from "./milestone/milestone";
 import { Project } from "./project/project";
 import style from "./task-list.module.css";
@@ -47,6 +48,9 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         break;
       case "smalltask":
         setTaskItem(<BarSmall {...props} />);
+        break;
+      case "parent":
+        setTaskItem(<BarParent {...props} />);
         break;
       default:
         setTaskItem(<Bar {...props} />);

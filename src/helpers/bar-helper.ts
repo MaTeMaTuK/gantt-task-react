@@ -157,7 +157,7 @@ const convertToBar = (
 ): BarTask => {
   const x1: any = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
   let x2: any = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
-  const y = taskYCoordinate(rowHeight, taskHeight);
+  const y = taskYCoordinate(index, rowHeight, taskHeight);
 
   const styles = {
     backgroundColor: barBackgroundColor,
@@ -200,7 +200,7 @@ const convertToMilestone = (
   milestoneBackgroundSelectedColor: string
 ) => {
   const x: any = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
-  const y = taskYCoordinate(rowHeight, taskHeight);
+  const y = taskYCoordinate(index, rowHeight, taskHeight);
 
   const x1 = x - taskHeight * 0.5;
   const x2 = x + taskHeight * 0.5;
@@ -258,10 +258,11 @@ const taskXCoordinate = (
 };
 
 const taskYCoordinate = (
+  index: number,
   rowHeight: number,
   taskHeight: number
 ) => {
-  const y = (rowHeight - taskHeight) / 2;
+  const y = index * rowHeight + (rowHeight - taskHeight) / 2;
   return y;
 };
 

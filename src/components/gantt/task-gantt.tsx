@@ -72,13 +72,36 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
           className={styles.backgroundSvg}
         >
           <defs>
-            <pattern id="grid" patternUnits="userSpaceOnUse" height={gridProps.rowHeight} width={gridProps.columnWidth}>
-              <path fill="none" d={`m 0 0 h ${gridProps.columnWidth}`} stroke-width="2" stroke="#ebecf0"></path>
-              <path fill="none" d={`m 0 0 v ${gridProps.rowHeight}`} stroke-width="2" stroke="#ebecf0"></path>
+            <pattern
+              id="grid"
+              patternUnits="userSpaceOnUse"
+              height={gridProps.rowHeight}
+              width={gridProps.columnWidth}
+            >
+              <path
+                fill="none"
+                d={`m 0 0 h ${gridProps.columnWidth}`}
+                strokeWidth="2"
+                stroke="#ebecf0"
+              />
+              <path
+                fill="none"
+                d={`m 0 0 v ${gridProps.rowHeight}`}
+                strokeWidth="2"
+                stroke="#ebecf0"
+              />
             </pattern>
           </defs>
-          <rect fill="url(#grid)" height={barProps.rowHeight * barProps.tasks.length} width={gridProps.svgWidth}></rect>
-          <Grid {...gridProps} viewMode={calendarProps.viewMode} scrollX={scrollX}/>
+          <rect
+            fill="url(#grid)"
+            height={barProps.rowHeight * barProps.tasks.length}
+            width={gridProps.svgWidth}
+          />
+          <Grid
+            {...gridProps}
+            viewMode={calendarProps.viewMode}
+            scrollX={scrollX}
+          />
         </svg>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -86,20 +109,22 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
           height={barProps.rowHeight * barProps.tasks.length}
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
-          style={{position: 'relative'}}
+          style={{ position: "relative" }}
         >
           <TaskGanttContent {...newBarProps} />
         </svg>
-        <div className={styles.contextContainer}>
-          {
-            newBarProps.tasks.map(task => {
+        {false && (
+          <div className={styles.contextContainer}>
+            {newBarProps.tasks.map(task => {
               if (!task.start || !task.end) {
                 return null;
               }
-              return <TaskGanttArrows key={task.id} {...newBarProps} task={task} />;
-            })
-          }
-        </div>
+              return (
+                <TaskGanttArrows key={task.id} {...newBarProps} task={task} />
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
