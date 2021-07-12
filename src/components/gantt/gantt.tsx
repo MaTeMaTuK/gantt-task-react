@@ -35,7 +35,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   headerHeight = 50,
   // columnWidth = 60,
   listCellWidth = "155px",
-  listWidth = 500,
+  listWidth = 680,
   listBottomHeight = 48,
   rowHeight = 50,
   // viewMode = ViewMode.Day,
@@ -107,6 +107,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const refScrollX: any = useRef(0);
   const [visible, setVisible] = useState(false);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
+  const dividerPositionRef = useRef({ left: 0 });
   // 到今天移动的距离
   // const [todayDistance, setTodayDistance] = useState(0);
   const svgWidth = dateSetup.dates.length * columnWidth;
@@ -117,7 +118,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     const [startDate, endDate] = ganttDateRange(viewMode);
     const newDates = seedDates(startDate, endDate, viewMode);
     setDateSetup({ dates: newDates, viewMode });
-    console.log(tasks, "tasks");
     setBarTasks(
       convertToBarTasks(
         tasks,
@@ -262,7 +262,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     (event: WheelEvent) => {
       event.preventDefault();
       event.stopPropagation();
-      console.log(event.deltaX, event.deltaY);
       if (Math.abs(event.deltaX) >= Math.abs(event.deltaY)) {
         if (event.deltaX !== 0) {
           const scrollX = refScrollX.current;
@@ -328,7 +327,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
     const scrollX = refScrollX.current;
     if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
-      console.log(refScrollX.current, "refScrollX.current");
       refScrollX.current = event.currentTarget.scrollLeft;
       setElementsScrollX();
       // setScrollX(scrollX);
@@ -548,6 +546,39 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       setColumnWidth(60);
     }
   };
+
+  const handleDividerMouseDown = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const distance = event.clientX - dividerPositionRef.current.left;
+      const minWidth = 220; // 拖动时，列表最小宽度为220
+      const width =
+        taskListWidth + distance > minWidth
+          ? taskListWidth + distance
+          : minWidth;
+      setTaskListWidth(width);
+    };
+    const handleMouseUp = () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+    dividerPositionRef.current.left = event.clientX;
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const handleDividerClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (taskListWidth > 0) {
+      dividerPositionRef.current.left = taskListWidth;
+      setTaskListWidth(0);
+    } else {
+      setTaskListWidth(dividerPositionRef.current.left);
+    }
+    event.stopPropagation();
+  };
   return (
     <div className={styles.box}>
       <GanttConfigContext.Provider
@@ -594,6 +625,36 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             onScroll={handleScrollX}
           />
         )}
+        <div
+          className={styles.dividerWrapper}
+          style={{
+            left: taskListWidth - 15 > 0 ? `${taskListWidth - 15}px` : 0,
+          }}
+        >
+          <div
+            className={styles.dividerContainer}
+            style={{
+              height: `calc(100% - ${listBottomHeight}px)`,
+            }}
+          >
+            <hr
+              onMouseDown={
+                taskListWidth === 0 ? undefined : handleDividerMouseDown
+              }
+            />
+            <span
+              className={
+                taskListWidth === 0
+                  ? `${styles.dividerIconWarpper} ${styles.reverse}`
+                  : styles.dividerIconWarpper
+              }
+              onMouseDown={e => e.stopPropagation()}
+              onClick={handleDividerClick}
+            >
+              <i />
+            </span>
+          </div>
+        </div>
         {ganttEvent.changedTask && (
           <Tooltip
             arrowIndent={arrowIndent}
