@@ -6,8 +6,8 @@ import { BarSmall } from "./bar/bar-small";
 import { BarParent } from "./bar/bar-parent";
 import { Milestone } from "./milestone/milestone";
 import { Project } from "./project/project";
-import style from "./task-list.module.css";
 
+import style from "./task-list.module.css";
 export type TaskItemProps = {
   task: BarTask;
   arrowIndent: number;
@@ -21,6 +21,7 @@ export type TaskItemProps = {
     selectedTask: BarTask,
     event?: React.MouseEvent | React.KeyboardEvent
   ) => any;
+  jsPlumb?: any;
 };
 
 export const TaskItem: React.FC<TaskItemProps> = props => {
@@ -31,13 +32,14 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     taskHeight,
     isSelected,
     onEventStart,
+    jsPlumb,
   } = {
     ...props,
   };
   const textRef = useRef<SVGTextElement>(null);
+
   const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
   const [isTextInside, setIsTextInside] = useState(true);
-
   useEffect(() => {
     switch (task.typeInternal) {
       case "milestone":
@@ -56,14 +58,13 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         setTaskItem(<Bar {...props} />);
         break;
     }
-  }, [task, isSelected]);
+  }, [task, isSelected, jsPlumb]);
 
   useEffect(() => {
     if (textRef.current) {
       setIsTextInside(textRef.current.getBBox().width < task.x2 - task.x1);
     }
   }, [textRef, task]);
-
   const getX = () => {
     const width = task.x2 - task.x1;
     const hasChild = task.barChildren.length > 0;
@@ -71,7 +72,6 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       ? task.x1 + width * 0.5
       : task.x1 + width + arrowIndent * +hasChild + arrowIndent * 0.2;
   };
-
   return (
     <g
       onKeyDown={e => {
@@ -109,6 +109,22 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       >
         {task.name}
       </text>
+      {/* 测试代码 */}
+      {/* <svg
+        width="43860"
+        height="200"
+        fill="red"
+        x="0"
+        y="0"
+        style={{ border: "1px solid gray", transform: "translateX(1000px)" }}
+      >
+        <g>
+          <rect x={task.x1} y="60" width="50" height="50" id="rect1" />
+        </g>
+        <g>
+          <rect x={task.x2} y="60" width="100" height="50" id="rect2" />
+        </g>
+      </svg> */}
     </g>
   );
 };

@@ -6,6 +6,10 @@ import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
 import { isKeyboardEvent } from "../../helpers/other-helper";
 import { TaskItem } from "../task-item/task-item";
 import {
+  offsetCalculators,
+  sizeCalculators,
+} from "../../helpers/jsPlumbConfig";
+import {
   BarMoveAction,
   GanttContentMoveAction,
   GanttEvent,
@@ -57,7 +61,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
-
+  const [jsPlumbInstance, setJsPlumbInstance] = useState(null);
   // create xStep
   useEffect(() => {
     const dateDelta =
@@ -242,7 +246,38 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       });
     }
   };
-
+  useEffect(() => {
+    import("jsplumb").then(({ jsPlumb }: any) => {
+      jsPlumb.ready(() => {
+        const instance = jsPlumb.getInstance();
+        setJsPlumbInstance(instance);
+      });
+    });
+  }, []);
+  useEffect(() => {
+    if (jsPlumbInstance) {
+      // @ts-ignore
+      const originalOffset = jsPlumbInstance.getOffset;
+      // @ts-ignore
+      const originalSize = jsPlumbInstance.getSize;
+      // @ts-ignore
+      jsPlumbInstance.getOffset = function (el: any) {
+        const tn = el.tagName.toUpperCase();
+        if (offsetCalculators[tn]) {
+          return offsetCalculators[tn](el);
+        } else return originalOffset.apply(this, [el]);
+      };
+      // @ts-ignore
+      jsPlumbInstance.getSize = function (el: any) {
+        const tn = el.tagName.toUpperCase();
+        if (sizeCalculators[tn]) {
+          return sizeCalculators[tn](el);
+        } else return originalSize.apply(this, [el]);
+      };
+      // @ts-ignore
+      jsPlumbInstance.setContainer("horizontalContainer");
+    }
+  }, [jsPlumbInstance]);
   return (
     <g className="content">
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>
@@ -268,6 +303,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           }
           return (
             <TaskItem
+              jsPlumb={jsPlumbInstance}
               task={task}
               arrowIndent={arrowIndent}
               taskHeight={taskHeight}

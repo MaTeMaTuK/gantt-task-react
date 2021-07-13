@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from "react";
-import { Modal, Form, Select, InputNumber } from "antd";
+import { Modal, Form, Select } from "antd";
 import { GanttConfigContext } from "../../contsxt";
-import styles from "./index.module.css";
 import { TimeItemProps } from "./time";
 const { Option } = Select;
 const filterOption = (input: any, option: any) => {
@@ -58,21 +57,23 @@ const ItemModal: React.FC<ItemModalProps> = ({
         wrapperCol={{ span: 24 }}
         layout="vertical"
       >
-        <Form.Item
-          label="卡片类型"
-          name="itemType"
-          rules={[{ required: true, message: "请选择卡片类型" }]}
-        >
-          <Select placeholder="请选择" allowClear>
-            {itemTypeData.map((ele: any) => {
-              return (
-                <Option value={ele.value} key={ele.value}>
-                  {ele.label}
-                </Option>
-              );
-            })}
-          </Select>
-        </Form.Item>
+        {!currentItem?.isDefault && (
+          <Form.Item
+            label="卡片类型"
+            name="itemType"
+            rules={[{ required: true, message: "请选择卡片类型" }]}
+          >
+            <Select placeholder="请选择" allowClear>
+              {itemTypeData.map((ele: any) => {
+                return (
+                  <Option value={ele.value} key={ele.value}>
+                    {ele.label}
+                  </Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+        )}
 
         <Form.Item
           label="开始日期"
@@ -137,12 +138,16 @@ const ItemModal: React.FC<ItemModalProps> = ({
           </Select>
         </Form.Item>
         <Form.Item label="完成占比" name="percentage">
-          <InputNumber
-            className={styles.width100}
-            max={100}
-            min={0}
-            placeholder="请输入占比"
-          />
+          <Select placeholder="请选择" allowClear>
+            {customeFieldData &&
+              customeFieldData.map((ele: any) => {
+                return (
+                  <Option value={ele.value} key={ele.value}>
+                    {ele.label}
+                  </Option>
+                );
+              })}
+          </Select>
         </Form.Item>
       </Form>
     </Modal>

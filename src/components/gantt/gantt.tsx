@@ -7,7 +7,6 @@ import React, {
   useCallback,
 } from "react";
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
-// import jsplumb from "jsplumb";
 import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import {
@@ -29,7 +28,7 @@ import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttHeader from "./gantt-header";
 import GanttConfig from "../gantt-config/index";
 import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
-// const jsPlumb = jsplumb.jsPlumb;
+
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   headerHeight = 50,
@@ -78,8 +77,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const taskGanttContainerRef = useRef<any>({});
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
-
-  // const [jsPlumbForword, setJsPlumbForword] = useState(null)
   const [viewMode, setViewMode] = useState(ViewMode.Day);
   const [columnWidth, setColumnWidth] = useState(60);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
@@ -112,7 +109,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // const [todayDistance, setTodayDistance] = useState(0);
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
-
   // task change events
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
@@ -158,15 +154,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     milestoneBackgroundColor,
     milestoneBackgroundSelectedColor,
   ]);
-  // const jsPlumbInstance = jsPlumb.getInstance();
-  // useEffect(() => {
-  //   if (wrapperRef.current) {
-  //     console.log(jsPlumbInstance, "jsPlumbInstance");
-  //     jsPlumbInstance.ready(() => {
-  //       jsPlumbInstance.setContainer("horizontalContainer");
-  //     });
-  //   }
-  // }, [wrapperRef]);
   useEffect(() => {
     const { changedTask, action } = ganttEvent;
     if (changedTask) {
