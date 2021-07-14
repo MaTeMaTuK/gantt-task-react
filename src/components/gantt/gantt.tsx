@@ -595,7 +595,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           <div
             ref={taskListRef}
             className={styles.taskListWrapper}
-            style={{ width: `${taskListWidth}px` }}
+            style={{
+              width: `${taskListWidth}px`,
+              visibility: tasks?.length ? "visible" : "hidden",
+            }}
           >
             {TaskListComponent}
             <div className={styles.mask} />
@@ -616,6 +619,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           className={styles.dividerWrapper}
           style={{
             left: taskListWidth - 15 > 0 ? `${taskListWidth - 15}px` : 0,
+            visibility: tasks?.length ? "visible" : "hidden",
           }}
         >
           <div

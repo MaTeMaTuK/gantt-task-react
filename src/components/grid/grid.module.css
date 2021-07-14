@@ -1,9 +1,5 @@
 .gridRow {
-  fill: #fff;
-}
-
-.gridRow:hover {
-  fill: #f5f5f5;
+  fill: transparent;
 }
 
 /* .gridRow:nth-child(even) {
