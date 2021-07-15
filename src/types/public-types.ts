@@ -153,8 +153,15 @@ export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   itemTypeData?: OptionsProp[];
   itemRelationData?: OptionsProp[];
   customeFieldData?: OptionsProp[];
+  itemLinks?: any[];
   ganttConfig?: any;
   configHandle?: (value: any) => void;
+  delConnection?: (value: string) => void;
+  addConnection?: (
+    source: string,
+    destination: string,
+    linkType: string
+  ) => void;
   renderTaskListComponent?: () => JSX.Element;
 }
 export interface OptionsProp {

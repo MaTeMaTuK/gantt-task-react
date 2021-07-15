@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { EventOption } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
 import { isKeyboardEvent } from "../../helpers/other-helper";
 import { TaskItem } from "../task-item/task-item";
+import { GanttConfigContext, ConnectionHandelContext } from "../../contsxt";
 import {
   offsetCalculators,
   sizeCalculators,
+  relationReverse,
+  //commonConfig,
+  relationInit,
 } from "../../helpers/jsPlumbConfig";
 import {
   BarMoveAction,
   GanttContentMoveAction,
   GanttEvent,
 } from "../../types/gantt-task-actions";
-
+import { message, Modal } from "antd";
 export type TaskGanttContentProps = {
   tasks: BarTask[];
   dates: Date[];
@@ -62,6 +66,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
   const [jsPlumbInstance, setJsPlumbInstance] = useState(null);
+  const { ganttConfig } = useContext(GanttConfigContext);
+  const { itemLinks } = useContext(GanttConfigContext);
+  const { delConnection } = useContext(ConnectionHandelContext);
+  const { addConnection } = useContext(ConnectionHandelContext);
   // create xStep
   useEffect(() => {
     const dateDelta =
@@ -246,16 +254,27 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       });
     }
   };
+  const getLinkTypeId = (start: string, end: string) => {
+    const linkType = relationReverse(start, end);
+    return ganttConfig.relation[linkType];
+  };
   useEffect(() => {
     import("jsplumb").then(({ jsPlumb }: any) => {
       jsPlumb.ready(() => {
         const instance = jsPlumb.getInstance();
+        instance.fire("jsPlumbDemoLoaded", instance);
         setJsPlumbInstance(instance);
       });
     });
   }, []);
   useEffect(() => {
     if (jsPlumbInstance) {
+      // @ts-ignore
+      jsPlumbInstance.unbind("click");
+      // @ts-ignore
+      jsPlumbInstance.unbind("beforeDrop");
+      // @ts-ignore
+      jsPlumbInstance.unbind("connection");
       // @ts-ignore
       const originalOffset = jsPlumbInstance.getOffset;
       // @ts-ignore
@@ -276,8 +295,101 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       };
       // @ts-ignore
       jsPlumbInstance.setContainer("horizontalContainer");
+      // 删除连线
+      // @ts-ignore
+      jsPlumbInstance.bind("click", function (conn: any) {
+        const currentLink = itemLinks.filter((ele: any) => {
+          return (
+            ele.source.objectId === conn.sourceId &&
+            ele.destination.objectId === conn.targetId &&
+            ele.linkType.objectId === conn.getData()
+          );
+        });
+        if (currentLink.length) {
+          Modal.confirm({
+            title: "解除关联关系",
+            content: "确定要解除卡片的关联关系吗？",
+            okText: "确认",
+            cancelText: "取消",
+            onOk: () => delConnection(currentLink[0].objectId),
+          });
+        }
+      });
+      // 连线前校验
+      // @ts-ignore
+      jsPlumbInstance.bind("beforeDrop", (conn: any) => {
+        if (conn.targetId === conn.sourceId) {
+          message.warning("连线有误");
+          return false;
+        }
+        const linkTypeId = getLinkTypeId(
+          conn.connection.endpoints[0].anchor.type,
+          conn.dropEndpoint.anchor.type
+        );
+        const currentLink = itemLinks.filter((ele: any) => {
+          return (
+            ele.source.objectId === conn.sourceId &&
+            ele.destination.objectId === conn.targetId &&
+            ele.linkType.objectId === linkTypeId
+          );
+        });
+        if (currentLink.length) {
+          message.warning("连线有误");
+          return false;
+        }
+        return true;
+      });
+      // @ts-ignore
+      jsPlumbInstance.bind("connection", (infor: any, originalEvent: any) => {
+        const linkTypeId = getLinkTypeId(
+          infor.connection.endpoints[0].anchor.type,
+          infor.connection.endpoints[1].anchor.type
+        );
+        const params = {
+          source: infor.sourceId,
+          destination: infor.targetId,
+          linkType: linkTypeId,
+        };
+        if (originalEvent) {
+          infor.connection.setData(linkTypeId);
+          addConnection(params);
+        }
+      });
     }
-  }, [jsPlumbInstance]);
+  }, [jsPlumbInstance, itemLinks]);
+  useEffect(() => {
+    if (itemLinks.length && tasks.length && jsPlumbInstance) {
+      // 删除所有连线
+      // @ts-ignore
+      jsPlumbInstance.deleteEveryConnection();
+      tasks.forEach((task: any) => {
+        // 找到需要连线的卡片
+        const itemFilter = itemLinks?.filter((ele: any) => {
+          return ele.source.objectId === task.id;
+        });
+        itemFilter.forEach((ele: any) => {
+          let relationType = "";
+          for (const key in ganttConfig.relation) {
+            if (ganttConfig.relation[key] === ele.linkType.objectId) {
+              relationType = key;
+              continue;
+            }
+          }
+          setTimeout(() => {
+            // @ts-ignore
+            const connect = jsPlumbInstance.connect({
+              uuids: [
+                `${ele.source.objectId}-${relationInit[relationType][0]}`,
+                `${ele.destination.objectId}-${relationInit[relationType][1]}`,
+              ],
+            });
+            // 给连线设置linkType
+            connect.setData(ganttConfig.relation[relationType]);
+          }, 20);
+        });
+      });
+    }
+  }, [itemLinks, jsPlumbInstance]);
   return (
     <g className="content">
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>
