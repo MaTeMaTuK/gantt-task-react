@@ -227,7 +227,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
   }, [taskGanttContainerRef?.current?.horizontalContainerRef]);
 
-  const setElementsScrollY = () => {
+  const setElementsScrollY = useCallback(() => {
     eleListTableBodyRef.current &&
       (eleListTableBodyRef.current.scrollTop = refScrollY.current);
     taskGanttContainerRef?.current?.horizontalContainerRef &&
@@ -235,15 +235,22 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         refScrollY.current);
     verticalScrollContainerRef?.current &&
       (verticalScrollContainerRef.current.scrollTop = refScrollY.current);
-  };
+  }, [
+    eleListTableBodyRef.current,
+    taskGanttContainerRef?.current?.horizontalContainerRef,
+    verticalScrollContainerRef?.current,
+  ]);
 
-  const setElementsScrollX = () => {
+  const setElementsScrollX = useCallback(() => {
     taskGanttContainerRef?.current?.verticalGanttContainerRef &&
       (taskGanttContainerRef.current.verticalGanttContainerRef.scrollLeft =
         refScrollX.current);
     horizontalScrollContainerRef?.current &&
       (horizontalScrollContainerRef.current.scrollLeft = refScrollX.current);
-  };
+  }, [
+    taskGanttContainerRef?.current?.verticalGanttContainerRef,
+    horizontalScrollContainerRef?.current,
+  ]);
 
   const handleWheel = useCallback(
     (event: WheelEvent) => {
@@ -506,12 +513,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     toToday();
-  }, [
-    wrapperRef.current,
-    svgContainerWidth,
-    viewMode,
-    taskGanttContainerRef?.current?.verticalGanttContainerRef,
-  ]);
+  }, [toToday]);
 
   const toConfig = () => {
     setVisible(true);
