@@ -1,5 +1,5 @@
 .gridRow {
-  fill: #fff;
+  fill: transparent;
 }
 
 .gridRow:hover {
@@ -17,6 +17,6 @@
 .gridTick {
   stroke: #e6e4e4;
 }
-.gridTickWeekday{
+.gridTickWeekday {
   fill: #f5f5f5;
 }

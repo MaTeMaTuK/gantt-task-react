@@ -227,7 +227,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           y2={y}
           className={styles.gridTick}
         />
-        {/* {isRestDay(date) && viewMode === ViewMode.Day && (
+        {isRestDay(date) && viewMode === ViewMode.Day && (
           <rect
             key={date.getTime() + date.getTime()}
             x={tickX + 1}
@@ -236,7 +236,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
             height={y}
             className={styles.gridTickWeekday}
           />
-        )} */}
+        )}
       </g>
     );
     if (
@@ -321,8 +321,9 @@ export const GridBody: React.FC<GridBodyProps> = ({
         setTranslateX(-500);
       }}
     >
-      <g className="rows">{gridRows}</g>
       <g className="ticks">{ticks}</g>
+      <g className="rows">{gridRows}</g>
+
       <g className="rowLines">{rowLines}</g>
       <g className="invalidColumn">{invalidColumn}</g>
       {isShow && <g className="invalidBar">{invalidBar}</g>}
