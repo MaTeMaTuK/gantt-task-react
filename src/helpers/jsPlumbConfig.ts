@@ -36,10 +36,10 @@ export const commonConfig = {
   connector: ["Flowchart"],
   // 设置连接线的样式
   connectorStyle: {
-    stroke: "#456", // 实线颜色
-    strokeWidth: 1, // 实线宽度
-    outlineStroke: "blank", // 边框颜色
-    outlineWidth: 1, // 边框宽度
+    stroke: "#c0c0c0", // 实线颜色
+    strokeWidth: 2, // 实线宽度
+    // outlineStroke: "#c0c0c0", // 边框颜色
+    // outlineWidth: 1, // 边框宽度
   },
   // 设置连接线悬浮样式
   connectorHoverStyle: {
@@ -104,4 +104,25 @@ export const sizeCalculators = {
     const h = parseInt(el.getAttribute("height"), 10);
     return [w, h];
   },
+};
+export const relationInit = {
+  FS: ["Right", "Left"],
+  FF: ["Right", "Right"],
+  SS: ["Left", "Left"],
+  SF: ["Left", "Right"],
+};
+export const relationReverse = (start: string, end: string) => {
+  if (start === "Right" && end === "Left") {
+    return "FS";
+  }
+  if (start === "Right" && end === "Right") {
+    return "FF";
+  }
+  if (start === "Left" && end === "Left") {
+    return "SS";
+  }
+  if (start === "Left" && end === "Right") {
+    return "SF";
+  }
+  return "SS";
 };

@@ -102,7 +102,12 @@ const ItemModal: React.FC<ItemModalProps> = ({
           name="endDate"
           rules={[{ required: true, message: "请选择结束日期字段" }]}
         >
-          <Select placeholder="请选择" allowClear>
+          <Select
+            placeholder="请选择"
+            allowClear
+            showSearch
+            filterOption={filterOption}
+          >
             {customeFieldData &&
               customeFieldData.map((ele: any) => {
                 return (
@@ -114,7 +119,12 @@ const ItemModal: React.FC<ItemModalProps> = ({
           </Select>
         </Form.Item>
         <Form.Item label="基线开始日期" name="baseLineStartDate">
-          <Select placeholder="请选择" allowClear>
+          <Select
+            placeholder="请选择"
+            allowClear
+            showSearch
+            filterOption={filterOption}
+          >
             {customeFieldData &&
               customeFieldData.map((ele: any) => {
                 return (
@@ -126,7 +136,12 @@ const ItemModal: React.FC<ItemModalProps> = ({
           </Select>
         </Form.Item>
         <Form.Item label="基线结束日期" name="baseLineEndDate">
-          <Select placeholder="请选择" allowClear>
+          <Select
+            placeholder="请选择"
+            allowClear
+            showSearch
+            filterOption={filterOption}
+          >
             {customeFieldData &&
               customeFieldData.map((ele: any) => {
                 return (
@@ -138,7 +153,12 @@ const ItemModal: React.FC<ItemModalProps> = ({
           </Select>
         </Form.Item>
         <Form.Item label="完成占比" name="percentage">
-          <Select placeholder="请选择" allowClear>
+          <Select
+            placeholder="请选择"
+            allowClear
+            showSearch
+            filterOption={filterOption}
+          >
             {customeFieldData &&
               customeFieldData.map((ele: any) => {
                 return (
