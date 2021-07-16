@@ -22,10 +22,7 @@ export type TaskGanttProps = {
 const TaskGanttComponent: React.ForwardRefRenderFunction<
   any,
   TaskGanttProps
-> = (
-  { gridProps, calendarProps, barProps, ganttHeight, scrollX, onScroll },
-  ref
-) => {
+> = ({ gridProps, calendarProps, barProps, scrollX, onScroll }, ref) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
@@ -57,11 +54,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
         id="horizontalContainer"
         ref={horizontalContainerRef}
         className={styles.horizontalContainer}
-        style={
-          ganttHeight
-            ? { height: ganttHeight, width: gridProps.svgWidth }
-            : { width: gridProps.svgWidth }
-        }
+        style={{ width: gridProps.svgWidth }}
       >
         {/* <svg
           xmlns="http://www.w3.org/2000/svg"
