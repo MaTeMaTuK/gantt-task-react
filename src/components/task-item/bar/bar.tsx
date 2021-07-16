@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import {
   progressWithByParams,
@@ -23,17 +24,17 @@ export const Bar: React.FC<TaskItemProps> = ({
     task.y,
     task.height
   );
-
   const handleHeight = task.height - 2;
-
   useEffect(() => {
     if (jsPlumb) {
       // @ts-ignore
       jsPlumb.addEndpoint(
         task.id,
         {
-          anchors: ["Right"],
+          anchors: "Right",
+          uuid: task.id + "-Right",
         },
+
         commonConfig
       );
       // @ts-ignore
@@ -41,67 +42,72 @@ export const Bar: React.FC<TaskItemProps> = ({
         task.id,
         {
           anchor: "Left",
+          uuid: task.id + "-Left",
         },
         commonConfig
       );
-      jsPlumb.bind("click", function (conn: any) {
-        console.log(conn, "conn");
-      });
     }
   }, [jsPlumb]);
+  useEffect(() => {
+    if (jsPlumb) {
+      jsPlumb.revalidate(task.id);
+    }
+  }, [task]);
   return (
-    <g className={styles.barWrapper} tabIndex={0}>
-      <BarDisplay
-        x={task.x1}
-        y={task.y}
-        task={task}
-        width={task.x2 - task.x1}
-        height={task.height}
-        progressWidth={progressWidth}
-        barCornerRadius={task.barCornerRadius}
-        styles={task.styles}
-        isSelected={isSelected}
-        id={task.id}
-        onMouseDown={e => {
-          isDateChangeable && onEventStart("move", task, e);
-        }}
-      />
-      <g className="handleGroup">
-        {isDateChangeable && (
-          <g>
-            {/* left */}
-            <BarDateHandle
-              x={task.x1 + 1}
-              y={task.y + 1}
-              width={task.handleWidth}
-              height={handleHeight}
-              barCornerRadius={task.barCornerRadius}
+    <svg>
+      <g className={styles.barWrapper} tabIndex={0}>
+        <BarDisplay
+          x={task.x1}
+          y={task.y}
+          task={task}
+          width={task.x2 - task.x1}
+          height={task.height}
+          progressWidth={progressWidth}
+          barCornerRadius={task.barCornerRadius}
+          styles={task.styles}
+          isSelected={isSelected}
+          id={task.id}
+          onMouseDown={e => {
+            isDateChangeable && onEventStart("move", task, e);
+          }}
+        />
+        <g className="handleGroup">
+          {isDateChangeable && (
+            <g>
+              {/* left */}
+              <BarDateHandle
+                x={task.x1 + 1}
+                y={task.y + 1}
+                width={task.handleWidth}
+                height={handleHeight}
+                barCornerRadius={task.barCornerRadius}
+                onMouseDown={e => {
+                  onEventStart("start", task, e);
+                }}
+              />
+              {/* right */}
+              <BarDateHandle
+                x={task.x2 - task.handleWidth - 1}
+                y={task.y + 1}
+                width={task.handleWidth}
+                height={handleHeight}
+                barCornerRadius={task.barCornerRadius}
+                onMouseDown={e => {
+                  onEventStart("end", task, e);
+                }}
+              />
+            </g>
+          )}
+          {isProgressChangeable && (
+            <BarProgressHandle
+              progressPoint={progressPoint}
               onMouseDown={e => {
-                onEventStart("start", task, e);
+                onEventStart("progress", task, e);
               }}
             />
-            {/* right */}
-            <BarDateHandle
-              x={task.x2 - task.handleWidth - 1}
-              y={task.y + 1}
-              width={task.handleWidth}
-              height={handleHeight}
-              barCornerRadius={task.barCornerRadius}
-              onMouseDown={e => {
-                onEventStart("end", task, e);
-              }}
-            />
-          </g>
-        )}
-        {isProgressChangeable && (
-          <BarProgressHandle
-            progressPoint={progressPoint}
-            onMouseDown={e => {
-              onEventStart("progress", task, e);
-            }}
-          />
-        )}
+          )}
+        </g>
       </g>
-    </g>
+    </svg>
   );
 };
