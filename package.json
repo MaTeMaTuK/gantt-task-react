@@ -1,11 +1,7 @@
 {
-  "name": "gantt-task-react",
-  "version": "0.3.2",
-  "description": "Interactive Gantt Chart for React with TypeScript.",
-  "author": "MaTeMaTuK <maksym.vikarii@gmail.com>",
-  "homepage": "https://github.com/MaTeMaTuK/gantt-task-react",
+  "name": "proxima-gantt",
+  "version": "0.1.0",
   "license": "MIT",
-  "repository": "MaTeMaTuK/gantt-task-react",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
