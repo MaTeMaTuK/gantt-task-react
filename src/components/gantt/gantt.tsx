@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
+// import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import {
