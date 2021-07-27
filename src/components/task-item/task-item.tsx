@@ -37,7 +37,6 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     ...props,
   };
   const textRef = useRef<SVGTextElement>(null);
-
   const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
   const [isTextInside, setIsTextInside] = useState(true);
   useEffect(() => {
@@ -109,22 +108,6 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       >
         {task.name}
       </text>
-      {/* 测试代码 */}
-      {/* <svg
-        width="43860"
-        height="200"
-        fill="red"
-        x="0"
-        y="0"
-        style={{ border: "1px solid gray", transform: "translateX(1000px)" }}
-      >
-        <g>
-          <rect x={task.x1} y="60" width="50" height="50" id="rect1" />
-        </g>
-        <g>
-          <rect x={task.x2} y="60" width="100" height="50" id="rect2" />
-        </g>
-      </svg> */}
     </g>
   );
 };
