@@ -10,7 +10,7 @@ import {
   offsetCalculators,
   sizeCalculators,
   relationReverse,
-  //commonConfig,
+  // commonConfig,
   relationInit,
 } from "../../helpers/jsPlumbConfig";
 import {
@@ -61,8 +61,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onDoubleClick,
   onDelete,
 }) => {
-  const [currentTask, setCurrentTask] = useState(null);
-  const [currentConn, setCurrentConn] = useState(null);
+  const [connectUuids, setConnectUuids] = useState([]);
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
@@ -199,9 +198,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     task: BarTask,
     event?: React.MouseEvent | React.KeyboardEvent
   ) => {
-    // @ts-ignore
-    setCurrentTask(task);
-    setCurrentConn(null);
     if (!event) {
       if (action === "select") {
         setSelectedTask(task.id);
@@ -310,13 +306,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
             content: "确定要解除卡片的关联关系吗？",
             okText: "确认",
             cancelText: "取消",
-            onOk: async () => {
-              const res = await delConnection(currentLink[0].objectId);
-              if (res === "success") {
-                setCurrentConn(conn);
-                setCurrentTask(null);
-              }
-            },
+            onOk: () => delConnection(currentLink[0].objectId),
           });
         }
       });
@@ -345,28 +335,21 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         return true;
       });
       // @ts-ignore
-      jsPlumbInstance.bind(
-        "connection",
-        async (infor: any, originalEvent: any) => {
-          const linkTypeId = getLinkTypeId(
-            infor.connection.endpoints[0].anchor.type,
-            infor.connection.endpoints[1].anchor.type
-          );
-          const params = {
-            source: infor.sourceId,
-            destination: infor.targetId,
-            linkType: linkTypeId,
-          };
-          if (originalEvent) {
-            infor.connection.setData(linkTypeId);
-            const res = await addConnection(params);
-            if (res === "success") {
-              setCurrentConn(infor);
-              setCurrentTask(null);
-            }
-          }
+      jsPlumbInstance.bind("connection", (infor: any, originalEvent: any) => {
+        const linkTypeId = getLinkTypeId(
+          infor.connection.endpoints[0].anchor.type,
+          infor.connection.endpoints[1].anchor.type
+        );
+        const params = {
+          source: infor.sourceId,
+          destination: infor.targetId,
+          linkType: linkTypeId,
+        };
+        if (originalEvent) {
+          infor.connection.setData(linkTypeId);
+          addConnection(params);
         }
-      );
+      });
     }
     return () => {
       if (jsPlumbInstance) {
@@ -381,16 +364,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   }, [jsPlumbInstance, itemLinks]);
   useEffect(() => {
     if (itemLinks.length && tasks.length && jsPlumbInstance) {
-      if (currentTask) {
-        // @ts-ignore
-        jsPlumbInstance.deleteConnectionsForElement(currentTask.id);
-      }
-      if (currentConn) {
-        // @ts-ignore
-        jsPlumbInstance.deleteConnectionsForElement(currentConn.targetId);
-        // @ts-ignore
-        jsPlumbInstance.deleteConnectionsForElement(currentConn.sourceId);
-      }
+      const connectUuids: any = [];
       tasks.forEach((task: any) => {
         // 找到需要连线的卡片
         const itemFilter = itemLinks?.filter((ele: any) => {
@@ -404,23 +378,47 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               continue;
             }
           }
-          setTimeout(() => {
-            // @ts-ignore
-            const connect = jsPlumbInstance.connect({
-              uuids: [
-                `${ele.source.objectId}-${relationInit[relationType][0]}`,
-                `${ele.destination.objectId}-${relationInit[relationType][1]}`,
-              ],
-            });
-            // 给连线设置linkType
-            if (connect) {
-              connect.setData(ganttConfig.relation[relationType]);
-            }
-          }, 20);
+          connectUuids.push({
+            source: ele.source.objectId,
+            destination: ele.destination.objectId,
+            relationType: relationType,
+          });
         });
       });
+      setConnectUuids(connectUuids);
     }
   }, [jsPlumbInstance, itemLinks, tasks]);
+
+  useEffect(() => {
+    if (jsPlumbInstance) {
+      // @ts-ignore
+      jsPlumbInstance.setSuspendDrawing(true);
+      for (let i = 0; i < connectUuids.length; i++) {
+        const uuidObj = connectUuids[i];
+        const { source, destination, relationType } = uuidObj;
+        const uuid = [
+          `${source}-${relationInit[relationType][0]}`,
+          `${destination}-${relationInit[relationType][1]}`,
+        ];
+        // @ts-ignore
+        const connect = jsPlumbInstance.connect({
+          uuids: uuid,
+        });
+        // 给连线设置linkType
+        if (connect) {
+          connect.setData(ganttConfig.relation[relationType]);
+        }
+      }
+      // @ts-ignore
+      jsPlumbInstance.setSuspendDrawing(false, true);
+    }
+    return () => {
+      if (jsPlumbInstance) {
+        // @ts-ignore
+        jsPlumbInstance.deleteEveryConnection();
+      }
+    };
+  }, [jsPlumbInstance, JSON.stringify(connectUuids)]);
   return (
     <g className="content">
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>

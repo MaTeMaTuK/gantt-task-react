@@ -377,7 +377,6 @@ export const GridBody: React.FC<GridBodyProps> = ({
       }}
     >
       <g className="ticks">{ticks}</g>
-      <g className="rows">{gridRows}</g>
 
       <g className="rowLines">{rowLines}</g>
       <g className="rows">{gridRows}</g>
