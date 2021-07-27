@@ -18,8 +18,8 @@ export const BarParent: React.FC<TaskItemProps> = ({
 }) => {
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const progressPoint = getProgressPoint(
-    progressWidth + task.x1,
-    task.y,
+    progressWidth + task.x1 + 1,
+    task.y + 5,
     task.height
   );
   const handleHeight = task.height - 2;

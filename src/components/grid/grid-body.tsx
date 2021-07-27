@@ -174,17 +174,38 @@ export const GridBody: React.FC<GridBodyProps> = ({
   };
   for (let i = 0; i < tasks.length; i++) {
     gridRows.push(
-      <rect
-        key={"Row" + tasks[i].id + i}
-        x="0"
-        y={y}
-        width={svgWidth}
-        height={rowHeight}
-        className={styles.gridRow}
-        onMouseMove={e => {
-          handleMouseMove(e, i);
+      <g
+        onMouseEnter={(e: any) => {
+          const ele = e.target.parentNode.firstChild;
+          ele && (ele.style.fill = "#f3f3f3");
         }}
-      />
+        onMouseLeave={(e: any) => {
+          const ele = e.target.parentNode.firstChild;
+          ele && (ele.style.fill = "");
+        }}
+      >
+        <rect
+          key={"Row" + tasks[i].id + i}
+          x="0"
+          y={y}
+          width={svgWidth}
+          height={rowHeight}
+          className={styles.gridRow}
+          onMouseMove={(e: any) => {
+            handleMouseMove(e, i);
+          }}
+        />
+        <rect
+          x={translateX + 0.5}
+          y={y}
+          width={columnWidth / parts}
+          height={rowHeight}
+          fill={isShow ? "#DAE0FF" : "transparent"}
+          onMouseMove={() => {
+            handleInvalidColumnMouseMove(i, tasks[i]);
+          }}
+        />
+      </g>
     );
     invalidColumn.push(
       <rect
@@ -325,7 +346,8 @@ export const GridBody: React.FC<GridBodyProps> = ({
       <g className="rows">{gridRows}</g>
 
       <g className="rowLines">{rowLines}</g>
-      <g className="invalidColumn">{invalidColumn}</g>
+      <g className="rows">{gridRows}</g>
+      {false && <g className="invalidColumn">{invalidColumn}</g>}
       {isShow && <g className="invalidBar">{invalidBar}</g>}
       <g className="today">{today}</g>
     </g>

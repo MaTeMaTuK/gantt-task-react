@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 48px;
-  border-bottom: 1px solid #eee;
+  border: 1px solid #eee;
 }
 
 .horizontalContainer {
@@ -48,7 +48,7 @@
 }
 .ganttHeader {
   text-align: right;
-  margin-bottom: 20px;
+  margin: 10px 0;
   padding: 0 20px;
 }
 .cursor {
@@ -57,15 +57,9 @@
 
 .taskListWrapper {
   position: relative;
-}
-
-.taskListWrapper .mask {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 16px;
-  background: #fff;
-  height: calc(100% - 48px);
+  margin-right: 15px;
+  border-top: 1px solid #eee;
+  border-left: 1px solid #eee;
 }
 
 .backgroundSvg {
@@ -78,4 +72,72 @@
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.dividerWrapper{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  background: #fff;
+  height: 100%;
+}
+
+.dividerContainer {
+  position: relative;
+  border-left: 1px solid #eee;
+}
+
+.dividerContainer > hr {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 0;
+  height: 100%;
+  margin: 0;
+  border: none;
+  border-left: 2px solid #919eab;
+  cursor: col-resize;
+}
+
+.dividerIconWarpper {
+  position: absolute;
+  left: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.dividerIconWarpper.reverse  i:before{
+  transform: rotate(-30deg);
+}
+
+.dividerIconWarpper.reverse  i:after{
+  transform: rotate(30deg);
+}
+
+.dividerIconWarpper i:before{
+  transform: rotate(30deg);
+  bottom: -1px;
+}
+
+.dividerIconWarpper i:after{
+  transform: rotate(-30deg);
+  top: -1px;
+}
+
+.dividerIconWarpper i:after,
+.dividerIconWarpper i:before {
+  content: "";
+  display: block;
+  position: relative;
+  width: 2px;
+  height: 8px;
+  background-color: #919eab;
+  border-radius: 1px;
 }

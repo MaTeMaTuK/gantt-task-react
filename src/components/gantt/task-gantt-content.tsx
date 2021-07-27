@@ -61,6 +61,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onDoubleClick,
   onDelete,
 }) => {
+  const [currentTask, setCurrentTask] = useState(null);
+  const [currentConn, setCurrentConn] = useState(null);
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
@@ -197,6 +199,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     task: BarTask,
     event?: React.MouseEvent | React.KeyboardEvent
   ) => {
+    // @ts-ignore
+    setCurrentTask(task);
+    setCurrentConn(null);
     if (!event) {
       if (action === "select") {
         setSelectedTask(task.id);
@@ -270,12 +275,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   useEffect(() => {
     if (jsPlumbInstance) {
       // @ts-ignore
-      jsPlumbInstance.unbind("click");
-      // @ts-ignore
-      jsPlumbInstance.unbind("beforeDrop");
-      // @ts-ignore
-      jsPlumbInstance.unbind("connection");
-      // @ts-ignore
       const originalOffset = jsPlumbInstance.getOffset;
       // @ts-ignore
       const originalSize = jsPlumbInstance.getSize;
@@ -311,7 +310,13 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
             content: "确定要解除卡片的关联关系吗？",
             okText: "确认",
             cancelText: "取消",
-            onOk: () => delConnection(currentLink[0].objectId),
+            onOk: async () => {
+              const res = await delConnection(currentLink[0].objectId);
+              if (res === "success") {
+                setCurrentConn(conn);
+                setCurrentTask(null);
+              }
+            },
           });
         }
       });
@@ -340,28 +345,52 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         return true;
       });
       // @ts-ignore
-      jsPlumbInstance.bind("connection", (infor: any, originalEvent: any) => {
-        const linkTypeId = getLinkTypeId(
-          infor.connection.endpoints[0].anchor.type,
-          infor.connection.endpoints[1].anchor.type
-        );
-        const params = {
-          source: infor.sourceId,
-          destination: infor.targetId,
-          linkType: linkTypeId,
-        };
-        if (originalEvent) {
-          infor.connection.setData(linkTypeId);
-          addConnection(params);
+      jsPlumbInstance.bind(
+        "connection",
+        async (infor: any, originalEvent: any) => {
+          const linkTypeId = getLinkTypeId(
+            infor.connection.endpoints[0].anchor.type,
+            infor.connection.endpoints[1].anchor.type
+          );
+          const params = {
+            source: infor.sourceId,
+            destination: infor.targetId,
+            linkType: linkTypeId,
+          };
+          if (originalEvent) {
+            infor.connection.setData(linkTypeId);
+            const res = await addConnection(params);
+            if (res === "success") {
+              setCurrentConn(infor);
+              setCurrentTask(null);
+            }
+          }
         }
-      });
+      );
     }
+    return () => {
+      if (jsPlumbInstance) {
+        // @ts-ignore
+        jsPlumbInstance.unbind("click");
+        // @ts-ignore
+        jsPlumbInstance.unbind("beforeDrop");
+        // @ts-ignore
+        jsPlumbInstance.unbind("connection");
+      }
+    };
   }, [jsPlumbInstance, itemLinks]);
   useEffect(() => {
     if (itemLinks.length && tasks.length && jsPlumbInstance) {
-      // 删除所有连线
-      // @ts-ignore
-      jsPlumbInstance.deleteEveryConnection();
+      if (currentTask) {
+        // @ts-ignore
+        jsPlumbInstance.deleteConnectionsForElement(currentTask.id);
+      }
+      if (currentConn) {
+        // @ts-ignore
+        jsPlumbInstance.deleteConnectionsForElement(currentConn.targetId);
+        // @ts-ignore
+        jsPlumbInstance.deleteConnectionsForElement(currentConn.sourceId);
+      }
       tasks.forEach((task: any) => {
         // 找到需要连线的卡片
         const itemFilter = itemLinks?.filter((ele: any) => {
@@ -384,12 +413,14 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               ],
             });
             // 给连线设置linkType
-            connect.setData(ganttConfig.relation[relationType]);
+            if (connect) {
+              connect.setData(ganttConfig.relation[relationType]);
+            }
           }, 20);
         });
       });
     }
-  }, [itemLinks, jsPlumbInstance]);
+  }, [jsPlumbInstance, itemLinks, tasks]);
   return (
     <g className="content">
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>
