@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
+// import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import {
@@ -116,6 +116,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // const [todayDistance, setTodayDistance] = useState(0);
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
+  const minWidth = 15; // 面板折叠后，taskListWidth 设置成15（设置成0后，dom节点会移除）
   // task change events
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
@@ -275,6 +276,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           }
           refScrollX.current = newScrollX;
           setElementsScrollX();
+          setScrollX(refScrollX.current);
         }
       } else {
         if (event.deltaY !== 0) {
@@ -289,6 +291,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           }
           refScrollY.current = newScrollY;
           setElementsScrollY();
+          setScrollY(refScrollY.current);
         }
       }
       setIgnoreScrollEvent(true);
@@ -321,6 +324,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
       refScrollY.current = event.currentTarget.scrollTop;
       setElementsScrollY();
+      setScrollY(refScrollY.current);
     }
     setIgnoreScrollEvent(false);
   };
@@ -330,7 +334,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
       refScrollX.current = event.currentTarget.scrollLeft;
       setElementsScrollX();
-      // setScrollX(scrollX);
+      setScrollX(refScrollX.current);
     }
     setIgnoreScrollEvent(false);
   };
@@ -373,6 +377,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       }
       refScrollX.current = newScrollX;
       setElementsScrollX();
+      setScrollX(refScrollX.current);
     } else {
       if (newScrollY < 0) {
         newScrollY = 0;
@@ -381,6 +386,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       }
       refScrollY.current = newScrollY;
       setElementsScrollY();
+      setScrollY(refScrollY.current);
     }
     setIgnoreScrollEvent(true);
   };
@@ -505,6 +511,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     refScrollX.current = newTickX - svgContainerWidth / 2;
     setElementsScrollX();
+    setScrollX(refScrollX.current);
   }, [
     dateSetup,
     viewMode,
@@ -512,11 +519,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     svgContainerWidth,
     setElementsScrollX,
   ]);
-
-  useEffect(() => {
-    setScrollX(refScrollX.current);
-    setScrollY(refScrollY.current);
-  }, [refScrollX.current, refScrollY.current, refScrollX]);
 
   useEffect(() => {
     toToday();
@@ -567,9 +569,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const handleDividerClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
-    if (taskListWidth > 0) {
+    if (taskListWidth > minWidth) {
       dividerPositionRef.current.left = taskListWidth;
-      setTaskListWidth(0);
+      setTaskListWidth(minWidth);
     } else {
       setTaskListWidth(dividerPositionRef.current.left);
     }
@@ -630,7 +632,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             <div
               className={styles.dividerWrapper}
               style={{
-                left: taskListWidth - 15 > 0 ? `${taskListWidth - 15}px` : 0,
+                left:
+                  taskListWidth - minWidth > 0
+                    ? `${taskListWidth - minWidth}px`
+                    : 0,
                 visibility: tasks?.length ? "visible" : "hidden",
               }}
             >
@@ -642,12 +647,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               >
                 <hr
                   onMouseDown={
-                    taskListWidth === 0 ? undefined : handleDividerMouseDown
+                    taskListWidth <= minWidth
+                      ? undefined
+                      : handleDividerMouseDown
                   }
                 />
                 <span
                   className={
-                    taskListWidth === 0
+                    taskListWidth <= minWidth
                       ? `${styles.dividerIconWarpper} ${styles.reverse}`
                       : styles.dividerIconWarpper
                   }

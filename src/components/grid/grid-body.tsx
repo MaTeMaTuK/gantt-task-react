@@ -183,6 +183,8 @@ export const GridBody: React.FC<GridBodyProps> = ({
           const ele = e.target.parentNode.firstChild;
           ele && (ele.style.fill = "");
         }}
+        // @ts-ignore
+        index={i}
       >
         <rect
           key={"Row" + tasks[i].id + i}
@@ -203,6 +205,38 @@ export const GridBody: React.FC<GridBodyProps> = ({
           fill={isShow ? "#DAE0FF" : "transparent"}
           onMouseMove={() => {
             handleInvalidColumnMouseMove(i, tasks[i]);
+          }}
+          onMouseEnter={(e: any) => {
+            const ele = e.target.parentNode;
+            const index = ele.getAttribute("index");
+            if (isShow && i === Number(index)) {
+              ele.lastChild.style.fill = "#7B90FF";
+            }
+          }}
+          onMouseLeave={(e: any) => {
+            const ele = e.target.parentNode;
+            ele.lastChild.style.fill = "transparent";
+          }}
+        />
+        <rect
+          x={translateX}
+          y={y + rowHeight / 2 - 30 / 2}
+          width={columnWidth / parts}
+          height={30}
+          fill="transparent"
+          onClick={invalidBarClick}
+          cursor="pointer"
+          // style={{ display: isShow ? "inhert" : "none" }}
+          onMouseEnter={(e: any) => {
+            const ele = e.target.parentNode;
+            const index = ele.getAttribute("index");
+            console.log(2222, isShow, i, index);
+            if (isShow && i === Number(index)) {
+              e.target.style.fill = "#7B90FF";
+            }
+          }}
+          onMouseLeave={(e: any) => {
+            e.target.style.fill = "transparent";
           }}
         />
       </g>
@@ -348,7 +382,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
       <g className="rowLines">{rowLines}</g>
       <g className="rows">{gridRows}</g>
       {false && <g className="invalidColumn">{invalidColumn}</g>}
-      {isShow && <g className="invalidBar">{invalidBar}</g>}
+      {false && <g className="invalidBar">{invalidBar}</g>}
       <g className="today">{today}</g>
     </g>
   );
