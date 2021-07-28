@@ -230,7 +230,6 @@ export const GridBody: React.FC<GridBodyProps> = ({
           onMouseEnter={(e: any) => {
             const ele = e.target.parentNode;
             const index = ele.getAttribute("index");
-            console.log(2222, isShow, i, index);
             if (isShow && i === Number(index)) {
               e.target.style.fill = "#7B90FF";
             }
