@@ -206,17 +206,6 @@ export const GridBody: React.FC<GridBodyProps> = ({
           onMouseMove={() => {
             handleInvalidColumnMouseMove(i, tasks[i]);
           }}
-          onMouseEnter={(e: any) => {
-            const ele = e.target.parentNode;
-            const index = ele.getAttribute("index");
-            if (isShow && i === Number(index)) {
-              ele.lastChild.style.fill = "#7B90FF";
-            }
-          }}
-          onMouseLeave={(e: any) => {
-            const ele = e.target.parentNode;
-            ele.lastChild.style.fill = "transparent";
-          }}
         />
         <rect
           x={translateX}
@@ -224,9 +213,8 @@ export const GridBody: React.FC<GridBodyProps> = ({
           width={columnWidth / parts}
           height={30}
           fill="transparent"
-          onClick={invalidBarClick}
-          cursor="pointer"
-          // style={{ display: isShow ? "inhert" : "none" }}
+          onClick={isShow ? invalidBarClick : () => {}}
+          cursor={isShow ? "pointer" : "default"}
           onMouseEnter={(e: any) => {
             const ele = e.target.parentNode;
             const index = ele.getAttribute("index");

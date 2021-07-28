@@ -418,7 +418,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         jsPlumbInstance.deleteEveryConnection();
       }
     };
-  }, [jsPlumbInstance, JSON.stringify(connectUuids)]);
+  }, [jsPlumbInstance, connectUuids]);
   return (
     <g className="content">
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>

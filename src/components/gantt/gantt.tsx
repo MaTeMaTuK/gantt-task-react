@@ -513,7 +513,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setElementsScrollX();
     setScrollX(refScrollX.current);
   }, [
-    dateSetup,
+    JSON.stringify(dateSetup),
     viewMode,
     wrapperRef.current,
     svgContainerWidth,
