@@ -108,23 +108,22 @@ export const StandardTooltipContent: React.FC<{
   };
   return (
     <div className={styles.tooltipDefaultContainer} style={style}>
-      <b style={{ fontSize: fontSize + 6 }}>{`${
-        task.name
-      }: ${task.start.getDate()}-${
-        task.start.getMonth() + 1
-      }-${task.start.getFullYear()} - ${task.end.getDate()}-${
-        task.end.getMonth() + 1
-      }-${task.end.getFullYear()}`}</b>
-      {task.end.getTime() - task.start.getTime() !== 0 && (
-        <p className={styles.tooltipDefaultContainerParagraph}>{`Duration: ${~~(
-          (task.end.getTime() - task.start.getTime()) /
-          (1000 * 60 * 60 * 24)
-        )} day(s)`}</p>
-      )}
-
-      <p className={styles.tooltipDefaultContainerParagraph}>
-        {!!task.progress && `Progress: ${task.progress} %`}
-      </p>
+      <div className={styles.tooltipId}>{task.id}</div>
+      <div className={styles.tooltipName}>{task.name}</div>
+      <div>
+        <span className={styles.tooltipTimeBefor}>开始日期：</span>
+        <span className={styles.tooltipTime}>
+          {task.start.getFullYear()}/{task.start.getMonth() + 1}/
+          {task.start.getDate()}
+        </span>
+      </div>
+      <div>
+        <span className={styles.tooltipTimeBefor}>结束日期：</span>
+        <span className={styles.tooltipTime}>
+          {task.end.getFullYear()}/{task.end.getMonth() + 1}/
+          {task.end.getDate()}
+        </span>
+      </div>
     </div>
   );
 };

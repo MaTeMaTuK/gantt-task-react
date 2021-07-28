@@ -28,3 +28,18 @@
   display: flex;
   pointer-events: none;
 }
+.tooltipId {
+  color: #3463ca;
+  font-weight: 600;
+  font-size:16px;
+}
+.tooltipName {
+  font-weight: 600;
+  font-size: 16px;
+}
+.tooltipTimeBefor {
+  color: #838c9e;
+}
+.tooltipTime {
+  font-weight: 600;
+}
