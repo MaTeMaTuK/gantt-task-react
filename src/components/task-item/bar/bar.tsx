@@ -27,6 +27,8 @@ export const Bar: React.FC<TaskItemProps> = ({
   const handleHeight = task.height - 2;
   useEffect(() => {
     if (jsPlumb) {
+      // 生成新节点删除旧节点时需设置setIdChanged
+      jsPlumb.setIdChanged(task.id, task.id);
       jsPlumb.addEndpoint(
         task.id,
         {
@@ -52,13 +54,21 @@ export const Bar: React.FC<TaskItemProps> = ({
         jsPlumb.deleteEndpoint(task.id + "-Right");
       }
     };
-  }, [jsPlumb, task]);
+  }, [jsPlumb, task.y]);
   useEffect(() => {
     if (jsPlumb) {
       // 重绘元素，解决拖动时间块连接点跟随
       jsPlumb.revalidate(task.id);
     }
-  }, [task]);
+  }, [jsPlumb, task]);
+  useEffect(() => {
+    return () => {
+      if (jsPlumb) {
+        jsPlumb.deleteEndpoint(task.id + "-Left");
+        jsPlumb.deleteEndpoint(task.id + "-Right");
+      }
+    };
+  }, [jsPlumb]);
   useEffect(() => {}, [barRef, jsPlumb]);
   return (
     <svg ref={barRef}>
