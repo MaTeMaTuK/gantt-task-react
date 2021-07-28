@@ -1,4 +1,3 @@
-
 import { ViewMode } from "../types/public-types";
 
 type DateHelperScales =
@@ -56,7 +55,9 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
 export const ganttDateRange = (viewMode: ViewMode) => {
   let newStartDate: Date = new Date(Date.now());
   let newEndDate: Date = new Date(Date.now());
-  const year = 1; // 1年
+  const year = 10; // 10年
+  const oneYear = 1; // 1年
+  // 只有week 、 day 是一年 其他的是10年
   switch (viewMode) {
     case ViewMode.Month:
       newStartDate = addToDate(newStartDate, -year * 12 - 1, "month");
@@ -67,14 +68,18 @@ export const ganttDateRange = (viewMode: ViewMode) => {
     case ViewMode.Week: // 周要是7的倍速，否则会显示不准确
       newStartDate = startOfDate(newStartDate, "day");
       newEndDate = startOfDate(newEndDate, "day");
-      newStartDate = addToDate(getMonday(newStartDate), -7 * 52 * year, "day");
-      newEndDate = addToDate(newEndDate, year + 1, "year");
+      newStartDate = addToDate(
+        getMonday(newStartDate),
+        -7 * 52 * oneYear,
+        "day"
+      );
+      newEndDate = addToDate(newEndDate, oneYear + 1, "year");
       break;
     case ViewMode.Day:
       newStartDate = startOfDate(newStartDate, "day");
       newEndDate = startOfDate(newEndDate, "day");
-      newStartDate = addToDate(newStartDate, -year, "year");
-      newEndDate = addToDate(newStartDate, year + 1, "year");
+      newStartDate = addToDate(newStartDate, -oneYear, "year");
+      newEndDate = addToDate(newStartDate, oneYear + 1, "year");
       break;
     case ViewMode.Quarter:
     case ViewMode.Year:
