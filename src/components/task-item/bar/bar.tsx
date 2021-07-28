@@ -1,5 +1,4 @@
-
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   progressWithByParams,
   getProgressPoint,
@@ -18,6 +17,7 @@ export const Bar: React.FC<TaskItemProps> = ({
   isSelected,
   jsPlumb,
 }) => {
+  const barRef = useRef(null);
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const progressPoint = getProgressPoint(
     progressWidth + task.x1,
@@ -27,7 +27,8 @@ export const Bar: React.FC<TaskItemProps> = ({
   const handleHeight = task.height - 2;
   useEffect(() => {
     if (jsPlumb) {
-      // @ts-ignore
+      // 生成新节点删除旧节点时需设置setIdChanged
+      jsPlumb.setIdChanged(task.id, task.id);
       jsPlumb.addEndpoint(
         task.id,
         {
@@ -47,14 +48,30 @@ export const Bar: React.FC<TaskItemProps> = ({
         commonConfig
       );
     }
-  }, [jsPlumb]);
+    return () => {
+      if (jsPlumb) {
+        jsPlumb.deleteEndpoint(task.id + "-Left");
+        jsPlumb.deleteEndpoint(task.id + "-Right");
+      }
+    };
+  }, [jsPlumb, task.y]);
   useEffect(() => {
     if (jsPlumb) {
+      // 重绘元素，解决拖动时间块连接点跟随
       jsPlumb.revalidate(task.id);
     }
-  }, [task]);
+  }, [jsPlumb, task]);
+  useEffect(() => {
+    return () => {
+      if (jsPlumb) {
+        jsPlumb.deleteEndpoint(task.id + "-Left");
+        jsPlumb.deleteEndpoint(task.id + "-Right");
+      }
+    };
+  }, [jsPlumb]);
+  useEffect(() => {}, [barRef, jsPlumb]);
   return (
-    <svg>
+    <svg ref={barRef}>
       <g className={styles.barWrapper} tabIndex={0}>
         <BarDisplay
           x={task.x1}

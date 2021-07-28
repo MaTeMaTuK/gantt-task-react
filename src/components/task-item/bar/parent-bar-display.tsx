@@ -41,19 +41,19 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
 
   const projectLeftTriangle = [
     task.x1,
-    task.y + task.height / 2 - 1,
+    task.y + task.height - 1,
     task.x1,
-    task.y + task.height + 10,
-    task.x1 + 15,
-    task.y + task.height / 2 - 1,
+    task.y + task.height + 5,
+    task.x1 + 5,
+    task.y + task.height - 1,
   ].join(",");
   const projectRightTriangle = [
     task.x2,
-    task.y + task.height / 2 - 1,
+    task.y + task.height - 1,
     task.x2,
-    task.y + task.height + 10,
-    task.x2 - 15,
-    task.y + task.height / 2 - 1,
+    task.y + task.height + 5,
+    task.x2 - 5,
+    task.y + task.height - 1,
   ].join(",");
 
   return (

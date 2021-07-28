@@ -10,7 +10,7 @@ import {
   offsetCalculators,
   sizeCalculators,
   relationReverse,
-  //commonConfig,
+  // commonConfig,
   relationInit,
 } from "../../helpers/jsPlumbConfig";
 import {
@@ -61,6 +61,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onDoubleClick,
   onDelete,
 }) => {
+  const [connectUuids, setConnectUuids] = useState([]);
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
@@ -270,12 +271,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   useEffect(() => {
     if (jsPlumbInstance) {
       // @ts-ignore
-      jsPlumbInstance.unbind("click");
-      // @ts-ignore
-      jsPlumbInstance.unbind("beforeDrop");
-      // @ts-ignore
-      jsPlumbInstance.unbind("connection");
-      // @ts-ignore
       const originalOffset = jsPlumbInstance.getOffset;
       // @ts-ignore
       const originalSize = jsPlumbInstance.getSize;
@@ -356,12 +351,20 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         }
       });
     }
+    return () => {
+      if (jsPlumbInstance) {
+        // @ts-ignore
+        jsPlumbInstance.unbind("click");
+        // @ts-ignore
+        jsPlumbInstance.unbind("beforeDrop");
+        // @ts-ignore
+        jsPlumbInstance.unbind("connection");
+      }
+    };
   }, [jsPlumbInstance, itemLinks]);
   useEffect(() => {
     if (itemLinks.length && tasks.length && jsPlumbInstance) {
-      // 删除所有连线
-      // @ts-ignore
-      jsPlumbInstance.deleteEveryConnection();
+      const connectUuids: any = [];
       tasks.forEach((task: any) => {
         // 找到需要连线的卡片
         const itemFilter = itemLinks?.filter((ele: any) => {
@@ -375,21 +378,47 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               continue;
             }
           }
-          setTimeout(() => {
-            // @ts-ignore
-            const connect = jsPlumbInstance.connect({
-              uuids: [
-                `${ele.source.objectId}-${relationInit[relationType][0]}`,
-                `${ele.destination.objectId}-${relationInit[relationType][1]}`,
-              ],
-            });
-            // 给连线设置linkType
-            connect.setData(ganttConfig.relation[relationType]);
-          }, 20);
+          connectUuids.push({
+            source: ele.source.objectId,
+            destination: ele.destination.objectId,
+            relationType: relationType,
+          });
         });
       });
+      setConnectUuids(connectUuids);
     }
-  }, [itemLinks, jsPlumbInstance]);
+  }, [jsPlumbInstance, itemLinks, tasks]);
+
+  useEffect(() => {
+    if (jsPlumbInstance) {
+      // @ts-ignore
+      jsPlumbInstance.setSuspendDrawing(true);
+      for (let i = 0; i < connectUuids.length; i++) {
+        const uuidObj = connectUuids[i];
+        const { source, destination, relationType } = uuidObj;
+        const uuid = [
+          `${source}-${relationInit[relationType][0]}`,
+          `${destination}-${relationInit[relationType][1]}`,
+        ];
+        // @ts-ignore
+        const connect = jsPlumbInstance.connect({
+          uuids: uuid,
+        });
+        // 给连线设置linkType
+        if (connect) {
+          connect.setData(ganttConfig.relation[relationType]);
+        }
+      }
+      // @ts-ignore
+      jsPlumbInstance.setSuspendDrawing(false, true);
+    }
+    return () => {
+      if (jsPlumbInstance) {
+        // @ts-ignore
+        jsPlumbInstance.deleteEveryConnection();
+      }
+    };
+  }, [jsPlumbInstance, connectUuids]);
   return (
     <g className="content">
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>

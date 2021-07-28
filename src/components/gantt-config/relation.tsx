@@ -44,6 +44,20 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
       relation: values,
     });
   };
+  const relactionCheck = (rule: any, value: any) => {
+    const filedData = form.getFieldsValue();
+    let isError = false;
+    Object.keys(filedData).forEach((ele: any) => {
+      if (filedData[ele] === value && rule.field !== ele) {
+        isError = true;
+      }
+    });
+    if (isError) {
+      return Promise.reject(new Error("关联关系重复， 请重新选择"));
+    } else {
+      return Promise.resolve();
+    }
+  };
   return (
     <div>
       <h4 className={styles.mb20}>
@@ -60,7 +74,12 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
         <Form.Item
           label="完成到开始关系（FS）"
           name="FS"
-          rules={[{ required: true, message: "请选择完成到开始关系（FS）" }]}
+          rules={[
+            { required: true, message: "请选择完成到开始关系（FS）" },
+            {
+              validator: relactionCheck,
+            },
+          ]}
         >
           <Select placeholder="请选择">
             {itemRelationData.map((ele: any) => {
@@ -75,7 +94,12 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
         <Form.Item
           label="完成到完成关系（FF）"
           name="FF"
-          rules={[{ required: true, message: "请选择完成到完成关系（FF）" }]}
+          rules={[
+            { required: true, message: "请选择完成到完成关系（FF）" },
+            {
+              validator: relactionCheck,
+            },
+          ]}
         >
           <Select placeholder="请选择">
             {itemRelationData.map((ele: any) => {
@@ -90,7 +114,12 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
         <Form.Item
           label="开始到开始关系（SS）"
           name="SS"
-          rules={[{ required: true, message: "请选择开始到开始关系（SS）" }]}
+          rules={[
+            { required: true, message: "请选择开始到开始关系（SS）" },
+            {
+              validator: relactionCheck,
+            },
+          ]}
         >
           <Select placeholder="请选择">
             {itemRelationData.map((ele: any) => {
@@ -105,7 +134,12 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
         <Form.Item
           label="开始到完成关系（SF）"
           name="SF"
-          rules={[{ required: true, message: "请选择开始到完成关系（SF）" }]}
+          rules={[
+            { required: true, message: "请选择开始到完成关系（SF）" },
+            {
+              validator: relactionCheck,
+            },
+          ]}
         >
           <Select placeholder="请选择">
             {itemRelationData.map((ele: any) => {

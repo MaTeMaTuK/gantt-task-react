@@ -175,6 +175,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   for (let i = 0; i < tasks.length; i++) {
     gridRows.push(
       <g
+        key={`Cell-${i}`}
         onMouseEnter={(e: any) => {
           const ele = e.target.parentNode.firstChild;
           ele && (ele.style.fill = "#f3f3f3");
@@ -198,6 +199,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           }}
         />
         <rect
+          key={"Cell" + tasks[i].id + i}
           x={translateX + 0.5}
           y={y}
           width={columnWidth / parts}
@@ -206,31 +208,19 @@ export const GridBody: React.FC<GridBodyProps> = ({
           onMouseMove={() => {
             handleInvalidColumnMouseMove(i, tasks[i]);
           }}
-          onMouseEnter={(e: any) => {
-            const ele = e.target.parentNode;
-            const index = ele.getAttribute("index");
-            if (isShow && i === Number(index)) {
-              ele.lastChild.style.fill = "#7B90FF";
-            }
-          }}
-          onMouseLeave={(e: any) => {
-            const ele = e.target.parentNode;
-            ele.lastChild.style.fill = "transparent";
-          }}
         />
         <rect
+          key={"Time" + tasks[i].id + i}
           x={translateX}
           y={y + rowHeight / 2 - 30 / 2}
           width={columnWidth / parts}
           height={30}
           fill="transparent"
-          onClick={invalidBarClick}
-          cursor="pointer"
-          // style={{ display: isShow ? "inhert" : "none" }}
+          onClick={isShow ? invalidBarClick : () => {}}
+          cursor={isShow ? "pointer" : "default"}
           onMouseEnter={(e: any) => {
             const ele = e.target.parentNode;
             const index = ele.getAttribute("index");
-            console.log(2222, isShow, i, index);
             if (isShow && i === Number(index)) {
               e.target.style.fill = "#7B90FF";
             }
@@ -243,6 +233,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     );
     invalidColumn.push(
       <rect
+        key={"invalidColumn" + tasks[i].id + i}
         x={translateX + 0.5}
         y={y}
         width={columnWidth / parts}
@@ -273,25 +264,25 @@ export const GridBody: React.FC<GridBodyProps> = ({
   for (let i = 0; i < dates.length; i++) {
     const date = dates[i];
     ticks.push(
-      <g>
+      <g key={`${date.getTime()}-${i}-ticks`}>
         <line
-          key={date.getTime()}
+          key={`${date.getTime()}-${i}-line`}
           x1={tickX}
           y1={0}
           x2={tickX}
           y2={y}
           className={styles.gridTick}
         />
-        {/* {isRestDay(date) && viewMode === ViewMode.Day && (
+        {isRestDay(date) && viewMode === ViewMode.Day && (
           <rect
-            key={date.getTime() + date.getTime()}
+            key={`${date.getTime()}-${date.getTime()}-${i}-restday`}
             x={tickX + 1}
             y="0"
             width={columnWidth - 1}
             height={y}
             className={styles.gridTickWeekday}
           />
-        )} */}
+        )}
       </g>
     );
     if (
@@ -377,6 +368,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
       }}
     >
       <g className="ticks">{ticks}</g>
+
       <g className="rowLines">{rowLines}</g>
       <g className="rows">{gridRows}</g>
       {false && <g className="invalidColumn">{invalidColumn}</g>}

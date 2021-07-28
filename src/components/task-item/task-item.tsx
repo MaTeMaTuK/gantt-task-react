@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BarTask } from "../../types/bar-task";
 import { GanttContentMoveAction } from "../../types/gantt-task-actions";
 import { Bar } from "./bar/bar";
@@ -7,7 +7,6 @@ import { BarParent } from "./bar/bar-parent";
 import { Milestone } from "./milestone/milestone";
 import { Project } from "./project/project";
 
-import style from "./task-list.module.css";
 export type TaskItemProps = {
   task: BarTask;
   arrowIndent: number;
@@ -25,21 +24,12 @@ export type TaskItemProps = {
 };
 
 export const TaskItem: React.FC<TaskItemProps> = props => {
-  const {
-    task,
-    arrowIndent,
-    isDelete,
-    taskHeight,
-    isSelected,
-    onEventStart,
-    jsPlumb,
-  } = {
+  const { task, isDelete, isSelected, onEventStart, jsPlumb } = {
     ...props,
   };
-  const textRef = useRef<SVGTextElement>(null);
 
   const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
-  const [isTextInside, setIsTextInside] = useState(true);
+
   useEffect(() => {
     switch (task.typeInternal) {
       case "milestone":
@@ -60,18 +50,6 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     }
   }, [task, isSelected, jsPlumb]);
 
-  useEffect(() => {
-    if (textRef.current) {
-      setIsTextInside(textRef.current.getBBox().width < task.x2 - task.x1);
-    }
-  }, [textRef, task]);
-  const getX = () => {
-    const width = task.x2 - task.x1;
-    const hasChild = task.barChildren.length > 0;
-    return isTextInside
-      ? task.x1 + width * 0.5
-      : task.x1 + width + arrowIndent * +hasChild + arrowIndent * 0.2;
-  };
   return (
     <g
       onKeyDown={e => {
@@ -97,34 +75,6 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       }}
     >
       {taskItem}
-      <text
-        x={getX()}
-        y={task.y + taskHeight * 0.5}
-        className={
-          isTextInside
-            ? style.barLabel
-            : style.barLabel && style.barLabelOutside
-        }
-        ref={textRef}
-      >
-        {task.name}
-      </text>
-      {/* 测试代码 */}
-      {/* <svg
-        width="43860"
-        height="200"
-        fill="red"
-        x="0"
-        y="0"
-        style={{ border: "1px solid gray", transform: "translateX(1000px)" }}
-      >
-        <g>
-          <rect x={task.x1} y="60" width="50" height="50" id="rect1" />
-        </g>
-        <g>
-          <rect x={task.x2} y="60" width="100" height="50" id="rect2" />
-        </g>
-      </svg> */}
     </g>
   );
 };
