@@ -1,4 +1,4 @@
-// import { Task, ViewMode } from "../types/public-types";
+
 import { ViewMode } from "../types/public-types";
 
 type DateHelperScales =
@@ -53,11 +53,10 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
   );
   return newDate;
 };
-// tasks: Task[], viewMode: ViewMode
 export const ganttDateRange = (viewMode: ViewMode) => {
   let newStartDate: Date = new Date(Date.now());
   let newEndDate: Date = new Date(Date.now());
-  const year = 10; // 1年
+  const year = 1; // 1年
   switch (viewMode) {
     case ViewMode.Month:
       newStartDate = addToDate(newStartDate, -year * 12 - 1, "month");
@@ -76,8 +75,6 @@ export const ganttDateRange = (viewMode: ViewMode) => {
       newEndDate = startOfDate(newEndDate, "day");
       newStartDate = addToDate(newStartDate, -year, "year");
       newEndDate = addToDate(newStartDate, year + 1, "year");
-      // newStartDate = addToDate(newStartDate, -100, "day");
-      // newEndDate = addToDate(newStartDate, 100, "day");
       break;
     case ViewMode.Quarter:
     case ViewMode.Year:
@@ -93,20 +90,6 @@ export const ganttDateRange = (viewMode: ViewMode) => {
       newEndDate = addToDate(newEndDate, 5, "day");
       break;
   }
-  // switch (viewMode) {
-  //   case ViewMode.Year:
-  //   case ViewMode.Quarter:
-  //   case ViewMode.Month:
-  //     year = 10;
-  //     break;
-  //   case ViewMode.Week:
-  //   case ViewMode.Day:
-  //     break;
-  // }
-  // newStartDate = startOfDate(newStartDate, "day");
-  // newEndDate = startOfDate(newEndDate, "day");
-  // newStartDate = addToDate(newStartDate, -year * 12 * 30, "day");
-  // newEndDate = addToDate(newEndDate, year * 12 * 30, "day");
   return [newStartDate, newEndDate];
 };
 export const seedDates = (
