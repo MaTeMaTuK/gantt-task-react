@@ -513,7 +513,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setElementsScrollX();
     setScrollX(refScrollX.current);
   }, [
-    dateSetup,
+    JSON.stringify(dateSetup),
     viewMode,
     wrapperRef.current,
     svgContainerWidth,
@@ -681,21 +681,25 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
                 TooltipContent={TooltipContent}
               />
             )}
-            <VerticalScroll
-              ref={verticalScrollContainerRef}
-              ganttFullHeight={ganttFullHeight}
-              ganttHeight={ganttHeight}
-              headerHeight={headerHeight}
-              listBottomHeight={listBottomHeight}
-              onScroll={handleScrollY}
-            />
-            <HorizontalScroll
-              ref={horizontalScrollContainerRef}
-              listBottomHeight={listBottomHeight}
-              svgWidth={svgWidth}
-              taskListWidth={taskListWidth}
-              onScroll={handleScrollX}
-            />
+            {tasks.length > 0 && (
+              <VerticalScroll
+                ref={verticalScrollContainerRef}
+                ganttFullHeight={ganttFullHeight}
+                ganttHeight={ganttHeight}
+                headerHeight={headerHeight}
+                listBottomHeight={listBottomHeight}
+                onScroll={handleScrollY}
+              />
+            )}
+            {tasks.length > 0 && (
+              <HorizontalScroll
+                ref={horizontalScrollContainerRef}
+                listBottomHeight={listBottomHeight}
+                svgWidth={svgWidth}
+                taskListWidth={taskListWidth}
+                onScroll={handleScrollX}
+              />
+            )}
           </div>
         </ConnectionHandelContext.Provider>
       </GanttConfigContext.Provider>

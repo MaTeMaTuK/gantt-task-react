@@ -138,6 +138,9 @@ const Time: React.FC<TimeProps> = () => {
         dataSource={timeList}
         pagination={false}
         className={styles.mb20}
+        rowKey={columns => {
+          return columns.itemType || "default";
+        }}
       />
       <Button type="primary" onClick={addTime}>
         添加卡片类型
