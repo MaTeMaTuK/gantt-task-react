@@ -57,7 +57,7 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
 export const ganttDateRange = (viewMode: ViewMode) => {
   let newStartDate: Date = new Date(Date.now());
   let newEndDate: Date = new Date(Date.now());
-  let year = 1; // 1年
+  const year = 10; // 1年
   switch (viewMode) {
     case ViewMode.Month:
       newStartDate = addToDate(newStartDate, -year * 12 - 1, "month");
