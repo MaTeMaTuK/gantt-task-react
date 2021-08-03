@@ -18,6 +18,7 @@ export const HorizontalScroll: React.FC<{
 
   return (
     <div
+      dir="ltr"
       style={{
         margin: rtl
           ? `0px ${taskListWidth}px 0px 0px`

@@ -12,7 +12,7 @@ export const TaskListTableDefault: React.FC<{
   selectedTaskId: string;
   setSelectedTask: (taskId: string) => void;
 }> = ({ rowHeight, rowWidth, tasks, fontFamily, fontSize, locale }) => {
-  const dateTimeOptions = {
+  const dateTimeOptions: Intl.DateTimeFormatOptions = {
     weekday: "short",
     year: "numeric",
     month: "long",

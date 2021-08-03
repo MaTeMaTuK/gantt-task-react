@@ -10,11 +10,12 @@ export const Bar: React.FC<TaskItemProps> = ({
   task,
   isProgressChangeable,
   isDateChangeable,
+  rtl,
   onEventStart,
   isSelected,
 }) => {
   const progressPoint = getProgressPoint(
-    task.progressWidth + task.x1,
+    +!rtl * task.progressWidth + task.progressX,
     task.y,
     task.height
   );

@@ -260,6 +260,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
                 rowHeight={rowHeight}
                 taskHeight={taskHeight}
                 arrowIndent={arrowIndent}
+                rtl={rtl}
               />
             );
           });
@@ -278,6 +279,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               onEventStart={handleBarEventStart}
               key={task.id}
               isSelected={!!selectedTask && task.id === selectedTask.id}
+              rtl={rtl}
             />
           );
         })}
