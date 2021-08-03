@@ -1,7 +1,8 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useMemo } from "react";
 import { Modal, Form, Select } from "antd";
 import { GanttConfigContext } from "../../contsxt";
 import { TimeItemProps } from "./time";
+import styles from "./index.module.css";
 const { Option } = Select;
 const filterOption = (input: any, option: any) => {
   return option?.children?.toLowerCase().indexOf(input?.toLowerCase()) > -1;
@@ -22,6 +23,15 @@ const ItemModal: React.FC<ItemModalProps> = ({
   const [form] = Form.useForm();
   const { itemTypeData } = useContext(GanttConfigContext);
   const { customeFieldData } = useContext(GanttConfigContext);
+  // 筛选字段类型为日期和数值的字段
+  const filterFields = (type: string) => {
+    const res = useMemo(() => {
+      return customeFieldData.filter((ele: any) => {
+        return ele?.fieldType?.key === type;
+      });
+    }, [customeFieldData]);
+    return res;
+  };
   useEffect(() => {
     if (visible) {
       form.resetFields();
@@ -67,6 +77,9 @@ const ItemModal: React.FC<ItemModalProps> = ({
               {itemTypeData.map((ele: any) => {
                 return (
                   <Option value={ele.value} key={ele.value}>
+                    {ele.icon ? (
+                      <img src={ele.icon} className={styles.icon} />
+                    ) : null}
                     {ele.label}
                   </Option>
                 );
@@ -87,14 +100,13 @@ const ItemModal: React.FC<ItemModalProps> = ({
             filterOption={filterOption}
             allowClear
           >
-            {customeFieldData &&
-              customeFieldData.map((ele: any) => {
-                return (
-                  <Option value={ele.value} key={ele.value}>
-                    {ele.label}
-                  </Option>
-                );
-              })}
+            {filterFields("Date").map((ele: any) => {
+              return (
+                <Option value={ele.value} key={ele.value}>
+                  {ele.label}
+                </Option>
+              );
+            })}
           </Select>
         </Form.Item>
         <Form.Item
@@ -108,14 +120,13 @@ const ItemModal: React.FC<ItemModalProps> = ({
             showSearch
             filterOption={filterOption}
           >
-            {customeFieldData &&
-              customeFieldData.map((ele: any) => {
-                return (
-                  <Option value={ele.value} key={ele.value}>
-                    {ele.label}
-                  </Option>
-                );
-              })}
+            {filterFields("Date").map((ele: any) => {
+              return (
+                <Option value={ele.value} key={ele.value}>
+                  {ele.label}
+                </Option>
+              );
+            })}
           </Select>
         </Form.Item>
         <Form.Item label="基线开始日期" name="baseLineStartDate">
@@ -125,14 +136,13 @@ const ItemModal: React.FC<ItemModalProps> = ({
             showSearch
             filterOption={filterOption}
           >
-            {customeFieldData &&
-              customeFieldData.map((ele: any) => {
-                return (
-                  <Option value={ele.value} key={ele.value}>
-                    {ele.label}
-                  </Option>
-                );
-              })}
+            {filterFields("Date").map((ele: any) => {
+              return (
+                <Option value={ele.value} key={ele.value}>
+                  {ele.label}
+                </Option>
+              );
+            })}
           </Select>
         </Form.Item>
         <Form.Item label="基线结束日期" name="baseLineEndDate">
@@ -142,14 +152,13 @@ const ItemModal: React.FC<ItemModalProps> = ({
             showSearch
             filterOption={filterOption}
           >
-            {customeFieldData &&
-              customeFieldData.map((ele: any) => {
-                return (
-                  <Option value={ele.value} key={ele.value}>
-                    {ele.label}
-                  </Option>
-                );
-              })}
+            {filterFields("Date").map((ele: any) => {
+              return (
+                <Option value={ele.value} key={ele.value}>
+                  {ele.label}
+                </Option>
+              );
+            })}
           </Select>
         </Form.Item>
         <Form.Item label="完成占比" name="percentage">
@@ -159,14 +168,13 @@ const ItemModal: React.FC<ItemModalProps> = ({
             showSearch
             filterOption={filterOption}
           >
-            {customeFieldData &&
-              customeFieldData.map((ele: any) => {
-                return (
-                  <Option value={ele.value} key={ele.value}>
-                    {ele.label}
-                  </Option>
-                );
-              })}
+            {filterFields("Number").map((ele: any) => {
+              return (
+                <Option value={ele.value} key={ele.value}>
+                  {ele.label}
+                </Option>
+              );
+            })}
           </Select>
         </Form.Item>
       </Form>
