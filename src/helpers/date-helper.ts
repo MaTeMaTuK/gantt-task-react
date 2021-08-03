@@ -83,11 +83,17 @@ export const ganttDateRange = (tasks: Task[], viewMode: ViewMode) => {
       newStartDate = addToDate(newStartDate, -1, "day");
       newEndDate = addToDate(newEndDate, 19, "day");
       break;
-    default:
+    case ViewMode.QuarterDay:
       newStartDate = startOfDate(newStartDate, "day");
       newEndDate = startOfDate(newEndDate, "day");
       newStartDate = addToDate(newStartDate, -1, "day");
-      newEndDate = addToDate(newEndDate, 5, "day");
+      newEndDate = addToDate(newEndDate, 66, "hour"); // 24(1 day)*3 - 6
+      break;
+    case ViewMode.HalfDay:
+      newStartDate = startOfDate(newStartDate, "day");
+      newEndDate = startOfDate(newEndDate, "day");
+      newStartDate = addToDate(newStartDate, -1, "day");
+      newEndDate = addToDate(newEndDate, 108, "hour"); // 24(1 day)*5 - 12
       break;
   }
   return [newStartDate, newEndDate];
@@ -162,4 +168,8 @@ export const getWeekNumberISO8601 = (date: Date) => {
   } else {
     return weekNumber;
   }
+};
+
+export const getDaysInMonth = (month: number, year: number) => {
+  return new Date(year, month + 1, 0).getDate();
 };

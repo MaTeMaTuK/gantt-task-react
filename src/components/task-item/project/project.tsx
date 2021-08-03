@@ -1,5 +1,4 @@
 import React from "react";
-import { progressWithByParams } from "../../../helpers/bar-helper";
 import { TaskItemProps } from "../task-item";
 import styles from "./project.module.css";
 
@@ -10,7 +9,6 @@ export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
   const processColor = isSelected
     ? task.styles.progressSelectedColor
     : task.styles.progressColor;
-  const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const projectWith = task.x2 - task.x1;
 
   const projectLeftTriangle = [
@@ -43,8 +41,8 @@ export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
         className={styles.projectBackground}
       />
       <rect
-        x={task.x1}
-        width={progressWidth}
+        x={task.progressX}
+        width={task.progressWidth}
         y={task.y}
         height={task.height}
         ry={task.barCornerRadius}
