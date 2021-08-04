@@ -238,13 +238,18 @@ const taskXCoordinate = (
 ) => {
   if (!xDate) return;
   // debugger
-  const index = ~~(
+  let index = ~~(
     (xDate.getTime() -
       dates[0].getTime() +
       xDate.getTimezoneOffset() -
       dates[0].getTimezoneOffset()) /
     dateDelta
   );
+  if (index < 0) {
+    index = 0;
+  } else if (index > dates.length - 1) {
+    index = dates.length - 1;
+  }
   const x = Math.round(
     (index +
       (xDate.getTime() -
