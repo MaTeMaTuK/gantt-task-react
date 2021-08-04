@@ -1,6 +1,11 @@
-.mb20{
+.mb20 {
   margin-bottom: 20px;
 }
-.width100{
+.width100 {
   width: 100%;
+}
+.icon {
+  height: 16px;
+  width: 16px;
+  margin-right: 5px;
 }

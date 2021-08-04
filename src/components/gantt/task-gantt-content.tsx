@@ -313,6 +313,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       // 连线前校验
       // @ts-ignore
       jsPlumbInstance.bind("beforeDrop", (conn: any) => {
+        if (!ganttConfig.relation) {
+          message.warning("未配置关联关系");
+          return;
+        }
         if (conn.targetId === conn.sourceId) {
           message.warning("连线有误");
           return false;
@@ -363,6 +367,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     };
   }, [jsPlumbInstance, itemLinks]);
   useEffect(() => {
+    // 如果没有配置关联关系，不可以连线
+    if (!ganttConfig.relation) {
+      return;
+    }
     if (itemLinks.length && tasks.length && jsPlumbInstance) {
       const connectUuids: any = [];
       tasks.forEach((task: any) => {
