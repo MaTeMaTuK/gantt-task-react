@@ -343,52 +343,66 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
    * Handles arrow keys events and transform it to new scroll
    */
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const scrollY = refScrollY.current;
-    const scrollX = refScrollX.current;
-    let newScrollY = scrollY;
-    let newScrollX = scrollX;
-    let isX = true;
-    switch (event.key) {
-      case "Down": // IE/Edge specific value
-      case "ArrowDown":
-        newScrollY += rowHeight;
-        isX = false;
-        break;
-      case "Up": // IE/Edge specific value
-      case "ArrowUp":
-        newScrollY -= rowHeight;
-        isX = false;
-        break;
-      case "Left":
-      case "ArrowLeft":
-        newScrollX -= columnWidth;
-        break;
-      case "Right": // IE/Edge specific value
-      case "ArrowRight":
-        newScrollX += columnWidth;
-        break;
-    }
-    if (isX) {
-      if (newScrollX < 0) {
-        newScrollX = 0;
-      } else if (newScrollX > svgWidth) {
-        newScrollX = svgWidth;
+    if (
+      [
+        "Down",
+        "ArrowDown",
+        "Up",
+        "ArrowUp",
+        "Left",
+        "ArrowLeft",
+        "Right",
+        "ArrowRight",
+      ].includes(event.key)
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      const scrollY = refScrollY.current;
+      const scrollX = refScrollX.current;
+      let newScrollY = scrollY;
+      let newScrollX = scrollX;
+      let isX = true;
+      switch (event.key) {
+        case "Down": // IE/Edge specific value
+        case "ArrowDown":
+          newScrollY += rowHeight;
+          isX = false;
+          break;
+        case "Up": // IE/Edge specific value
+        case "ArrowUp":
+          newScrollY -= rowHeight;
+          isX = false;
+          break;
+        case "Left":
+        case "ArrowLeft":
+          newScrollX -= columnWidth;
+          break;
+        case "Right": // IE/Edge specific value
+        case "ArrowRight":
+          newScrollX += columnWidth;
+          break;
       }
-      refScrollX.current = newScrollX;
-      setElementsScrollX();
-      setScrollX(refScrollX.current);
-    } else {
-      if (newScrollY < 0) {
-        newScrollY = 0;
-      } else if (newScrollY > ganttFullHeight - ganttHeight) {
-        newScrollY = ganttFullHeight - ganttHeight;
+      if (isX) {
+        if (newScrollX < 0) {
+          newScrollX = 0;
+        } else if (newScrollX > svgWidth) {
+          newScrollX = svgWidth;
+        }
+        refScrollX.current = newScrollX;
+        setElementsScrollX();
+        setScrollX(refScrollX.current);
+      } else {
+        if (newScrollY < 0) {
+          newScrollY = 0;
+        } else if (newScrollY > ganttFullHeight - ganttHeight) {
+          newScrollY = ganttFullHeight - ganttHeight;
+        }
+        refScrollY.current = newScrollY;
+        setElementsScrollY();
+        setScrollY(refScrollY.current);
       }
-      refScrollY.current = newScrollY;
-      setElementsScrollY();
-      setScrollY(refScrollY.current);
+      setIgnoreScrollEvent(true);
     }
-    setIgnoreScrollEvent(true);
   };
 
   /**

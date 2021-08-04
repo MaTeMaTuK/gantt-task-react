@@ -129,6 +129,7 @@ const Time: React.FC<TimeProps> = () => {
         handleCancel={handleCancel}
         handleOk={handleOk}
         currentItem={currentItem}
+        timeList={timeList} // 做卡片唯一性校验
       />
       <h4 className={styles.mb20}>
         为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应卡片的哪个时间字段

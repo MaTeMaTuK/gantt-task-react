@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Tabs, Drawer } from "antd";
-// import styles from "./index.module.css";
-const { TabPane } = Tabs;
 import Time from "./time";
 import Relation from "./relation";
+// import styles from "./index.module.css";
+const { TabPane } = Tabs;
 interface GanttConfigProps {
   toGantt: () => void;
   visible: boolean;
@@ -12,7 +12,6 @@ interface GanttConfigProps {
 const GanttConfig: React.FC<GanttConfigProps> = ({ toGantt, visible }) => {
   const [tabs, setTabs] = useState("time");
   const tabChange = (val: string) => {
-    console.log(val, "va;l");
     setTabs(val);
   };
   return (
