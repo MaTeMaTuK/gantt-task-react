@@ -13,12 +13,14 @@ interface ItemModalProps {
   handleCancel: () => void;
   handleOk: (values: any) => void;
   currentItem: TimeItemProps;
+  timeList?: TimeItemProps[];
 }
 const ItemModal: React.FC<ItemModalProps> = ({
   visible,
   handleCancel,
   handleOk,
   currentItem,
+  timeList,
 }) => {
   const [form] = Form.useForm();
   const { itemTypeData } = useContext(GanttConfigContext);
@@ -51,6 +53,17 @@ const ItemModal: React.FC<ItemModalProps> = ({
         console.log("Validate Failed:", info);
       });
   };
+  const itemCheck = (_: any, value: any) => {
+    if (value) {
+      const itemFilter = timeList?.filter(item => item.itemType === value);
+      if (itemFilter?.length && currentItem.itemType !== value) {
+        return Promise.reject(new Error("该卡片类型已选择， 请重新选择"));
+      }
+      return Promise.resolve();
+    } else {
+      return Promise.resolve();
+    }
+  };
   return (
     <Modal
       title="时间字段配置"
@@ -71,7 +84,12 @@ const ItemModal: React.FC<ItemModalProps> = ({
           <Form.Item
             label="卡片类型"
             name="itemType"
-            rules={[{ required: true, message: "请选择卡片类型" }]}
+            rules={[
+              { required: true, message: "请选择卡片类型" },
+              {
+                validator: itemCheck,
+              },
+            ]}
           >
             <Select placeholder="请选择" allowClear>
               {itemTypeData.map((ele: any) => {

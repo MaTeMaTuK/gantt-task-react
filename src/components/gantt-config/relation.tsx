@@ -45,15 +45,19 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
     });
   };
   const relactionCheck = (rule: any, value: any) => {
-    const filedData = form.getFieldsValue();
-    let isError = false;
-    Object.keys(filedData).forEach((ele: any) => {
-      if (filedData[ele] === value && rule.field !== ele) {
-        isError = true;
+    if (value) {
+      const filedData = form.getFieldsValue();
+      let isError = false;
+      Object.keys(filedData).forEach((ele: any) => {
+        if (filedData[ele] === value && rule.field !== ele) {
+          isError = true;
+        }
+      });
+      if (isError) {
+        return Promise.reject(new Error("关联关系重复， 请重新选择"));
+      } else {
+        return Promise.resolve();
       }
-    });
-    if (isError) {
-      return Promise.reject(new Error("关联关系重复， 请重新选择"));
     } else {
       return Promise.resolve();
     }
@@ -81,7 +85,7 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
             },
           ]}
         >
-          <Select placeholder="请选择">
+          <Select placeholder="请选择" allowClear>
             {itemRelationData.map((ele: any) => {
               return (
                 <Option value={ele.value} key={ele.value}>
@@ -101,7 +105,7 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
             },
           ]}
         >
-          <Select placeholder="请选择">
+          <Select placeholder="请选择" allowClear>
             {itemRelationData.map((ele: any) => {
               return (
                 <Option value={ele.value} key={ele.value}>
@@ -121,7 +125,7 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
             },
           ]}
         >
-          <Select placeholder="请选择">
+          <Select placeholder="请选择" allowClear>
             {itemRelationData.map((ele: any) => {
               return (
                 <Option value={ele.value} key={ele.value}>
@@ -141,7 +145,7 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
             },
           ]}
         >
-          <Select placeholder="请选择">
+          <Select placeholder="请选择" allowClear>
             {itemRelationData.map((ele: any) => {
               return (
                 <Option value={ele.value} key={ele.value}>
