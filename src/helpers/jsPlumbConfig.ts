@@ -39,8 +39,6 @@ export const commonConfig = {
     stroke: "#c0c0c0", // 实线颜色
     strokeWidth: 1.5, // 实线宽度
     strokeOpacity: 0.5,
-    // outlineStroke: "#c0c0c0", // 边框颜色
-    // outlineWidth: 1, // 边框宽度
   },
   // 设置连接线悬浮样式
   connectorHoverStyle: {
