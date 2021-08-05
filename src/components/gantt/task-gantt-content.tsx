@@ -404,17 +404,19 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       for (let i = 0; i < connectUuids.length; i++) {
         const uuidObj = connectUuids[i];
         const { source, destination, relationType } = uuidObj;
-        const uuid = [
-          `${source}-${relationInit[relationType][0]}`,
-          `${destination}-${relationInit[relationType][1]}`,
-        ];
-        // @ts-ignore
-        const connect = jsPlumbInstance.connect({
-          uuids: uuid,
-        });
-        // 给连线设置linkType
-        if (connect) {
-          connect.setData(ganttConfig.relation[relationType]);
+        if (source && destination && relationType) {
+          const uuid = [
+            `${source}-${relationInit[relationType][0]}`,
+            `${destination}-${relationInit[relationType][1]}`,
+          ];
+          // @ts-ignore
+          const connect = jsPlumbInstance.connect({
+            uuids: uuid,
+          });
+          // 给连线设置linkType
+          if (connect) {
+            connect.setData(ganttConfig.relation[relationType]);
+          }
         }
       }
       // @ts-ignore
