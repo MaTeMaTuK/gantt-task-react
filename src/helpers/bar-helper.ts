@@ -63,6 +63,19 @@ export const convertToBarTasks = (
     }
     return task;
   });
+  // normalize flags for hideChildren
+  barTasks = barTasks.map(task => {
+    if (task.barChildren.length > 0) {
+      if (!task.hideChildren) {
+        task.hideChildren = false;
+      }
+    } else if (!task.hideChildren && task.type === "project") {
+      task.hideChildren = false;
+    } else if (!task.hideChildren) {
+      task.hideChildren = undefined;
+    }
+    return task;
+  });
 
   return barTasks;
 };

@@ -1,5 +1,5 @@
 import React, { useState, SyntheticEvent, useRef, useEffect } from "react";
-import { ViewMode, GanttProps } from "../../types/public-types";
+import { ViewMode, GanttProps, Task } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import { ganttDateRange, seedDates } from "../../helpers/date-helper";
 import { CalendarProps } from "../calendar/calendar";
@@ -16,6 +16,7 @@ import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
+import { removeHiddenTasks } from "../../helpers/other-helper";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
@@ -54,6 +55,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDoubleClick,
   onDelete,
   onSelect,
+  onExpanderClick,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -83,7 +85,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   // task change events
   useEffect(() => {
-    const [startDate, endDate] = ganttDateRange(tasks, viewMode);
+    const filteredTasks = removeHiddenTasks(tasks);
+    const [startDate, endDate] = ganttDateRange(filteredTasks, viewMode);
     let newDates = seedDates(startDate, endDate, viewMode);
     if (rtl) {
       newDates = newDates.reverse();
@@ -94,7 +97,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setDateSetup({ dates: newDates, viewMode });
     setBarTasks(
       convertToBarTasks(
-        tasks,
+        filteredTasks,
         newDates,
         columnWidth,
         rowHeight,
@@ -322,7 +325,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     setSelectedTask(newSelectedTask);
   };
-
+  const handleExpanderClick = (task: Task) => {
+    if (onExpanderClick && task.hideChildren !== undefined) {
+      onExpanderClick({ ...task, hideChildren: !task.hideChildren });
+    }
+  };
   const gridProps: GridProps = {
     columnWidth,
     svgWidth,
@@ -380,6 +387,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     selectedTask,
     taskListRef,
     setSelectedTask: handleSelectedTask,
+    onExpanderClick: handleExpanderClick,
     TaskListHeader,
     TaskListTable,
   };

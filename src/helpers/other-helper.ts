@@ -16,3 +16,33 @@ export function isMouseEvent(
 export function isBarTask(task: Task | BarTask): task is BarTask {
   return (task as BarTask).x1 !== undefined;
 }
+
+export function removeHiddenTasks(tasks: Task[]) {
+  const groupedTasks = tasks.filter(t => t.hideChildren);
+  if (groupedTasks.length > 0) {
+    for (let i = 0; groupedTasks.length > i; i++) {
+      const groupedTask = groupedTasks[i];
+      const children = getChildren(tasks, groupedTask);
+      tasks = tasks.filter(t => children.indexOf(t) === -1);
+    }
+  }
+  return tasks;
+}
+
+function getChildren(taskList: Task[], task: Task) {
+  let tasks: Task[] = [];
+  if (task.type !== "project") {
+    tasks = taskList.filter(
+      t => t.dependencies && t.dependencies.indexOf(task.id) !== -1
+    );
+  } else {
+    tasks = taskList.filter(t => t.project && t.project === task.id);
+  }
+  const taskChildren = tasks.reduce(
+    (children: Task[], t) =>
+      children.concat(children, getChildren(taskList, t)),
+    []
+  );
+  tasks = tasks.concat(tasks, taskChildren);
+  return tasks;
+}

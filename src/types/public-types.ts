@@ -26,6 +26,7 @@ export interface Task {
   isDisabled?: boolean;
   project?: string;
   dependencies?: string[];
+  hideChildren?: boolean;
 }
 
 export interface EventOption {
@@ -57,6 +58,10 @@ export interface EventOption {
    * Invokes on delete selected task. Chart undoes operation if method return false or error.
    */
   onDelete?: (task: Task) => void | boolean | Promise<void> | Promise<boolean>;
+  /**
+   * Invokes on expander on task list
+   */
+  onExpanderClick?: (task: Task) => void;
 }
 
 export interface DisplayOption {
@@ -119,6 +124,7 @@ export interface StylingOption {
      * Sets selected task by id
      */
     setSelectedTask: (taskId: string) => void;
+    onExpanderClick: (task: Task) => void;
   }>;
 }
 
