@@ -135,6 +135,7 @@ npm start
 | isDisabled     | bool     | Disables all action for current task.                                                                 |
 | fontSize       | string   | Specifies the taskbar font size locally.                                                              |
 | project        | string   | Task project name                                                                                     |
+| hideChildren   | bool     | Hide children items.                                                                                  |
 
 \*Required
 

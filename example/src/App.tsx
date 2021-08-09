@@ -16,7 +16,7 @@ const App = () => {
     columnWidth = 250;
   }
 
-  const onTaskChange = (task: Task) => {
+  const handleTaskChange = (task: Task) => {
     console.log("On date change Id:" + task.id);
     let newTasks = tasks.map(t => (t.id === task.id ? task : t));
     if (task.project) {
@@ -35,7 +35,7 @@ const App = () => {
     setTasks(newTasks);
   };
 
-  const onTaskDelete = (task: Task) => {
+  const handleTaskDelete = (task: Task) => {
     const conf = window.confirm("Are you sure about " + task.name + " ?");
     if (conf) {
       setTasks(tasks.filter(t => t.id !== task.id));
@@ -43,17 +43,22 @@ const App = () => {
     return conf;
   };
 
-  const onProgressChange = async (task: Task) => {
+  const handleProgressChange = async (task: Task) => {
     setTasks(tasks.map(t => (t.id === task.id ? task : t)));
     console.log("On progress change Id:" + task.id);
   };
 
-  const onDblClick = (task: Task) => {
+  const handleDblClick = (task: Task) => {
     alert("On Double Click event Id:" + task.id);
   };
 
-  const onSelect = (task: Task, isSelected: boolean) => {
+  const handleSelect = (task: Task, isSelected: boolean) => {
     console.log(task.name + " has " + (isSelected ? "selected" : "unselected"));
+  };
+
+  const handleExpanderClick = (task: Task) => {
+    setTasks(tasks.map(t => (t.id === task.id ? task : t)));
+    console.log("On expander click Id:" + task.id);
   };
 
   return (
@@ -67,11 +72,12 @@ const App = () => {
       <Gantt
         tasks={tasks}
         viewMode={view}
-        onDateChange={onTaskChange}
-        onDelete={onTaskDelete}
-        onProgressChange={onProgressChange}
-        onDoubleClick={onDblClick}
-        onSelect={onSelect}
+        onDateChange={handleTaskChange}
+        onDelete={handleTaskDelete}
+        onProgressChange={handleProgressChange}
+        onDoubleClick={handleDblClick}
+        onSelect={handleSelect}
+        onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
       />
@@ -79,11 +85,12 @@ const App = () => {
       <Gantt
         tasks={tasks}
         viewMode={view}
-        onDateChange={onTaskChange}
-        onDelete={onTaskDelete}
-        onProgressChange={onProgressChange}
-        onDoubleClick={onDblClick}
-        onSelect={onSelect}
+        onDateChange={handleTaskChange}
+        onDelete={handleTaskDelete}
+        onProgressChange={handleProgressChange}
+        onDoubleClick={handleDblClick}
+        onSelect={handleSelect}
+        onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         ganttHeight={300}
         columnWidth={columnWidth}

@@ -11,7 +11,16 @@ export const TaskListTableDefault: React.FC<{
   tasks: Task[];
   selectedTaskId: string;
   setSelectedTask: (taskId: string) => void;
-}> = ({ rowHeight, rowWidth, tasks, fontFamily, fontSize, locale }) => {
+  onExpanderClick: (task: Task) => void;
+}> = ({
+  rowHeight,
+  rowWidth,
+  tasks,
+  fontFamily,
+  fontSize,
+  locale,
+  onExpanderClick,
+}) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     weekday: "short",
     year: "numeric",
@@ -27,6 +36,13 @@ export const TaskListTableDefault: React.FC<{
       }}
     >
       {tasks.map(t => {
+        let expanderSymbol = "";
+        if (t.hideChildren === false) {
+          expanderSymbol = "▼";
+        } else if (t.hideChildren === true) {
+          expanderSymbol = "▶";
+        }
+
         return (
           <div
             className={styles.taskListTableRow}
@@ -41,7 +57,19 @@ export const TaskListTableDefault: React.FC<{
               }}
               title={t.name}
             >
-              &nbsp;{t.name}
+              <div className={styles.taskListNameWrapper}>
+                <div
+                  className={
+                    expanderSymbol
+                      ? styles.taskListExpander
+                      : styles.taskListEmptyExpander
+                  }
+                  onClick={() => onExpanderClick(t)}
+                >
+                  {expanderSymbol}
+                </div>
+                <div>{t.name}</div>
+              </div>
             </div>
             <div
               className={styles.taskListCell}
