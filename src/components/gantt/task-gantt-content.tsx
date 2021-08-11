@@ -134,7 +134,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         isNotLikeOriginal
       ) {
         try {
-          const result = await onDateChange(newChangedTask);
+          const result = await onDateChange(
+            newChangedTask,
+            newChangedTask.barChildren
+          );
           if (result !== undefined) {
             operationSuccess = result;
           }
@@ -143,7 +146,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         }
       } else if (onProgressChange && isNotLikeOriginal) {
         try {
-          const result = await onProgressChange(newChangedTask);
+          const result = await onProgressChange(
+            newChangedTask,
+            newChangedTask.barChildren
+          );
           if (result !== undefined) {
             operationSuccess = result;
           }
@@ -254,9 +260,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           return task.barChildren.map(child => {
             return (
               <Arrow
-                key={`Arrow from ${task.id} to ${tasks[child].id}`}
+                key={`Arrow from ${task.id} to ${tasks[child.index].id}`}
                 taskFrom={task}
-                taskTo={tasks[child]}
+                taskTo={tasks[child.index]}
                 rowHeight={rowHeight}
                 taskHeight={taskHeight}
                 arrowIndent={arrowIndent}

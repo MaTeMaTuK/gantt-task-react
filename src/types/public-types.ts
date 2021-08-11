@@ -46,13 +46,15 @@ export interface EventOption {
    * Invokes on end and start time change. Chart undoes operation if method return false or error.
    */
   onDateChange?: (
-    task: Task
+    task: Task,
+    children: Task[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Invokes on progress change. Chart undoes operation if method return false or error.
    */
   onProgressChange?: (
-    task: Task
+    task: Task,
+    children: Task[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Invokes on delete selected task. Chart undoes operation if method return false or error.

@@ -53,26 +53,13 @@ export const convertToBarTasks = (
   });
 
   // set dependencies
-  barTasks = barTasks.map((task, i) => {
+  barTasks = barTasks.map(task => {
     const dependencies = task.dependencies || [];
     for (let j = 0; j < dependencies.length; j++) {
       const dependence = barTasks.findIndex(
         value => value.id === dependencies[j]
       );
-      if (dependence !== -1) barTasks[dependence].barChildren.push(i);
-    }
-    return task;
-  });
-  // normalize flags for hideChildren
-  barTasks = barTasks.map(task => {
-    if (task.barChildren.length > 0) {
-      if (!task.hideChildren) {
-        task.hideChildren = false;
-      }
-    } else if (!task.hideChildren && task.type === "project") {
-      task.hideChildren = false;
-    } else if (!task.hideChildren) {
-      task.hideChildren = undefined;
+      if (dependence !== -1) barTasks[dependence].barChildren.push(task);
     }
     return task;
   });
@@ -197,6 +184,7 @@ const convertToBar = (
     rtl
   );
   const y = taskYCoordinate(index, rowHeight, taskHeight);
+  const hideChildren = task.type === "project" ? task.hideChildren : undefined;
 
   const styles = {
     backgroundColor: barBackgroundColor,
@@ -216,6 +204,7 @@ const convertToBar = (
     progressWidth,
     barCornerRadius,
     handleWidth,
+    hideChildren,
     height: taskHeight,
     barChildren: [],
     styles,
@@ -263,6 +252,7 @@ const convertToMilestone = (
     typeInternal: task.type,
     progress: 0,
     height: rotatedHeight,
+    hideChildren: undefined,
     barChildren: [],
     styles,
   };
