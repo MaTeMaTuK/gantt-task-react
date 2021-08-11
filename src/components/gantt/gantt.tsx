@@ -85,7 +85,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   // task change events
   useEffect(() => {
-    const filteredTasks = removeHiddenTasks(tasks);
+    let filteredTasks: Task[];
+    if (onExpanderClick) {
+      filteredTasks = removeHiddenTasks(tasks);
+    } else {
+      filteredTasks = tasks;
+    }
     const [startDate, endDate] = ganttDateRange(filteredTasks, viewMode);
     let newDates = seedDates(startDate, endDate, viewMode);
     if (rtl) {
@@ -137,6 +142,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     milestoneBackgroundSelectedColor,
     rtl,
     scrollX,
+    onExpanderClick,
   ]);
 
   useEffect(() => {

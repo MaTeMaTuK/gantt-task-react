@@ -10,6 +10,8 @@ export function initTasks() {
       id: "ProjectSample",
       progress: 25,
       type: "project",
+
+      hideChildren: false,
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
