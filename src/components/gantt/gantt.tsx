@@ -35,6 +35,7 @@ import {
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
+  isUpdate,
   headerHeight = 50,
   // columnWidth = 60,
   listCellWidth = "155px",
@@ -56,7 +57,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   projectBackgroundSelectedColor = "#f7bb53",
   milestoneBackgroundColor = "#f1c453",
   milestoneBackgroundSelectedColor = "#f29e4c",
-  handleWidth = 2,
+  handleWidth = 3,
   timeStep = 300000,
   arrowColor = "grey",
   fontFamily = "Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue",
@@ -145,6 +146,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     );
   }, [
     tasks,
+    isUpdate,
     viewMode,
     rowHeight,
     barCornerRadius,
