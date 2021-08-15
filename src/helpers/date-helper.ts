@@ -12,7 +12,10 @@ type DateHelperScales =
   | "millisecond";
 
 const intlDTCache = {};
-const getCachedDateTimeFormat = (locString: string | string[], opts: DateTimeFormatOptions = {}): DateTimeFormat => {
+const getCachedDateTimeFormat = (
+  locString: string | string[],
+  opts: DateTimeFormatOptions = {}
+): DateTimeFormat => {
   const key = JSON.stringify([locString, opts]);
   let dtf = intlDTCache[key];
   if (!dtf) {
@@ -21,7 +24,6 @@ const getCachedDateTimeFormat = (locString: string | string[], opts: DateTimeFor
   }
   return dtf;
 };
-
 
 export const addToDate = (
   date: Date,
@@ -187,4 +189,3 @@ export const getWeekNumberISO8601 = (date: Date) => {
 export const getDaysInMonth = (month: number, year: number) => {
   return new Date(year, month + 1, 0).getDate();
 };
-
