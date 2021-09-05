@@ -23,12 +23,12 @@ export const commonConfig = {
   endpoint: [
     canChangeLayout ? "Dot" : "Blank",
     {
-      radius: 4,
+      radius: 3,
     },
   ],
   // 设置端点的样式
   endpointStyle: {
-    fill: "#159CEE", // 填充颜色
+    fill: "#0A50D1", // 填充颜色
     outlineStroke: "blank", // 边框颜色
     outlineWidth: 0, // 边框宽度
   },
@@ -36,23 +36,23 @@ export const commonConfig = {
   connector: ["Flowchart"],
   // 设置连接线的样式
   connectorStyle: {
-    stroke: "#c0c0c0", // 实线颜色
+    stroke: "#979797", // 实线颜色
     strokeWidth: 1.5, // 实线宽度
     strokeOpacity: 0.5,
   },
   // 设置连接线悬浮样式
   connectorHoverStyle: {
-    stroke: "#8573ff",
-    strokeWidth: 3,
+    stroke: "#0C62FF",
+    strokeWidth: 1.5,
   },
   // 设置连接线的箭头
   // 可以设置箭头的长宽以及箭头的位置，location 0.5表示箭头位于中间，location 1表示箭头设置在连接线末端。 一根连接线是可以添加多个箭头的。
   connectorOverlays: [
     [
-      "Arrow",
+      "PlainArrow",
       {
-        width: 10,
-        length: 10,
+        width: 8,
+        length: 8,
         location: 1,
       },
     ],

@@ -31,29 +31,27 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   styles,
   onMouseDown,
 }) => {
-  const getProcessColor = () => {
-    return isSelected ? styles.progressSelectedColor : styles.progressColor;
-  };
-
   const getBarColor = () => {
     return isSelected ? styles.backgroundSelectedColor : styles.backgroundColor;
   };
+  const triangleX = task.x2 - task.x1 > 15 ? 15 : 2;
+  const triangleY = 2;
 
   const projectLeftTriangle = [
     task.x1,
-    task.y + task.height - 1,
+    task.y + task.height - triangleY,
     task.x1,
-    task.y + task.height + 5,
-    task.x1 + 5,
-    task.y + task.height - 1,
+    task.y + task.height + triangleY + 3,
+    task.x1 + triangleX,
+    task.y + task.height - triangleY,
   ].join(",");
   const projectRightTriangle = [
     task.x2,
-    task.y + task.height - 1,
+    task.y + task.height - triangleY,
     task.x2,
-    task.y + task.height + 5,
-    task.x2 - 5,
-    task.y + task.height - 1,
+    task.y + task.height + triangleY + 3,
+    task.x2 - triangleX,
+    task.y + task.height - triangleY,
   ].join(",");
 
   return (
@@ -71,14 +69,12 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
       <polygon points={projectLeftTriangle} fill={getBarColor()} />
       <polygon points={projectRightTriangle} fill={getBarColor()} />
       <rect
-        x={x}
-        width={progressWidth}
+        x={x + progressWidth}
+        width={width - progressWidth}
         y={y}
-        height={height}
-        ry={barCornerRadius}
-        rx={barCornerRadius}
-        style={{ opacity: 0.6 }}
-        fill={getProcessColor()}
+        height={height + 5}
+        style={{ opacity: 0.4 }}
+        fill="#fff"
       />
     </g>
   );

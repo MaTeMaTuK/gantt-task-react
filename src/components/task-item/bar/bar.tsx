@@ -24,7 +24,7 @@ export const Bar: React.FC<TaskItemProps> = ({
     task.y,
     task.height
   );
-  const handleHeight = task.height - 2;
+  const handleHeight = task.height - 12;
   useEffect(() => {
     if (jsPlumb) {
       // 生成新节点删除旧节点时需设置setIdChanged
@@ -32,17 +32,16 @@ export const Bar: React.FC<TaskItemProps> = ({
       jsPlumb.addEndpoint(
         task.id,
         {
-          anchors: "Right",
+          anchor: [1, 0.5, 1, 0, 22, 0, "Right"],
           uuid: task.id + "-Right",
         },
-
         commonConfig
       );
       // @ts-ignore
       jsPlumb.addEndpoint(
         task.id,
         {
-          anchor: "Left",
+          anchor: [0, 0.5, -1, 0, -22, 0, "Left"],
           uuid: task.id + "-Left",
         },
         commonConfig
@@ -73,6 +72,17 @@ export const Bar: React.FC<TaskItemProps> = ({
   return (
     <svg ref={barRef}>
       <g className={styles.barWrapper} tabIndex={0}>
+        <g className={styles.barHandle}>
+          <rect
+            x={task.x1 - 16}
+            y={task.y - 3}
+            width={task.x2 - task.x1 + 32}
+            height={task.height + 6}
+            className={`${styles.barHandle} ${styles.barHandleBackground}`}
+            ry={task.barCornerRadius}
+            rx={task.barCornerRadius}
+          />
+        </g>
         <BarDisplay
           x={task.x1}
           y={task.y}
@@ -93,22 +103,22 @@ export const Bar: React.FC<TaskItemProps> = ({
             <g>
               {/* left */}
               <BarDateHandle
-                x={task.x1 + 1}
-                y={task.y + 1}
+                x={task.x1}
+                y={task.y}
                 width={task.handleWidth}
                 height={handleHeight}
-                barCornerRadius={task.barCornerRadius}
+                type="left"
                 onMouseDown={e => {
                   onEventStart("start", task, e);
                 }}
               />
               {/* right */}
               <BarDateHandle
-                x={task.x2 - task.handleWidth - 1}
-                y={task.y + 1}
+                x={task.x2 - task.handleWidth}
+                y={task.y}
                 width={task.handleWidth}
                 height={handleHeight}
-                barCornerRadius={task.barCornerRadius}
+                type="right"
                 onMouseDown={e => {
                   onEventStart("end", task, e);
                 }}

@@ -7,12 +7,12 @@
 } */
 
 .gridRowLine {
-  stroke: #eeeeee;
+  stroke: none;
 }
 
 .gridTick {
-  stroke: #e6e4e4;
+  stroke: #ECEDF0;
 }
 .gridTickWeekday {
-  fill: #f5f5f5;
+  fill: #F7F7F7;
 }
