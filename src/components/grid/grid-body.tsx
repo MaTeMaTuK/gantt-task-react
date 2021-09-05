@@ -204,7 +204,9 @@ export const GridBody: React.FC<GridBodyProps> = ({
           y={y}
           width={columnWidth / parts}
           height={rowHeight}
-          fill={isShow ? "#DAE0FF" : "transparent"}
+          fill="transparent"
+          ry={4}
+          rx={4}
           onMouseMove={() => {
             handleInvalidColumnMouseMove(i, tasks[i]);
           }}
@@ -222,7 +224,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
             const ele = e.target.parentNode;
             const index = ele.getAttribute("index");
             if (isShow && i === Number(index)) {
-              e.target.style.fill = "#7B90FF";
+              e.target.style.fill = "#AFCBFF";
             }
           }}
           onMouseLeave={(e: any) => {
@@ -322,19 +324,12 @@ export const GridBody: React.FC<GridBodyProps> = ({
           /> */}
           <circle
             cx={newTickX}
-            cy="15"
-            r="15"
+            cy="2"
+            r="2"
             stroke="black"
             strokeWidth="0"
             fill={todayColor}
           />
-          <text
-            x={newTickX - 10}
-            y={15 + 2.5}
-            style={{ fontSize: "10px", fill: "#fff" }}
-          >
-            今日
-          </text>
           <line
             x1={newTickX}
             y1="0"
@@ -354,7 +349,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         y={translateY + rowHeight / 2 - 30 / 2}
         width={columnWidth / parts}
         height={30}
-        fill="#7B90FF"
+        fill="#AFCBFF"
         onClick={invalidBarClick}
         cursor="pointer"
       />
