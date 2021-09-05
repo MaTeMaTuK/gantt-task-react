@@ -9,3 +9,18 @@
   width: 16px;
   margin-right: 5px;
 }
+.timeTips {
+  padding: 9px 5px;
+  text-align: center;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 8px -2px rgba(21, 29, 43, 0.25), 0px 0px 1px 0px rgba(21, 29, 43, 0.3);
+  border-radius: 4px;
+  margin: 12px 3px 33px;
+}
+.timeTips em{
+  margin-right: 10px;
+}
+.settingModalTitle {
+  font-size: 18px;
+  font-weight: 900;
+}

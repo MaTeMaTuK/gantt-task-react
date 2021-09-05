@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tabs, Drawer } from "antd";
 import Time from "./time";
 import Relation from "./relation";
-// import styles from "./index.module.css";
+import styles from "./index.module.css";
 const { TabPane } = Tabs;
 interface GanttConfigProps {
   toGantt: () => void;
@@ -18,10 +18,14 @@ const GanttConfig: React.FC<GanttConfigProps> = ({ toGantt, visible }) => {
     <Drawer
       visible={visible}
       onClose={() => toGantt()}
-      width="35%"
+      width="50%"
       getContainer={false}
+      className={styles.settingsModalContainer}
+      contentWrapperStyle={{ maxWidth: "721px" }}
     >
-      <h3 onClick={() => toGantt()}>甘特图配置</h3>
+      <h3 className={styles.settingModalTitle} onClick={() => toGantt()}>
+        甘特图配置
+      </h3>
       <Tabs defaultActiveKey="time" onChange={tabChange}>
         <TabPane tab="时间字段配置" key="time">
           <Time />
