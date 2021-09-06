@@ -118,7 +118,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // const [todayDistance, setTodayDistance] = useState(0);
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
-  const minWidth = 12; // 面板折叠后，taskListWidth 设置成15（设置成0后，dom节点会移除）
+  const minWidth = 1; // 面板折叠后，taskListWidth 设置成1（设置成0后，dom节点会移除）
+  const paddingLeft = 24; // wrapper的padding值， 用于dividerWrapper定位
   // task change events
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
@@ -653,7 +654,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
                   : styles.dividerWrapper
               }
               style={{
-                left: taskListWidth - minWidth > 0 ? `${taskListWidth}px` : 0,
+                left: `${
+                  taskListWidth - minWidth > 0
+                    ? taskListWidth + paddingLeft
+                    : paddingLeft
+                }px`,
                 visibility: tasks?.length ? "visible" : "hidden",
               }}
             >

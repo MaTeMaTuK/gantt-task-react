@@ -36,6 +36,7 @@
   height: 100%;
   flex: 1;
   overflow: hidden;
+  padding: 0 12px 0 24px;
 }
 
 .task-gantt-wrapper {
@@ -139,19 +140,12 @@
   box-shadow: 1px 2px 3px #ECEDF0;
 }
 
-.dividerWrapper.reverse{
-  width: 12px;
-}
-
 .reverse .dividerContainer > hr.maskLine {
   display: block;
 }
 
 .reverse .dividerContainer > hr.maskLineTop {
   display: block;
-}
-.reverse .dividerIconWarpper {
-  left: 0;
 }
 
 .reverse .dividerIconWarpper i:before{

@@ -324,8 +324,8 @@ export const GridBody: React.FC<GridBodyProps> = ({
           /> */}
           <circle
             cx={newTickX}
-            cy="2"
-            r="2"
+            cy="3"
+            r="3"
             stroke="black"
             strokeWidth="0"
             fill={todayColor}
@@ -349,6 +349,8 @@ export const GridBody: React.FC<GridBodyProps> = ({
         y={translateY + rowHeight / 2 - 30 / 2}
         width={columnWidth / parts}
         height={30}
+        rx={4}
+        ry={4}
         fill="#AFCBFF"
         onClick={invalidBarClick}
         cursor="pointer"
