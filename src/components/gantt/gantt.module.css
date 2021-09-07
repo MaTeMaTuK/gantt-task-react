@@ -86,7 +86,6 @@
   background: #fff;
   height: calc(100% - 48px);
   border-left: 2px solid #ecedf0;
-  box-shadow: 1px 1px 4px #ecedf0;
 }
 
 .dividerContainer {
