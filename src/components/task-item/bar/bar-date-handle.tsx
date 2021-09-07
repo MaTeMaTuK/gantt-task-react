@@ -6,7 +6,7 @@ type BarDateHandleProps = {
   y: number;
   width: number;
   height: number;
-  barCornerRadius: number;
+  type: string;
   onMouseDown: (event: React.MouseEvent<SVGRectElement, MouseEvent>) => void;
 };
 export const BarDateHandle: React.FC<BarDateHandleProps> = ({
@@ -14,19 +14,29 @@ export const BarDateHandle: React.FC<BarDateHandleProps> = ({
   y,
   width,
   height,
-  barCornerRadius,
+  type,
   onMouseDown,
 }) => {
   return (
-    <rect
-      x={x}
-      y={y}
-      width={width}
-      height={height}
-      className={styles.barHandle}
-      ry={barCornerRadius}
-      rx={barCornerRadius}
-      onMouseDown={onMouseDown}
-    />
+    <g onMouseDown={onMouseDown}>
+      <rect
+        x={type === "left" ? x - 11 : x + 11}
+        y={y + 6}
+        width={width}
+        height={height}
+        className={`${styles.barHandle} ${styles.barHandleDate}`}
+        ry={1}
+        rx={1}
+      />
+      <rect
+        x={type === "left" ? x - 7 : x + 7}
+        y={y + 6}
+        width={width}
+        height={height}
+        className={`${styles.barHandle} ${styles.barHandleDate}`}
+        ry={1}
+        rx={1}
+      />
+    </g>
   );
 };

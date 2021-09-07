@@ -17,6 +17,7 @@
   will-change: transform;
   direction: ltr;
   position: relative;
+  border-top: 1px solid #eee;
 }
 
 .box {
@@ -35,6 +36,7 @@
   height: 100%;
   flex: 1;
   overflow: hidden;
+  padding: 0 12px 0 24px;
 }
 
 .task-gantt-wrapper {
@@ -48,7 +50,7 @@
 }
 .ganttHeader {
   text-align: right;
-  margin: 10px 0;
+  margin: 0 0 16px;
   padding: 0 20px;
 }
 .cursor {
@@ -57,9 +59,11 @@
 
 .taskListWrapper {
   position: relative;
-  margin-right: 15px;
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
+}
+.taskListWrapper>div {
+  padding: 0;
 }
 
 .backgroundSvg {
@@ -78,46 +82,76 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 30px;
+  width: 2px;
   background: #fff;
-  height: 100%;
+  height: calc(100% - 48px);
+  border-left: 2px solid #ecedf0;
 }
 
 .dividerContainer {
   position: relative;
-  border-left: 1px solid #eee;
+  height: calc(100% - 50px);
+  top: 50px;
 }
 
 .dividerContainer > hr {
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 0;
+  right: 2px;
+  top: 1px;
+  width: 12px;
+  background: #fff;
   height: 100%;
+  border: 0;
   margin: 0;
-  border: none;
-  border-left: 2px solid #919eab;
   cursor: col-resize;
+}
+.dividerContainer > hr.maskLine {
+  display: none;
+  top: unset;
+  bottom: -100px;
+  height: 100px;
+  background: #fff;
+  cursor: default;
+}
+
+.dividerContainer > hr.maskLineTop {
+  display: none;
+  top: -50px;
+  height: 50px;
+  background: #fff;
+  cursor: default;
 }
 
 .dividerIconWarpper {
   position: absolute;
-  left: 7px;
+  left: -12px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 14px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
+  background: #fff;
+  border-radius: 50%;
+  border: 1px solid #ECEDF0;
+  box-shadow: 1px 2px 3px #ECEDF0;
 }
 
-.dividerIconWarpper.reverse  i:before{
+.reverse .dividerContainer > hr.maskLine {
+  display: block;
+}
+
+.reverse .dividerContainer > hr.maskLineTop {
+  display: block;
+}
+
+.reverse .dividerIconWarpper i:before{
   transform: rotate(-30deg);
 }
 
-.dividerIconWarpper.reverse  i:after{
+.reverse .dividerIconWarpper  i:after{
   transform: rotate(30deg);
 }
 
@@ -138,6 +172,7 @@
   position: relative;
   width: 2px;
   height: 8px;
-  background-color: #919eab;
+  background-color: #2E405E;
   border-radius: 1px;
 }
+

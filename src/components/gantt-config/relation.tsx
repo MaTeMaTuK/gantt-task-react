@@ -3,6 +3,7 @@ import { Form, Select, Button } from "antd";
 import styles from "./index.module.css";
 import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
 import { omit } from "lodash";
+import WarningIcon from "../icons/warning";
 const { Option } = Select;
 
 interface RelationProps {
@@ -64,7 +65,10 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
   };
   return (
     <div>
-      <h4 className={styles.mb20}>
+      <h4 className={`${styles.timeTips} ${styles.mb20}`}>
+        <em>
+          <WarningIcon />
+        </em>
         为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应卡片的哪个时间字段
       </h4>
       <Form
@@ -156,9 +160,7 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
           </Select>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
-            更新
-          </Button>
+          <Button htmlType="submit">更新</Button>
         </Form.Item>
       </Form>
     </div>
