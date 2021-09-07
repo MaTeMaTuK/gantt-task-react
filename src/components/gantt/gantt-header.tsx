@@ -1,5 +1,5 @@
 import React from "react";
-import { Space, Select } from "antd";
+import { Space, Select, Tooltip } from "antd";
 // import { AimOutlined } from "@ant-design/icons";
 import styles from "./gantt.module.css";
 import { viewModeOptions, ViewMode } from "../../types/public-types";
@@ -44,12 +44,16 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
           </Select>
         </span>
         {/* <AimOutlined className={styles.cursor} onClick={toToday} /> */}
-        <span className={styles.cursor} onClick={toToday}>
-          <ToTodayIcon />
-        </span>
-        <span className={styles.cursor} onClick={handleOperation}>
-          <SettingsIcon />
-        </span>
+        <Tooltip placement="top" title="今天">
+          <span className={styles.cursor} onClick={toToday}>
+            <ToTodayIcon />
+          </span>
+        </Tooltip>
+        <Tooltip placement="top" title="设置">
+          <span className={styles.cursor} onClick={handleOperation}>
+            <SettingsIcon />
+          </span>
+        </Tooltip>
       </Space>
     </div>
   );

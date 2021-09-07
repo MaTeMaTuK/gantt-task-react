@@ -44,7 +44,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
-          height={calendarProps.headerHeight}
+          height={calendarProps.headerHeight - 1} // 减去下边框高度
           fontFamily={barProps.fontFamily}
         >
           <Calendar {...calendarProps} />
