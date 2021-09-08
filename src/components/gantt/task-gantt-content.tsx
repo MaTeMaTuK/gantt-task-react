@@ -6,6 +6,7 @@ import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
 import { isKeyboardEvent } from "../../helpers/other-helper";
 import { TaskItem } from "../task-item/task-item";
 import { GanttConfigContext, ConnectionHandelContext } from "../../contsxt";
+import { filter } from "lodash";
 import {
   offsetCalculators,
   sizeCalculators,
@@ -313,13 +314,23 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       // 连线前校验
       // @ts-ignore
       jsPlumbInstance.bind("beforeDrop", (conn: any) => {
+        const taskSource = filter(tasks, { id: conn.sourceId })[0];
+        const taskTarget = filter(tasks, { id: conn.targetId })[0];
         if (!ganttConfig.relation) {
           message.warning("未配置关联关系");
           return;
         }
         if (conn.targetId === conn.sourceId) {
           message.warning("连线有误");
-          return false;
+          return;
+        }
+        // 父卡片和子卡片不能相互连接，其他类型待定
+        if (
+          (taskSource.type === "parent" && taskTarget.type === "task") ||
+          (taskSource.type === "task" && taskTarget.type === "parent")
+        ) {
+          message.warning("连线有误");
+          return;
         }
         const linkTypeId = getLinkTypeId(
           conn.connection.endpoints[0].anchor.type,

@@ -75,6 +75,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   itemRelationData, // 卡片关联
   customeFieldData, // 字段
   configHandle, // 配置事件
+  setItemTypeValue, // 卡片类型
   ganttConfig = {}, // 配置详情
   itemLinks = [], // 卡片关联
   addConnection,
@@ -604,7 +605,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           itemLinks,
         }}
       >
-        <ConfigHandelContext.Provider value={{ configHandle }}>
+        <ConfigHandelContext.Provider
+          value={{ configHandle, setItemTypeValue }}
+        >
           <GanttConfig toGantt={toGantt} visible={visible} />
           <GanttHeader
             toToday={toToday}

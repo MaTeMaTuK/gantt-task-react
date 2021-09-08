@@ -69,7 +69,6 @@ export const Bar: React.FC<TaskItemProps> = ({
       }
     };
   }, [jsPlumb]);
-  useEffect(() => {}, [barRef, jsPlumb]);
   return (
     <svg ref={barRef}>
       <g className={styles.barWrapper} tabIndex={0}>

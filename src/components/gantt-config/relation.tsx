@@ -2,7 +2,6 @@ import React, { useEffect, useContext, useMemo } from "react";
 import { Form, Select, Button } from "antd";
 import styles from "./index.module.css";
 import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
-import { omit } from "lodash";
 const { Option } = Select;
 
 interface RelationProps {
@@ -33,14 +32,7 @@ const Relation: React.FC<RelationProps> = ({ currentTab }) => {
   }, [currentTab]);
   const onFinish = (values: RelationValueProps) => {
     configHandle({
-      ...omit(ganttConfig, [
-        "ACl",
-        "tennat",
-        "updateAt",
-        "createdAt",
-        "updatedAt",
-        "createdBy",
-      ]),
+      ...ganttConfig,
       relation: values,
     });
   };

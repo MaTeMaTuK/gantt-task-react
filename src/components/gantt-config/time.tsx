@@ -3,7 +3,6 @@ import { Button, Table, Space, Modal } from "antd";
 import styles from "./index.module.css";
 import TimeModal from "./time-modal";
 import { ConfigHandelContext, GanttConfigContext } from "../../contsxt";
-import { omit } from "lodash";
 interface TimeProps {}
 export interface TimeItemProps {
   itemType?: string;
@@ -49,13 +48,13 @@ const Time: React.FC<TimeProps> = () => {
       ),
     },
   ];
-  const { configHandle } = useContext(ConfigHandelContext);
-  const { ganttConfig } = useContext(GanttConfigContext);
-  const { itemTypeData } = useContext(GanttConfigContext);
+  const { configHandle, setItemTypeValue } = useContext(ConfigHandelContext);
+  const { ganttConfig, itemTypeData } = useContext(GanttConfigContext);
   const [currentItem, setCurrentItem] = useState({});
   const [index, setIndex] = useState(0);
   const timeList = useMemo(
-    () => (ganttConfig?.time ? ganttConfig?.time : [{ isDefault: true }]),
+    () =>
+      ganttConfig?.time?.length ? ganttConfig?.time : [{ isDefault: true }],
     [ganttConfig?.time]
   );
   const handleCancel = () => {
@@ -78,25 +77,24 @@ const Time: React.FC<TimeProps> = () => {
     }
     setVisible(false);
     configHandle({
-      ...omit(ganttConfig, [
-        "ACl",
-        "tennat",
-        "updateAt",
-        "createdAt",
-        "updatedAt",
-        "createdBy",
-      ]),
+      ...ganttConfig,
       time: newTimeList,
     });
   };
   const addTime = () => {
     setVisible(true);
     setCurrentItem({});
+    setItemTypeValue("");
   };
   const editTime = (index: number) => {
     setIndex(index);
     setCurrentItem(timeList[index]);
     setVisible(true);
+    if (timeList[index]?.["isDefault"]) {
+      setItemTypeValue(Date.now());
+    } else {
+      setItemTypeValue(timeList[index]?.itemType);
+    }
   };
   const del = (index: number) => {
     Modal.confirm({
@@ -111,16 +109,12 @@ const Time: React.FC<TimeProps> = () => {
     const newTimeList = [...timeList];
     newTimeList.splice(index, 1);
     configHandle({
-      ...omit(ganttConfig, [
-        "ACl",
-        "tennat",
-        "updateAt",
-        "createdAt",
-        "updatedAt",
-        "createdBy",
-      ]),
+      ...ganttConfig,
       time: newTimeList,
     });
+  };
+  const itemTypeChange = (val: string) => {
+    setItemTypeValue(val);
   };
   return (
     <div>
@@ -130,6 +124,7 @@ const Time: React.FC<TimeProps> = () => {
         handleOk={handleOk}
         currentItem={currentItem}
         timeList={timeList} // 做卡片唯一性校验
+        itemTypeChange={itemTypeChange}
       />
       <h4 className={styles.mb20}>
         为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应卡片的哪个时间字段

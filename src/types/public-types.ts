@@ -157,6 +157,7 @@ export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   ganttConfig?: any;
   configHandle?: (value: any) => void;
   delConnection?: (value: string) => void;
+  setItemTypeValue?: (value: string) => void;
   addConnection?: (
     source: string,
     destination: string,
