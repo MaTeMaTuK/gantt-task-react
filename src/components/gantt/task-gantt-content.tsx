@@ -333,8 +333,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           return;
         }
         const linkTypeId = getLinkTypeId(
-          conn.connection.endpoints[0].anchor.type,
-          conn.dropEndpoint.anchor.type
+          conn.connection.endpoints[0].anchor.cssClass,
+          conn.dropEndpoint.anchor.cssClass
         );
         const currentLink = itemLinks.filter((ele: any) => {
           return (
@@ -352,8 +352,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       // @ts-ignore
       jsPlumbInstance.bind("connection", (infor: any, originalEvent: any) => {
         const linkTypeId = getLinkTypeId(
-          infor.connection.endpoints[0].anchor.type,
-          infor.connection.endpoints[1].anchor.type
+          infor.connection.endpoints[0].anchor.cssClass,
+          infor.connection.endpoints[1].anchor.cssClass
         );
         const params = {
           source: infor.sourceId,

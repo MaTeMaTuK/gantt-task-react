@@ -1,8 +1,10 @@
 import React, { useState, useContext, useMemo } from "react";
 import { Button, Table, Space, Modal } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import styles from "./index.module.css";
 import TimeModal from "./time-modal";
 import { ConfigHandelContext, GanttConfigContext } from "../../contsxt";
+import WarningIcon from "../icons/warning";
 interface TimeProps {}
 export interface TimeItemProps {
   itemType?: string;
@@ -126,7 +128,10 @@ const Time: React.FC<TimeProps> = () => {
         timeList={timeList} // 做卡片唯一性校验
         itemTypeChange={itemTypeChange}
       />
-      <h4 className={styles.mb20}>
+      <h4 className={`${styles.timeTips}`}>
+        <em>
+          <WarningIcon />
+        </em>
         为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应卡片的哪个时间字段
       </h4>
       <Table
@@ -138,7 +143,7 @@ const Time: React.FC<TimeProps> = () => {
           return columns.itemType || "default";
         }}
       />
-      <Button type="primary" onClick={addTime}>
+      <Button icon={<PlusOutlined />} onClick={addTime}>
         添加卡片类型
       </Button>
     </div>

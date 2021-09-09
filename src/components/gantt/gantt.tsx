@@ -27,6 +27,7 @@ import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttHeader from "./gantt-header";
 import GanttConfig from "../gantt-config/index";
+import "./gantt.css";
 import {
   GanttConfigContext,
   ConfigHandelContext,
@@ -39,31 +40,31 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   headerHeight = 50,
   // columnWidth = 60,
   listCellWidth = "155px",
-  listWidth = 680,
+  listWidth = 500,
   listBottomHeight = 48,
   rowHeight = 50,
   // viewMode = ViewMode.Day,
   locale = "en-GB",
   // locale = "zh-cn",
-  barFill = 60,
-  barCornerRadius = 3,
-  barProgressColor = "#a3a3ff",
-  barProgressSelectedColor = "#8282f5",
-  barBackgroundColor = "#b8c2cc",
-  barBackgroundSelectedColor = "#aeb8c2",
+  barFill = 50,
+  barCornerRadius = 4,
+  barProgressColor = "#4B8BFF",
+  barProgressSelectedColor = "#4B8BFF",
+  barBackgroundColor = "#4B8BFF",
+  barBackgroundSelectedColor = "#4B8BFF",
   projectProgressColor = "#7db59a",
   projectProgressSelectedColor = "#59a985",
   projectBackgroundColor = "#fac465",
   projectBackgroundSelectedColor = "#f7bb53",
   milestoneBackgroundColor = "#f1c453",
   milestoneBackgroundSelectedColor = "#f29e4c",
-  handleWidth = 3,
+  handleWidth = 2,
   timeStep = 300000,
   arrowColor = "grey",
   fontFamily = "Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue",
   fontSize = "14px",
   arrowIndent = 20,
-  todayColor = "#A3A3FF",
+  todayColor = "#FFAB00",
   TooltipContent = StandardTooltipContent,
   onDateChange,
   onProgressChange,
@@ -87,7 +88,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const [viewMode, setViewMode] = useState(ViewMode.Day);
-  const [columnWidth, setColumnWidth] = useState(60);
+  const [columnWidth, setColumnWidth] = useState(50);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
@@ -118,7 +119,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // const [todayDistance, setTodayDistance] = useState(0);
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
-  const minWidth = 15; // 面板折叠后，taskListWidth 设置成15（设置成0后，dom节点会移除）
+  const minWidth = 1; // 面板折叠后，taskListWidth 设置成1（设置成0后，dom节点会移除）
+  const paddingLeft = 24; // wrapper的padding值， 用于dividerWrapper定位
   // task change events
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
@@ -649,12 +651,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               />
             )}
             <div
-              className={styles.dividerWrapper}
+              className={
+                taskListWidth <= minWidth
+                  ? `${styles.dividerWrapper} ${styles.reverse}`
+                  : styles.dividerWrapper
+              }
               style={{
-                left:
+                left: `${
                   taskListWidth - minWidth > 0
-                    ? `${taskListWidth - minWidth}px`
-                    : 0,
+                    ? taskListWidth + paddingLeft
+                    : paddingLeft
+                }px`,
                 visibility: tasks?.length ? "visible" : "hidden",
               }}
             >
@@ -671,12 +678,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
                       : handleDividerMouseDown
                   }
                 />
+                <hr className={styles.maskLine} />
+                <hr className={styles.maskLineTop} />
                 <span
-                  className={
-                    taskListWidth <= minWidth
-                      ? `${styles.dividerIconWarpper} ${styles.reverse}`
-                      : styles.dividerIconWarpper
-                  }
+                  className={styles.dividerIconWarpper}
                   onMouseDown={e => e.stopPropagation()}
                   onClick={handleDividerClick}
                 >

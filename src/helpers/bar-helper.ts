@@ -313,7 +313,7 @@ export const getProgressPoint = (
     progressX + 5,
     taskY + taskHeight,
     progressX,
-    taskY + taskHeight - 8.66,
+    taskY + taskHeight - 5.66,
   ];
   return point.join(",");
 };
