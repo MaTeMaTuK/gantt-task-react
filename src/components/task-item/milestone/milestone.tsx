@@ -25,7 +25,7 @@ export const Milestone: React.FC<TaskItemProps> = ({
       jsPlumb.addEndpoint(
         task.id,
         {
-          anchors: "Right",
+          anchor: [1, 0.5, 1, 0, 22, 4, "Right"],
           uuid: task.id + "-Right",
         },
 
@@ -35,7 +35,7 @@ export const Milestone: React.FC<TaskItemProps> = ({
       jsPlumb.addEndpoint(
         task.id,
         {
-          anchor: "Left",
+          anchor: [0, 0.5, -1, 0, -22, 4, "Left"],
           uuid: task.id + "-Left",
         },
         commonConfig
@@ -72,7 +72,6 @@ export const Milestone: React.FC<TaskItemProps> = ({
       <rect
         id={task.id}
         fill={getBarColor()}
-        //fill="transparent"
         x={task.x1}
         width={task.height}
         y={task.y}
@@ -82,25 +81,6 @@ export const Milestone: React.FC<TaskItemProps> = ({
         transform={transform}
         className={styles.milestoneBackground}
         onMouseDown={e => {
-          isDateChangeable && onEventStart("move", task, e);
-        }}
-      />
-      {/* <polygon
-        // id={task.id}
-        fill={getBarColor()}
-        points={points}
-        onMouseDown={e => {
-          isDateChangeable && onEventStart("move", task, e);
-        }}
-      /> */}
-      <image
-        href="http://180.76.121.222/parse/files/proxima-core/bd4cf7c4ca1938295cafdfacefe68874_mail-stone.png"
-        x={task.x1}
-        y={task.y}
-        width={task.height}
-        height={task.height}
-        onMouseDown={e => {
-          console.log(e, "e");
           isDateChangeable && onEventStart("move", task, e);
         }}
       />
