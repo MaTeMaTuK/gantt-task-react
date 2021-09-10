@@ -37,12 +37,12 @@ import {
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   isUpdate,
-  headerHeight = 50,
+  headerHeight = 40,
   // columnWidth = 60,
   listCellWidth = "155px",
   listWidth = 500,
   listBottomHeight = 48,
-  rowHeight = 50,
+  rowHeight = 40,
   // viewMode = ViewMode.Day,
   locale = "en-GB",
   // locale = "zh-cn",
@@ -267,10 +267,18 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const handleWheel = useCallback(
     (event: WheelEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
       if (Math.abs(event.deltaX) >= Math.abs(event.deltaY)) {
         if (event.deltaX !== 0) {
+          // @ts-ignore
+          const path = event.path || [];
+          const filterData = path.filter(
+            (ele: HTMLDivElement) => ele.id === "ganttTaskListWrapper"
+          );
+          if (filterData?.length) {
+            return;
+          }
+          event.preventDefault();
+          event.stopPropagation();
           const scrollX = refScrollX.current;
           const scrollMove = event.deltaX;
           let newScrollX = scrollX + scrollMove;
@@ -284,6 +292,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           setScrollX(refScrollX.current);
         }
       } else {
+        event.preventDefault();
+        event.stopPropagation();
         if (event.deltaY !== 0) {
           // Y轴滚动处理
           const max = ganttFullHeight - ganttHeight;
@@ -628,6 +638,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               <div
                 ref={taskListRef}
                 className={styles.taskListWrapper}
+                id="ganttTaskListWrapper"
                 style={{
                   width: `${taskListWidth}px`,
                   visibility: tasks?.length ? "visible" : "hidden",
@@ -661,14 +672,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
                     : paddingLeft
                 }px`,
                 visibility: tasks?.length ? "visible" : "hidden",
+                height: `calc(100% - ${listBottomHeight}px)`,
               }}
             >
-              <div
-                className={styles.dividerContainer}
-                style={{
-                  height: `calc(100% - ${listBottomHeight}px)`,
-                }}
-              >
+              <div className={styles.dividerContainer}>
                 <hr
                   onMouseDown={
                     taskListWidth <= minWidth
