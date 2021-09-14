@@ -1,6 +1,5 @@
 import React from "react";
 import { Space, Select, Tooltip } from "antd";
-// import { AimOutlined } from "@ant-design/icons";
 import styles from "./gantt.module.css";
 import { viewModeOptions, ViewMode } from "../../types/public-types";
 import SettingsIcon from "../icons/settings";
@@ -16,7 +15,6 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
   toConfig,
   modeChange,
 }) => {
-  // const [viewMode, setViewMode] = useState("Day");
   const handleOperation = () => {
     toConfig();
   };
@@ -28,7 +26,7 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
       <Space size={20}>
         <span className="ganttCalendarSelect">
           <Select
-            style={{ width: 50 }}
+            style={{ width: 70 }}
             onChange={handleChange}
             defaultValue={ViewMode.Day}
             virtual={false}
@@ -43,7 +41,6 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
             })}
           </Select>
         </span>
-        {/* <AimOutlined className={styles.cursor} onClick={toToday} /> */}
         <Tooltip placement="top" title="今天">
           <span className={styles.cursor} onClick={toToday}>
             <ToTodayIcon />

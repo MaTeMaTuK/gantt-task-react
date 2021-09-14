@@ -1,7 +1,7 @@
-import { Task } from "../types/public-types";
+import { Task, ViewMode, DateDeltaInit } from "../types/public-types";
 import { BarTask, TaskTypeInternal } from "../types/bar-task";
 import { BarMoveAction } from "../types/gantt-task-actions";
-
+import { isLeapYear, getQuarter } from "../helpers/other-helper";
 export const convertToBarTasks = (
   tasks: Task[],
   dates: Date[],
@@ -19,7 +19,8 @@ export const convertToBarTasks = (
   projectBackgroundColor: string,
   projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
-  milestoneBackgroundSelectedColor: string
+  milestoneBackgroundSelectedColor: string,
+  viewMode: string
 ) => {
   const dateDelta =
     dates[1].getTime() -
@@ -46,7 +47,8 @@ export const convertToBarTasks = (
       projectBackgroundColor,
       projectBackgroundSelectedColor,
       milestoneBackgroundColor,
-      milestoneBackgroundSelectedColor
+      milestoneBackgroundSelectedColor,
+      viewMode
     );
   });
 
@@ -83,7 +85,8 @@ const convertToBarTask = (
   projectBackgroundColor: string,
   projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
-  milestoneBackgroundSelectedColor: string
+  milestoneBackgroundSelectedColor: string,
+  viewMode: string
 ): BarTask => {
   let barTask: BarTask;
   switch (task.type) {
@@ -116,7 +119,8 @@ const convertToBarTask = (
         projectProgressColor,
         projectProgressSelectedColor,
         projectBackgroundColor,
-        projectBackgroundSelectedColor
+        projectBackgroundSelectedColor,
+        viewMode
       );
       break;
     default:
@@ -133,7 +137,8 @@ const convertToBarTask = (
         barProgressColor,
         barProgressSelectedColor,
         barBackgroundColor,
-        barBackgroundSelectedColor
+        barBackgroundSelectedColor,
+        viewMode
       );
       break;
   }
@@ -153,10 +158,23 @@ const convertToBar = (
   barProgressColor: string,
   barProgressSelectedColor: string,
   barBackgroundColor: string,
-  barBackgroundSelectedColor: string
+  barBackgroundSelectedColor: string,
+  viewMode: string
 ): BarTask => {
-  const x1: any = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
-  let x2: any = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
+  const x1: any = taskXCoordinate(
+    task.start,
+    dates,
+    dateDelta,
+    columnWidth,
+    viewMode
+  );
+  let x2: any = taskXCoordinate(
+    task.end,
+    dates,
+    dateDelta,
+    columnWidth,
+    viewMode
+  );
   const y = taskYCoordinate(index, rowHeight, taskHeight);
 
   const styles = {
@@ -234,17 +252,53 @@ const taskXCoordinate = (
   xDate: Date,
   dates: Date[],
   dateDelta: number,
-  columnWidth: number
+  columnWidth: number,
+  viewMode?: string
 ) => {
   if (!xDate) return;
-  // debugger
-  let index = ~~(
-    (xDate.getTime() -
-      dates[0].getTime() +
-      xDate.getTimezoneOffset() -
-      dates[0].getTimezoneOffset()) /
-    dateDelta
-  );
+  let precision;
+  let index = 0;
+  if (viewMode === ViewMode.Month) {
+    index =
+      xDate?.getFullYear() * 12 +
+      xDate?.getMonth() -
+      dates[0]?.getFullYear() * 12 -
+      dates[0]?.getMonth();
+    if (isLeapYear(xDate?.getFullYear()) && xDate?.getMonth() === 1) {
+      precision = DateDeltaInit.LeapMounth;
+    } else {
+      precision = DateDeltaInit[ViewMode.Month][xDate?.getMonth() + 1];
+    }
+  } else if (viewMode === ViewMode.Year) {
+    index = xDate?.getFullYear() - dates[0]?.getFullYear();
+    precision = isLeapYear(xDate?.getFullYear())
+      ? DateDeltaInit[ViewMode.Year].leap
+      : DateDeltaInit[ViewMode.Year].common;
+  } else if (viewMode === ViewMode.Quarter) {
+    index =
+      xDate?.getFullYear() * 4 +
+      getQuarter(xDate?.getMonth() + 1) -
+      dates[0]?.getFullYear() * 4 -
+      getQuarter(dates[0]?.getMonth() + 1);
+    if (
+      isLeapYear(xDate?.getFullYear()) &&
+      getQuarter(xDate?.getMonth() + 1) === 1
+    ) {
+      precision = DateDeltaInit.LeapQuarter;
+    } else {
+      precision =
+        DateDeltaInit[ViewMode.Quarter][getQuarter(xDate?.getMonth() + 1)];
+    }
+  } else {
+    index = ~~(
+      (xDate.getTime() -
+        dates[0].getTime() +
+        xDate.getTimezoneOffset() -
+        dates[0].getTimezoneOffset()) /
+      dateDelta
+    );
+    precision = dateDelta;
+  }
   if (index < 0) {
     index = 0;
   } else if (index > dates.length - 1) {
@@ -256,7 +310,7 @@ const taskXCoordinate = (
         dates[index].getTime() -
         xDate.getTimezoneOffset() * 60 * 1000 +
         dates[index].getTimezoneOffset() * 60 * 1000) /
-        dateDelta) *
+        precision) *
       columnWidth
   );
   return x;
