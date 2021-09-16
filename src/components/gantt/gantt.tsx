@@ -26,7 +26,6 @@ import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
-// import GanttHeader from "./gantt-header";
 import GanttConfig from "../gantt-config/index";
 import "./gantt.css";
 import {
@@ -631,11 +630,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       >
         <ConfigHandelContext.Provider value={{ configHandle }}>
           <GanttConfig toGantt={toGantt} visible={visible} />
-          {/* <GanttHeader
-            toToday={toToday}
-            toConfig={toConfig}
-            modeChange={modeChange}
-          /> */}
         </ConfigHandelContext.Provider>
         <ConnectionHandelContext.Provider
           value={{ delConnection, addConnection }}
