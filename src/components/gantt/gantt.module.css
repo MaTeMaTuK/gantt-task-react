@@ -36,7 +36,7 @@
   height: 100%;
   flex: 1;
   overflow: hidden;
-  padding: 0 12px 0 24px;
+  padding: 0 12px 0 0px;
 }
 
 .task-gantt-wrapper {
@@ -46,7 +46,7 @@
 }
 
 .calendarWrapper {
-  height: 50px;
+  height: 40px;
 }
 .ganttHeader {
   text-align: right;
