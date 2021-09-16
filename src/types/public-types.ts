@@ -151,7 +151,6 @@ export interface StylingOption {
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
   itemTypeData?: OptionsProp[];
-  itemRelationData?: OptionsProp[];
   customeFieldData?: OptionsProp[];
   itemLinks?: any[];
   ganttConfig?: any;

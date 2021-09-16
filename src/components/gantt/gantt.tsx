@@ -73,7 +73,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onSelect,
   renderTaskListComponent,
   itemTypeData, // 卡片类型
-  itemRelationData, // 卡片关联
   customeFieldData, // 字段
   configHandle, // 配置事件
   ganttConfig = {}, // 配置详情
@@ -611,7 +610,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       <GanttConfigContext.Provider
         value={{
           itemTypeData,
-          itemRelationData,
           customeFieldData,
           ganttConfig,
           itemLinks,
