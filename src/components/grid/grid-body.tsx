@@ -19,12 +19,9 @@ export type GridBodyProps = {
 } & EventOption;
 // 判断是否为周末
 export const isRestDay = (date: Date) => {
-  // 周末测试
-  console.log(date, "gantt-task-react");
-  console.log(dayjs(date).weekday(), "week");
+  // 周末显示问题测试
   return [0, 6].includes(dayjs(date).weekday());
 };
-
 export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
   dates,
@@ -286,7 +283,12 @@ export const GridBody: React.FC<GridBodyProps> = ({
             width={columnWidth - 1}
             height={y}
             className={styles.gridTickWeekday}
-          />
+          >
+            <text>{JSON.stringify(dayjs(date))}</text>
+            <text>{JSON.stringify(date)}</text>
+            <text>{dayjs(date).weekday()}</text>
+            <text>{dayjs(date).weekday()}</text>
+          </rect>
         )}
       </g>
     );
