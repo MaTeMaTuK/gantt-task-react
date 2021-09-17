@@ -5,7 +5,6 @@ import React, {
   useEffect,
   useMemo,
   useCallback,
-  useImperativeHandle,
 } from "react";
 // import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import { ViewMode, GanttProps } from "../../types/public-types";
@@ -27,6 +26,7 @@ import { DateSetup } from "../../types/date-setup";
 import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttConfig from "../gantt-config/index";
+import GanttHeader from "./gantt-header";
 import "./gantt.css";
 import {
   GanttConfigContext,
@@ -79,7 +79,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   itemLinks = [], // 卡片关联
   addConnection,
   delConnection,
-  actionRef,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -121,17 +120,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const minWidth = 1; // 面板折叠后，taskListWidth 设置成1（设置成0后，dom节点会移除）
   const paddingLeft = 24; // wrapper的padding值， 用于dividerWrapper定位
 
-  useImperativeHandle(actionRef, () => ({
-    toToday() {
-      toToday();
-    },
-    toConfig() {
-      toConfig();
-    },
-    modeChange(val: ViewMode) {
-      modeChange(val);
-    },
-  }));
   // task change events
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
@@ -630,6 +618,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       >
         <ConfigHandelContext.Provider value={{ configHandle }}>
           <GanttConfig toGantt={toGantt} visible={visible} />
+          <GanttHeader
+            toToday={toToday}
+            toConfig={toConfig}
+            modeChange={modeChange}
+          />
         </ConfigHandelContext.Provider>
         <ConnectionHandelContext.Provider
           value={{ delConnection, addConnection }}

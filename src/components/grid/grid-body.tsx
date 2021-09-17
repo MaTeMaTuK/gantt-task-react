@@ -19,6 +19,9 @@ export type GridBodyProps = {
 } & EventOption;
 // 判断是否为周末
 export const isRestDay = (date: Date) => {
+  // 周末测试
+  console.log(date, "gantt-task-react");
+  console.log(dayjs(date).weekday(), "week");
   return [0, 6].includes(dayjs(date).weekday());
 };
 
