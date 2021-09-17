@@ -284,10 +284,9 @@ export const GridBody: React.FC<GridBodyProps> = ({
             height={y}
             className={styles.gridTickWeekday}
           >
-            <text>{JSON.stringify(dayjs(date))}</text>
-            <text>{JSON.stringify(date)}</text>
-            <text>{dayjs(date).weekday()}</text>
-            <text>{dayjs(date).weekday()}</text>
+            {/* 测试代码 */}
+            <text>{JSON.stringify(dayjs(date).format())}</text>
+            <text>{date.getDate()}</text>
           </rect>
         )}
       </g>

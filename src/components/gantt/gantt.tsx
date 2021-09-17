@@ -86,7 +86,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const [viewMode, setViewMode] = useState(ViewMode.Day);
-  const [columnWidth, setColumnWidth] = useState(60);
+  const [columnWidth, setColumnWidth] = useState(50);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
@@ -570,7 +570,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     } else if (val === ViewMode.Quarter) {
       setColumnWidth(180);
     } else {
-      setColumnWidth(60);
+      setColumnWidth(50);
     }
   };
 
