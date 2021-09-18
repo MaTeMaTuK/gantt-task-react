@@ -29,14 +29,13 @@
 .wrapper {
   position: relative;
   display: flex;
-  padding: 0;
   margin: 0;
   list-style: none;
   outline: none;
   height: 100%;
   flex: 1;
   overflow: hidden;
-  padding: 0 12px 0 0px;
+  padding: 0 12px 0 24px;
 }
 
 .task-gantt-wrapper {
