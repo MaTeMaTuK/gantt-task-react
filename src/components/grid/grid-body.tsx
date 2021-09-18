@@ -2,7 +2,6 @@ import React, { ReactChild, useState, useEffect } from "react";
 import { Task, ViewMode, EventOption } from "../../types/public-types";
 import { addToDate } from "../../helpers/date-helper";
 import styles from "./grid.module.css";
-// import { GanttContext } from "../../contsxt";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 dayjs.extend(weekday);
@@ -18,9 +17,10 @@ export type GridBodyProps = {
   offsetLeft: number;
 } & EventOption;
 // 判断是否为周末
-export const isRestDay = (date: Date) => {
-  // 周末显示问题测试
-  return [0, 6].includes(dayjs(date).weekday());
+// 之前用是dayjs的weekday()方法获取周几，本地运行可以，但是线上包计算有无，具体原因不确定，所以采用getDay方法
+const isRestDay = (date: Date) => {
+  const dt = new Date(date);
+  return [0, 6].includes(dt.getDay());
 };
 export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
@@ -283,11 +283,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
             width={columnWidth - 1}
             height={y}
             className={styles.gridTickWeekday}
-          >
-            {/* 测试代码 */}
-            <text>{JSON.stringify(dayjs(date).format())}</text>
-            <text>{date.getDate()}</text>
-          </rect>
+          />
         )}
       </g>
     );
