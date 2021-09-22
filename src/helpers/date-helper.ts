@@ -12,7 +12,10 @@ type DateHelperScales =
   | "millisecond";
 
 const intlDTCache = {};
-export const getCachedDateTimeFormat = (locString: string | string[], opts: DateTimeFormatOptions = {}): DateTimeFormat => {
+export const getCachedDateTimeFormat = (
+  locString: string | string[],
+  opts: DateTimeFormatOptions = {}
+): DateTimeFormat => {
   const key = JSON.stringify([locString, opts]);
   let dtf = intlDTCache[key];
   if (!dtf) {
