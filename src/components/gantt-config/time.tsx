@@ -20,7 +20,7 @@ const Time: React.FC<TimeProps> = () => {
   const [visible, setVisible] = useState(false);
   const columns = [
     {
-      title: "卡片类型",
+      title: "事项类型",
       dataIndex: "itemType",
       key: "name",
       render: (text: string) => {
@@ -149,7 +149,7 @@ const Time: React.FC<TimeProps> = () => {
         }}
       />
       <Button icon={<PlusOutlined />} onClick={addTime}>
-        添加卡片类型
+        添加事项类型
       </Button>
     </div>
   );
