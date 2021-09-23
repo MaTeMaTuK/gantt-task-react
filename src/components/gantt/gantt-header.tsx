@@ -26,7 +26,7 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
       <Space size={20}>
         <span className="ganttCalendarSelect">
           <Select
-            style={{ width: 70 }}
+            style={{ width: 50 }}
             onChange={handleChange}
             defaultValue={ViewMode.Day}
             virtual={false}
