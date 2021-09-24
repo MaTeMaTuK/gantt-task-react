@@ -64,7 +64,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     />,
   ];
   const handleMouseMove = (event: any, index: number) => {
-    const pointerX = event.clientX - offsetLeft;
+    const pointerX = event.clientX - offsetLeft - 24;
     // 整数
     const currentDataIndex = Math.floor((pointerX + scrollX) / columnWidth);
     setCurrentDataIndex(currentDataIndex);
