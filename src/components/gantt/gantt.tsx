@@ -27,6 +27,7 @@ import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttConfig from "../gantt-config/index";
 import GanttHeader from "./gantt-header";
+import ArrowIcon from "../icons/arrow";
 import "./gantt.css";
 import {
   GanttConfigContext,
@@ -44,9 +45,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   listBottomHeight = 48,
   rowHeight = 40,
   // viewMode = ViewMode.Day,
-  locale = "en-GB",
-  // locale = "zh-cn",
-  barFill = 50,
+  //locale = "en-GB",
+  locale = "zh-cn",
+  barFill = 60,
   barCornerRadius = 4,
   barProgressColor = "#4B8BFF",
   barProgressSelectedColor = "#4B8BFF",
@@ -118,7 +119,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
   const minWidth = 1; // 面板折叠后，taskListWidth 设置成1（设置成0后，dom节点会移除）
-  const paddingLeft = 24; // wrapper的padding值， 用于dividerWrapper定位
+  const paddingLeft = 0; // wrapper的padding值， 用于dividerWrapper定位
 
   // task change events
   useEffect(() => {
@@ -215,10 +216,20 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       setTaskListWidth(0);
     }
     if (taskListRef.current) {
+      console.log(taskListRef.current.offsetHeight, "hieght");
       setTaskListWidth(taskListRef.current.offsetWidth);
     }
   }, [taskListRef, listCellWidth]);
-
+  // 在数据为空时宽度设为100%，和structure保持一致
+  useEffect(() => {
+    if (wrapperRef.current) {
+      if (tasks.length) {
+        setTaskListWidth(listWidth);
+      } else {
+        setTaskListWidth(wrapperRef?.current?.offsetWidth);
+      }
+    }
+  }, [tasks]);
   useEffect(() => {
     if (wrapperRef.current) {
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
@@ -232,7 +243,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       setSvgContainerHeight(tasks.length * rowHeight + headerHeight);
     }
   }, [ganttHeight, tasks]);
-
   useEffect(() => {
     const ele = taskGanttContainerRef?.current?.horizontalContainerRef;
     if (ele) {
@@ -656,6 +666,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
                 ganttHeight={ganttHeight}
                 scrollX={scrollX}
                 onScroll={handleScrollX}
+                taskListHieght={taskListRef?.current?.offsetHeight}
               />
             )}
             <div
@@ -689,7 +700,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
                   onMouseDown={e => e.stopPropagation()}
                   onClick={handleDividerClick}
                 >
-                  <i />
+                  <ArrowIcon />
                 </span>
               </div>
             </div>

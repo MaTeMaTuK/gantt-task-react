@@ -6,7 +6,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  margin-bottom: 48px;
+  margin-bottom: 47px;
   border: 1px solid #eee;
 }
 
@@ -24,6 +24,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding: 0 20px 0 9px;
 }
 
 .wrapper {
@@ -35,7 +36,7 @@
   height: 100%;
   flex: 1;
   overflow: hidden;
-  padding: 0 12px 0 24px;
+  padding: 0;
 }
 
 .task-gantt-wrapper {
@@ -50,7 +51,7 @@
 .ganttHeader {
   text-align: right;
   margin: 0 0 16px;
-  padding: 0 20px;
+  padding: 0 4px;
 }
 .cursor {
   cursor: pointer;
@@ -60,6 +61,15 @@
   position: relative;
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
+}
+.taskListWrapper::after{
+  content: '';
+  position: absolute;
+  left: -1px;
+  bottom: 0;
+  background:#fff;
+  width: 1px;
+  height: 47px;
 }
 .taskListWrapper>div {
   padding: 0;
@@ -83,7 +93,7 @@
   left: 0;
   width: 2px;
   background: #fff;
-  height: calc(100% - 48px);
+  height: calc(100% - 47px);
   border-left: 2px solid #ecedf0;
 }
 
@@ -143,6 +153,9 @@
 
 .reverse .dividerContainer > hr.maskLineTop {
   display: block;
+}
+.reverse .dividerIconWarpper svg{
+  transform: rotate(-180deg);
 }
 
 .reverse .dividerIconWarpper i:before{
