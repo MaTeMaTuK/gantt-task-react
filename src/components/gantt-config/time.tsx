@@ -137,7 +137,7 @@ const Time: React.FC<TimeProps> = () => {
         <em>
           <WarningIcon />
         </em>
-        为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应卡片的哪个时间字段
+        为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应事项的哪个时间字段
       </h4>
       <Table
         columns={columns}
