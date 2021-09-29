@@ -24,20 +24,17 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  /* padding: 0 20px 0 9px; */
-  margin-left: -15px;
 }
 
 .wrapper {
   position: relative;
   display: flex;
-  margin: 0;
+  margin: 15px 0 0 0;
   list-style: none;
   outline: none;
   height: 100%;
   flex: 1;
   overflow: hidden;
- 
   padding: 0 20px 0px 24px;
 }
 

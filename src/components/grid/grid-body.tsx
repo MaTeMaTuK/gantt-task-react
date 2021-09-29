@@ -213,26 +213,29 @@ export const GridBody: React.FC<GridBodyProps> = ({
             handleInvalidColumnMouseMove(i, tasks[i]);
           }}
         />
-        <rect
-          key={"Time" + tasks[i].id + i}
-          x={translateX}
-          y={y + rowHeight / 2 - 30 / 2}
-          width={columnWidth / parts}
-          height={30}
-          fill="transparent"
-          onClick={isShow ? invalidBarClick : () => {}}
-          cursor={isShow ? "pointer" : "default"}
-          onMouseEnter={(e: any) => {
-            const ele = e.target.parentNode;
-            const index = ele.getAttribute("index");
-            if (isShow && i === Number(index)) {
-              e.target.style.fill = "#AFCBFF";
-            }
-          }}
-          onMouseLeave={(e: any) => {
-            e.target.style.fill = "transparent";
-          }}
-        />
+        {/* 卡片为空时不能添加时间 */}
+        {tasks[i].id && (
+          <rect
+            key={"Time" + tasks[i].id + i}
+            x={translateX}
+            y={y + rowHeight / 2 - 30 / 2}
+            width={columnWidth / parts}
+            height={30}
+            fill="transparent"
+            onClick={isShow ? invalidBarClick : () => {}}
+            cursor={isShow ? "pointer" : "default"}
+            onMouseEnter={(e: any) => {
+              const ele = e.target.parentNode;
+              const index = ele.getAttribute("index");
+              if (isShow && i === Number(index)) {
+                e.target.style.fill = "#AFCBFF";
+              }
+            }}
+            onMouseLeave={(e: any) => {
+              e.target.style.fill = "transparent";
+            }}
+          />
+        )}
       </g>
     );
     invalidColumn.push(
