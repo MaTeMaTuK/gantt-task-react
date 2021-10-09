@@ -7,3 +7,14 @@
   white-space: initial;
   text-overflow: initial;
 }
+:global(.overlay-label) {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  visibility: hidden;
+}
+:global(.overlay-label.jtk-hover) {
+  visibility: visible;
+  display:visible
+}

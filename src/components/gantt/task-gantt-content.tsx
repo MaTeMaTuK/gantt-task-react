@@ -11,7 +11,6 @@ import {
   offsetCalculators,
   sizeCalculators,
   relationReverse,
-  // commonConfig,
   relationInit,
 } from "../../helpers/jsPlumbConfig";
 import {
@@ -260,6 +259,24 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     const linkType = relationReverse(start, end);
     return ganttConfig.relation[linkType];
   };
+  const deleteConn = (conn: any) => {
+    const currentLink = itemLinks.filter((ele: any) => {
+      return (
+        ele.source.objectId === conn.sourceId &&
+        ele.destination.objectId === conn.targetId &&
+        ele.linkType.objectId === conn.getData()
+      );
+    });
+    if (currentLink.length) {
+      Modal.confirm({
+        title: "解除关联关系",
+        content: "确定要解除卡片的关联关系吗？",
+        okText: "确认",
+        cancelText: "取消",
+        onOk: () => delConnection(currentLink[0].objectId),
+      });
+    }
+  };
   useEffect(() => {
     import("jsplumb").then(({ jsPlumb }: any) => {
       jsPlumb.ready(() => {
@@ -291,26 +308,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       };
       // @ts-ignore
       jsPlumbInstance.setContainer("horizontalContainer");
-      // 删除连线
-      // @ts-ignore
-      jsPlumbInstance.bind("click", function (conn: any) {
-        const currentLink = itemLinks.filter((ele: any) => {
-          return (
-            ele.source.objectId === conn.sourceId &&
-            ele.destination.objectId === conn.targetId &&
-            ele.linkType.objectId === conn.getData()
-          );
-        });
-        if (currentLink.length) {
-          Modal.confirm({
-            title: "解除关联关系",
-            content: "确定要解除卡片的关联关系吗？",
-            okText: "确认",
-            cancelText: "取消",
-            onOk: () => delConnection(currentLink[0].objectId),
-          });
-        }
-      });
       // 连线前校验
       // @ts-ignore
       jsPlumbInstance.bind("beforeDrop", (conn: any) => {
@@ -360,6 +357,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           destination: infor.targetId,
           linkType: linkTypeId,
         };
+        // init(infor.connection);
         if (originalEvent) {
           infor.connection.setData(linkTypeId);
           addConnection(params);
@@ -368,8 +366,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     }
     return () => {
       if (jsPlumbInstance) {
-        // @ts-ignore
-        jsPlumbInstance.unbind("click");
         // @ts-ignore
         jsPlumbInstance.unbind("beforeDrop");
         // @ts-ignore
@@ -426,6 +422,20 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           });
           // 给连线设置linkType
           if (connect) {
+            connect.addOverlay([
+              "Label",
+              {
+                label: `<svg t="1633768438353" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4762" width="20" height="20"><path d="M522.24 512m-440.32 0a440.32 440.32 0 1 0 880.64 0 440.32 440.32 0 1 0-880.64 0Z" fill="#666666" p-id="4763"></path><path d="M667.136 687.616c-7.68 0-15.872-3.072-21.504-9.216L355.84 389.12c-11.776-11.776-11.776-31.232 0-43.52 11.776-11.776 31.232-11.776 43.52 0l289.792 289.792c11.776 11.776 11.776 31.232 0 43.52-6.144 5.632-14.336 8.704-22.016 8.704z" fill="#FFFFFF" p-id="4764"></path><path d="M377.344 687.616c-7.68 0-15.872-3.072-21.504-9.216-11.776-11.776-11.776-31.232 0-43.52L645.12 345.6c11.776-11.776 31.232-11.776 43.52 0 11.776 11.776 11.776 31.232 0 43.52L399.36 678.4c-6.144 6.144-13.824 9.216-22.016 9.216z" fill="#FFFFFF" p-id="4765"></path></svg>`,
+                location: 0.5,
+                cssClass: "overlay-label",
+                events: {
+                  click: function () {
+                    deleteConn(connect);
+                  },
+                },
+                id: uuid[0],
+              },
+            ]);
             connect.setData(ganttConfig.relation[relationType]);
           }
         }

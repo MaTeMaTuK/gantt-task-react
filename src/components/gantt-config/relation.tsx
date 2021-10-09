@@ -3,18 +3,15 @@ import { Form, Select, Button } from "antd";
 import styles from "./index.module.css";
 import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
 import WarningIcon from "../icons/warning";
+import { TabConfigProps } from "../../types/public-types";
 const { Option } = Select;
-
-interface RelationProps {
-  currentTab: string;
-}
 interface RelationValueProps {
   FS: string;
   FF: string;
   SS: string;
   SF: string;
 }
-const Relation: React.FC<RelationProps> = ({ currentTab }) => {
+const Relation: React.FC<TabConfigProps> = ({ currentTab }) => {
   const [form] = Form.useForm();
   const { itemRelationData } = useContext(GanttConfigContext);
   const { ganttConfig } = useContext(GanttConfigContext);

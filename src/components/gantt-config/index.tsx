@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Tabs, Drawer } from "antd";
 import Time from "./time";
-import Relation from "./relation";
+// import Relation from "./relation";
 import MileStone from "./milestone";
+import OtherConfig from "./other-config";
 // import styles from "./index.module.css";
 import styles from "./index.module.css";
 const { TabPane } = Tabs;
@@ -32,11 +33,14 @@ const GanttConfig: React.FC<GanttConfigProps> = ({ toGantt, visible }) => {
         <TabPane tab="时间字段配置" key="time">
           <Time />
         </TabPane>
-        <TabPane tab="关联关系配置" key="relation">
+        {/* <TabPane tab="关联关系配置" key="relation">
           <Relation currentTab={tabs} />
-        </TabPane>
+        </TabPane> */}
         <TabPane tab="里程碑配置" key="mileStone">
           <MileStone currentTab={tabs} />
+        </TabPane>
+        <TabPane tab="其他配置" key="otherConfig">
+          <OtherConfig currentTab={tabs}/>
         </TabPane>
       </Tabs>
     </Drawer>

@@ -3,16 +3,13 @@ import { Form, Select, Button } from "antd";
 import styles from "./index.module.css";
 import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
 import { filterFields } from "./time-modal";
+import { TabConfigProps } from "../../types/public-types";
 const { Option } = Select;
-
-interface milestoneProps {
-  currentTab?: string;
-}
 interface RelationValueProps {
   itemType: string;
   startDate: string;
 }
-const MileStone: React.FC<milestoneProps> = ({ currentTab }) => {
+const MileStone: React.FC<TabConfigProps> = ({ currentTab }) => {
   const [form] = Form.useForm();
   const { ganttConfig, itemTypeData, customeFieldData } = useContext(
     GanttConfigContext

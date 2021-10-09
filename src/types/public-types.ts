@@ -170,3 +170,6 @@ export interface OptionsProp {
   label: string;
   value: string;
 }
+export interface TabConfigProps {
+  currentTab: string;
+}
