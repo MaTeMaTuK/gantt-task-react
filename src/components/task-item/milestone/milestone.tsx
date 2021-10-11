@@ -31,7 +31,6 @@ export const Milestone: React.FC<TaskItemProps> = ({
 
         commonConfig
       );
-      // @ts-ignore
       jsPlumb.addEndpoint(
         task.id,
         {

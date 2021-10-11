@@ -35,8 +35,7 @@ const Time: React.FC<TimeProps> = () => {
       title: "操作",
       key: "action",
       width: 120,
-      // @ts-ignore
-      render: (text: string, record: TimeItemProps, index: number) => (
+      render: (_text: string, record: TimeItemProps, index: number) => (
         <Space>
           <a type="link" onClick={() => editTime(index)}>
             配置
@@ -52,7 +51,7 @@ const Time: React.FC<TimeProps> = () => {
   ];
   const { configHandle, setItemTypeValue } = useContext(ConfigHandelContext);
   const { ganttConfig, itemTypeData } = useContext(GanttConfigContext);
-  const [currentItem, setCurrentItem] = useState({});
+  const [currentItem, setCurrentItem] = useState<any>({});
   const [index, setIndex] = useState(0);
   const timeList = useMemo(
     () =>
@@ -66,9 +65,7 @@ const Time: React.FC<TimeProps> = () => {
     let newTimeList;
     if (Object.keys(currentItem).length) {
       newTimeList = [...timeList];
-      // @ts-ignore
       if (currentItem?.isDefault) {
-        // @ts-ignore
         values.isDefault = currentItem?.isDefault;
       }
       newTimeList[index] = values;

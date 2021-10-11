@@ -37,7 +37,6 @@ export const Bar: React.FC<TaskItemProps> = ({
         },
         commonConfig
       );
-      // @ts-ignore
       jsPlumb.addEndpoint(
         task.id,
         {

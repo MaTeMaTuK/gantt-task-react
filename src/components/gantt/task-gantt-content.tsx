@@ -19,6 +19,7 @@ import {
   GanttEvent,
 } from "../../types/gantt-task-actions";
 import { message, Modal } from "antd";
+
 export type TaskGanttContentProps = {
   tasks: BarTask[];
   dates: Date[];
@@ -66,7 +67,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
-  const [jsPlumbInstance, setJsPlumbInstance] = useState(null);
+  const [jsPlumbInstance, setJsPlumbInstance] = useState<any>(null);
   const { ganttConfig } = useContext(GanttConfigContext);
   const { itemLinks } = useContext(GanttConfigContext);
   const { delConnection } = useContext(ConnectionHandelContext);
@@ -288,28 +289,22 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   }, []);
   useEffect(() => {
     if (jsPlumbInstance) {
-      // @ts-ignore
       const originalOffset = jsPlumbInstance.getOffset;
-      // @ts-ignore
       const originalSize = jsPlumbInstance.getSize;
-      // @ts-ignore
       jsPlumbInstance.getOffset = function (el: any) {
         const tn = el.tagName.toUpperCase();
         if (offsetCalculators[tn]) {
           return offsetCalculators[tn](el);
         } else return originalOffset.apply(this, [el]);
       };
-      // @ts-ignore
       jsPlumbInstance.getSize = function (el: any) {
         const tn = el.tagName.toUpperCase();
         if (sizeCalculators[tn]) {
           return sizeCalculators[tn](el);
         } else return originalSize.apply(this, [el]);
       };
-      // @ts-ignore
       jsPlumbInstance.setContainer("horizontalContainer");
       // 连线前校验
-      // @ts-ignore
       jsPlumbInstance.bind("beforeDrop", (conn: any) => {
         const taskSource = filter(tasks, { id: conn.sourceId })[0];
         const taskTarget = filter(tasks, { id: conn.targetId })[0];
@@ -346,7 +341,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         }
         return true;
       });
-      // @ts-ignore
       jsPlumbInstance.bind("connection", (infor: any, originalEvent: any) => {
         const linkTypeId = getLinkTypeId(
           infor.connection.endpoints[0].anchor.cssClass,
@@ -366,9 +360,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     }
     return () => {
       if (jsPlumbInstance) {
-        // @ts-ignore
         jsPlumbInstance.unbind("beforeDrop");
-        // @ts-ignore
         jsPlumbInstance.unbind("connection");
       }
     };
@@ -406,7 +398,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   useEffect(() => {
     if (jsPlumbInstance) {
-      // @ts-ignore
       jsPlumbInstance.setSuspendDrawing(true);
       for (let i = 0; i < connectUuids.length; i++) {
         const uuidObj = connectUuids[i];
@@ -416,7 +407,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
             `${source}-${relationInit[relationType][0]}`,
             `${destination}-${relationInit[relationType][1]}`,
           ];
-          // @ts-ignore
           const connect = jsPlumbInstance.connect({
             uuids: uuid,
           });
@@ -440,12 +430,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           }
         }
       }
-      // @ts-ignore
       jsPlumbInstance.setSuspendDrawing(false, true);
     }
     return () => {
       if (jsPlumbInstance) {
-        // @ts-ignore
         jsPlumbInstance.deleteEveryConnection();
       }
     };
