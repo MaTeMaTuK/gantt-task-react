@@ -206,7 +206,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         i + 1 !== dates.length &&
         date.getMonth() !== dates[i + 1].getMonth()
       ) {
-        const topValue = `${date.getFullYear()}.${date.getMonth() + 1}`;
+        const topValue = `${date.getFullYear()}年${date.getMonth() + 1}月`;
 
         topValues.push(
           <TopPartOfCalendar

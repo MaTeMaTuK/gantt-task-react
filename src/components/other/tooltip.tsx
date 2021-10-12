@@ -90,7 +90,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           ? styles.tooltipDetailsContainer
           : styles.tooltipDetailsContainerHidden
       }
-      style={{ left: relatedX, top: relatedY }}
+      style={{ left: relatedX, top: relatedY < -40 ? -40 : relatedY }}
     >
       <TooltipContent task={task} fontSize={fontSize} fontFamily={fontFamily} />
     </div>
