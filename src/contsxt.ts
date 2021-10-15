@@ -1,4 +1,5 @@
 import { createContext } from "react";
 export const GanttConfigContext = createContext<any>(null);
-export const ConfigHandelContext = createContext<any>(null);
-export const ConnectionHandelContext = createContext<any>(null);
+export const ConfigHandleContext = createContext<any>(null);
+export const ConnectionHandleContext = createContext<any>(null);
+export const BaseLineContext = createContext<any>(null);

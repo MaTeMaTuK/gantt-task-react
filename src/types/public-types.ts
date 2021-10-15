@@ -150,14 +150,18 @@ export interface StylingOption {
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
+  baseLineLog?: Task[];
   itemTypeData?: OptionsProp[];
   itemRelationData?: OptionsProp[];
   customeFieldData?: OptionsProp[];
   itemLinks?: any[];
   ganttConfig?: any;
+  baselineList?: any[];
   configHandle?: (value: any) => void;
+  baseLineHandle?: (value?: any, type?: "add" | "edit" | "delete") => void;
   delConnection?: (value: string) => void;
   setItemTypeValue?: (value: string) => void;
+  setCurrentLog?: (value: any) => void;
   addConnection?: (
     source: string,
     destination: string,

@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useMemo } from "react";
 import { Form, Select, Button } from "antd";
 import styles from "./index.module.css";
-import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
+import { GanttConfigContext, ConfigHandleContext } from "../../contsxt";
 import { filterFields } from "./time-modal";
 import { TabConfigProps } from "../../types/public-types";
 const { Option } = Select;
@@ -14,7 +14,7 @@ const MileStone: React.FC<TabConfigProps> = ({ currentTab }) => {
   const { ganttConfig, itemTypeData, customeFieldData } = useContext(
     GanttConfigContext
   );
-  const { configHandle, setItemTypeValue } = useContext(ConfigHandelContext);
+  const { configHandle, setItemTypeValue } = useContext(ConfigHandleContext);
   const milestone = useMemo(() => ganttConfig?.milestone, [
     ganttConfig?.milestone,
   ]);

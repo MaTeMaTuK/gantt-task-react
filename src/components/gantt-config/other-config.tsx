@@ -1,6 +1,6 @@
 import React, { useState, useContext, useMemo, useEffect } from "react";
 import { Form, Button, Switch, Modal } from "antd";
-import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
+import { GanttConfigContext, ConfigHandleContext } from "../../contsxt";
 import { TabConfigProps } from "../../types/public-types";
 const { confirm } = Modal;
 interface OtherCofigProps {
@@ -11,7 +11,7 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
   const [checked, setChecked] = useState(false);
   const { ganttConfig } = useContext(GanttConfigContext);
   console.log(ganttConfig, "ganttConfig");
-  const { configHandle } = useContext(ConfigHandelContext);
+  const { configHandle } = useContext(ConfigHandleContext);
   const otherConfig = useMemo(() => ganttConfig?.otherConfig, [
     ganttConfig?.otherConfig,
   ]);

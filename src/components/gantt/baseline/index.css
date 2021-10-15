@@ -1,0 +1,27 @@
+.list li {
+  list-style: none;
+  text-align: left;
+  padding: 5px 2px;
+  display: flex;
+  justify-content: space-between;
+}
+.list li:hover {
+  background: #f3f3f3;
+}
+.list li:hover .dot {
+  visibility: visible;
+}
+.cursor {
+  cursor: pointer;
+}
+.panel {
+  width: 150px;
+}
+.panel ul.list,
+.panel button {
+  padding: 0;
+}
+.dot {
+  cursor: pointer;
+  visibility: hidden;
+}

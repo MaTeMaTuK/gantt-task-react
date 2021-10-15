@@ -3,7 +3,7 @@ import { Button, Table, Space, Modal } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import styles from "./index.module.css";
 import TimeModal from "./time-modal";
-import { ConfigHandelContext, GanttConfigContext } from "../../contsxt";
+import { ConfigHandleContext, GanttConfigContext } from "../../contsxt";
 import WarningIcon from "../icons/warning";
 interface TimeProps {}
 export interface TimeItemProps {
@@ -49,7 +49,7 @@ const Time: React.FC<TimeProps> = () => {
       ),
     },
   ];
-  const { configHandle, setItemTypeValue } = useContext(ConfigHandelContext);
+  const { configHandle, setItemTypeValue } = useContext(ConfigHandleContext);
   const { ganttConfig, itemTypeData } = useContext(GanttConfigContext);
   const [currentItem, setCurrentItem] = useState<any>({});
   const [index, setIndex] = useState(0);

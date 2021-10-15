@@ -30,12 +30,14 @@ import GanttConfig from "../gantt-config/index";
 import "./gantt.css";
 import {
   GanttConfigContext,
-  ConfigHandelContext,
-  ConnectionHandelContext,
+  ConfigHandleContext,
+  ConnectionHandleContext,
+  BaseLineContext,
 } from "../../contsxt";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
+  baseLineLog,
   isUpdate,
   headerHeight = 50,
   // columnWidth = 60,
@@ -76,11 +78,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   itemRelationData, // 卡片关联
   customeFieldData, // 字段
   configHandle, // 配置事件
+  baseLineHandle, // 基线事件
   setItemTypeValue, // 卡片类型
+  setCurrentLog, // 选择基线log
   ganttConfig = {}, // 配置详情
   itemLinks = [], // 卡片关联
   addConnection,
   delConnection,
+  baselineList,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -100,6 +105,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ganttHeight, setGanttHeight] = useState(0);
   const [svgContainerHeight, setSvgContainerHeight] = useState(ganttHeight);
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
+  const [logTasks, setLogTasks] = useState<BarTask[]>([]);
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
   });
@@ -149,6 +155,51 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     );
   }, [
     tasks,
+    isUpdate,
+    viewMode,
+    rowHeight,
+    barCornerRadius,
+    columnWidth,
+    taskHeight,
+    handleWidth,
+    barProgressColor,
+    barProgressSelectedColor,
+    barBackgroundColor,
+    barBackgroundSelectedColor,
+    projectProgressColor,
+    projectProgressSelectedColor,
+    projectBackgroundColor,
+    projectBackgroundSelectedColor,
+    milestoneBackgroundColor,
+    milestoneBackgroundSelectedColor,
+  ]);
+  useEffect(() => {
+    const [startDate, endDate] = ganttDateRange(viewMode);
+    const newDates = seedDates(startDate, endDate, viewMode);
+    setLogTasks(
+      convertToBarTasks(
+        // @ts-ignore
+        (tasks = baseLineLog),
+        newDates,
+        columnWidth,
+        rowHeight,
+        taskHeight,
+        barCornerRadius,
+        handleWidth,
+        barProgressColor,
+        barProgressSelectedColor,
+        barBackgroundColor,
+        barBackgroundSelectedColor,
+        projectProgressColor,
+        projectProgressSelectedColor,
+        projectBackgroundColor,
+        projectBackgroundSelectedColor,
+        milestoneBackgroundColor,
+        milestoneBackgroundSelectedColor
+      )
+    );
+  }, [
+    baseLineLog,
     isUpdate,
     viewMode,
     rowHeight,
@@ -453,6 +504,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,
+    logTasks: logTasks,
     dates: dateSetup.dates,
     ganttEvent,
     selectedTask,
@@ -607,17 +659,22 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           itemLinks,
         }}
       >
-        <ConfigHandelContext.Provider
-          value={{ configHandle, setItemTypeValue }}
+        <ConfigHandleContext.Provider
+          value={{ configHandle, setItemTypeValue, baseLineHandle }}
         >
           <GanttConfig toGantt={toGantt} visible={visible} />
+        </ConfigHandleContext.Provider>
+        <BaseLineContext.Provider
+          value={{ baseLineHandle, baselineList, setCurrentLog }}
+        >
           <GanttHeader
             toToday={toToday}
             toConfig={toConfig}
             modeChange={modeChange}
           />
-        </ConfigHandelContext.Provider>
-        <ConnectionHandelContext.Provider
+        </BaseLineContext.Provider>
+
+        <ConnectionHandleContext.Provider
           value={{ delConnection, addConnection }}
         >
           <div
@@ -725,7 +782,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               />
             )}
           </div>
-        </ConnectionHandelContext.Provider>
+        </ConnectionHandleContext.Provider>
       </GanttConfigContext.Provider>
     </div>
   );

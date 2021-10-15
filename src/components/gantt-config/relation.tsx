@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useMemo } from "react";
 import { Form, Select, Button } from "antd";
 import styles from "./index.module.css";
-import { GanttConfigContext, ConfigHandelContext } from "../../contsxt";
+import { GanttConfigContext, ConfigHandleContext } from "../../contsxt";
 import WarningIcon from "../icons/warning";
 import { TabConfigProps } from "../../types/public-types";
 const { Option } = Select;
@@ -15,7 +15,7 @@ const Relation: React.FC<TabConfigProps> = ({ currentTab }) => {
   const [form] = Form.useForm();
   const { itemRelationData } = useContext(GanttConfigContext);
   const { ganttConfig } = useContext(GanttConfigContext);
-  const { configHandle } = useContext(ConfigHandelContext);
+  const { configHandle } = useContext(ConfigHandleContext);
   const relationValue = useMemo(
     () => (ganttConfig.relation ? ganttConfig.relation : {}),
     [ganttConfig?.relation]

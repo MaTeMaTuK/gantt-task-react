@@ -5,7 +5,7 @@ import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
 import { isKeyboardEvent } from "../../helpers/other-helper";
 import { TaskItem } from "../task-item/task-item";
-import { GanttConfigContext, ConnectionHandelContext } from "../../contsxt";
+import { GanttConfigContext, ConnectionHandleContext } from "../../contsxt";
 import { filter } from "lodash";
 import {
   offsetCalculators,
@@ -22,6 +22,7 @@ import { message, Modal } from "antd";
 
 export type TaskGanttContentProps = {
   tasks: BarTask[];
+  logTasks: BarTask[];
   dates: Date[];
   ganttEvent: GanttEvent;
   selectedTask: BarTask | undefined;
@@ -42,6 +43,7 @@ export type TaskGanttContentProps = {
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   tasks,
+  logTasks,
   dates,
   ganttEvent,
   selectedTask,
@@ -62,6 +64,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onDoubleClick,
   onDelete,
 }) => {
+  console.log(logTasks, 'logTasks')
   const [connectUuids, setConnectUuids] = useState([]);
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
@@ -70,8 +73,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   const [jsPlumbInstance, setJsPlumbInstance] = useState<any>(null);
   const { ganttConfig } = useContext(GanttConfigContext);
   const { itemLinks } = useContext(GanttConfigContext);
-  const { delConnection } = useContext(ConnectionHandelContext);
-  const { addConnection } = useContext(ConnectionHandelContext);
+  const { delConnection, addConnection } = useContext(ConnectionHandleContext);
   // create xStep
   useEffect(() => {
     const dateDelta =

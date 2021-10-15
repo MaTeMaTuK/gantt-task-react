@@ -5,6 +5,7 @@ import styles from "./gantt.module.css";
 import { viewModeOptions, ViewMode } from "../../types/public-types";
 import SettingsIcon from "../icons/settings";
 import ToTodayIcon from "../icons/toToday";
+import Baseline from "./baseline/popover";
 const { Option } = Select;
 interface GanttHeaderProps {
   toToday: () => void;
@@ -26,6 +27,7 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
   return (
     <div className={styles.ganttHeader}>
       <Space size={20}>
+        <Baseline />
         <span className="ganttCalendarSelect">
           <Select
             style={{ width: 50 }}
