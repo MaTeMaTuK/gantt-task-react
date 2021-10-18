@@ -1,7 +1,7 @@
 .list li {
   list-style: none;
   text-align: left;
-  padding: 5px 2px;
+  padding: 5px 5px;
   display: flex;
   justify-content: space-between;
 }
@@ -11,17 +11,39 @@
 .list li:hover .dot {
   visibility: visible;
 }
+li.activeBaseline {
+  background: #dbe8ff;
+}
+.list .content {
+  flex: 1;
+}
+.list .name {
+  font-size: 12px;
+  font-weight: 600;
+}
+.list .time,
+.list .name {
+  font-size: 12px;
+}
 .cursor {
   cursor: pointer;
 }
 .panel {
-  width: 150px;
+  width: 200px;
 }
-.panel ul.list,
-.panel button {
+.panel ul.list {
   padding: 0;
+}
+.panel .createBaseline {
+  margin-bottom: 10px;
+}
+.createBaseline button {
+  padding-left: 0px;
 }
 .dot {
   cursor: pointer;
   visibility: hidden;
+}
+.ml8{
+  margin-left: 8px;
 }

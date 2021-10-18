@@ -16,6 +16,7 @@ export const Bar: React.FC<TaskItemProps> = ({
   onEventStart,
   isSelected,
   jsPlumb,
+  isLog,
 }) => {
   const barRef = useRef(null);
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
@@ -70,17 +71,20 @@ export const Bar: React.FC<TaskItemProps> = ({
   return (
     <svg ref={barRef}>
       <g className={styles.barWrapper} tabIndex={0}>
-        <g className={styles.barHandle}>
-          <rect
-            x={task.x1 - 16}
-            y={task.y - 3}
-            width={task.x2 - task.x1 + 32}
-            height={task.height + 6}
-            className={`${styles.barHandle} ${styles.barHandleBackground}`}
-            ry={task.barCornerRadius}
-            rx={task.barCornerRadius}
-          />
-        </g>
+        {!isLog && (
+          <g className={styles.barHandle}>
+            <rect
+              x={task.x1 - 16}
+              y={task.y - 3}
+              width={task.x2 - task.x1 + 32}
+              height={task.height + 6}
+              className={`${styles.barHandle} ${styles.barHandleBackground}`}
+              ry={task.barCornerRadius}
+              rx={task.barCornerRadius}
+            />
+          </g>
+        )}
+
         <BarDisplay
           x={task.x1}
           y={task.y}
@@ -89,15 +93,16 @@ export const Bar: React.FC<TaskItemProps> = ({
           height={task.height}
           progressWidth={progressWidth}
           barCornerRadius={task.barCornerRadius}
-          styles={task.styles}
+          styles={!isLog ? task.styles : { ...task.styles, opacity: 0.5 }}
           isSelected={isSelected}
           id={task.id}
+          isLog={isLog}
           onMouseDown={e => {
-            isDateChangeable && onEventStart("move", task, e);
+            isDateChangeable && !isLog && onEventStart("move", task, e);
           }}
         />
         <g className="handleGroup">
-          {isDateChangeable && (
+          {isDateChangeable && !isLog && (
             <g>
               {/* left */}
               <BarDateHandle
@@ -123,7 +128,7 @@ export const Bar: React.FC<TaskItemProps> = ({
               />
             </g>
           )}
-          {isProgressChangeable && (
+          {isProgressChangeable && !isLog && (
             <BarProgressHandle
               progressPoint={progressPoint}
               onMouseDown={e => {

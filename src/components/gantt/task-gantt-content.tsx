@@ -5,6 +5,7 @@ import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
 import { isKeyboardEvent } from "../../helpers/other-helper";
 import { TaskItem } from "../task-item/task-item";
+import { TaskItemLog } from "../task-item/task-item-log";
 import { GanttConfigContext, ConnectionHandleContext } from "../../contsxt";
 import { filter } from "lodash";
 import {
@@ -64,7 +65,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onDoubleClick,
   onDelete,
 }) => {
-  console.log(logTasks, 'logTasks')
   const [connectUuids, setConnectUuids] = useState([]);
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
@@ -460,22 +460,41 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       </g>
       <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
         {tasks.map(task => {
-          if (!task.start || !task.end) {
-            return null;
+          const cuttentLog = logTasks.find(ele => ele.id === task.id);
+          if (cuttentLog) {
+            cuttentLog.y = task.y;
           }
           return (
-            <TaskItem
-              jsPlumb={jsPlumbInstance}
-              task={task}
-              arrowIndent={arrowIndent}
-              taskHeight={taskHeight}
-              isProgressChangeable={!!onProgressChange && !task.isDisabled}
-              isDateChangeable={!!onDateChange && !task.isDisabled}
-              isDelete={!task.isDisabled}
-              onEventStart={handleBarEventStart}
-              key={task.id}
-              isSelected={!!selectedTask && task.id === selectedTask.id}
-            />
+            <g key={task.id}>
+              {!cuttentLog?.start || !cuttentLog?.end ? null : (
+                <TaskItemLog
+                  task={cuttentLog}
+                  arrowIndent={arrowIndent}
+                  taskHeight={taskHeight}
+                  isProgressChangeable={!!onProgressChange && !task.isDisabled}
+                  isDateChangeable={!!onDateChange && !task.isDisabled}
+                  isDelete={!task.isDisabled}
+                  onEventStart={handleBarEventStart}
+                  key={`${task.id}-log`}
+                  isSelected={!!selectedTask && task.id === selectedTask.id}
+                  isLog
+                />
+              )}
+              {!task.start || !task.end ? null : (
+                <TaskItem
+                  jsPlumb={jsPlumbInstance}
+                  task={task}
+                  arrowIndent={arrowIndent}
+                  taskHeight={taskHeight}
+                  isProgressChangeable={!!onProgressChange && !task.isDisabled}
+                  isDateChangeable={!!onDateChange && !task.isDisabled}
+                  isDelete={!task.isDisabled}
+                  onEventStart={handleBarEventStart}
+                  key={task.id}
+                  isSelected={!!selectedTask && task.id === selectedTask.id}
+                />
+              )}
+            </g>
           );
         })}
       </g>

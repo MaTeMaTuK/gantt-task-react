@@ -1,49 +1,72 @@
 import React, { useState, useContext } from "react";
-import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
-import { Button, Popover } from "antd";
+import {
+  PlusOutlined,
+  EllipsisOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { Menu, Dropdown, Button, Modal } from "antd";
 import AddEdit from "./add-edit";
 import { BaseLineContext } from "../../../contsxt";
 import { omit } from "lodash";
+import dayjs from "dayjs";
+
 import styles from "./index.css";
 interface panelProps {
   onClosePopver: () => void;
+  setPopoverVisible?: React.Dispatch<React.SetStateAction<Boolean>>;
 }
-interface BaselineConfigProps {
-  baseline?: any;
-}
-export const Panel: React.FC<panelProps> = ({ onClosePopver }) => {
-  const BaselineConfig: React.FC<BaselineConfigProps> = () => {
-    const edit = () => {
-      setVisible(true);
-      // 关闭popover
-      onClosePopver?.();
-      // 关闭configpopover
-      setConfigVisible(false);
-    };
-    const del = () => {
-      onClosePopver?.();
-      setConfigVisible(false);
-      baseLineHandle(currentBaseline);
-    };
-    return (
-      <div>
-        <p className={styles.cursor} onClick={edit}>
-          编辑基线
-        </p>
-        <p className={styles.cursor} onClick={del}>
-          删除基线
-        </p>
-      </div>
-    );
+export const Panel: React.FC<panelProps> = ({
+  onClosePopver,
+  setPopoverVisible,
+}) => {
+  const deleteBaseline = () => {
+    Modal.confirm({
+      title: "删除基线",
+      content: "删除的基线无法恢复，确认删除？",
+      okText: "确认",
+      cancelText: "取消",
+      onOk: () => baseLineHandle(currentBaseline),
+    });
   };
-  const { baseLineHandle, baselineList, setCurrentLog } = useContext(
-    BaseLineContext
+  const handleMenuClick = (e: any) => {
+    onClosePopver?.();
+    switch (e.key) {
+      case "edit":
+        setVisible(true);
+        break;
+      case "del":
+        deleteBaseline();
+        break;
+    }
+  };
+  const BaselineConfig = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="edit">
+        <span>
+          <EditOutlined />
+          <span className={styles.ml8}>编辑基线</span>
+        </span>
+      </Menu.Item>
+      <Menu.Item key="del">
+        <span>
+          <DeleteOutlined />
+          <span className={styles.ml8}>删除基线</span>
+        </span>
+      </Menu.Item>
+    </Menu>
   );
+  const {
+    baseLineHandle,
+    baselineList,
+    setCurrentLog,
+    currentLog,
+  } = useContext(BaseLineContext);
   const [visible, setVisible] = useState(false);
-  const [configVisible, setConfigVisible] = useState(false);
   const [currentBaseline, setCurrentBaseline] = useState<any>({});
   const addBaseline = () => {
     setVisible(true);
+    setCurrentBaseline({});
     onClosePopver?.();
   };
   const handleOk = (value: any) => {
@@ -53,18 +76,20 @@ export const Panel: React.FC<panelProps> = ({ onClosePopver }) => {
   const handleCancel = () => {
     setVisible(false);
   };
-  const handleConfigVisible = (visible: boolean, item: any) => {
-    setCurrentBaseline(omit(item, ["createdAt", "updatedAt"]));
-    setConfigVisible(visible);
-  };
   const chooseLog = (infor: any) => {
     setCurrentLog(infor);
+    setPopoverVisible?.(false);
   };
   return (
     <div className={styles.panel}>
-      <div>
-        <Button type="text" icon={<PlusOutlined />} onClick={addBaseline}>
-          创建基线
+      <div className={styles.createBaseline}>
+        <Button
+          type="link"
+          icon={<PlusOutlined />}
+          onClick={addBaseline}
+          disabled={baselineList.length >= 10}
+        >
+          {`创建基线（${baselineList?.length}/10）`}
         </Button>
       </div>
       {visible && (
@@ -78,23 +103,38 @@ export const Panel: React.FC<panelProps> = ({ onClosePopver }) => {
       <ul className={styles.list}>
         {baselineList.map((ele: any) => {
           return (
-            <li key={ele.objectId} onClick={() => chooseLog(ele)}>
-              {ele.name}
-              <Popover
-                key={ele.objectId}
-                content={<BaselineConfig baseline={currentBaseline} />}
-                trigger="click"
-                visible={
-                  configVisible && currentBaseline?.objectId === ele.objectId
-                }
-                onVisibleChange={(e: boolean) => {
-                  handleConfigVisible(e, ele);
-                }}
+            <li
+              key={ele.objectId}
+              className={
+                currentLog && ele.objectId === currentLog.objectId
+                  ? styles.activeBaseline
+                  : undefined
+              }
+            >
+              <div
+                className={`${styles.content} ${styles.cursor}`}
+                onClick={() => chooseLog(ele)}
               >
-                <span className={styles.dot}>
+                <div className={styles.name}>{ele.name}</div>
+                <div className={styles.time}>
+                  创建于：
+                  {dayjs(new Date(ele.createdAt)).format("YYYY-MM-DD hh:mm:ss")}
+                </div>
+              </div>
+              <Dropdown
+                overlay={BaselineConfig}
+                placement="bottomRight"
+                trigger={["click"]}
+              >
+                <span
+                  className={styles.dot}
+                  onClick={() => {
+                    setCurrentBaseline(omit(ele, ["createdAt", "updatedAt"]));
+                  }}
+                >
                   <EllipsisOutlined />
                 </span>
-              </Popover>
+              </Dropdown>
             </li>
           );
         })}

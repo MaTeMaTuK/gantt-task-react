@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Form, Input } from "antd";
+import dayjs from "dayjs";
 export interface BaselineProps {
   name?: string;
   objectId?: string;
@@ -25,7 +26,9 @@ export const AddEdit: React.FC<ModalProps> = ({
   }, [visible]);
   useEffect(() => {
     form.setFieldsValue({
-      name: currentBaseline?.name,
+      name: currentBaseline?.name
+        ? currentBaseline?.name
+        : dayjs(new Date()).format("YYYY-MM-DD hh:mm:ss"),
     });
   }, [currentBaseline]);
   const onFinish = () => {};

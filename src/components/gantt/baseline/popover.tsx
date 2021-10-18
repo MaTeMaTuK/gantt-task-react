@@ -14,7 +14,12 @@ export const Baseline: React.FC = () => {
   return (
     <Popover
       placement="bottomRight"
-      content={<Panel onClosePopver={handelClosePopver} />}
+      content={
+        <Panel
+          onClosePopver={handelClosePopver}
+          setPopoverVisible={setVisible}
+        />
+      }
       trigger="click"
       visible={visible}
       onVisibleChange={handleVisibleChange}

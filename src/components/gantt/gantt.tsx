@@ -27,6 +27,7 @@ import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttHeader from "./gantt-header";
 import GanttConfig from "../gantt-config/index";
+import { Button } from "antd";
 import "./gantt.css";
 import {
   GanttConfigContext,
@@ -86,6 +87,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   addConnection,
   delConnection,
   baselineList,
+  currentLog,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -648,6 +650,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     event.stopPropagation();
   };
+  // 退出基线
+  const baselineExit = () => {
+    setCurrentLog?.(null);
+    setLogTasks([]);
+  };
   return (
     <div className={styles.box}>
       <GanttConfigContext.Provider
@@ -665,7 +672,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           <GanttConfig toGantt={toGantt} visible={visible} />
         </ConfigHandleContext.Provider>
         <BaseLineContext.Provider
-          value={{ baseLineHandle, baselineList, setCurrentLog }}
+          value={{ baseLineHandle, baselineList, setCurrentLog, currentLog }}
         >
           <GanttHeader
             toToday={toToday}
@@ -683,6 +690,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             tabIndex={0}
             ref={wrapperRef}
           >
+            {currentLog?.name && (
+              <div className={styles.choosedBaselIne}>
+                <span className={styles.loaded}>
+                  已加载：{currentLog?.name}
+                </span>
+                <Button size="small" onClick={baselineExit}>
+                  退出
+                </Button>
+              </div>
+            )}
+
             {listCellWidth && TaskListComponent && (
               <div
                 ref={taskListRef}
