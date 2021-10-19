@@ -6,3 +6,6 @@
   white-space: initial;
   text-overflow: initial;
 }
+:global(.ganttHeaderGlobal .ant-space-item) {
+  z-index: 2;
+}

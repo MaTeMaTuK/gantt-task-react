@@ -23,7 +23,7 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
   };
   return (
     <div className={styles.ganttHeader}>
-      <Space size={20}>
+      <Space size={20} className="ganttHeaderGlobal">
         <span className="ganttCalendarSelect">
           <Select
             style={{ width: 50 }}
