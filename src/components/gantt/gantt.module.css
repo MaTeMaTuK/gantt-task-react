@@ -190,3 +190,10 @@
   background-color: #2e405e;
   border-radius: 1px;
 }
+.guideInfor {
+  font-weight: 600;
+}
+.guideInfor .clickThis {
+  color: #3D7EFF;
+  cursor: pointer;
+}

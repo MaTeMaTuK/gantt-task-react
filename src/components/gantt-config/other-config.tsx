@@ -48,7 +48,11 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
   return (
     <div>
       <Form form={form} name="basic" onFinish={onFinish}>
-        <Form.Item label="自动编排" name="autoPatch">
+        <Form.Item
+          label="自动编排"
+          name="autoPatch"
+          tooltip="根据卡片之间的关系，自动调整卡片时间，避免出现逻辑错误"
+        >
           <Switch onChange={onChange} checked={checked} />
         </Form.Item>
         <Form.Item>

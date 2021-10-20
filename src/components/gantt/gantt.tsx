@@ -27,6 +27,7 @@ import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttHeader from "./gantt-header";
 import GanttConfig from "../gantt-config/index";
+import GuideModal from "./guide-modal";
 import { Button } from "antd";
 import "./gantt.css";
 import {
@@ -88,6 +89,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   delConnection,
   baselineList,
   currentLog,
+  actionRef,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -122,6 +124,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const refScrollX: any = useRef(0);
   const [visible, setVisible] = useState(false);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
+  const [guideModalVisible, setGuideModalVisible] = useState(false);
+  const [currentPanel, setCurrentPanel] = useState("");
+
   const dividerPositionRef = useRef({ left: 0 });
   // 到今天移动的距离
   // const [todayDistance, setTodayDistance] = useState(0);
@@ -655,8 +660,19 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setCurrentLog?.(null);
     setLogTasks([]);
   };
+  React.useImperativeHandle(actionRef, () => ({
+    openGuide(type: string) {
+      setCurrentPanel(type);
+      setGuideModalVisible(true);
+    },
+  }));
+  const toPanel = () => {
+    console.log(currentPanel);
+    toConfig();
+  };
   return (
     <div className={styles.box}>
+      <GuideModal visible={guideModalVisible} toPanel={toPanel} />
       <GanttConfigContext.Provider
         value={{
           itemTypeData,

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useMemo } from "react";
-import { Button, Table, Space, Modal } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button, Table, Space, Modal, Tooltip } from "antd";
+import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import styles from "./index.module.css";
 import TimeModal from "./time-modal";
 import { ConfigHandleContext, GanttConfigContext } from "../../contsxt";
@@ -28,7 +28,14 @@ const Time: React.FC<TimeProps> = () => {
           itemTypeData.filter((ele: { label: string; value: string }) => {
             return ele.value === text;
           });
-        return res[0]?.label || "默认";
+        return (
+          res[0]?.label || (
+            <Tooltip title="没有配置的卡片类型将使用默认配置">
+              默认 &nbsp;
+              <QuestionCircleOutlined />
+            </Tooltip>
+          )
+        );
       },
     },
     {

@@ -54,6 +54,7 @@ const MileStone: React.FC<TabConfigProps> = ({ currentTab }) => {
       >
         <Form.Item
           label="里程碑卡片类型"
+          tooltip="在甘特图中，被设置为里程碑的卡片将显示为菱形，并隐藏其子卡片"
           name="itemType"
           rules={[{ required: true, message: "请选择里程碑卡片类型" }]}
         >

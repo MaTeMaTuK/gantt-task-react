@@ -170,6 +170,7 @@ export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   renderTaskListComponent?: () => JSX.Element;
   isUpdate?: boolean;
   currentLog?: any;
+  actionRef?: any;
 }
 export interface OptionsProp {
   label: string;

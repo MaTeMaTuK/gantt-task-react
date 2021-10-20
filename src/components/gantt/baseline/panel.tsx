@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import styles from "./index.css";
 interface panelProps {
   onClosePopver: () => void;
-  setPopoverVisible?: React.Dispatch<React.SetStateAction<Boolean>>;
+  setPopoverVisible?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const Panel: React.FC<panelProps> = ({
   onClosePopver,

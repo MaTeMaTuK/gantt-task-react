@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Form, Input } from "antd";
 import dayjs from "dayjs";
+const { TextArea } = Input;
 export interface BaselineProps {
   name?: string;
   objectId?: string;
@@ -29,6 +30,7 @@ export const AddEdit: React.FC<ModalProps> = ({
       name: currentBaseline?.name
         ? currentBaseline?.name
         : dayjs(new Date()).format("YYYY-MM-DD hh:mm:ss"),
+      description: currentBaseline?.description,
     });
   }, [currentBaseline]);
   const onFinish = () => {};
@@ -64,7 +66,10 @@ export const AddEdit: React.FC<ModalProps> = ({
           name="name"
           rules={[{ required: true, message: "请输入基线名称" }]}
         >
-          <Input />
+          <Input placeholder="请输入基线名称" />
+        </Form.Item>
+        <Form.Item label="描述" name="description">
+          <TextArea placeholder="请输入基线描述" />
         </Form.Item>
       </Form>
     </Modal>

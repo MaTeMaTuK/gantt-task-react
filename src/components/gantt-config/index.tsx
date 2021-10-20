@@ -40,7 +40,7 @@ const GanttConfig: React.FC<GanttConfigProps> = ({ toGantt, visible }) => {
           <MileStone currentTab={tabs} />
         </TabPane>
         <TabPane tab="其他配置" key="otherConfig">
-          <OtherConfig currentTab={tabs}/>
+          <OtherConfig currentTab={tabs} />
         </TabPane>
       </Tabs>
     </Drawer>
