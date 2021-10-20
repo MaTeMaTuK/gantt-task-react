@@ -22,8 +22,8 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
     modeChange(value);
   };
   return (
-    <div className={styles.ganttHeader}>
-      <Space size={20} className="ganttHeaderGlobal">
+    <div className={`${styles.ganttHeader} ganttHeaderGlobal`}>
+      <Space size={20}>
         <span className="ganttCalendarSelect">
           <Select
             style={{ width: 50 }}
