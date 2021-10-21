@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Tabs, Drawer } from "antd";
 import Time from "./time";
-// import Relation from "./relation";
 import MileStone from "./milestone";
 import OtherConfig from "./other-config";
-// import styles from "./index.module.css";
 import styles from "./index.module.css";
 const { TabPane } = Tabs;
 interface GanttConfigProps {
@@ -22,9 +20,6 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
   const tabChange = (val: string) => {
     setTabs(val);
   };
-  // const defaultActiveKey = useMemo(() => {
-  //   return currentPanel ? currentPanel : "time";
-  // }, [currentPanel]);
   useEffect(() => {
     setTabs(currentPanel ? currentPanel : "time");
   }, [currentPanel]);
@@ -44,9 +39,6 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
         <TabPane tab="时间字段配置" key="time">
           <Time />
         </TabPane>
-        {/* <TabPane tab="关联关系配置" key="relation">
-          <Relation currentTab={tabs} />
-        </TabPane> */}
         <TabPane tab="里程碑配置" key="mileStone">
           <MileStone currentTab={tabs} />
         </TabPane>

@@ -152,7 +152,6 @@ export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
   baseLineLog?: Task[];
   itemTypeData?: OptionsProp[];
-  itemRelationData?: OptionsProp[];
   customeFieldData?: OptionsProp[];
   itemLinks?: any[];
   ganttConfig?: any;
@@ -179,3 +178,32 @@ export interface OptionsProp {
 export interface TabConfigProps {
   currentTab: string;
 }
+//特殊时间精度
+export const DateDeltaInit = {
+  [ViewMode.Month]: {
+    1: 31 * 24 * 3600 * 1000,
+    2: 28 * 24 * 3600 * 1000,
+    3: 31 * 24 * 3600 * 1000,
+    4: 30 * 24 * 3600 * 1000,
+    5: 31 * 24 * 3600 * 1000,
+    6: 30 * 24 * 3600 * 1000,
+    7: 31 * 24 * 3600 * 1000,
+    8: 31 * 24 * 3600 * 1000,
+    9: 30 * 24 * 3600 * 1000,
+    10: 31 * 24 * 3600 * 1000,
+    11: 30 * 24 * 3600 * 1000,
+    12: 31 * 24 * 3600 * 1000,
+  },
+  [ViewMode.Year]: {
+    common: 365 * 24 * 3600 * 1000,
+    leap: 366 * 24 * 3600 * 1000,
+  },
+  [ViewMode.Quarter]: {
+    1: (31 + 28 + 31) * 24 * 3600 * 1000,
+    2: (30 + 31 + 30) * 24 * 3600 * 1000,
+    3: (31 + 31 + 30) * 24 * 3600 * 1000,
+    4: (30 + 30 + 31) * 24 * 3600 * 1000,
+  },
+  LeapMounth: 29 * 24 * 3600 * 1000,
+  LeapQuarter: (31 + 29 + 31) * 24 * 3600 * 1000,
+};

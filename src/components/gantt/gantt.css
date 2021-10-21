@@ -3,7 +3,6 @@
   padding: 5px 0;
 }
 :global(.ganttCalendarSelect .ant-select-selection-item) {
-  overflow: auto;
   white-space: initial;
   text-overflow: initial;
 }

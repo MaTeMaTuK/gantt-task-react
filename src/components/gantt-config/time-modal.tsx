@@ -55,7 +55,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
     if (value) {
       const itemFilter = timeList?.filter(item => item.itemType === value);
       if (itemFilter?.length && currentItem.itemType !== value) {
-        return Promise.reject(new Error("该卡片类型已选择， 请重新选择"));
+        return Promise.reject(new Error("该事项类型已选择， 请重新选择"));
       }
       return Promise.resolve();
     } else {
@@ -88,10 +88,10 @@ const ItemModal: React.FC<ItemModalProps> = ({
       >
         {!currentItem?.isDefault && (
           <Form.Item
-            label="卡片类型"
+            label="事项类型"
             name="itemType"
             rules={[
-              { required: true, message: "请选择卡片类型" },
+              { required: true, message: "请选择事项类型" },
               {
                 validator: itemCheck,
               },

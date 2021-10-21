@@ -368,10 +368,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     };
   }, [jsPlumbInstance, itemLinks]);
   useEffect(() => {
-    // 如果没有配置关联关系，不可以连线
-    if (!ganttConfig.relation) {
-      return;
-    }
     if (itemLinks.length && tasks.length && jsPlumbInstance) {
       const connectUuids: any = [];
       tasks.forEach((task: any) => {

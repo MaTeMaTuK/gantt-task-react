@@ -17,12 +17,16 @@ export type TaskGanttProps = {
   ganttHeight: number;
   scrollX: number;
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
+  taskListHieght?: number;
   // onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 const TaskGanttComponent: React.ForwardRefRenderFunction<
   any,
   TaskGanttProps
-> = ({ gridProps, calendarProps, barProps, scrollX, onScroll }, ref) => {
+> = (
+  { gridProps, calendarProps, barProps, scrollX, onScroll, taskListHieght },
+  ref
+) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
@@ -59,7 +63,11 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
-          height={barProps.rowHeight * barProps.tasks.length}
+          height={
+            barProps.rowHeight * barProps.tasks.length < Number(taskListHieght)
+              ? taskListHieght
+              : barProps.rowHeight * barProps.tasks.length
+          }
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
           style={{ position: "relative" }}
@@ -68,6 +76,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
             {...gridProps}
             viewMode={calendarProps.viewMode}
             scrollX={scrollX}
+            taskListHieght={taskListHieght}
           />
           <TaskGanttContent {...newBarProps} />
         </svg>

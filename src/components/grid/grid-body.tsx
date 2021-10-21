@@ -4,9 +4,9 @@ import { addToDate } from "../../helpers/date-helper";
 import { GanttConfigContext } from "../../contsxt";
 
 // import { GanttContext } from "../../contsxt";
+import styles from "./grid.module.css";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
-import styles from "./grid.module.css";
 dayjs.extend(weekday);
 export type GridBodyProps = {
   tasks: Task[];
@@ -18,12 +18,14 @@ export type GridBodyProps = {
   viewMode?: string;
   scrollX: number;
   offsetLeft: number;
+  taskListHieght?: number;
 } & EventOption;
 // 判断是否为周末
-export const isRestDay = (date: Date) => {
-  return [0, 6].includes(dayjs(date).weekday());
+// 之前用是dayjs的weekday()方法获取周几，本地运行可以，但是线上包计算有无，具体原因不确定，所以采用getDay方法
+const isRestDay = (date: Date) => {
+  const dt = new Date(date);
+  return [0, 6].includes(dt.getDay());
 };
-
 export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
   dates,
@@ -34,6 +36,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   viewMode,
   scrollX,
   offsetLeft,
+  taskListHieght,
   onDateChange,
 }) => {
   const { ganttConfig } = useContext(GanttConfigContext);
@@ -65,7 +68,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     />,
   ];
   const handleMouseMove = (event: any, index: number) => {
-    const pointerX = event.clientX - offsetLeft;
+    const pointerX = event.clientX - offsetLeft - 24;
     // 整数
     const currentDataIndex = Math.floor((pointerX + scrollX) / columnWidth);
     setCurrentDataIndex(currentDataIndex);
@@ -218,26 +221,29 @@ export const GridBody: React.FC<GridBodyProps> = ({
             handleInvalidColumnMouseMove(i, tasks[i]);
           }}
         />
-        <rect
-          key={"Time" + tasks[i].id + i}
-          x={translateX}
-          y={y + rowHeight / 2 - 30 / 2}
-          width={columnWidth / parts}
-          height={30}
-          fill="transparent"
-          onClick={isShow ? invalidBarClick : () => {}}
-          cursor={isShow ? "pointer" : "default"}
-          onMouseEnter={(e: any) => {
-            const ele = e.target.parentNode;
-            const index = ele.getAttribute("index");
-            if (isShow && i === Number(index)) {
-              e.target.style.fill = "#AFCBFF";
-            }
-          }}
-          onMouseLeave={(e: any) => {
-            e.target.style.fill = "transparent";
-          }}
-        />
+        {/* 卡片为空时不能添加时间 */}
+        {tasks[i].id && (
+          <rect
+            key={"Time" + tasks[i].id + i}
+            x={translateX}
+            y={y + rowHeight / 2 - 30 / 2}
+            width={columnWidth / parts}
+            height={30}
+            fill="transparent"
+            onClick={isShow ? invalidBarClick : () => {}}
+            cursor={isShow ? "pointer" : "default"}
+            onMouseEnter={(e: any) => {
+              const ele = e.target.parentNode;
+              const index = ele.getAttribute("index");
+              if (isShow && i === Number(index)) {
+                e.target.style.fill = "#AFCBFF";
+              }
+            }}
+            onMouseLeave={(e: any) => {
+              e.target.style.fill = "transparent";
+            }}
+          />
+        )}
       </g>
     );
     invalidColumn.push(
@@ -279,7 +285,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           x1={tickX}
           y1={0}
           x2={tickX}
-          y2={y}
+          y2={y < Number(taskListHieght) ? taskListHieght : y}
           className={styles.gridTick}
         />
         {isRestDay(date) && viewMode === ViewMode.Day && (
@@ -288,7 +294,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
             x={tickX + 1}
             y="0"
             width={columnWidth - 1}
-            height={y}
+            height={y < Number(taskListHieght) ? taskListHieght : y}
             className={styles.gridTickWeekday}
           />
         )}
@@ -341,7 +347,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
             x1={newTickX}
             y1="0"
             x2={newTickX}
-            y2={y}
+            y2={y < Number(taskListHieght) ? taskListHieght : y}
             style={{ stroke: todayColor, strokeWidth: "1" }}
           />
         </g>
