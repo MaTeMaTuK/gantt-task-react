@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Tabs, Drawer } from "antd";
 import Time from "./time";
 import MileStone from "./milestone";
@@ -49,4 +49,4 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
     </Drawer>
   );
 };
-export default GanttConfig;
+export default memo(GanttConfig);

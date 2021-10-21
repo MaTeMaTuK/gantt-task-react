@@ -56,8 +56,10 @@ const Time: React.FC<TimeProps> = () => {
       ),
     },
   ];
-  const { configHandle, setItemTypeValue } = useContext(ConfigHandleContext);
-  const { ganttConfig, itemTypeData } = useContext(GanttConfigContext);
+  const { configHandle, setItemTypeValue, itemTypeData } = useContext(
+    ConfigHandleContext
+  );
+  const { ganttConfig } = useContext(GanttConfigContext);
   const [currentItem, setCurrentItem] = useState<any>({});
   const [index, setIndex] = useState(0);
   const timeList = useMemo(

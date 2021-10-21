@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Space, Select, Tooltip } from "antd";
 import styles from "./gantt.module.css";
 import { viewModeOptions, ViewMode } from "../../types/public-types";
@@ -57,4 +57,4 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
     </div>
   );
 };
-export default GanttHeader;
+export default memo(GanttHeader);

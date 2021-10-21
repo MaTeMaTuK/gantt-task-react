@@ -11,10 +11,13 @@ interface RelationValueProps {
 }
 const MileStone: React.FC<TabConfigProps> = ({ currentTab }) => {
   const [form] = Form.useForm();
-  const { ganttConfig, itemTypeData, customeFieldData } = useContext(
-    GanttConfigContext
-  );
-  const { configHandle, setItemTypeValue } = useContext(ConfigHandleContext);
+  const { ganttConfig } = useContext(GanttConfigContext);
+  const {
+    configHandle,
+    setItemTypeValue,
+    itemTypeData,
+    customeFieldData,
+  } = useContext(ConfigHandleContext);
   const milestone = useMemo(() => ganttConfig?.milestone, [
     ganttConfig?.milestone,
   ]);

@@ -148,24 +148,37 @@ export interface StylingOption {
   }>;
 }
 
-export interface GanttProps extends EventOption, DisplayOption, StylingOption {
+export interface ConnectionProps {
+  delConnection: (value: string) => void;
+  addConnection: (params: {
+    source: string;
+    destination: string;
+    linkType: string;
+  }) => void;
+  itemLinks: any[];
+}
+export interface GanttProps
+  extends EventOption,
+    DisplayOption,
+    StylingOption,
+    ConnectionProps {
   tasks: Task[];
   baseLineLog?: Task[];
   itemTypeData?: OptionsProp[];
   customeFieldData?: OptionsProp[];
-  itemLinks?: any[];
+  //itemLinks?: any[];
   ganttConfig?: any;
   baselineList?: any[];
   configHandle?: (value: any) => void;
   baseLineHandle?: (value?: any, type?: "add" | "edit" | "delete") => void;
-  delConnection?: (value: string) => void;
+  //delConnection?: (value: string) => void;
   setItemTypeValue?: (value: string) => void;
   setCurrentLog?: (value: any) => void;
-  addConnection?: (
-    source: string,
-    destination: string,
-    linkType: string
-  ) => void;
+  // addConnection?: (
+  //   source: string,
+  //   destination: string,
+  //   linkType: string
+  // ) => void;
   renderTaskListComponent?: () => JSX.Element;
   isUpdate?: boolean;
   currentLog?: any;

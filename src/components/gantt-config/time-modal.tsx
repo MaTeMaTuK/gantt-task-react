@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { Modal, Form, Select } from "antd";
-import { GanttConfigContext } from "../../contsxt";
+import { ConfigHandleContext } from "../../contsxt";
 import { TimeItemProps } from "./time";
 import styles from "./index.module.css";
 const { Option } = Select;
@@ -30,7 +30,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
   itemTypeChange,
 }) => {
   const [form] = Form.useForm();
-  const { itemTypeData, customeFieldData } = useContext(GanttConfigContext);
+  const { itemTypeData, customeFieldData } = useContext(ConfigHandleContext);
   // 筛选字段类型为日期和数值的字段
   useEffect(() => {
     if (visible) {
