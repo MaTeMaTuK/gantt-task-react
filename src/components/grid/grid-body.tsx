@@ -1,10 +1,12 @@
-import React, { ReactChild, useState, useEffect } from "react";
+import React, { ReactChild, useState, useEffect, useContext } from "react";
 import { Task, ViewMode, EventOption } from "../../types/public-types";
 import { addToDate } from "../../helpers/date-helper";
-import styles from "./grid.module.css";
+import { GanttConfigContext } from "../../contsxt";
+
 // import { GanttContext } from "../../contsxt";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
+import styles from "./grid.module.css";
 dayjs.extend(weekday);
 export type GridBodyProps = {
   tasks: Task[];
@@ -34,6 +36,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   offsetLeft,
   onDateChange,
 }) => {
+  const { ganttConfig } = useContext(GanttConfigContext);
   const [translateX, setTranslateX] = useState(-500);
   const [translateY, setTranslateY] = useState(-500);
   const [isShow, setIsShow] = useState(false);
@@ -167,8 +170,12 @@ export const GridBody: React.FC<GridBodyProps> = ({
     }
     onDateChange?.(
       Object.assign(tasks[taskIndex], {
-        start: startDate?.startOf("day").toDate(),
-        end: endDate?.startOf("day").toDate(),
+        start: ganttConfig?.time?.length
+          ? startDate?.startOf("day").toDate()
+          : null,
+        end: ganttConfig?.time?.length
+          ? endDate?.startOf("day").toDate()
+          : null,
       })
     );
   };

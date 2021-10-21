@@ -21,3 +21,7 @@
 :global(.ant-switch-checked .ant-switch-handle ) {
   left: calc(100% - 20px)
 }
+:global(.guide-modal .ant-modal-close ) {
+  right: -20px;
+  top: -20px
+}

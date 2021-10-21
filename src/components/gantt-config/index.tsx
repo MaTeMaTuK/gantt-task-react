@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, Drawer } from "antd";
 import Time from "./time";
 // import Relation from "./relation";
@@ -10,13 +10,24 @@ const { TabPane } = Tabs;
 interface GanttConfigProps {
   toGantt: () => void;
   visible: boolean;
+  currentPanel?: string | undefined;
 }
 
-const GanttConfig: React.FC<GanttConfigProps> = ({ toGantt, visible }) => {
+const GanttConfig: React.FC<GanttConfigProps> = ({
+  toGantt,
+  visible,
+  currentPanel,
+}) => {
   const [tabs, setTabs] = useState("time");
   const tabChange = (val: string) => {
     setTabs(val);
   };
+  // const defaultActiveKey = useMemo(() => {
+  //   return currentPanel ? currentPanel : "time";
+  // }, [currentPanel]);
+  useEffect(() => {
+    setTabs(currentPanel ? currentPanel : "time");
+  }, [currentPanel]);
   return (
     <Drawer
       visible={visible}
@@ -29,7 +40,7 @@ const GanttConfig: React.FC<GanttConfigProps> = ({ toGantt, visible }) => {
       <h3 className={styles.settingModalTitle} onClick={() => toGantt()}>
         甘特图配置
       </h3>
-      <Tabs defaultActiveKey="time" onChange={tabChange}>
+      <Tabs onChange={tabChange} activeKey={tabs}>
         <TabPane tab="时间字段配置" key="time">
           <Time />
         </TabPane>

@@ -662,17 +662,24 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
   React.useImperativeHandle(actionRef, () => ({
     openGuide(type: string) {
+      console.log("openGuide");
       setCurrentPanel(type);
       setGuideModalVisible(true);
     },
   }));
   const toPanel = () => {
-    console.log(currentPanel);
+    setGuideModalVisible(false);
     toConfig();
   };
   return (
     <div className={styles.box}>
-      <GuideModal visible={guideModalVisible} toPanel={toPanel} />
+      <GuideModal
+        visible={guideModalVisible}
+        toPanel={toPanel}
+        toCancel={() => {
+          setGuideModalVisible(false);
+        }}
+      />
       <GanttConfigContext.Provider
         value={{
           itemTypeData,
@@ -685,7 +692,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         <ConfigHandleContext.Provider
           value={{ configHandle, setItemTypeValue, baseLineHandle }}
         >
-          <GanttConfig toGantt={toGantt} visible={visible} />
+          <GanttConfig
+            toGantt={toGantt}
+            visible={visible}
+            currentPanel={currentPanel}
+          />
         </ConfigHandleContext.Provider>
         <BaseLineContext.Provider
           value={{ baseLineHandle, baselineList, setCurrentLog, currentLog }}
