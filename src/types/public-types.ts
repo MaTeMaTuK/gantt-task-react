@@ -51,6 +51,7 @@ export interface Task {
   isDisabled?: boolean;
   project?: string;
   dependencies?: string[];
+  item?: any;
 }
 
 export interface EventOption {
@@ -168,7 +169,7 @@ export interface OptionsProp {
   label: string;
   value: string;
 }
-//特殊时间精度
+// 特殊时间精度
 export const DateDeltaInit = {
   [ViewMode.Month]: {
     1: 31 * 24 * 3600 * 1000,
