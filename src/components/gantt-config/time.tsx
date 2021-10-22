@@ -20,7 +20,7 @@ const Time: React.FC<TimeProps> = () => {
   const [visible, setVisible] = useState(false);
   const columns = [
     {
-      title: "卡片类型",
+      title: "事项类型",
       dataIndex: "itemType",
       key: "name",
       render: (text: string) => {
@@ -137,7 +137,7 @@ const Time: React.FC<TimeProps> = () => {
         <em>
           <WarningIcon />
         </em>
-        为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应卡片的哪个时间字段
+        为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应事项的哪个时间字段
       </h4>
       <Table
         columns={columns}
@@ -149,7 +149,7 @@ const Time: React.FC<TimeProps> = () => {
         }}
       />
       <Button icon={<PlusOutlined />} onClick={addTime}>
-        添加卡片类型
+        添加事项类型
       </Button>
     </div>
   );

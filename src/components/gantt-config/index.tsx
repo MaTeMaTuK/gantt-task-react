@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Tabs, Drawer } from "antd";
 import Time from "./time";
-import Relation from "./relation";
 import styles from "./index.module.css";
 const { TabPane } = Tabs;
 interface GanttConfigProps {
@@ -10,6 +9,7 @@ interface GanttConfigProps {
 }
 
 const GanttConfig: React.FC<GanttConfigProps> = ({ toGantt, visible }) => {
+  // @ts-ignore
   const [tabs, setTabs] = useState("time");
   const tabChange = (val: string) => {
     setTabs(val);
@@ -29,9 +29,6 @@ const GanttConfig: React.FC<GanttConfigProps> = ({ toGantt, visible }) => {
       <Tabs defaultActiveKey="time" onChange={tabChange}>
         <TabPane tab="时间字段配置" key="time">
           <Time />
-        </TabPane>
-        <TabPane tab="关联关系配置" key="relation">
-          <Relation currentTab={tabs} />
         </TabPane>
       </Tabs>
     </Drawer>
