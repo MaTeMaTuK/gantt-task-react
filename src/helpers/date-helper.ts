@@ -12,7 +12,7 @@ type DateHelperScales =
   | "millisecond";
 
 const intlDTCache = {};
-const getCachedDateTimeFormat = (
+export const getCachedDateTimeFormat = (
   locString: string | string[],
   opts: DateTimeFormatOptions = {}
 ): DateTimeFormat => {
@@ -24,6 +24,7 @@ const getCachedDateTimeFormat = (
   }
   return dtf;
 };
+
 
 export const addToDate = (
   date: Date,
@@ -189,3 +190,4 @@ export const getWeekNumberISO8601 = (date: Date) => {
 export const getDaysInMonth = (month: number, year: number) => {
   return new Date(year, month + 1, 0).getDate();
 };
+
