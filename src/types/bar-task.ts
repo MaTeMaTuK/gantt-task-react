@@ -10,6 +10,8 @@ export interface BarTask extends Task {
   barCornerRadius: number;
   handleWidth: number;
   barChildren: number[];
+  isTimeErrorItem?: boolean;
+  isDelayItem?: boolean;
   styles: {
     backgroundColor: string;
     backgroundSelectedColor: string;
