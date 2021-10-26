@@ -76,16 +76,16 @@
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
 }
-.taskListWrapper::after{
-  content: '';
+.taskListWrapper::after {
+  content: "";
   position: absolute;
   left: -1px;
   bottom: 0;
-  background:#fff;
+  background: #fff;
   width: 1px;
   height: 47px;
 }
-.taskListWrapper>div {
+.taskListWrapper > div {
   padding: 0;
 }
 
@@ -168,7 +168,7 @@
 .reverse .dividerContainer > hr.maskLineTop {
   display: block;
 }
-.reverse .dividerIconWarpper svg{
+.reverse .dividerIconWarpper svg {
   transform: rotate(-180deg);
 }
 
@@ -204,7 +204,7 @@
   font-weight: 600;
 }
 .guideInfor .clickThis {
-  color: #3D7EFF;
+  color: #3d7eff;
   cursor: pointer;
   margin-right: 5px;
 }

@@ -15,12 +15,12 @@
 }
 :global(.overlay-label.jtk-hover) {
   visibility: visible;
-  display:visible
+  display: visible;
 }
-:global(.ant-switch-checked .ant-switch-handle ) {
-  left: calc(100% - 20px)
+:global(.ant-switch-checked .ant-switch-handle) {
+  left: calc(100% - 20px);
 }
-:global(.guide-modal .ant-modal-close ) {
+:global(.guide-modal .ant-modal-close) {
   right: -20px;
-  top: -20px
+  top: -20px;
 }
