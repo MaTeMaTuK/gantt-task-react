@@ -26,17 +26,20 @@ import { DateSetup } from "../../types/date-setup";
 import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttConfig from "../gantt-config/index";
+import GuideModal from "./guide-modal";
+import { Button } from "antd";
 import GanttHeader from "./gantt-header";
 import ArrowIcon from "../icons/arrow";
 import "./gantt.css";
 import {
   GanttConfigContext,
-  ConfigHandelContext,
-  ConnectionHandelContext,
+  ConfigHandleContext,
+  BaseLineContext,
 } from "../../contsxt";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
+  baseLineLog,
   isUpdate,
   headerHeight = 40,
   // columnWidth = 60,
@@ -77,10 +80,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   itemTypeData, // 卡片类型
   customeFieldData, // 字段
   configHandle, // 配置事件
+  baseLineHandle, // 基线事件
+  setItemTypeValue, // 卡片类型
+  setCurrentLog, // 选择基线log
   ganttConfig = {}, // 配置详情
   itemLinks = [], // 卡片关联
   addConnection,
   delConnection,
+  baselineList,
+  currentLog,
+  actionRef,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -100,6 +109,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ganttHeight, setGanttHeight] = useState(0);
   const [svgContainerHeight, setSvgContainerHeight] = useState(ganttHeight);
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
+  const [logTasks, setLogTasks] = useState<BarTask[]>([]);
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
   });
@@ -114,6 +124,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const refScrollX: any = useRef(0);
   const [visible, setVisible] = useState(false);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
+  const [guideModalVisible, setGuideModalVisible] = useState(false);
+  const [currentPanel, setCurrentPanel] = useState("");
+
   const dividerPositionRef = useRef({ left: 0 });
   // 到今天移动的距离
   // const [todayDistance, setTodayDistance] = useState(0);
@@ -152,6 +165,52 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     );
   }, [
     tasks,
+    isUpdate,
+    viewMode,
+    rowHeight,
+    barCornerRadius,
+    columnWidth,
+    taskHeight,
+    handleWidth,
+    barProgressColor,
+    barProgressSelectedColor,
+    barBackgroundColor,
+    barBackgroundSelectedColor,
+    projectProgressColor,
+    projectProgressSelectedColor,
+    projectBackgroundColor,
+    projectBackgroundSelectedColor,
+    milestoneBackgroundColor,
+    milestoneBackgroundSelectedColor,
+  ]);
+  useEffect(() => {
+    const [startDate, endDate] = ganttDateRange(viewMode);
+    const newDates = seedDates(startDate, endDate, viewMode);
+    setLogTasks(
+      convertToBarTasks(
+        // @ts-ignore
+        (tasks = baseLineLog),
+        newDates,
+        columnWidth,
+        rowHeight,
+        taskHeight,
+        barCornerRadius,
+        handleWidth,
+        barProgressColor,
+        barProgressSelectedColor,
+        barBackgroundColor,
+        barBackgroundSelectedColor,
+        projectProgressColor,
+        projectProgressSelectedColor,
+        projectBackgroundColor,
+        projectBackgroundSelectedColor,
+        milestoneBackgroundColor,
+        milestoneBackgroundSelectedColor,
+        viewMode
+      )
+    );
+  }, [
+    baseLineLog,
     isUpdate,
     viewMode,
     rowHeight,
@@ -474,6 +533,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,
+    logTasks: logTasks,
     dates: dateSetup.dates,
     ganttEvent,
     selectedTask,
@@ -493,6 +553,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onProgressChange,
     onDoubleClick,
     onDelete,
+    delConnection,
+    addConnection,
+    itemLinks,
   };
 
   const TaskListComponent = useMemo(() => {
@@ -617,130 +680,168 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     event.stopPropagation();
   };
+  // 退出基线
+  const baselineExit = () => {
+    setCurrentLog?.(null);
+    setLogTasks([]);
+  };
+  React.useImperativeHandle(actionRef, () => ({
+    openGuide(type: string) {
+      setCurrentPanel(type);
+      setGuideModalVisible(true);
+    },
+  }));
+  const toPanel = () => {
+    setGuideModalVisible(false);
+    toConfig();
+  };
   return (
     <div className={styles.box}>
+      <GuideModal
+        visible={guideModalVisible}
+        toPanel={toPanel}
+        toCancel={() => {
+          setGuideModalVisible(false);
+        }}
+      />
       <GanttConfigContext.Provider
         value={{
-          itemTypeData,
-          customeFieldData,
           ganttConfig,
-          itemLinks,
         }}
       >
-        <ConfigHandelContext.Provider value={{ configHandle }}>
-          <GanttConfig toGantt={toGantt} visible={visible} />
+        <ConfigHandleContext.Provider
+          value={{
+            configHandle,
+            setItemTypeValue,
+            itemTypeData,
+            customeFieldData,
+          }}
+        >
+          <GanttConfig
+            toGantt={toGantt}
+            visible={visible}
+            currentPanel={currentPanel}
+          />
+        </ConfigHandleContext.Provider>
+        <BaseLineContext.Provider
+          value={{ baseLineHandle, baselineList, setCurrentLog, currentLog }}
+        >
           <GanttHeader
             toToday={toToday}
             toConfig={toConfig}
             modeChange={modeChange}
           />
-        </ConfigHandelContext.Provider>
-        <ConnectionHandelContext.Provider
-          value={{ delConnection, addConnection }}
+        </BaseLineContext.Provider>
+
+        <div
+          className={styles.wrapper}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          ref={wrapperRef}
         >
-          <div
-            className={styles.wrapper}
-            onKeyDown={handleKeyDown}
-            tabIndex={0}
-            ref={wrapperRef}
-          >
-            {listCellWidth && TaskListComponent && (
-              <div
-                ref={taskListRef}
-                className={styles.taskListWrapper}
-                id="ganttTaskListWrapper"
-                style={{
-                  width: `${taskListWidth}px`,
-                  visibility: tasks?.length ? "visible" : "hidden",
-                }}
-              >
-                {TaskListComponent}
-              </div>
-            )}
-            {tasks.length > 0 && (
-              <TaskGantt
-                ref={taskGanttContainerRef}
-                gridProps={gridProps}
-                calendarProps={calendarProps}
-                barProps={barProps}
-                ganttHeight={ganttHeight}
-                scrollX={scrollX}
-                onScroll={handleScrollX}
-                taskListHieght={taskListRef?.current?.offsetHeight}
-              />
-            )}
+          {currentLog?.name && (
+            <div className={styles.choosedBaselIne}>
+              <span className={styles.loaded}>已加载：{currentLog?.name}</span>
+              <Button size="small" onClick={baselineExit}>
+                退出
+              </Button>
+            </div>
+          )}
+
+          {listCellWidth && TaskListComponent && (
             <div
-              className={
-                taskListWidth <= minWidth
-                  ? `${styles.dividerWrapper} ${styles.reverse}`
-                  : styles.dividerWrapper
-              }
+              ref={taskListRef}
+              className={styles.taskListWrapper}
+              id="ganttTaskListWrapper"
               style={{
-                left: `${
-                  taskListWidth - minWidth > 0
-                    ? taskListWidth + paddingLeft
-                    : paddingLeft
-                }px`,
+                width: `${taskListWidth}px`,
                 visibility: tasks?.length ? "visible" : "hidden",
-                height: `calc(100% - ${listBottomHeight}px)`,
               }}
             >
-              <div className={styles.dividerContainer}>
-                <hr
-                  onMouseDown={
-                    taskListWidth <= minWidth
-                      ? undefined
-                      : handleDividerMouseDown
-                  }
-                />
-                <hr className={styles.maskLine} />
-                <hr className={styles.maskLineTop} />
-                <span
-                  className={styles.dividerIconWarpper}
-                  onMouseDown={e => e.stopPropagation()}
-                  onClick={handleDividerClick}
-                >
-                  <ArrowIcon />
-                </span>
-              </div>
+              {TaskListComponent}
             </div>
-            {ganttEvent.changedTask && (
-              <Tooltip
-                arrowIndent={arrowIndent}
-                rowHeight={rowHeight}
-                svgContainerHeight={svgContainerHeight}
-                svgContainerWidth={svgContainerWidth}
-                fontFamily={fontFamily}
-                fontSize={fontSize}
-                scrollX={scrollX}
-                scrollY={scrollY}
-                task={ganttEvent.changedTask}
-                headerHeight={headerHeight}
-                taskListWidth={taskListWidth}
-                TooltipContent={TooltipContent}
+          )}
+          {tasks.length > 0 && (
+            <TaskGantt
+              ref={taskGanttContainerRef}
+              gridProps={gridProps}
+              calendarProps={calendarProps}
+              barProps={barProps}
+              ganttHeight={ganttHeight}
+              scrollX={scrollX}
+              onScroll={handleScrollX}
+              taskListHieght={taskListRef?.current?.offsetHeight}
+            />
+          )}
+          <div
+            className={
+              taskListWidth <= minWidth
+                ? `${styles.dividerWrapper} ${styles.reverse}`
+                : styles.dividerWrapper
+            }
+            style={{
+              left: `${
+                taskListWidth - minWidth > 0
+                  ? taskListWidth + paddingLeft
+                  : paddingLeft
+              }px`,
+              visibility: tasks?.length ? "visible" : "hidden",
+              height: `calc(100% - ${listBottomHeight}px)`,
+            }}
+          >
+            <div className={styles.dividerContainer}>
+              <hr
+                onMouseDown={
+                  taskListWidth <= minWidth ? undefined : handleDividerMouseDown
+                }
               />
-            )}
-            {tasks.length > 0 && (
-              <VerticalScroll
-                ref={verticalScrollContainerRef}
-                ganttFullHeight={ganttFullHeight}
-                ganttHeight={ganttHeight}
-                headerHeight={headerHeight}
-                listBottomHeight={listBottomHeight}
-                onScroll={handleScrollY}
-              />
-            )}
-            {tasks.length > 0 && (
-              <HorizontalScroll
-                ref={horizontalScrollContainerRef}
-                listBottomHeight={listBottomHeight}
-                svgWidth={svgWidth}
-                taskListWidth={taskListWidth}
-                onScroll={handleScrollX}
-              />
-            )}
+              <hr className={styles.maskLine} />
+              <hr className={styles.maskLineTop} />
+              <span
+                className={styles.dividerIconWarpper}
+                onMouseDown={e => e.stopPropagation()}
+                onClick={handleDividerClick}
+              >
+                <ArrowIcon />
+              </span>
+            </div>
           </div>
-        </ConnectionHandelContext.Provider>
+          {ganttEvent.changedTask && (
+            <Tooltip
+              arrowIndent={arrowIndent}
+              rowHeight={rowHeight}
+              svgContainerHeight={svgContainerHeight}
+              svgContainerWidth={svgContainerWidth}
+              fontFamily={fontFamily}
+              fontSize={fontSize}
+              scrollX={scrollX}
+              scrollY={scrollY}
+              task={ganttEvent.changedTask}
+              headerHeight={headerHeight}
+              taskListWidth={taskListWidth}
+              TooltipContent={TooltipContent}
+            />
+          )}
+          {tasks.length > 0 && (
+            <VerticalScroll
+              ref={verticalScrollContainerRef}
+              ganttFullHeight={ganttFullHeight}
+              ganttHeight={ganttHeight}
+              headerHeight={headerHeight}
+              listBottomHeight={listBottomHeight}
+              onScroll={handleScrollY}
+            />
+          )}
+          {tasks.length > 0 && (
+            <HorizontalScroll
+              ref={horizontalScrollContainerRef}
+              listBottomHeight={listBottomHeight}
+              svgWidth={svgWidth}
+              taskListWidth={taskListWidth}
+              onScroll={handleScrollX}
+            />
+          )}
+        </div>
       </GanttConfigContext.Provider>
     </div>
   );

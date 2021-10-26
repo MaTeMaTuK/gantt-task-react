@@ -1,7 +1,6 @@
 .ganttVerticalContainer {
   flex: 1;
   overflow: hidden;
-  font-size: 0;
   margin: 0;
   padding: 0;
   display: flex;
@@ -25,7 +24,6 @@
   flex-direction: column;
   height: 100%;
 }
-
 .wrapper {
   position: relative;
   display: flex;
@@ -37,7 +35,24 @@
   overflow: hidden;
   padding: 0 20px 0px 24px;
 }
-
+.wrapper .choosedBaselIne {
+  position: absolute;
+  right: 50px;
+  top: 60px;
+  z-index: 2;
+  border: 1px solid #4b8bff;
+  padding: 2px 5px;
+  color: #4b8bff;
+  background: #dbe8ff;
+  border-radius: 4px;
+}
+.wrapper .choosedBaselIne,
+.wrapper button {
+  font-size: 12px;
+}
+.choosedBaselIne .loaded {
+  margin-right: 8px;
+}
 .task-gantt-wrapper {
   position: absolute;
   top: 0;
@@ -61,16 +76,16 @@
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
 }
-.taskListWrapper::after{
-  content: '';
+.taskListWrapper::after {
+  content: "";
   position: absolute;
   left: -1px;
   bottom: 0;
-  background:#fff;
+  background: #fff;
   width: 1px;
   height: 47px;
 }
-.taskListWrapper>div {
+.taskListWrapper > div {
   padding: 0;
 }
 
@@ -86,7 +101,7 @@
   left: 0;
 }
 
-.dividerWrapper{
+.dividerWrapper {
   position: absolute;
   top: 0;
   left: 0;
@@ -142,8 +157,8 @@
   cursor: pointer;
   background: #fff;
   border-radius: 50%;
-  border: 1px solid #ECEDF0;
-  box-shadow: 1px 2px 3px #ECEDF0;
+  border: 1px solid #ecedf0;
+  box-shadow: 1px 2px 3px #ecedf0;
 }
 
 .reverse .dividerContainer > hr.maskLine {
@@ -153,24 +168,24 @@
 .reverse .dividerContainer > hr.maskLineTop {
   display: block;
 }
-.reverse .dividerIconWarpper svg{
+.reverse .dividerIconWarpper svg {
   transform: rotate(-180deg);
 }
 
-.reverse .dividerIconWarpper i:before{
+.reverse .dividerIconWarpper i:before {
   transform: rotate(-30deg);
 }
 
-.reverse .dividerIconWarpper  i:after{
+.reverse .dividerIconWarpper i:after {
   transform: rotate(30deg);
 }
 
-.dividerIconWarpper i:before{
+.dividerIconWarpper i:before {
   transform: rotate(30deg);
   bottom: -1px;
 }
 
-.dividerIconWarpper i:after{
+.dividerIconWarpper i:after {
   transform: rotate(-30deg);
   top: -1px;
 }
@@ -182,7 +197,14 @@
   position: relative;
   width: 2px;
   height: 8px;
-  background-color: #2E405E;
+  background-color: #2e405e;
   border-radius: 1px;
 }
-
+.guideInfor {
+  font-weight: 600;
+}
+.guideInfor .clickThis {
+  color: #3d7eff;
+  cursor: pointer;
+  margin-right: 5px;
+}

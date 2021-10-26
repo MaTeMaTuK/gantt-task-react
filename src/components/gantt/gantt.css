@@ -9,3 +9,21 @@
 :global(.ganttHeaderGlobal .ant-space-item) {
   z-index: 2;
 }
+:global(.overlay-label) {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  visibility: hidden;
+}
+:global(.overlay-label.jtk-hover) {
+  visibility: visible;
+  display: visible;
+}
+:global(.ant-switch-checked .ant-switch-handle) {
+  left: calc(100% - 20px);
+}
+:global(.guide-modal .ant-modal-close) {
+  right: -20px;
+  top: -20px;
+}

@@ -24,8 +24,8 @@ export type TaskItemProps = {
   isLog?: boolean | undefined;
 };
 
-export const TaskItem: React.FC<TaskItemProps> = props => {
-  const { task, isDelete, isSelected, onEventStart, jsPlumb } = {
+export const TaskItemLog: React.FC<TaskItemProps> = props => {
+  const { task, isSelected, jsPlumb } = {
     ...props,
   };
 
@@ -51,31 +51,5 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     }
   }, [task, isSelected, jsPlumb]);
 
-  return (
-    <g
-      onKeyDown={e => {
-        switch (e.key) {
-          case "Delete": {
-            if (isDelete) onEventStart("delete", task, e);
-            break;
-          }
-        }
-        e.stopPropagation();
-      }}
-      onMouseEnter={e => {
-        onEventStart("mouseenter", task, e);
-      }}
-      onMouseLeave={e => {
-        onEventStart("mouseleave", task, e);
-      }}
-      onDoubleClick={e => {
-        onEventStart("dblclick", task, e);
-      }}
-      onFocus={() => {
-        onEventStart("select", task);
-      }}
-    >
-      {taskItem}
-    </g>
-  );
+  return <g>{taskItem}</g>;
 };

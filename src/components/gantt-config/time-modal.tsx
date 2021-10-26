@@ -1,19 +1,25 @@
-import React, { useEffect, useContext, useMemo } from "react";
+import React, { useEffect, useContext } from "react";
 import { Modal, Form, Select } from "antd";
-import { GanttConfigContext } from "../../contsxt";
+import { ConfigHandleContext } from "../../contsxt";
 import { TimeItemProps } from "./time";
 import styles from "./index.module.css";
 const { Option } = Select;
 const filterOption = (input: any, option: any) => {
   return option?.children?.toLowerCase().indexOf(input?.toLowerCase()) > -1;
 };
-
+// 筛选某一类型的字段
+export const filterFields = (type: string, customeFieldData: any) => {
+  return customeFieldData.filter((ele: any) => {
+    return ele?.fieldType?.key === type;
+  });
+};
 interface ItemModalProps {
   visible: boolean;
   handleCancel: () => void;
   handleOk: (values: any) => void;
   currentItem: TimeItemProps;
   timeList?: TimeItemProps[];
+  itemTypeChange: (value: string) => void;
 }
 const ItemModal: React.FC<ItemModalProps> = ({
   visible,
@@ -21,19 +27,11 @@ const ItemModal: React.FC<ItemModalProps> = ({
   handleOk,
   currentItem,
   timeList,
+  itemTypeChange,
 }) => {
   const [form] = Form.useForm();
-  const { itemTypeData } = useContext(GanttConfigContext);
-  const { customeFieldData } = useContext(GanttConfigContext);
+  const { itemTypeData, customeFieldData } = useContext(ConfigHandleContext);
   // 筛选字段类型为日期和数值的字段
-  const filterFields = (type: string) => {
-    const res = useMemo(() => {
-      return customeFieldData.filter((ele: any) => {
-        return ele?.fieldType?.key === type;
-      });
-    }, [customeFieldData]);
-    return res;
-  };
   useEffect(() => {
     if (visible) {
       form.resetFields();
@@ -64,6 +62,14 @@ const ItemModal: React.FC<ItemModalProps> = ({
       return Promise.resolve();
     }
   };
+  const handelChange = (val: string) => {
+    itemTypeChange(val);
+    form.setFieldsValue({
+      startDate: undefined,
+      endDate: undefined,
+      percentage: undefined,
+    });
+  };
   return (
     <Modal
       title="时间字段配置"
@@ -91,7 +97,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
               },
             ]}
           >
-            <Select placeholder="请选择" allowClear>
+            <Select placeholder="请选择" allowClear onChange={handelChange}>
               {itemTypeData.map((ele: any) => {
                 return (
                   <Option value={ele.value} key={ele.value}>
@@ -118,7 +124,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
             filterOption={filterOption}
             allowClear
           >
-            {filterFields("Date").map((ele: any) => {
+            {filterFields("Date", customeFieldData).map((ele: any) => {
               return (
                 <Option value={ele.value} key={ele.value}>
                   {ele.label}
@@ -138,39 +144,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
             showSearch
             filterOption={filterOption}
           >
-            {filterFields("Date").map((ele: any) => {
-              return (
-                <Option value={ele.value} key={ele.value}>
-                  {ele.label}
-                </Option>
-              );
-            })}
-          </Select>
-        </Form.Item>
-        <Form.Item label="基线开始日期" name="baseLineStartDate">
-          <Select
-            placeholder="请选择"
-            allowClear
-            showSearch
-            filterOption={filterOption}
-          >
-            {filterFields("Date").map((ele: any) => {
-              return (
-                <Option value={ele.value} key={ele.value}>
-                  {ele.label}
-                </Option>
-              );
-            })}
-          </Select>
-        </Form.Item>
-        <Form.Item label="基线结束日期" name="baseLineEndDate">
-          <Select
-            placeholder="请选择"
-            allowClear
-            showSearch
-            filterOption={filterOption}
-          >
-            {filterFields("Date").map((ele: any) => {
+            {filterFields("Date", customeFieldData).map((ele: any) => {
               return (
                 <Option value={ele.value} key={ele.value}>
                   {ele.label}
@@ -186,7 +160,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
             showSearch
             filterOption={filterOption}
           >
-            {filterFields("Number").map((ele: any) => {
+            {filterFields("Number", customeFieldData).map((ele: any) => {
               return (
                 <Option value={ele.value} key={ele.value}>
                   {ele.label}
