@@ -16,6 +16,7 @@ type BarDisplayProps = {
     backgroundSelectedColor: string;
     progressColor: string;
     progressSelectedColor: string;
+    barBackgroundColorTimeError?: string;
     opacity?: number;
   };
   onMouseDown: (event: React.MouseEvent<SVGPolygonElement, MouseEvent>) => void;
@@ -33,10 +34,15 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   styles,
   onMouseDown,
   id,
+  task,
   isLog,
 }) => {
   const getBarColor = () => {
-    return isSelected ? styles.backgroundSelectedColor : styles.backgroundColor;
+    return task?.isTimeErrorItem || task?.isDelayItem
+      ? styles.barBackgroundColorTimeError
+      : isSelected
+      ? styles.backgroundSelectedColor
+      : styles.backgroundColor;
   };
   return (
     <g onMouseDown={onMouseDown}>
