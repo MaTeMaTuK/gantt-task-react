@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useContext } from "react";
-import { EventOption } from "../../types/public-types";
+import { EventOption, ConnectionProps } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
 import { isKeyboardEvent } from "../../helpers/other-helper";
 import { TaskItem } from "../task-item/task-item";
-import { GanttConfigContext, ConnectionHandelContext } from "../../contsxt";
+import { TaskItemLog } from "../task-item/task-item-log";
+import { GanttConfigContext } from "../../contsxt";
+import { filter } from "lodash";
 import {
   offsetCalculators,
   sizeCalculators,
   relationReverse,
-  // commonConfig,
   relationInit,
 } from "../../helpers/jsPlumbConfig";
 import {
@@ -19,8 +20,10 @@ import {
   GanttEvent,
 } from "../../types/gantt-task-actions";
 import { message, Modal } from "antd";
+
 export type TaskGanttContentProps = {
   tasks: BarTask[];
+  logTasks: BarTask[];
   dates: Date[];
   ganttEvent: GanttEvent;
   selectedTask: BarTask | undefined;
@@ -37,10 +40,12 @@ export type TaskGanttContentProps = {
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
-} & EventOption;
+} & EventOption &
+  ConnectionProps;
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   tasks,
+  logTasks,
   dates,
   ganttEvent,
   selectedTask,
@@ -60,18 +65,17 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onProgressChange,
   onDoubleClick,
   onDelete,
+  delConnection,
+  addConnection,
+  itemLinks,
 }) => {
   const [connectUuids, setConnectUuids] = useState([]);
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
-  const [jsPlumbInstance, setJsPlumbInstance] = useState(null);
+  const [jsPlumbInstance, setJsPlumbInstance] = useState<any>(null);
   const { ganttConfig } = useContext(GanttConfigContext);
-  const { itemLinks } = useContext(GanttConfigContext);
-  const { delConnection } = useContext(ConnectionHandelContext);
-  const { addConnection } = useContext(ConnectionHandelContext);
-  // create xStep
   useEffect(() => {
     const dateDelta =
       dates[1].getTime() -
@@ -259,6 +263,24 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     const linkType = relationReverse(start, end);
     return ganttConfig.relation[linkType];
   };
+  const deleteConn = (conn: any) => {
+    const currentLink = itemLinks.filter((ele: any) => {
+      return (
+        ele.source.objectId === conn.sourceId &&
+        ele.destination.objectId === conn.targetId &&
+        ele.linkType.objectId === conn.getData()
+      );
+    });
+    if (currentLink.length) {
+      Modal.confirm({
+        title: "解除关联关系",
+        content: "确定要解除卡片的关联关系吗？",
+        okText: "确认",
+        cancelText: "取消",
+        onOk: () => delConnection(currentLink[0].objectId),
+      });
+    }
+  };
   useEffect(() => {
     import("jsplumb").then(({ jsPlumb }: any) => {
       jsPlumb.ready(() => {
@@ -270,53 +292,42 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   }, []);
   useEffect(() => {
     if (jsPlumbInstance) {
-      // @ts-ignore
       const originalOffset = jsPlumbInstance.getOffset;
-      // @ts-ignore
       const originalSize = jsPlumbInstance.getSize;
-      // @ts-ignore
       jsPlumbInstance.getOffset = function (el: any) {
         const tn = el.tagName.toUpperCase();
         if (offsetCalculators[tn]) {
           return offsetCalculators[tn](el);
         } else return originalOffset.apply(this, [el]);
       };
-      // @ts-ignore
       jsPlumbInstance.getSize = function (el: any) {
         const tn = el.tagName.toUpperCase();
         if (sizeCalculators[tn]) {
           return sizeCalculators[tn](el);
         } else return originalSize.apply(this, [el]);
       };
-      // @ts-ignore
       jsPlumbInstance.setContainer("horizontalContainer");
-      // 删除连线
-      // @ts-ignore
-      jsPlumbInstance.bind("click", function (conn: any) {
-        const currentLink = itemLinks.filter((ele: any) => {
-          return (
-            ele.source.objectId === conn.sourceId &&
-            ele.destination.objectId === conn.targetId &&
-            ele.linkType.objectId === conn.getData()
-          );
-        });
-        if (currentLink.length) {
-          Modal.confirm({
-            title: "解除关联关系",
-            content: "确定要解除卡片的关联关系吗？",
-            okText: "确认",
-            cancelText: "取消",
-            onOk: () => delConnection(currentLink[0].objectId),
-          });
-        }
-      });
       // 连线前校验
-      // @ts-ignore
       jsPlumbInstance.bind("beforeDrop", (conn: any) => {
+        const taskSource = filter(tasks, { id: conn.sourceId })[0];
+        const taskTarget = filter(tasks, { id: conn.targetId })[0];
+        if (!ganttConfig.relation) {
+          message.warning("未配置关联关系");
+          return;
+        }
         if (conn.targetId === conn.sourceId) {
           message.warning("连线有误");
-          return false;
+          return;
         }
+        // 父卡片和子卡片不能相互连接，其他类型待定
+        if (
+          (taskSource.type === "parent" && taskTarget.type === "task") ||
+          (taskSource.type === "task" && taskTarget.type === "parent")
+        ) {
+          message.warning("父子卡片之间不能存在关联关系");
+          return;
+        }
+        // 两个卡片只能存在一种关联关系
         const linkTypeId = getLinkTypeId(
           conn.connection.endpoints[0].anchor.cssClass,
           conn.dropEndpoint.anchor.cssClass
@@ -334,7 +345,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         }
         return true;
       });
-      // @ts-ignore
       jsPlumbInstance.bind("connection", (infor: any, originalEvent: any) => {
         const linkTypeId = getLinkTypeId(
           infor.connection.endpoints[0].anchor.cssClass,
@@ -345,6 +355,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           destination: infor.targetId,
           linkType: linkTypeId,
         };
+        // init(infor.connection);
         if (originalEvent) {
           infor.connection.setData(linkTypeId);
           addConnection(params);
@@ -353,11 +364,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     }
     return () => {
       if (jsPlumbInstance) {
-        // @ts-ignore
-        jsPlumbInstance.unbind("click");
-        // @ts-ignore
         jsPlumbInstance.unbind("beforeDrop");
-        // @ts-ignore
         jsPlumbInstance.unbind("connection");
       }
     };
@@ -391,7 +398,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   useEffect(() => {
     if (jsPlumbInstance) {
-      // @ts-ignore
       jsPlumbInstance.setSuspendDrawing(true);
       for (let i = 0; i < connectUuids.length; i++) {
         const uuidObj = connectUuids[i];
@@ -401,22 +407,33 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
             `${source}-${relationInit[relationType][0]}`,
             `${destination}-${relationInit[relationType][1]}`,
           ];
-          // @ts-ignore
           const connect = jsPlumbInstance.connect({
             uuids: uuid,
           });
           // 给连线设置linkType
           if (connect) {
+            connect.addOverlay([
+              "Label",
+              {
+                label: `<svg t="1633768438353" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4762" width="20" height="20"><path d="M522.24 512m-440.32 0a440.32 440.32 0 1 0 880.64 0 440.32 440.32 0 1 0-880.64 0Z" fill="#666666" p-id="4763"></path><path d="M667.136 687.616c-7.68 0-15.872-3.072-21.504-9.216L355.84 389.12c-11.776-11.776-11.776-31.232 0-43.52 11.776-11.776 31.232-11.776 43.52 0l289.792 289.792c11.776 11.776 11.776 31.232 0 43.52-6.144 5.632-14.336 8.704-22.016 8.704z" fill="#FFFFFF" p-id="4764"></path><path d="M377.344 687.616c-7.68 0-15.872-3.072-21.504-9.216-11.776-11.776-11.776-31.232 0-43.52L645.12 345.6c11.776-11.776 31.232-11.776 43.52 0 11.776 11.776 11.776 31.232 0 43.52L399.36 678.4c-6.144 6.144-13.824 9.216-22.016 9.216z" fill="#FFFFFF" p-id="4765"></path></svg>`,
+                location: 0.5,
+                cssClass: "overlay-label",
+                events: {
+                  click: function () {
+                    deleteConn(connect);
+                  },
+                },
+                id: uuid[0],
+              },
+            ]);
             connect.setData(ganttConfig.relation[relationType]);
           }
         }
       }
-      // @ts-ignore
       jsPlumbInstance.setSuspendDrawing(false, true);
     }
     return () => {
       if (jsPlumbInstance) {
-        // @ts-ignore
         jsPlumbInstance.deleteEveryConnection();
       }
     };
@@ -441,22 +458,41 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       </g>
       <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
         {tasks.map(task => {
-          if (!task.start || !task.end) {
-            return null;
+          const cuttentLog = logTasks.find(ele => ele.id === task.id);
+          if (cuttentLog) {
+            cuttentLog.y = task.y;
           }
           return (
-            <TaskItem
-              jsPlumb={jsPlumbInstance}
-              task={task}
-              arrowIndent={arrowIndent}
-              taskHeight={taskHeight}
-              isProgressChangeable={!!onProgressChange && !task.isDisabled}
-              isDateChangeable={!!onDateChange && !task.isDisabled}
-              isDelete={!task.isDisabled}
-              onEventStart={handleBarEventStart}
-              key={task.id}
-              isSelected={!!selectedTask && task.id === selectedTask.id}
-            />
+            <g key={task.id}>
+              {!cuttentLog?.start || !cuttentLog?.end ? null : (
+                <TaskItemLog
+                  task={cuttentLog}
+                  arrowIndent={arrowIndent}
+                  taskHeight={taskHeight}
+                  isProgressChangeable={!!onProgressChange && !task.isDisabled}
+                  isDateChangeable={!!onDateChange && !task.isDisabled}
+                  isDelete={!task.isDisabled}
+                  onEventStart={handleBarEventStart}
+                  key={`${task.id}-log`}
+                  isSelected={!!selectedTask && task.id === selectedTask.id}
+                  isLog
+                />
+              )}
+              {!task.start || !task.end ? null : (
+                <TaskItem
+                  jsPlumb={jsPlumbInstance}
+                  task={task}
+                  arrowIndent={arrowIndent}
+                  taskHeight={taskHeight}
+                  isProgressChangeable={!!onProgressChange && !task.isDisabled}
+                  isDateChangeable={!!onDateChange && !task.isDisabled}
+                  isDelete={!task.isDisabled}
+                  onEventStart={handleBarEventStart}
+                  key={task.id}
+                  isSelected={!!selectedTask && task.id === selectedTask.id}
+                />
+              )}
+            </g>
           );
         })}
       </g>

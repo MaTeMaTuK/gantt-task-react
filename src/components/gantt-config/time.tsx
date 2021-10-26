@@ -1,10 +1,9 @@
 import React, { useState, useContext, useMemo } from "react";
-import { Button, Table, Space, Modal } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button, Table, Space, Modal, Tooltip } from "antd";
+import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import styles from "./index.module.css";
 import TimeModal from "./time-modal";
-import { ConfigHandelContext, GanttConfigContext } from "../../contsxt";
-import { omit } from "lodash";
+import { ConfigHandleContext, GanttConfigContext } from "../../contsxt";
 import WarningIcon from "../icons/warning";
 interface TimeProps {}
 export interface TimeItemProps {
@@ -29,15 +28,21 @@ const Time: React.FC<TimeProps> = () => {
           itemTypeData.filter((ele: { label: string; value: string }) => {
             return ele.value === text;
           });
-        return res[0]?.label || "默认";
+        return (
+          res[0]?.label || (
+            <Tooltip title="没有配置的卡片类型将使用默认配置">
+              默认 &nbsp;
+              <QuestionCircleOutlined />
+            </Tooltip>
+          )
+        );
       },
     },
     {
       title: "操作",
       key: "action",
       width: 120,
-      // @ts-ignore
-      render: (text: string, record: TimeItemProps, index: number) => (
+      render: (_text: string, record: TimeItemProps, index: number) => (
         <Space>
           <a type="link" onClick={() => editTime(index)}>
             配置
@@ -51,13 +56,15 @@ const Time: React.FC<TimeProps> = () => {
       ),
     },
   ];
-  const { configHandle } = useContext(ConfigHandelContext);
+  const { configHandle, setItemTypeValue, itemTypeData } = useContext(
+    ConfigHandleContext
+  );
   const { ganttConfig } = useContext(GanttConfigContext);
-  const { itemTypeData } = useContext(GanttConfigContext);
-  const [currentItem, setCurrentItem] = useState({});
+  const [currentItem, setCurrentItem] = useState<any>({});
   const [index, setIndex] = useState(0);
   const timeList = useMemo(
-    () => (ganttConfig?.time ? ganttConfig?.time : [{ isDefault: true }]),
+    () =>
+      ganttConfig?.time?.length ? ganttConfig?.time : [{ isDefault: true }],
     [ganttConfig?.time]
   );
   const handleCancel = () => {
@@ -67,9 +74,7 @@ const Time: React.FC<TimeProps> = () => {
     let newTimeList;
     if (Object.keys(currentItem).length) {
       newTimeList = [...timeList];
-      // @ts-ignore
       if (currentItem?.isDefault) {
-        // @ts-ignore
         values.isDefault = currentItem?.isDefault;
       }
       newTimeList[index] = values;
@@ -80,25 +85,24 @@ const Time: React.FC<TimeProps> = () => {
     }
     setVisible(false);
     configHandle({
-      ...omit(ganttConfig, [
-        "ACl",
-        "tennat",
-        "updateAt",
-        "createdAt",
-        "updatedAt",
-        "createdBy",
-      ]),
+      ...ganttConfig,
       time: newTimeList,
     });
   };
   const addTime = () => {
     setVisible(true);
     setCurrentItem({});
+    setItemTypeValue("");
   };
   const editTime = (index: number) => {
     setIndex(index);
     setCurrentItem(timeList[index]);
     setVisible(true);
+    if (timeList[index]?.["isDefault"]) {
+      setItemTypeValue(Date.now());
+    } else {
+      setItemTypeValue(timeList[index]?.itemType);
+    }
   };
   const del = (index: number) => {
     Modal.confirm({
@@ -113,16 +117,12 @@ const Time: React.FC<TimeProps> = () => {
     const newTimeList = [...timeList];
     newTimeList.splice(index, 1);
     configHandle({
-      ...omit(ganttConfig, [
-        "ACl",
-        "tennat",
-        "updateAt",
-        "createdAt",
-        "updatedAt",
-        "createdBy",
-      ]),
+      ...ganttConfig,
       time: newTimeList,
     });
+  };
+  const itemTypeChange = (val: string) => {
+    setItemTypeValue(val);
   };
   return (
     <div>
@@ -132,6 +132,7 @@ const Time: React.FC<TimeProps> = () => {
         handleOk={handleOk}
         currentItem={currentItem}
         timeList={timeList} // 做卡片唯一性校验
+        itemTypeChange={itemTypeChange}
       />
       <h4 className={`${styles.timeTips}`}>
         <em>

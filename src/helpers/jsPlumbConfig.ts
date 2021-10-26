@@ -69,7 +69,6 @@ export const offsetCalculators = {
     };
   },
   ELLIPSE: function (el: any) {
-    // @ts-ignore
     const cx = parseInt(el.getAttribute("cx"), 10);
     const cy = parseInt(el.getAttribute("cy"), 10);
     const rx = parseInt(el.getAttribute("rx"), 10);
