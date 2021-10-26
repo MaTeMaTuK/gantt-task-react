@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { EventOption, ConnectionProps } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
@@ -263,6 +263,47 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     const linkType = relationReverse(start, end);
     return ganttConfig.relation[linkType];
   };
+
+  const getHasLinkItems = useCallback(task => {
+    // 获取与当前事项有关联关系的事项列表
+    const hasLinkItems = task?.link || {};
+    let needUpdateItems: string[] = [];
+    Object.keys(hasLinkItems).map(type => {
+      if (hasLinkItems[type]) {
+        Object.keys(hasLinkItems[type]).map(linkType => {
+          if (hasLinkItems[type][linkType]) {
+            needUpdateItems = needUpdateItems.concat(
+              hasLinkItems[type][linkType]
+            );
+          }
+        });
+      }
+    });
+    return needUpdateItems;
+  }, []);
+
+  const checkIsErrorLink = useCallback(
+    task => {
+      // 获取与当前事项有关联关系的事项列表
+      const needUpdateItems = getHasLinkItems(task);
+      // 获取当前事项的子代事项
+      const subItems: string[] = task?.item?.subItem || [];
+
+      let flag = false;
+      if (needUpdateItems.length !== new Set(needUpdateItems)?.size) {
+        flag = true;
+        return flag;
+      }
+      subItems.forEach(item => {
+        if (needUpdateItems.includes(item)) {
+          flag = true;
+        }
+      });
+      return flag;
+    },
+    [getHasLinkItems]
+  );
+
   const deleteConn = (conn: any) => {
     const currentLink = itemLinks.filter((ele: any) => {
       return (
@@ -343,6 +384,29 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           message.warning("连线有误");
           return false;
         }
+        let sourceTask: BarTask | undefined;
+        let desinationTask: BarTask | undefined;
+        tasks.map(task => {
+          if (task.id === conn.sourceId) {
+            sourceTask = task;
+          }
+          if (task.id === conn.sourceId) {
+            desinationTask = task;
+          }
+        });
+        const hasLinkItems = getHasLinkItems(sourceTask);
+        // 两个事项有多条关联关系
+        if (hasLinkItems.includes(conn.targetId)) {
+          message.warning("连线有误");
+          return false;
+        }
+        if (
+          desinationTask?.item?.subItem.includes(conn.sourceId) ||
+          sourceTask?.item?.subItem.includes(conn.targetId)
+        ) {
+          message.warning("连线有误");
+          return false;
+        }
         return true;
       });
       jsPlumbInstance.bind("connection", (infor: any, originalEvent: any) => {
@@ -368,7 +432,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         jsPlumbInstance.unbind("connection");
       }
     };
-  }, [jsPlumbInstance, itemLinks]);
+  }, [jsPlumbInstance, itemLinks, tasks, getHasLinkItems]);
+
   useEffect(() => {
     if (itemLinks.length && tasks.length && jsPlumbInstance) {
       const connectUuids: any = [];
@@ -385,16 +450,18 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               continue;
             }
           }
+          const isErrorLink = checkIsErrorLink(task);
           connectUuids.push({
             source: ele.source.objectId,
             destination: ele.destination.objectId,
             relationType: relationType,
+            isErrorLink: isErrorLink,
           });
         });
       });
       setConnectUuids(connectUuids);
     }
-  }, [jsPlumbInstance, itemLinks, tasks]);
+  }, [jsPlumbInstance, itemLinks, tasks, checkIsErrorLink]);
 
   useEffect(() => {
     if (jsPlumbInstance) {

@@ -20,7 +20,8 @@ export const convertToBarTasks = (
   projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
   milestoneBackgroundSelectedColor: string,
-  viewMode: string
+  viewMode: string,
+  barBackgroundColorTimeError: string
 ) => {
   const dateDelta =
     dates[1].getTime() -
@@ -48,7 +49,8 @@ export const convertToBarTasks = (
       projectBackgroundSelectedColor,
       milestoneBackgroundColor,
       milestoneBackgroundSelectedColor,
-      viewMode
+      viewMode,
+      barBackgroundColorTimeError
     );
   });
 
@@ -86,7 +88,8 @@ const convertToBarTask = (
   projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
   milestoneBackgroundSelectedColor: string,
-  viewMode: string
+  viewMode: string,
+  barBackgroundColorTimeError: string
 ): BarTask => {
   let barTask: BarTask;
   switch (task.type) {
@@ -120,7 +123,8 @@ const convertToBarTask = (
         projectProgressSelectedColor,
         projectBackgroundColor,
         projectBackgroundSelectedColor,
-        viewMode
+        viewMode,
+        barBackgroundColorTimeError
       );
       break;
     default:
@@ -138,7 +142,8 @@ const convertToBarTask = (
         barProgressSelectedColor,
         barBackgroundColor,
         barBackgroundSelectedColor,
-        viewMode
+        viewMode,
+        barBackgroundColorTimeError
       );
       break;
   }
@@ -159,7 +164,8 @@ const convertToBar = (
   barProgressSelectedColor: string,
   barBackgroundColor: string,
   barBackgroundSelectedColor: string,
-  viewMode: string
+  viewMode: string,
+  barBackgroundColorTimeError: string
 ): BarTask => {
   const x1: any = taskXCoordinate(
     task.start,
@@ -182,6 +188,7 @@ const convertToBar = (
     backgroundSelectedColor: barBackgroundSelectedColor,
     progressColor: barProgressColor,
     progressSelectedColor: barProgressSelectedColor,
+    barBackgroundColorTimeError: barBackgroundColorTimeError,
     ...task.styles,
   };
   const typeInternal: TaskTypeInternal = task.type;

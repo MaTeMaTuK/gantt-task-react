@@ -51,6 +51,7 @@ export interface Task {
   isDisabled?: boolean;
   project?: string;
   dependencies?: string[];
+  item?: any;
 }
 
 export interface EventOption {
@@ -122,6 +123,7 @@ export interface StylingOption {
   arrowColor?: string;
   arrowIndent?: number;
   todayColor?: string;
+  barBackgroundColorTimeError?: string;
   TooltipContent?: React.FC<{
     task: Task;
     fontSize: string;
@@ -166,12 +168,12 @@ export interface GanttProps
   baseLineLog?: Task[];
   itemTypeData?: OptionsProp[];
   customeFieldData?: OptionsProp[];
-  //itemLinks?: any[];
+  // itemLinks?: any[];
   ganttConfig?: any;
   baselineList?: any[];
   configHandle?: (value: any) => void;
   baseLineHandle?: (value?: any, type?: "add" | "edit" | "delete") => void;
-  //delConnection?: (value: string) => void;
+  // delConnection?: (value: string) => void;
   setItemTypeValue?: (value: string) => void;
   setCurrentLog?: (value: any) => void;
   // addConnection?: (
@@ -191,7 +193,7 @@ export interface OptionsProp {
 export interface TabConfigProps {
   currentTab: string;
 }
-//特殊时间精度
+// 特殊时间精度
 export const DateDeltaInit = {
   [ViewMode.Month]: {
     1: 31 * 24 * 3600 * 1000,

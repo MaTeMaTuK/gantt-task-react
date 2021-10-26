@@ -48,10 +48,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   listBottomHeight = 48,
   rowHeight = 48,
   // viewMode = ViewMode.Day,
-  //locale = "en-GB",
+  // locale = "en-GB",
   locale = "zh-cn",
   barFill = 60,
   barCornerRadius = 4,
+  barBackgroundColorTimeError = "#FF8F73",
   barProgressColor = "#4B8BFF",
   barProgressSelectedColor = "#4B8BFF",
   barBackgroundColor = "#4B8BFF",
@@ -158,7 +159,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         projectBackgroundSelectedColor,
         milestoneBackgroundColor,
         milestoneBackgroundSelectedColor,
-        viewMode
+        viewMode,
+        barBackgroundColorTimeError
       )
     );
   }, [
