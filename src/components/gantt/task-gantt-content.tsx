@@ -324,9 +324,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           (taskSource.type === "parent" && taskTarget.type === "task") ||
           (taskSource.type === "task" && taskTarget.type === "parent")
         ) {
-          message.warning("连线有误");
+          message.warning("父子卡片之间不能存在关联关系");
           return;
         }
+        // 两个卡片只能存在一种关联关系
         const linkTypeId = getLinkTypeId(
           conn.connection.endpoints[0].anchor.cssClass,
           conn.dropEndpoint.anchor.cssClass

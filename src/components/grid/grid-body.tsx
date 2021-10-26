@@ -40,8 +40,8 @@ export const GridBody: React.FC<GridBodyProps> = ({
   onDateChange,
 }) => {
   const { ganttConfig } = useContext(GanttConfigContext);
-  const [translateX, setTranslateX] = useState(-500);
-  const [translateY, setTranslateY] = useState(-500);
+  const [translateX, setTranslateX] = useState(0);
+  const [translateY, setTranslateY] = useState(0);
   const [isShow, setIsShow] = useState(false);
   const [parts, setParts] = useState(1);
   // 余的天数

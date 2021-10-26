@@ -685,7 +685,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
   React.useImperativeHandle(actionRef, () => ({
     openGuide(type: string) {
-      console.log("openGuide");
       setCurrentPanel(type);
       setGuideModalVisible(true);
     },
