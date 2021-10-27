@@ -19,6 +19,7 @@ import {
   GanttEvent,
 } from "../../types/gantt-task-actions";
 import { message, Modal } from "antd";
+import { isEqual } from "lodash";
 export type TaskGanttContentProps = {
   tasks: BarTask[];
   dates: Date[];
@@ -363,8 +364,13 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     };
   }, [jsPlumbInstance, itemLinks]);
   useEffect(() => {
+    if (!itemLinks.length) {
+      if (!isEqual(connectUuids, [])) {
+        setConnectUuids([]);
+      }
+    }
     if (itemLinks.length && tasks.length && jsPlumbInstance) {
-      const connectUuids: any = [];
+      const newConnectUuids: any = [];
       tasks.forEach((task: any) => {
         // 找到需要连线的卡片
         const itemFilter = itemLinks?.filter((ele: any) => {
@@ -378,16 +384,18 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               continue;
             }
           }
-          connectUuids.push({
+          newConnectUuids.push({
             source: ele.source.objectId,
             destination: ele.destination.objectId,
             relationType: relationType,
           });
         });
       });
-      setConnectUuids(connectUuids);
+      if (!isEqual(connectUuids, newConnectUuids)) {
+        setConnectUuids(newConnectUuids);
+      }
     }
-  }, [jsPlumbInstance, itemLinks, tasks]);
+  }, [jsPlumbInstance, itemLinks, tasks, connectUuids]);
 
   useEffect(() => {
     if (jsPlumbInstance) {
