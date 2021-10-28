@@ -22,7 +22,7 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
   const onFinish = (values: OtherCofigProps) => {
     configHandle({
       ...ganttConfig,
-      otherConfig: values,
+      otherConfig: { ...ganttConfig.otherConfig, ...values },
     });
   };
   const onChange = (value: boolean) => {
