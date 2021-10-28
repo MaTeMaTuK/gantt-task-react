@@ -497,7 +497,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
             connect.setPaintStyle({
               stroke: isErrorLink ? "#FF8F73" : "#979797",
             });
-            connect.setData(ganttConfig.relation[relationType]);
+            connect.setData(ganttConfig?.relation?.[relationType]);
           }
         }
       }
