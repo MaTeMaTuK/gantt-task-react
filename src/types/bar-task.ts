@@ -18,6 +18,7 @@ export interface BarTask extends Task {
     backgroundSelectedColor: string;
     progressColor: string;
     progressSelectedColor: string;
+    barBackgroundColorTimeError?: string;
   };
 }
 

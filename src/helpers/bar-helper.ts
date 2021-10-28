@@ -199,7 +199,10 @@ const convertToBar = (
     ...task.styles,
   };
   const typeInternal: TaskTypeInternal = task.type;
-  if (typeInternal === "task" && x2 - x1 < handleWidth * 2) {
+  if (
+    (typeInternal === "task" || typeInternal === "parent") &&
+    x2 - x1 < handleWidth * 2
+  ) {
     // typeInternal = "smalltask";
     x2 = x1 + handleWidth * 2 + 4;
   }

@@ -118,7 +118,7 @@ export const Panel: React.FC<panelProps> = ({
                 <div className={styles.name}>{ele.name}</div>
                 <div className={styles.time}>
                   创建于：
-                  {dayjs(new Date(ele.createdAt)).format("YYYY-MM-DD hh:mm:ss")}
+                  {dayjs(new Date(ele.createdAt)).format("YYYY-MM-DD HH:mm:ss")}
                 </div>
               </div>
               <Dropdown
