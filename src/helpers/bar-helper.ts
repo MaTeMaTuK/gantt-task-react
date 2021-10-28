@@ -21,7 +21,8 @@ export const convertToBarTasks = (
   milestoneBackgroundColor: string,
   milestoneBackgroundSelectedColor: string,
   viewMode: string,
-  barBackgroundColorTimeError: string
+  barBackgroundColorTimeError: string,
+  barBackgroundColorCriticalPath: string
 ) => {
   const dateDelta =
     dates[1].getTime() -
@@ -50,7 +51,8 @@ export const convertToBarTasks = (
       milestoneBackgroundColor,
       milestoneBackgroundSelectedColor,
       viewMode,
-      barBackgroundColorTimeError
+      barBackgroundColorTimeError,
+      barBackgroundColorCriticalPath
     );
   });
 
@@ -89,7 +91,8 @@ const convertToBarTask = (
   milestoneBackgroundColor: string,
   milestoneBackgroundSelectedColor: string,
   viewMode: string,
-  barBackgroundColorTimeError: string
+  barBackgroundColorTimeError: string,
+  barBackgroundColorCriticalPath: string
 ): BarTask => {
   let barTask: BarTask;
   switch (task.type) {
@@ -124,7 +127,8 @@ const convertToBarTask = (
         projectBackgroundColor,
         projectBackgroundSelectedColor,
         viewMode,
-        barBackgroundColorTimeError
+        barBackgroundColorTimeError,
+        barBackgroundColorCriticalPath
       );
       break;
     default:
@@ -143,7 +147,8 @@ const convertToBarTask = (
         barBackgroundColor,
         barBackgroundSelectedColor,
         viewMode,
-        barBackgroundColorTimeError
+        barBackgroundColorTimeError,
+        barBackgroundColorCriticalPath
       );
       break;
   }
@@ -165,7 +170,8 @@ const convertToBar = (
   barBackgroundColor: string,
   barBackgroundSelectedColor: string,
   viewMode: string,
-  barBackgroundColorTimeError: string
+  barBackgroundColorTimeError: string,
+  barBackgroundColorCriticalPath: string
 ): BarTask => {
   const x1: any = taskXCoordinate(
     task.start,
@@ -189,6 +195,7 @@ const convertToBar = (
     progressColor: barProgressColor,
     progressSelectedColor: barProgressSelectedColor,
     barBackgroundColorTimeError: barBackgroundColorTimeError,
+    barBackgroundColorCriticalPath: barBackgroundColorCriticalPath,
     ...task.styles,
   };
   const typeInternal: TaskTypeInternal = task.type;

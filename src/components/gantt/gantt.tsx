@@ -53,6 +53,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   barFill = 60,
   barCornerRadius = 4,
   barBackgroundColorTimeError = "#FF8F73",
+  barBackgroundColorCriticalPath = "#8777D9",
   barProgressColor = "#4B8BFF",
   barProgressSelectedColor = "#4B8BFF",
   barBackgroundColor = "#4B8BFF",
@@ -160,7 +161,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         milestoneBackgroundColor,
         milestoneBackgroundSelectedColor,
         viewMode,
-        barBackgroundColorTimeError
+        barBackgroundColorTimeError,
+        barBackgroundColorCriticalPath
       )
     );
   }, [
@@ -182,6 +184,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     projectBackgroundSelectedColor,
     milestoneBackgroundColor,
     milestoneBackgroundSelectedColor,
+    barBackgroundColorTimeError,
+    barBackgroundColorCriticalPath,
   ]);
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
@@ -206,7 +210,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         projectBackgroundSelectedColor,
         milestoneBackgroundColor,
         milestoneBackgroundSelectedColor,
-        viewMode
+        viewMode,
+        barBackgroundColorTimeError,
+        barBackgroundColorCriticalPath
       )
     );
   }, [
@@ -228,6 +234,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     projectBackgroundSelectedColor,
     milestoneBackgroundColor,
     milestoneBackgroundSelectedColor,
+    barBackgroundColorTimeError,
+    barBackgroundColorCriticalPath,
   ]);
   useEffect(() => {
     const { changedTask, action } = ganttEvent;

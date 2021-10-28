@@ -12,6 +12,7 @@ export interface BarTask extends Task {
   barChildren: number[];
   isTimeErrorItem?: boolean;
   isDelayItem?: boolean;
+  isCriticalPathItem?: boolean;
   styles: {
     backgroundColor: string;
     backgroundSelectedColor: string;

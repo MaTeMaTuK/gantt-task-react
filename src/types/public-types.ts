@@ -124,6 +124,7 @@ export interface StylingOption {
   arrowIndent?: number;
   todayColor?: string;
   barBackgroundColorTimeError?: string;
+  barBackgroundColorCriticalPath?: string;
   TooltipContent?: React.FC<{
     task: Task;
     fontSize: string;
