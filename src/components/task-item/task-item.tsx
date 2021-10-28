@@ -28,7 +28,6 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
   const { task, isDelete, isSelected, onEventStart, jsPlumb } = {
     ...props,
   };
-
   const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
 
   useEffect(() => {

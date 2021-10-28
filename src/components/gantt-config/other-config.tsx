@@ -10,7 +10,6 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
   const [form] = Form.useForm();
   const [checked, setChecked] = useState(false);
   const { ganttConfig } = useContext(GanttConfigContext);
-  console.log(ganttConfig, "ganttConfig");
   const { configHandle } = useContext(ConfigHandleContext);
   const otherConfig = useMemo(() => ganttConfig?.otherConfig, [
     ganttConfig?.otherConfig,

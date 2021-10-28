@@ -29,7 +29,7 @@ export const AddEdit: React.FC<ModalProps> = ({
     form.setFieldsValue({
       name: currentBaseline?.name
         ? currentBaseline?.name
-        : dayjs(new Date()).format("YYYY-MM-DD hh:mm:ss"),
+        : dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss"),
       description: currentBaseline?.description,
     });
   }, [currentBaseline]);

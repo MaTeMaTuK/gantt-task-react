@@ -206,6 +206,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         projectBackgroundSelectedColor,
         milestoneBackgroundColor,
         milestoneBackgroundSelectedColor,
+        barBackgroundColorTimeError,
         viewMode
       )
     );

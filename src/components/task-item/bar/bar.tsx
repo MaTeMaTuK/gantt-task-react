@@ -95,7 +95,7 @@ export const Bar: React.FC<TaskItemProps> = ({
           barCornerRadius={task.barCornerRadius}
           styles={!isLog ? task.styles : { ...task.styles, opacity: 0.5 }}
           isSelected={isSelected}
-          id={task.id}
+          id={isLog ? `${task.id}-log` : task.id}
           isLog={isLog}
           onMouseDown={e => {
             isDateChangeable && !isLog && onEventStart("move", task, e);

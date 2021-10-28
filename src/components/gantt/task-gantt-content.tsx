@@ -468,7 +468,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       jsPlumbInstance.setSuspendDrawing(true);
       for (let i = 0; i < connectUuids.length; i++) {
         const uuidObj = connectUuids[i];
-        const { source, destination, relationType } = uuidObj;
+        const { source, destination, relationType, isErrorLink } = uuidObj;
         if (source && destination && relationType) {
           const uuid = [
             `${source}-${relationInit[relationType][0]}`,
@@ -493,6 +493,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
                 id: uuid[0],
               },
             ]);
+            // 设置连线错误的颜色
+            connect.setPaintStyle({
+              stroke: isErrorLink ? "#FF8F73" : "#979797",
+            });
             connect.setData(ganttConfig.relation[relationType]);
           }
         }
