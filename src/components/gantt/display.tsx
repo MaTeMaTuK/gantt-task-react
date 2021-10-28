@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Popover, Button, Switch, Row, Col } from "antd";
+import { GanttConfigProps } from "../../types/public-types";
 import styles from "./gantt.module.css";
 interface DisplayProps {
-  ganttConfig?: any;
-  configHandle?: (value: any) => void;
-  visibleChange?: (value: any) => void;
+  ganttConfig?: GanttConfigProps;
+  configHandle?: (value: GanttConfigProps) => void;
+  visibleChange?: (value: GanttConfigProps) => void;
 }
 const Panel: React.FC<DisplayProps> = ({ ganttConfig, visibleChange }) => {
   const [config, setConfig] = useState<any>({});

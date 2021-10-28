@@ -1,11 +1,9 @@
 import React, { useState, useContext, useMemo, useEffect } from "react";
 import { Form, Button, Switch, Modal } from "antd";
 import { GanttConfigContext, ConfigHandleContext } from "../../contsxt";
-import { TabConfigProps } from "../../types/public-types";
+import { TabConfigProps, OtherConfigProps } from "../../types/public-types";
 const { confirm } = Modal;
-interface OtherCofigProps {
-  autoPatch: boolean;
-}
+
 const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
   const [form] = Form.useForm();
   const [checked, setChecked] = useState(false);
@@ -19,7 +17,7 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
       setChecked(otherConfig?.autoPatch);
     }
   }, [currentTab]);
-  const onFinish = (values: OtherCofigProps) => {
+  const onFinish = (values: OtherConfigProps) => {
     configHandle({
       ...ganttConfig,
       otherConfig: { ...ganttConfig.otherConfig, ...values },

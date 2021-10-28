@@ -4,17 +4,9 @@ import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import styles from "./index.module.css";
 import TimeModal from "./time-modal";
 import { ConfigHandleContext, GanttConfigContext } from "../../contsxt";
+import { TimeItemProps } from "../../types/public-types";
 import WarningIcon from "../icons/warning";
 interface TimeProps {}
-export interface TimeItemProps {
-  itemType?: string;
-  startDate?: string;
-  endDate?: string;
-  baseLineStartDate?: string;
-  baseLineEndDate?: string;
-  percentage?: string;
-  isDefault?: boolean;
-}
 const Time: React.FC<TimeProps> = () => {
   const [visible, setVisible] = useState(false);
   const columns = [

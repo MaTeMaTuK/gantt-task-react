@@ -3,12 +3,8 @@ import { Form, Select, Button } from "antd";
 import styles from "./index.module.css";
 import { GanttConfigContext, ConfigHandleContext } from "../../contsxt";
 import { filterFields } from "./time-modal";
-import { TabConfigProps } from "../../types/public-types";
+import { TabConfigProps, MilestoneProps } from "../../types/public-types";
 const { Option } = Select;
-interface RelationValueProps {
-  itemType: string;
-  startDate: string;
-}
 const MileStone: React.FC<TabConfigProps> = ({ currentTab }) => {
   const [form] = Form.useForm();
   const { ganttConfig } = useContext(GanttConfigContext);
@@ -30,7 +26,7 @@ const MileStone: React.FC<TabConfigProps> = ({ currentTab }) => {
       });
     }
   }, [currentTab]);
-  const onFinish = (values: RelationValueProps) => {
+  const onFinish = (values: MilestoneProps) => {
     configHandle({
       ...ganttConfig,
       milestone: values,

@@ -1,7 +1,11 @@
 import React, { memo } from "react";
 import { Space, Select, Tooltip } from "antd";
 import styles from "./gantt.module.css";
-import { viewModeOptions, ViewMode } from "../../types/public-types";
+import {
+  viewModeOptions,
+  ViewMode,
+  GanttConfigProps,
+} from "../../types/public-types";
 import SettingsIcon from "../icons/settings";
 import ToTodayIcon from "../icons/toToday";
 import Baseline from "./baseline/popover";
@@ -11,8 +15,8 @@ interface GanttHeaderProps {
   toToday: () => void;
   toConfig: () => void;
   modeChange: (val: ViewMode) => void;
-  ganttConfig?: any;
-  configHandle?: (value: any) => void;
+  ganttConfig?: GanttConfigProps;
+  configHandle?: (value: GanttConfigProps) => void;
 }
 export const GanttHeader: React.FC<GanttHeaderProps> = ({
   toToday,
