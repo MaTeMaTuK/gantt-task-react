@@ -731,6 +731,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             toToday={toToday}
             toConfig={toConfig}
             modeChange={modeChange}
+            ganttConfig={ganttConfig}
+            configHandle={configHandle}
           />
         </BaseLineContext.Provider>
 
