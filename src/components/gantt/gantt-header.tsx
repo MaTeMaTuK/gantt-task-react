@@ -5,16 +5,21 @@ import { viewModeOptions, ViewMode } from "../../types/public-types";
 import SettingsIcon from "../icons/settings";
 import ToTodayIcon from "../icons/toToday";
 import Baseline from "./baseline/popover";
+import Display from "./display";
 const { Option } = Select;
 interface GanttHeaderProps {
   toToday: () => void;
   toConfig: () => void;
   modeChange: (val: ViewMode) => void;
+  ganttConfig?: any;
+  configHandle?: (value: any) => void;
 }
 export const GanttHeader: React.FC<GanttHeaderProps> = ({
   toToday,
   toConfig,
   modeChange,
+  ganttConfig,
+  configHandle,
 }) => {
   const handleOperation = () => {
     toConfig();
@@ -26,6 +31,7 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
     <div className={styles.ganttHeader}>
       <Space size={20} className="ganttHeaderGlobal">
         <Baseline />
+        <Display ganttConfig={ganttConfig} configHandle={configHandle} />
         <span className="ganttCalendarSelect">
           <Select
             style={{ width: 50 }}
