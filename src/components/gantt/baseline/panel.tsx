@@ -8,6 +8,7 @@ import {
 import { Menu, Dropdown, Button, Modal } from "antd";
 import AddEdit from "./add-edit";
 import { BaseLineContext } from "../../../contsxt";
+import { BaselineProps } from "../../../types/public-types";
 import { omit } from "lodash";
 import dayjs from "dayjs";
 
@@ -69,14 +70,14 @@ export const Panel: React.FC<panelProps> = ({
     setCurrentBaseline({});
     onClosePopver?.();
   };
-  const handleOk = (value: any) => {
+  const handleOk = (value: BaselineProps) => {
     setVisible(false);
     baseLineHandle(value, value.objectId ? "edit" : "add");
   };
   const handleCancel = () => {
     setVisible(false);
   };
-  const chooseLog = (infor: any) => {
+  const chooseLog = (infor: BaselineProps) => {
     setCurrentLog(infor);
     setPopoverVisible?.(false);
   };
@@ -101,7 +102,7 @@ export const Panel: React.FC<panelProps> = ({
         />
       )}
       <ul className={styles.list}>
-        {baselineList.map((ele: any) => {
+        {baselineList.map((ele: BaselineProps) => {
           return (
             <li
               key={ele.objectId}

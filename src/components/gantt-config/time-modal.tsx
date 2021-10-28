@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { Modal, Form, Select } from "antd";
 import { ConfigHandleContext } from "../../contsxt";
-import { TimeItemProps } from "./time";
+import { TimeItemProps } from "../../types/public-types";
 import styles from "./index.module.css";
 const { Option } = Select;
 const filterOption = (input: any, option: any) => {

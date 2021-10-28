@@ -159,6 +159,36 @@ export interface ConnectionProps {
   }) => void;
   itemLinks: any[];
 }
+export interface TimeItemProps {
+  itemType?: string;
+  startDate?: string;
+  endDate?: string;
+  baseLineStartDate?: string;
+  baseLineEndDate?: string;
+  percentage?: string;
+  isDefault?: boolean;
+}
+export interface MilestoneProps {
+  itemType: string;
+  startDate: string;
+}
+export interface OtherConfigProps {
+  overdue?: boolean;
+  autoPatch?: boolean;
+  pivotalPath?: boolean;
+  [propName: string]: any;
+}
+export interface GanttConfigProps {
+  time: TimeItemProps[];
+  milestone: MilestoneProps;
+  otherConfig: OtherConfigProps;
+  [propName: string]: any;
+}
+export interface BaselineProps {
+  name: string;
+  description?: string;
+  [propName: string]: any;
+}
 export interface GanttProps
   extends EventOption,
     DisplayOption,
@@ -168,22 +198,18 @@ export interface GanttProps
   baseLineLog?: Task[];
   itemTypeData?: OptionsProp[];
   customeFieldData?: OptionsProp[];
-  // itemLinks?: any[];
-  ganttConfig?: any;
-  baselineList?: any[];
-  configHandle?: (value: any) => void;
-  baseLineHandle?: (value?: any, type?: "add" | "edit" | "delete") => void;
-  // delConnection?: (value: string) => void;
+  ganttConfig?: GanttConfigProps;
+  baselineList?: BaselineProps[];
+  configHandle?: (value: GanttConfigProps) => void;
+  baseLineHandle?: (
+    value?: BaselineProps,
+    type?: "add" | "edit" | "delete"
+  ) => void;
   setItemTypeValue?: (value: string) => void;
-  setCurrentLog?: (value: any) => void;
-  // addConnection?: (
-  //   source: string,
-  //   destination: string,
-  //   linkType: string
-  // ) => void;
+  setCurrentLog?: (value: BaselineProps) => void;
   renderTaskListComponent?: () => JSX.Element;
   isUpdate?: boolean;
-  currentLog?: any;
+  currentLog?: BaselineProps;
   actionRef?: any;
 }
 export interface OptionsProp {

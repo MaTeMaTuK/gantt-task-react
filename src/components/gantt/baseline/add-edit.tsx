@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Form, Input } from "antd";
+import { BaselineProps } from "../../../types/public-types";
 import dayjs from "dayjs";
 const { TextArea } = Input;
-export interface BaselineProps {
-  name?: string;
-  objectId?: string;
-  [propName: string]: any;
-}
 interface ModalProps {
   visible: boolean;
-  handleOk: (value: any) => void;
+  handleOk: (value: BaselineProps) => void;
   handleCancel: () => void;
   currentBaseline: BaselineProps;
 }
@@ -37,7 +33,7 @@ export const AddEdit: React.FC<ModalProps> = ({
   const confirmOk = () => {
     form
       .validateFields()
-      .then((values: any) => {
+      .then((values: BaselineProps) => {
         handleOk(Object.assign(currentBaseline, values));
       })
       .catch(info => {
