@@ -178,13 +178,13 @@ export interface OtherConfigProps {
   [propName: string]: any;
 }
 export interface GanttConfigProps {
-  time: TimeItemProps[];
-  milestone: MilestoneProps;
-  otherConfig: OtherConfigProps;
+  time?: TimeItemProps[];
+  milestone?: MilestoneProps;
+  otherConfig?: OtherConfigProps;
   [propName: string]: any;
 }
 export interface BaselineProps {
-  name: string;
+  name?: string;
   description?: string;
   [propName: string]: any;
 }
