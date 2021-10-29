@@ -11,13 +11,13 @@ export interface BarTask extends Task {
   handleWidth: number;
   barChildren: number[];
   isTimeErrorItem?: boolean;
-  isDelayItem?: boolean;
+  isOverdueItem?: boolean;
+  isPivotalPathItem?: boolean;
   styles: {
     backgroundColor: string;
     backgroundSelectedColor: string;
     progressColor: string;
     progressSelectedColor: string;
-    barBackgroundColorTimeError?: string;
   };
 }
 

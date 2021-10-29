@@ -4,6 +4,10 @@ import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
 import { isKeyboardEvent } from "../../helpers/other-helper";
+import {
+  errorLinkBorderColor,
+  pivotalPathLinkBorderColor,
+} from "../../helpers/dicts";
 import { TaskItem } from "../task-item/task-item";
 import { TaskItemLog } from "../task-item/task-item-log";
 import { GanttConfigContext } from "../../contsxt";
@@ -282,15 +286,34 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     return needUpdateItems;
   }, []);
 
+  const checkIsPivotalPathLink = useCallback(
+    (task, target, tasks, relationType) => {
+      const targetPivotalPathItem = tasks.filter(
+        (ele: BarTask) => ele.id === target && ele?.isPivotalPathItem
+      );
+      if (
+        task?.isPivotalPathItem &&
+        targetPivotalPathItem?.length &&
+        relationType === "FS"
+      ) {
+        return true;
+      }
+      return false;
+    },
+    []
+  );
+
   const checkIsErrorLink = useCallback(
-    task => {
+    (task, target) => {
       // 获取与当前事项有关联关系的事项列表
       const needUpdateItems = getHasLinkItems(task);
       // 获取当前事项的子代事项
       const subItems: string[] = task?.item?.subItem || [];
 
       let flag = false;
-      if (needUpdateItems.length !== new Set(needUpdateItems)?.size) {
+      // 关联关系为目标节点的事项
+      const targetItems = needUpdateItems.filter(id => id === target);
+      if (targetItems?.length > 1) {
         flag = true;
         return flag;
       }
@@ -450,12 +473,19 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               continue;
             }
           }
-          const isErrorLink = checkIsErrorLink(task);
+          const isErrorLink = checkIsErrorLink(task, ele.destination.objectId);
+          const isPivotalPathLink = checkIsPivotalPathLink(
+            task,
+            ele.destination.objectId,
+            tasks,
+            relationType
+          );
           connectUuids.push({
             source: ele.source.objectId,
             destination: ele.destination.objectId,
             relationType: relationType,
             isErrorLink: isErrorLink,
+            isPivotalPathLink: isPivotalPathLink,
           });
         });
       });
@@ -468,7 +498,13 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       jsPlumbInstance.setSuspendDrawing(true);
       for (let i = 0; i < connectUuids.length; i++) {
         const uuidObj = connectUuids[i];
-        const { source, destination, relationType, isErrorLink } = uuidObj;
+        const {
+          source,
+          destination,
+          relationType,
+          isErrorLink,
+          isPivotalPathLink,
+        } = uuidObj;
         if (source && destination && relationType) {
           const uuid = [
             `${source}-${relationInit[relationType][0]}`,
@@ -493,11 +529,19 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
                 id: uuid[0],
               },
             ]);
-            // 设置连线错误的颜色
-            connect.setPaintStyle({
-              stroke: isErrorLink ? "#FF8F73" : "#979797",
-            });
-            connect.setData(ganttConfig.relation[relationType]);
+            if (isErrorLink) {
+              // 设置连线错误的颜色
+              connect.setPaintStyle({
+                stroke: errorLinkBorderColor,
+              });
+            }
+            if (isPivotalPathLink) {
+              // 设置关键路径连线的颜色
+              connect.setPaintStyle({
+                stroke: pivotalPathLinkBorderColor,
+              });
+            }
+            connect.setData(ganttConfig?.relation?.[relationType]);
           }
         }
       }

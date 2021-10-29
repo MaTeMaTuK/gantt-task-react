@@ -1,6 +1,10 @@
 import React from "react";
 import style from "./bar.module.css";
 import { BarTask } from "../../../types/bar-task";
+import {
+  barBackgroundColorPivotalPath,
+  barBackgroundColorTimeError,
+} from "../../../helpers/dicts";
 
 type BarDisplayProps = {
   x: number;
@@ -17,7 +21,6 @@ type BarDisplayProps = {
     progressColor: string;
     progressSelectedColor: string;
     opacity?: number;
-    barBackgroundColorTimeError?: string;
   };
   onMouseDown: (event: React.MouseEvent<SVGPolygonElement, MouseEvent>) => void;
   id: string;
@@ -38,8 +41,10 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   isLog,
 }) => {
   const getBarColor = () => {
-    return task?.isTimeErrorItem || task?.isDelayItem
-      ? styles.barBackgroundColorTimeError
+    return task?.isTimeErrorItem || task?.isOverdueItem
+      ? barBackgroundColorTimeError
+      : task?.isPivotalPathItem
+      ? barBackgroundColorPivotalPath
       : isSelected
       ? styles.backgroundSelectedColor
       : styles.backgroundColor;
