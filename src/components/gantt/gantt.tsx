@@ -680,7 +680,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
   // 退出基线
   const baselineExit = () => {
-    setCurrentLog?.(null);
+    setCurrentLog?.({});
     setLogTasks([]);
   };
   React.useImperativeHandle(actionRef, () => ({

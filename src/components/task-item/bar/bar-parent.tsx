@@ -31,7 +31,7 @@ export const BarParent: React.FC<TaskItemProps> = ({
       jsPlumb.addEndpoint(
         task.id,
         {
-          anchors: "Right",
+          anchor: [1, 0.5, 1, 0, 22, 0, "Right"],
           uuid: task.id + "-Right",
         },
 
@@ -40,7 +40,7 @@ export const BarParent: React.FC<TaskItemProps> = ({
       jsPlumb.addEndpoint(
         task.id,
         {
-          anchor: "Left",
+          anchor: [0, 0.5, -1, 0, -22, 0, "Left"],
           uuid: task.id + "-Left",
         },
         commonConfig
