@@ -23,17 +23,19 @@ export const commonConfig = {
   endpoint: [
     canChangeLayout ? "Dot" : "Blank",
     {
-      radius: 3,
+      radius: 4,
+      cssClass: "end-point",
     },
   ],
+  // EndpointHoverStyle: { fill: "#ec9f2e" },
   // 设置端点的样式
   endpointStyle: {
-    fill: "#0A50D1", // 填充颜色
-    outlineStroke: "blank", // 边框颜色
-    outlineWidth: 0, // 边框宽度
+    // fill: "#0A50D1", // 填充颜色
+    // outlineStroke: "blank", // 边框颜色
+    // outlineWidth: 0, // 边框宽度
   },
   // 设置连接线的样式 Bezier-贝瑟尔曲线 Flowchart-流程图 StateMachine-弧线 Straight-直线
-  connector: ["Flowchart"],
+  connector: ["Flowchart", { cornerRadius: 8 }],
   // 设置连接线的样式
   connectorStyle: {
     stroke: "#979797", // 实线颜色
@@ -53,7 +55,7 @@ export const commonConfig = {
       {
         width: 8,
         length: 8,
-        location: 1,
+        location: 0.5,
       },
     ],
   ],

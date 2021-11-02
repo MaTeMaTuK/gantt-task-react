@@ -3,11 +3,6 @@
   outline: none;
 }
 
-.barWrapper:hover .barHandle {
-  visibility: visible;
-  opacity: 1;
-}
-
 .barHandle {
   fill: #fff;
   cursor: ew-resize;
@@ -16,8 +11,8 @@
 }
 
 .barHandleProgress {
-  stroke: #0A50D1;
-  stroke-width: .5;
+  stroke: #0a50d1;
+  stroke-width: 0.5;
 }
 
 .barHandleDate {
@@ -25,9 +20,9 @@
 }
 
 .barHandleBackground {
-  filter: drop-shadow(1px 1px 2px rgba(0,0,0,.2));
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
   cursor: default;
-  stroke: #efefef
+  stroke: #efefef;
 }
 
 .barBackground {
