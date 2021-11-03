@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./bar.module.css";
+// import styles from "./bar.module.css";
 
 type BarDateHandleProps = {
   x: number;
@@ -24,7 +24,7 @@ export const BarDateHandle: React.FC<BarDateHandleProps> = ({
         y={y + 6}
         width={width}
         height={height}
-        className={`${styles.barHandle} ${styles.barHandleDate}`}
+        className="barHandle barHandleDate"
         ry={1}
         rx={1}
       />
@@ -33,7 +33,7 @@ export const BarDateHandle: React.FC<BarDateHandleProps> = ({
         y={y + 6}
         width={width}
         height={height}
-        className={`${styles.barHandle} ${styles.barHandleDate}`}
+        className="barHandle barHandleDate"
         ry={1}
         rx={1}
       />

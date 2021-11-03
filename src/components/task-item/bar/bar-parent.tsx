@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   progressWithByParams,
   getProgressPoint,
@@ -8,7 +8,7 @@ import { BarDateHandle } from "./bar-date-handle";
 import { BarProgressHandle } from "./bar-progress-handle";
 import { TaskItemProps } from "../task-item";
 import styles from "./bar.module.css";
-import { commonConfig } from "../../../helpers/jsPlumbConfig";
+import { useHover, useAddPoint } from "../hook";
 export const BarParent: React.FC<TaskItemProps> = ({
   task,
   isProgressChangeable,
@@ -18,41 +18,15 @@ export const BarParent: React.FC<TaskItemProps> = ({
   jsPlumb,
   isLog,
 }) => {
+  const barRef = useRef<any>(null);
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const progressPoint = getProgressPoint(
     progressWidth + task.x1 + 1,
     task.y + 5,
     task.height
   );
-  useEffect(() => {
-    if (jsPlumb) {
-      // 生成新节点删除旧节点时需设置setIdChanged
-      jsPlumb.setIdChanged(task.id, task.id);
-      jsPlumb.addEndpoint(
-        task.id,
-        {
-          anchor: [1, 0.5, 1, 0, 22, 0, "Right"],
-          uuid: task.id + "-Right",
-        },
-
-        commonConfig
-      );
-      jsPlumb.addEndpoint(
-        task.id,
-        {
-          anchor: [0, 0.5, -1, 0, -22, 0, "Left"],
-          uuid: task.id + "-Left",
-        },
-        commonConfig
-      );
-    }
-    return () => {
-      if (jsPlumb) {
-        jsPlumb.deleteEndpoint(task.id + "-Left");
-        jsPlumb.deleteEndpoint(task.id + "-Right");
-      }
-    };
-  }, [jsPlumb, task.y]);
+  // 设置端点
+  useAddPoint(jsPlumb, task, barRef);
   useEffect(() => {
     if (jsPlumb) {
       // 重绘元素，解决拖动时间块连接点跟随
@@ -67,17 +41,18 @@ export const BarParent: React.FC<TaskItemProps> = ({
       }
     };
   }, [jsPlumb]);
+  useHover(barRef, jsPlumb, task.id);
   const handleHeight = task.height - 10;
   return (
-    <g className={styles.barWrapper} tabIndex={0}>
+    <g ref={barRef} className={styles.barWrapper} tabIndex={0}>
       {!isLog && (
-        <g className={styles.barHandle}>
+        <g className="barHandle">
           <rect
             x={task.x1 - 16}
             y={task.y - 6}
             width={task.x2 - task.x1 + 32}
             height={task.height + 12}
-            className={`${styles.barHandle} ${styles.barHandleBackground}`}
+            className={`barHandle ${styles.barHandleBackground}`}
             ry={task.barCornerRadius}
             rx={task.barCornerRadius}
           />

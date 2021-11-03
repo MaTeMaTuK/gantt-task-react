@@ -80,6 +80,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
           />
           <TaskGanttContent {...newBarProps} />
         </svg>
+
         {false && (
           <div className={styles.contextContainer}>
             {newBarProps.tasks.map(task => {

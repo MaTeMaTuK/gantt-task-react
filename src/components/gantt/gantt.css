@@ -27,3 +27,28 @@
   right: -20px;
   top: -20px;
 }
+:global(.end-point) {
+  cursor: pointer;
+  opacity: 0;
+  background-color: #0a50d1;
+  border-radius: 4px;
+}
+:global(.end-point):hover {
+  opacity: 1;
+}
+:global(.endpoint-hover) {
+  opacity: 1;
+}
+:global(.barHover .barHandle) {
+  visibility: visible;
+  opacity: 1;
+}
+:global(.barHandle) {
+  fill: #fff;
+  cursor: ew-resize;
+  opacity: 0;
+  visibility: hidden;
+}
+:global(.barHandleDate) {
+  fill: #ccc;
+}

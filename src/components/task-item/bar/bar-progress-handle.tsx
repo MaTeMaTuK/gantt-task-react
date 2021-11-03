@@ -11,7 +11,7 @@ export const BarProgressHandle: React.FC<BarProgressHandleProps> = ({
 }) => {
   return (
     <polygon
-      className={`${styles.barHandle} ${styles.barHandleProgress}`}
+      className={`barHandle ${styles.barHandleProgress}`}
       points={progressPoint}
       onMouseDown={onMouseDown}
     />
