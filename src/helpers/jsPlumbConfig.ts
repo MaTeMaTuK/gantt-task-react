@@ -27,7 +27,6 @@ export const commonConfig = {
       cssClass: "end-point",
     },
   ],
-  // EndpointHoverStyle: { fill: "#ec9f2e" },
   // 设置端点的样式
   endpointStyle: {
     // fill: "#0A50D1", // 填充颜色
@@ -55,7 +54,7 @@ export const commonConfig = {
       {
         width: 8,
         length: 8,
-        location: 0.5,
+        location: 1,
       },
     ],
   ],
