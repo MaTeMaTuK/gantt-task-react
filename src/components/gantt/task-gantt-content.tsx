@@ -11,7 +11,7 @@ import {
 import { TaskItem } from "../task-item/task-item";
 import { TaskItemLog } from "../task-item/task-item-log";
 import { GanttConfigContext } from "../../contsxt";
-import { filter } from "lodash";
+import { filter, isEqual } from "lodash";
 import {
   offsetCalculators,
   sizeCalculators,
@@ -458,8 +458,13 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   }, [jsPlumbInstance, itemLinks, tasks, getHasLinkItems]);
 
   useEffect(() => {
+    if (!itemLinks.length) {
+      if (!isEqual(connectUuids, [])) {
+        setConnectUuids([]);
+      }
+    }
     if (itemLinks.length && tasks.length && jsPlumbInstance) {
-      const connectUuids: any = [];
+      const newConnectUuids: any = [];
       tasks.forEach((task: any) => {
         // 找到需要连线的卡片
         const itemFilter = itemLinks?.filter((ele: any) => {
@@ -480,7 +485,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
             tasks,
             relationType
           );
-          connectUuids.push({
+          newConnectUuids.push({
             source: ele.source.objectId,
             destination: ele.destination.objectId,
             relationType: relationType,
@@ -489,9 +494,11 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           });
         });
       });
-      setConnectUuids(connectUuids);
+      if (!isEqual(connectUuids, newConnectUuids)) {
+        setConnectUuids(newConnectUuids);
+      }
     }
-  }, [jsPlumbInstance, itemLinks, tasks, checkIsErrorLink]);
+  }, [jsPlumbInstance, itemLinks, tasks, connectUuids, checkIsErrorLink]);
 
   useEffect(() => {
     if (jsPlumbInstance) {
