@@ -1,6 +1,6 @@
 {
   "name": "proxima-gantt",
-  "version": "2.1.0",
+  "version": "1.1.0",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
