@@ -9,3 +9,46 @@
 :global(.ganttHeaderGlobal .ant-space-item) {
   z-index: 2;
 }
+:global(.overlay-label) {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  visibility: hidden;
+}
+:global(.overlay-label.jtk-hover) {
+  visibility: visible;
+  display: visible;
+}
+:global(.ant-switch-checked .ant-switch-handle) {
+  left: calc(100% - 20px);
+}
+:global(.guide-modal .ant-modal-close) {
+  right: -20px;
+  top: -20px;
+}
+:global(.end-point) {
+  cursor: pointer;
+  opacity: 0;
+  background-color: #0a50d1;
+  border-radius: 4px;
+}
+:global(.end-point):hover {
+  opacity: 1;
+}
+:global(.endpoint-hover) {
+  opacity: 1;
+}
+:global(.barHover .barHandle) {
+  visibility: visible;
+  opacity: 1;
+}
+:global(.barHandle) {
+  fill: #fff;
+  cursor: ew-resize;
+  opacity: 0;
+  visibility: hidden;
+}
+:global(.barHandleDate) {
+  fill: #ccc;
+}

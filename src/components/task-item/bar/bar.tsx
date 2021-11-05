@@ -8,7 +8,7 @@ import { BarDateHandle } from "./bar-date-handle";
 import { BarProgressHandle } from "./bar-progress-handle";
 import { TaskItemProps } from "../task-item";
 import styles from "./bar.module.css";
-import { commonConfig } from "../../../helpers/jsPlumbConfig";
+import { useHover, useAddPoint } from "../hook";
 export const Bar: React.FC<TaskItemProps> = ({
   task,
   isProgressChangeable,
@@ -16,8 +16,9 @@ export const Bar: React.FC<TaskItemProps> = ({
   onEventStart,
   isSelected,
   jsPlumb,
+  isLog,
 }) => {
-  const barRef = useRef(null);
+  const barRef = useRef<any>(null);
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const progressPoint = getProgressPoint(
     progressWidth + task.x1,
@@ -25,35 +26,8 @@ export const Bar: React.FC<TaskItemProps> = ({
     task.height
   );
   const handleHeight = task.height - 12;
-  useEffect(() => {
-    if (jsPlumb) {
-      // 生成新节点删除旧节点时需设置setIdChanged
-      jsPlumb.setIdChanged(task.id, task.id);
-      jsPlumb.addEndpoint(
-        task.id,
-        {
-          anchor: [1, 0.5, 1, 0, 22, 0, "Right"],
-          uuid: task.id + "-Right",
-        },
-        commonConfig
-      );
-      // @ts-ignore
-      jsPlumb.addEndpoint(
-        task.id,
-        {
-          anchor: [0, 0.5, -1, 0, -22, 0, "Left"],
-          uuid: task.id + "-Left",
-        },
-        commonConfig
-      );
-    }
-    return () => {
-      if (jsPlumb) {
-        jsPlumb.deleteEndpoint(task.id + "-Left");
-        jsPlumb.deleteEndpoint(task.id + "-Right");
-      }
-    };
-  }, [jsPlumb, task.y]);
+  // 设置端点
+  useAddPoint(jsPlumb, task, barRef);
   useEffect(() => {
     if (jsPlumb) {
       // 重绘元素，解决拖动时间块连接点跟随
@@ -68,21 +42,24 @@ export const Bar: React.FC<TaskItemProps> = ({
       }
     };
   }, [jsPlumb]);
-  useEffect(() => {}, [barRef, jsPlumb]);
+  useHover(barRef, jsPlumb, task.id);
   return (
-    <svg ref={barRef}>
-      <g className={styles.barWrapper} tabIndex={0}>
-        <g className={styles.barHandle}>
-          <rect
-            x={task.x1 - 16}
-            y={task.y - 3}
-            width={task.x2 - task.x1 + 32}
-            height={task.height + 6}
-            className={`${styles.barHandle} ${styles.barHandleBackground}`}
-            ry={task.barCornerRadius}
-            rx={task.barCornerRadius}
-          />
-        </g>
+    <svg>
+      <g ref={barRef} className={styles.barWrapper} tabIndex={0}>
+        {!isLog && (
+          <g className="barHandle">
+            <rect
+              x={task.x1 - 16}
+              y={task.y - 3}
+              width={task.x2 - task.x1 + 32}
+              height={task.height + 6}
+              className={`barHandle ${styles.barHandleBackground}`}
+              ry={task.barCornerRadius}
+              rx={task.barCornerRadius}
+            />
+          </g>
+        )}
+
         <BarDisplay
           x={task.x1}
           y={task.y}
@@ -91,15 +68,16 @@ export const Bar: React.FC<TaskItemProps> = ({
           height={task.height}
           progressWidth={progressWidth}
           barCornerRadius={task.barCornerRadius}
-          styles={task.styles}
+          styles={!isLog ? task.styles : { ...task.styles, opacity: 0.5 }}
           isSelected={isSelected}
-          id={task.id}
+          id={isLog ? `${task.id}-log` : task.id}
+          isLog={isLog}
           onMouseDown={e => {
-            isDateChangeable && onEventStart("move", task, e);
+            isDateChangeable && !isLog && onEventStart("move", task, e);
           }}
         />
         <g className="handleGroup">
-          {isDateChangeable && (
+          {isDateChangeable && !isLog && (
             <g>
               {/* left */}
               <BarDateHandle
@@ -125,7 +103,7 @@ export const Bar: React.FC<TaskItemProps> = ({
               />
             </g>
           )}
-          {isProgressChangeable && (
+          {isProgressChangeable && !isLog && (
             <BarProgressHandle
               progressPoint={progressPoint}
               onMouseDown={e => {

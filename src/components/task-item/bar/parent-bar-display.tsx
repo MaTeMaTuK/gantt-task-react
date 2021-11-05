@@ -1,6 +1,10 @@
 import React from "react";
 import style from "./bar.module.css";
 import { BarTask } from "../../../types/bar-task";
+import {
+  barBackgroundColorPivotalPath,
+  barBackgroundColorTimeError,
+} from "../../../helpers/dicts";
 
 type BarDisplayProps = {
   x: number;
@@ -16,8 +20,11 @@ type BarDisplayProps = {
     backgroundSelectedColor: string;
     progressColor: string;
     progressSelectedColor: string;
+    opacity?: number;
   };
   onMouseDown: (event: React.MouseEvent<SVGPolygonElement, MouseEvent>) => void;
+  id: string;
+  isLog?: boolean | undefined;
 };
 export const BarDisplay: React.FC<BarDisplayProps> = ({
   x,
@@ -30,9 +37,17 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   barCornerRadius,
   styles,
   onMouseDown,
+  id,
+  isLog,
 }) => {
   const getBarColor = () => {
-    return isSelected ? styles.backgroundSelectedColor : styles.backgroundColor;
+    return task?.isTimeErrorItem || task?.isOverdueItem
+      ? barBackgroundColorTimeError
+      : task?.isPivotalPathItem
+      ? barBackgroundColorPivotalPath
+      : isSelected
+      ? styles.backgroundSelectedColor
+      : styles.backgroundColor;
   };
   const triangleX = task.x2 - task.x1 > 15 ? 15 : 2;
   const triangleY = 2;
@@ -57,6 +72,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   return (
     <g onMouseDown={onMouseDown}>
       <rect
+        id={id}
         x={x}
         width={width}
         y={y}
@@ -73,7 +89,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         width={width - progressWidth}
         y={y}
         height={height + 5}
-        style={{ opacity: 0.4 }}
+        style={{ opacity: isLog ? 0.8 : 0.4 }}
         fill="#fff"
       />
     </g>

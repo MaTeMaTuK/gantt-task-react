@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   progressWithByParams,
   getProgressPoint,
@@ -8,35 +8,60 @@ import { BarDateHandle } from "./bar-date-handle";
 import { BarProgressHandle } from "./bar-progress-handle";
 import { TaskItemProps } from "../task-item";
 import styles from "./bar.module.css";
-
+import { useHover, useAddPoint } from "../hook";
 export const BarParent: React.FC<TaskItemProps> = ({
   task,
   isProgressChangeable,
   isDateChangeable,
   onEventStart,
   isSelected,
+  jsPlumb,
+  isLog,
 }) => {
+  const barRef = useRef<any>(null);
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const progressPoint = getProgressPoint(
     progressWidth + task.x1 + 1,
     task.y + 5,
     task.height
   );
+  // 设置端点
+  useAddPoint(jsPlumb, task, barRef);
+  useEffect(() => {
+    if (jsPlumb) {
+      // 重绘元素，解决拖动时间块连接点跟随
+      jsPlumb.revalidate(task.id);
+    }
+  }, [jsPlumb, task]);
+  useEffect(() => {
+    return () => {
+      if (jsPlumb) {
+        jsPlumb.deleteEndpoint(task.id + "-Left");
+        jsPlumb.deleteEndpoint(task.id + "-Right");
+      }
+    };
+  }, [jsPlumb]);
+  useHover(barRef, jsPlumb, task.id);
   const handleHeight = task.height - 10;
   return (
-    <g className={styles.barWrapper} tabIndex={0}>
-      <g className={styles.barHandle}>
-        <rect
-          x={task.x1 - 16}
-          y={task.y - 6}
-          width={task.x2 - task.x1 + 32}
-          height={task.height + 12}
-          className={`${styles.barHandle} ${styles.barHandleBackground}`}
-          ry={task.barCornerRadius}
-          rx={task.barCornerRadius}
-        />
-      </g>
+    <g ref={barRef} className={styles.barWrapper} tabIndex={0}>
+      {!isLog && (
+        <g className="barHandle">
+          <rect
+            x={task.x1 - 16}
+            y={task.y - 6}
+            width={task.x2 - task.x1 + 32}
+            height={task.height + 12}
+            className={`barHandle ${styles.barHandleBackground}`}
+            ry={task.barCornerRadius}
+            rx={task.barCornerRadius}
+          />
+        </g>
+      )}
+
       <BarDisplay
+        id={isLog ? `${task.id}-log` : task.id}
+        isLog={isLog}
         x={task.x1}
         y={task.y}
         task={task}
@@ -44,14 +69,14 @@ export const BarParent: React.FC<TaskItemProps> = ({
         height={task.height}
         progressWidth={progressWidth}
         barCornerRadius={task.barCornerRadius}
-        styles={task.styles}
+        styles={!isLog ? task.styles : { ...task.styles, opacity: 0.5 }}
         isSelected={isSelected}
         onMouseDown={e => {
-          isDateChangeable && onEventStart("move", task, e);
+          isDateChangeable && !isLog && onEventStart("move", task, e);
         }}
       />
       <g className="handleGroup">
-        {isDateChangeable && (
+        {isDateChangeable && !isLog && (
           <g>
             {/* left */}
             <BarDateHandle
@@ -77,7 +102,7 @@ export const BarParent: React.FC<TaskItemProps> = ({
             />
           </g>
         )}
-        {isProgressChangeable && (
+        {isProgressChangeable && !isLog && (
           <BarProgressHandle
             progressPoint={progressPoint}
             onMouseDown={e => {

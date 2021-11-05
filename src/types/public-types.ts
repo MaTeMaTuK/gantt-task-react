@@ -51,6 +51,7 @@ export interface Task {
   isDisabled?: boolean;
   project?: string;
   dependencies?: string[];
+  item?: any;
 }
 
 export interface EventOption {
@@ -148,27 +149,76 @@ export interface StylingOption {
   }>;
 }
 
-export interface GanttProps extends EventOption, DisplayOption, StylingOption {
+export interface ConnectionProps {
+  delConnection: (value: string) => void;
+  addConnection: (params: {
+    source: string;
+    destination: string;
+    linkType: string;
+  }) => void;
+  itemLinks: any[];
+}
+export interface TimeItemProps {
+  itemType?: string;
+  startDate?: string;
+  endDate?: string;
+  baseLineStartDate?: string;
+  baseLineEndDate?: string;
+  percentage?: string;
+  isDefault?: boolean;
+}
+export interface MilestoneProps {
+  itemType: string;
+  startDate: string;
+}
+export interface OtherConfigProps {
+  overdue?: boolean;
+  autoPatch?: boolean;
+  pivotalPath?: boolean;
+  [propName: string]: any;
+}
+export interface GanttConfigProps {
+  time?: TimeItemProps[];
+  milestone?: MilestoneProps;
+  otherConfig?: OtherConfigProps;
+  [propName: string]: any;
+}
+export interface BaselineProps {
+  name?: string;
+  description?: string;
+  [propName: string]: any;
+}
+export interface GanttProps
+  extends EventOption,
+    DisplayOption,
+    StylingOption,
+    ConnectionProps {
   tasks: Task[];
+  baseLineLog?: Task[];
   itemTypeData?: OptionsProp[];
   customeFieldData?: OptionsProp[];
-  itemLinks?: any[];
-  ganttConfig?: any;
-  configHandle?: (value: any) => void;
-  delConnection?: (value: string) => void;
-  addConnection?: (
-    source: string,
-    destination: string,
-    linkType: string
+  ganttConfig?: GanttConfigProps;
+  baselineList?: BaselineProps[];
+  configHandle?: (value: GanttConfigProps) => void;
+  baseLineHandle?: (
+    value?: BaselineProps,
+    type?: "add" | "edit" | "delete"
   ) => void;
+  setItemTypeValue?: (value: string) => void;
+  setCurrentLog?: (value: BaselineProps) => void;
   renderTaskListComponent?: () => JSX.Element;
   isUpdate?: boolean;
+  currentLog?: BaselineProps;
+  actionRef?: any;
 }
 export interface OptionsProp {
   label: string;
   value: string;
 }
-//特殊时间精度
+export interface TabConfigProps {
+  currentTab: string;
+}
+// 特殊时间精度
 export const DateDeltaInit = {
   [ViewMode.Month]: {
     1: 31 * 24 * 3600 * 1000,

@@ -1,6 +1,9 @@
-import React, { ReactChild, useState, useEffect } from "react";
+import React, { ReactChild, useState, useEffect, useContext } from "react";
 import { Task, ViewMode, EventOption } from "../../types/public-types";
 import { addToDate } from "../../helpers/date-helper";
+import { GanttConfigContext } from "../../contsxt";
+
+// import { GanttContext } from "../../contsxt";
 import styles from "./grid.module.css";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
@@ -36,8 +39,9 @@ export const GridBody: React.FC<GridBodyProps> = ({
   taskListHieght,
   onDateChange,
 }) => {
-  const [translateX, setTranslateX] = useState(-500);
-  const [translateY, setTranslateY] = useState(-500);
+  const { ganttConfig } = useContext(GanttConfigContext);
+  const [translateX, setTranslateX] = useState(0);
+  const [translateY, setTranslateY] = useState(0);
   const [isShow, setIsShow] = useState(false);
   const [parts, setParts] = useState(1);
   // 余的天数
@@ -169,8 +173,12 @@ export const GridBody: React.FC<GridBodyProps> = ({
     }
     onDateChange?.(
       Object.assign(tasks[taskIndex], {
-        start: startDate?.startOf("day").toDate(),
-        end: endDate?.startOf("day").toDate(),
+        start: ganttConfig?.time?.length
+          ? startDate?.startOf("day").toDate()
+          : null,
+        end: ganttConfig?.time?.length
+          ? endDate?.startOf("day").toDate()
+          : null,
       })
     );
   };

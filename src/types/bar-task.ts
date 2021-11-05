@@ -10,6 +10,9 @@ export interface BarTask extends Task {
   barCornerRadius: number;
   handleWidth: number;
   barChildren: number[];
+  isTimeErrorItem?: boolean;
+  isOverdueItem?: boolean;
+  isPivotalPathItem?: boolean;
   styles: {
     backgroundColor: string;
     backgroundSelectedColor: string;
