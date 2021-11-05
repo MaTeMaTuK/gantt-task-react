@@ -45,7 +45,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   listBottomHeight = 48,
   rowHeight = 48,
   // viewMode = ViewMode.Day,
-  //locale = "en-GB",
+  // locale = "en-GB",
   locale = "zh-cn",
   barFill = 60,
   barCornerRadius = 4,
@@ -228,7 +228,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         setTaskListWidth(wrapperRef?.current?.offsetWidth);
       }
     }
-  }, [tasks]);
+  }, [!tasks.length]);
   useEffect(() => {
     if (wrapperRef.current) {
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
