@@ -36,6 +36,10 @@
 .tooltipName {
   font-weight: 600;
   font-size: 16px;
+  max-width: 200px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .tooltipTimeBefor {
   color: #838c9e;
