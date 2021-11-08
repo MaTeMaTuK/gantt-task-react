@@ -102,7 +102,6 @@ export const StandardTooltipContent: React.FC<{
   fontSize: string;
   fontFamily: string;
 }> = ({ task, fontSize, fontFamily }) => {
-  console.log(task, "task111");
   const style = {
     fontSize,
     fontFamily,
