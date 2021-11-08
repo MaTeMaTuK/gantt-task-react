@@ -102,13 +102,14 @@ export const StandardTooltipContent: React.FC<{
   fontSize: string;
   fontFamily: string;
 }> = ({ task, fontSize, fontFamily }) => {
+  console.log(task, "task111");
   const style = {
     fontSize,
     fontFamily,
   };
   return (
     <div className={styles.tooltipDefaultContainer} style={style}>
-      <div className={styles.tooltipId}>{task.id}</div>
+      <div className={styles.tooltipId}>{task?.item?.key}</div>
       <div className={styles.tooltipName}>{task.name}</div>
       <div>
         <span className={styles.tooltipTimeBefor}>开始日期：</span>
