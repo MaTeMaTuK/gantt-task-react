@@ -184,9 +184,11 @@ const convertToBar = (
     progressSelectedColor: barProgressSelectedColor,
     ...task.styles,
   };
-  let typeInternal: TaskTypeInternal = task.type;
-  if (typeInternal === "task" && x2 - x1 < handleWidth * 2) {
-    typeInternal = "smalltask";
+  const typeInternal: TaskTypeInternal = task.type;
+  if (
+    (typeInternal === "task" || typeInternal === "parent") &&
+    x2 - x1 < handleWidth * 2
+  ) {
     x2 = x1 + handleWidth * 2;
   }
   return {
