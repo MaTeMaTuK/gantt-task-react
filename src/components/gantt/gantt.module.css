@@ -10,7 +10,7 @@
 }
 
 .horizontalContainer {
-  margin: 0;
+  margin: -1px 0 0; /* 日历的下边框1px*/
   padding: 0;
   overflow: hidden;
   will-change: transform;
