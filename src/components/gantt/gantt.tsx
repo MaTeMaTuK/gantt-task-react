@@ -30,6 +30,7 @@ import GuideModal from "./guide-modal";
 import { Button } from "antd";
 import GanttHeader from "./gantt-header";
 import ArrowIcon from "../icons/arrow";
+import utils from "../../helpers/utils";
 import "./gantt.css";
 import {
   GanttConfigContext,
@@ -101,9 +102,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     const [startDate, endDate] = ganttDateRange(viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
+  const CACHE_LIST_WIDTH_KEY = "gantt-cache-list-width";
+  const cacheListWidth = utils.getLocalStorageItem(CACHE_LIST_WIDTH_KEY);
+  const initListWidth = useMemo(() => {
+    return cacheListWidth || listWidth;
+  }, [listWidth, cacheListWidth]);
 
   const [taskHeight, setTaskHeight] = useState((rowHeight * barFill) / 100);
-  const [taskListWidth, setTaskListWidth] = useState(listWidth);
+  const [taskListWidth, setTaskListWidth] = useState(initListWidth);
   const [svgContainerWidth, setSvgContainerWidth] = useState(0);
   const [ganttHeight, setGanttHeight] = useState(0);
   const [svgContainerHeight, setSvgContainerHeight] = useState(ganttHeight);
@@ -282,12 +288,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     if (wrapperRef.current) {
       if (tasks.length) {
-        setTaskListWidth(listWidth);
+        setTaskListWidth(cacheListWidth);
       } else {
         setTaskListWidth(wrapperRef?.current?.offsetWidth);
       }
     }
-  }, [!tasks.length]);
+  }, [!tasks.length, initListWidth]);
   useEffect(() => {
     if (wrapperRef.current) {
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
@@ -657,6 +663,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           ? taskListWidth + distance
           : minWidth;
       setTaskListWidth(width);
+      utils.setLocalStorageItem(CACHE_LIST_WIDTH_KEY, width);
     };
     const handleMouseUp = () => {
       window.removeEventListener("mousemove", handleMouseMove);
@@ -670,12 +677,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const handleDividerClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
+    let width;
     if (taskListWidth > minWidth) {
       dividerPositionRef.current.left = taskListWidth;
-      setTaskListWidth(minWidth);
+      width = minWidth;
     } else {
-      setTaskListWidth(dividerPositionRef.current.left);
+      width = dividerPositionRef.current.left;
     }
+    setTaskListWidth(width);
+    utils.setLocalStorageItem(CACHE_LIST_WIDTH_KEY, width);
     event.stopPropagation();
   };
   // 退出基线
