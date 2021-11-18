@@ -288,7 +288,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     if (wrapperRef.current) {
       if (tasks.length) {
-        setTaskListWidth(cacheListWidth);
+        setTaskListWidth(initListWidth);
       } else {
         setTaskListWidth(wrapperRef?.current?.offsetWidth);
       }
@@ -682,7 +682,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       dividerPositionRef.current.left = taskListWidth;
       width = minWidth;
     } else {
-      width = dividerPositionRef.current.left;
+      width = dividerPositionRef.current.left || listWidth;
     }
     setTaskListWidth(width);
     utils.setLocalStorageItem(CACHE_LIST_WIDTH_KEY, width);
