@@ -48,9 +48,9 @@ export const BarParent: React.FC<TaskItemProps> = ({
       {!isLog && (
         <g className="barHandle">
           <rect
-            x={task.x1 - 16}
+            x={task.x1 - 20}
             y={task.y - 6}
-            width={task.x2 - task.x1 + 32}
+            width={task.x2 - task.x1 + 40}
             height={task.height + 12}
             className={`barHandle ${styles.barHandleBackground}`}
             ry={task.barCornerRadius}

@@ -3,9 +3,12 @@
   outline: none;
 }
 
+.handleGroup {
+  cursor: ew-resize;
+}
+
 .barHandle {
   fill: #fff;
-  cursor: ew-resize;
   opacity: 0;
   visibility: hidden;
 }
@@ -17,6 +20,10 @@
 
 .barHandleDate {
   fill: #ccc;
+}
+
+.barHandleBg {
+  fill: #fff;
 }
 
 .barHandleBackground {

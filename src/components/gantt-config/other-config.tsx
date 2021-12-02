@@ -54,7 +54,7 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            更新
+            保存
           </Button>
         </Form.Item>
       </Form>

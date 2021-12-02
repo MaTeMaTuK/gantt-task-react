@@ -20,7 +20,14 @@ export const BarDateHandle: React.FC<BarDateHandleProps> = ({
   return (
     <g onMouseDown={onMouseDown}>
       <rect
-        x={type === "left" ? x - 11 : x + 11}
+        x={type === "left" ? x - 18 : x + 18}
+        y={y + 3}
+        width={12}
+        height={20}
+        className="barHandle barHandleBg"
+      />
+      <rect
+        x={type === "left" ? x - 14 : x + 14}
         y={y + 6}
         width={width}
         height={height}
@@ -29,7 +36,7 @@ export const BarDateHandle: React.FC<BarDateHandleProps> = ({
         rx={1}
       />
       <rect
-        x={type === "left" ? x - 7 : x + 7}
+        x={type === "left" ? x - 10 : x + 10}
         y={y + 6}
         width={width}
         height={height}
