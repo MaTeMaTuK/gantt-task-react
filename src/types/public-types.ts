@@ -51,7 +51,9 @@ export interface Task {
   isDisabled?: boolean;
   project?: string;
   dependencies?: string[];
-  item?: any;
+  item?: {
+    [propName: string]: any;
+  };
 }
 
 export interface EventOption {

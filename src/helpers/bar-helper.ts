@@ -189,8 +189,7 @@ const convertToBar = (
     (typeInternal === "task" || typeInternal === "parent") &&
     x2 - x1 < handleWidth * 2
   ) {
-    // typeInternal = "smalltask";
-    x2 = x1 + handleWidth * 2 + 4;
+    x2 = x1 + handleWidth * 2;
   }
   return {
     ...task,
