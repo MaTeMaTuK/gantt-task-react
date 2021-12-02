@@ -385,8 +385,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         }
         // 父卡片和子卡片不能相互连接，其他类型待定
         if (
-          (taskSource.type === "parent" && taskTarget.type === "task") ||
-          (taskSource.type === "task" && taskTarget.type === "parent")
+          (taskSource.item.subItem || []).includes(taskTarget.id) ||
+          (taskTarget.item.subItem || []).includes(taskSource.id)
         ) {
           message.warning("父子卡片之间不能存在关联关系");
           return;
