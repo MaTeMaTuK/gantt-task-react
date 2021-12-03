@@ -317,6 +317,11 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         flag = true;
         return flag;
       }
+      // 父子存在关联关系
+      if ((task?.item?.ancestors || []).includes(target)) {
+        flag = true;
+        return flag;
+      }
       subItems.forEach(item => {
         if (needUpdateItems.includes(item)) {
           flag = true;
