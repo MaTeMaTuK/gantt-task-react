@@ -34,7 +34,7 @@ const Panel: React.FC<DisplayProps> = ({ ganttConfig, visibleChange }) => {
         </Col>
       </Row>
       <Row>
-        <Col span={14}>逾期的卡片</Col>
+        <Col span={14}>逾期的事项</Col>
         <Col span={10} className={styles.textAlignR}>
           <Switch
             onChange={checked => handleChange(checked, "overdue")}
