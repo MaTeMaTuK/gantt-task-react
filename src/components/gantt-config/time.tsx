@@ -91,7 +91,7 @@ const Time: React.FC<TimeProps> = () => {
     setCurrentItem(timeList[index]);
     setVisible(true);
     if (timeList[index]?.["isDefault"]) {
-      setItemTypeValue(Date.now());
+      setItemTypeValue("isDefault");
     } else {
       setItemTypeValue(timeList[index]?.itemType);
     }
