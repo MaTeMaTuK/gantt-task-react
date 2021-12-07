@@ -15,6 +15,7 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
   useEffect(() => {
     if (currentTab === "otherConfig") {
       setChecked(otherConfig?.autoPatch);
+      form.setFieldsValue({ autoPatch: otherConfig?.autoPatch });
     }
   }, [currentTab]);
   const onFinish = (values: OtherConfigProps) => {

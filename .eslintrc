@@ -8,7 +8,7 @@
     "prettier/react",
     "plugin:@typescript-eslint/eslint-recommended"
   ],
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint","react-hooks"],
   "env": {
     "node": true
   },
@@ -33,6 +33,8 @@
     "import/export": 0,
     "no-unused-vars": "off",
     "no-use-before-define": "off",
-    "@typescript-eslint/no-unused-vars": "error"
+    "@typescript-eslint/no-unused-vars": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

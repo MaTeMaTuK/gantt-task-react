@@ -34,7 +34,10 @@ export const commonConfig = {
     // outlineWidth: 0, // 边框宽度
   },
   // 设置连接线的样式 Bezier-贝瑟尔曲线 Flowchart-流程图 StateMachine-弧线 Straight-直线
-  connector: ["Flowchart", { cornerRadius: 8 }],
+  connector: [
+    "Flowchart",
+    { alwaysRespectStubs: true, cornerRadius: 8, stub: 16 },
+  ],
   // 设置连接线的样式
   connectorStyle: {
     stroke: "#979797", // 实线颜色
