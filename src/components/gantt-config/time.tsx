@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from "react";
+import React, { useState, useContext, useMemo, useCallback } from "react";
 import { Button, Table, Space, Modal, Tooltip } from "antd";
 import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import styles from "./index.module.css";
@@ -59,9 +59,11 @@ const Time: React.FC<TimeProps> = () => {
       ganttConfig?.time?.length ? ganttConfig?.time : [{ isDefault: true }],
     [ganttConfig?.time]
   );
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setVisible(false);
-  };
+    // 为了再次触发getScreen事件
+    setItemTypeValue("");
+  }, [setItemTypeValue]);
   const handleOk = (values: TimeItemProps) => {
     let newTimeList;
     if (Object.keys(currentItem).length) {
@@ -81,21 +83,24 @@ const Time: React.FC<TimeProps> = () => {
       time: newTimeList,
     });
   };
-  const addTime = () => {
+  const addTime = useCallback(() => {
     setVisible(true);
     setCurrentItem({});
     setItemTypeValue("");
-  };
-  const editTime = (index: number) => {
-    setIndex(index);
-    setCurrentItem(timeList[index]);
-    setVisible(true);
-    if (timeList[index]?.["isDefault"]) {
-      setItemTypeValue("isDefault");
-    } else {
-      setItemTypeValue(timeList[index]?.itemType);
-    }
-  };
+  }, [setItemTypeValue]);
+  const editTime = useCallback(
+    (index: number) => {
+      setIndex(index);
+      setCurrentItem(timeList[index]);
+      setVisible(true);
+      if (timeList[index]?.["isDefault"]) {
+        setItemTypeValue("isDefault");
+      } else {
+        setItemTypeValue(timeList[index]?.itemType);
+      }
+    },
+    [setItemTypeValue, timeList]
+  );
   const del = (index: number) => {
     Modal.confirm({
       title: "删除该配置",
@@ -113,9 +118,12 @@ const Time: React.FC<TimeProps> = () => {
       time: newTimeList,
     });
   };
-  const itemTypeChange = (val: string) => {
-    setItemTypeValue(val);
-  };
+  const itemTypeChange = useCallback(
+    (val: string) => {
+      setItemTypeValue(val);
+    },
+    [setItemTypeValue]
+  );
   return (
     <div>
       <TimeModal

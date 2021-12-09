@@ -1,8 +1,9 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { Modal, Form, Select } from "antd";
 import { ConfigHandleContext } from "../../contsxt";
 import { TimeItemProps } from "../../types/public-types";
 import styles from "./index.module.css";
+import { find } from "lodash";
 const { Option } = Select;
 const filterOption = (input: any, option: any) => {
   return option?.children?.toLowerCase().indexOf(input?.toLowerCase()) > -1;
@@ -12,6 +13,14 @@ export const filterFields = (type: string, customeFieldData: any) => {
   return customeFieldData.filter((ele: any) => {
     return ele?.fieldType?.key === type;
   });
+};
+// 过滤不存在的字段
+export const filterDeleteFields = (
+  id: string | undefined,
+  customeFieldData: any
+) => {
+  const filterData = find(customeFieldData, { objectId: id });
+  return filterData ? filterData.objectId : null;
 };
 interface ItemModalProps {
   visible: boolean;
@@ -31,16 +40,32 @@ const ItemModal: React.FC<ItemModalProps> = ({
 }) => {
   const [form] = Form.useForm();
   const { itemTypeData, customeFieldData } = useContext(ConfigHandleContext);
+  // 设置isSelected变量，避免切换事项类型变化时引起form.setFieldsValue触发
+  const [isSelected, setIsSelected] = useState(false);
   // 筛选字段类型为日期和数值的字段
   useEffect(() => {
     if (visible) {
+      if (isSelected) {
+        return;
+      }
       form.resetFields();
       form.setFieldsValue({
-        ...currentItem,
+        endDate: filterDeleteFields(currentItem.endDate, customeFieldData),
+        itemType: filterDeleteFields(`${currentItem.itemType}`, itemTypeData),
+        percentage: filterDeleteFields(
+          currentItem.percentage,
+          customeFieldData
+        ),
+        startDate: filterDeleteFields(currentItem.startDate, customeFieldData),
+        isDefault: currentItem.isDefault,
       });
     }
-  }, [visible, currentItem]);
-
+  }, [visible, currentItem, form, customeFieldData, itemTypeData, isSelected]);
+  useEffect(() => {
+    if (!visible) {
+      setIsSelected(false);
+    }
+  }, [visible]);
   const handleConfirm = () => {
     form
       .validateFields()
@@ -63,6 +88,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
     }
   };
   const handelChange = (val: string) => {
+    setIsSelected(true);
     itemTypeChange(val);
     form.setFieldsValue({
       startDate: undefined,
