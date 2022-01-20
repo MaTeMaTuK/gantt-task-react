@@ -2,6 +2,7 @@ import React, { ReactChild } from "react";
 import { ViewMode } from "../../types/public-types";
 import { TopPartOfCalendar } from "./top-part-of-calendar";
 import {
+  getCachedDateTimeFormat,
   getDaysInMonth,
   getLocaleMonth,
   getWeekNumberISO8601,
@@ -177,7 +178,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     const dates = dateSetup.dates;
     for (let i = 0; i < dates.length; i++) {
       const date = dates[i];
-      const bottomValue = Intl.DateTimeFormat(locale, {
+      const bottomValue = getCachedDateTimeFormat(locale, {
         hour: "numeric",
       }).format(date);
 
