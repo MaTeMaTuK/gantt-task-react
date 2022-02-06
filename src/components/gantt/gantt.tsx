@@ -47,6 +47,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   fontSize = "14px",
   arrowIndent = 20,
   todayColor = "rgba(252, 248, 227, 0.5)",
+  viewDate,
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
@@ -63,6 +64,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     const [startDate, endDate] = ganttDateRange(tasks, viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
+  const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
+    undefined
+  );
 
   const [taskHeight, setTaskHeight] = useState((rowHeight * barFill) / 100);
   const [taskListWidth, setTaskListWidth] = useState(0);
@@ -143,6 +147,34 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     rtl,
     scrollX,
     onExpanderClick,
+  ]);
+
+  useEffect(() => {
+    if (
+      viewMode === dateSetup.viewMode &&
+      ((viewDate && !currentViewDate) ||
+        (viewDate && currentViewDate?.valueOf() !== viewDate.valueOf()))
+    ) {
+      const dates = dateSetup.dates;
+      const index = dates.findIndex(
+        (d, i) =>
+          viewDate.valueOf() >= d.valueOf() &&
+          i + 1 !== dates.length &&
+          viewDate.valueOf() < dates[i + 1].valueOf()
+      );
+      if (index === -1) {
+        return;
+      }
+      setCurrentViewDate(viewDate);
+      setScrollX(columnWidth * index);
+    }
+  }, [
+    viewDate,
+    columnWidth,
+    dateSetup.dates,
+    viewMode,
+    currentViewDate,
+    setCurrentViewDate,
   ]);
 
   useEffect(() => {

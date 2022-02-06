@@ -1,4 +1,5 @@
 export enum ViewMode {
+  Hour = "Hour",
   QuarterDay = "Quarter Day",
   HalfDay = "Half Day",
   Day = "Day",
@@ -68,6 +69,7 @@ export interface EventOption {
 
 export interface DisplayOption {
   viewMode?: ViewMode;
+  viewDate?: Date;
   /**
    * Specifies the month name language. Able formats: ISO 639-2, Java Locale
    */

@@ -25,7 +25,6 @@ export const getCachedDateTimeFormat = (
   return dtf;
 };
 
-
 export const addToDate = (
   date: Date,
   quantity: number,
@@ -112,6 +111,12 @@ export const ganttDateRange = (tasks: Task[], viewMode: ViewMode) => {
       newStartDate = addToDate(newStartDate, -1, "day");
       newEndDate = addToDate(newEndDate, 108, "hour"); // 24(1 day)*5 - 12
       break;
+    case ViewMode.Hour:
+      newStartDate = startOfDate(newStartDate, "hour");
+      newEndDate = startOfDate(newEndDate, "day");
+      newStartDate = addToDate(newStartDate, -1, "hour");
+      newEndDate = addToDate(newEndDate, 1, "day");
+      break;
   }
   return [newStartDate, newEndDate];
 };
@@ -140,6 +145,9 @@ export const seedDates = (
       case ViewMode.QuarterDay:
         currentDate = addToDate(currentDate, 6, "hour");
         break;
+      case ViewMode.Hour:
+        currentDate = addToDate(currentDate, 1, "hour");
+        break;
     }
     dates.push(currentDate);
   }
@@ -149,6 +157,21 @@ export const seedDates = (
 export const getLocaleMonth = (date: Date, locale: string) => {
   let bottomValue = getCachedDateTimeFormat(locale, {
     month: "long",
+  }).format(date);
+  bottomValue = bottomValue.replace(
+    bottomValue[0],
+    bottomValue[0].toLocaleUpperCase()
+  );
+  return bottomValue;
+};
+
+export const getLocalDayOfWeek = (
+  date: Date,
+  locale: string,
+  format?: "long" | "short" | "narrow" | undefined
+) => {
+  let bottomValue = getCachedDateTimeFormat(locale, {
+    weekday: format,
   }).format(date);
   bottomValue = bottomValue.replace(
     bottomValue[0],
@@ -190,4 +213,3 @@ export const getWeekNumberISO8601 = (date: Date) => {
 export const getDaysInMonth = (month: number, year: number) => {
   return new Date(year, month + 1, 0).getDate();
 };
-
