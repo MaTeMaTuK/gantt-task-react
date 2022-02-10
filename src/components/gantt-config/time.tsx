@@ -48,9 +48,7 @@ const Time: React.FC<TimeProps> = () => {
       ),
     },
   ];
-  const { configHandle, setItemTypeValue, itemTypeData } = useContext(
-    ConfigHandleContext
-  );
+  const { configHandle, itemTypeData } = useContext(ConfigHandleContext);
   const { ganttConfig } = useContext(GanttConfigContext);
   const [currentItem, setCurrentItem] = useState<any>({});
   const [index, setIndex] = useState(0);
@@ -61,10 +59,8 @@ const Time: React.FC<TimeProps> = () => {
   );
   const handleCancel = useCallback(() => {
     setVisible(false);
-    // 为了再次触发getScreen事件
-    setItemTypeValue("");
-  }, [setItemTypeValue]);
-  const handleOk = (values: TimeItemProps) => {
+  }, []);
+  const handleOk = async (values: TimeItemProps) => {
     let newTimeList;
     if (Object.keys(currentItem).length) {
       newTimeList = [...timeList];
@@ -86,20 +82,14 @@ const Time: React.FC<TimeProps> = () => {
   const addTime = useCallback(() => {
     setVisible(true);
     setCurrentItem({});
-    setItemTypeValue("");
-  }, [setItemTypeValue]);
+  }, []);
   const editTime = useCallback(
     (index: number) => {
       setIndex(index);
       setCurrentItem(timeList[index]);
       setVisible(true);
-      if (timeList[index]?.["isDefault"]) {
-        setItemTypeValue("isDefault");
-      } else {
-        setItemTypeValue(timeList[index]?.itemType);
-      }
     },
-    [setItemTypeValue, timeList]
+    [timeList]
   );
   const del = (index: number) => {
     Modal.confirm({
@@ -118,12 +108,6 @@ const Time: React.FC<TimeProps> = () => {
       time: newTimeList,
     });
   };
-  const itemTypeChange = useCallback(
-    (val: string) => {
-      setItemTypeValue(val);
-    },
-    [setItemTypeValue]
-  );
   return (
     <div>
       <TimeModal
@@ -132,7 +116,6 @@ const Time: React.FC<TimeProps> = () => {
         handleOk={handleOk}
         currentItem={currentItem}
         timeList={timeList} // 做卡片唯一性校验
-        itemTypeChange={itemTypeChange}
       />
       <h4 className={`${styles.timeTips}`}>
         <em>

@@ -1,34 +1,41 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Modal, Form, Select } from "antd";
 import { ConfigHandleContext } from "../../contsxt";
-import { TimeItemProps } from "../../types/public-types";
+import { TimeItemProps, FieldAndItemProps } from "../../types/public-types";
 import styles from "./index.module.css";
-import { find } from "lodash";
+import { find, omit } from "lodash";
+import { OptionData, OptionGroupData } from "rc-select/lib/interface";
 const { Option } = Select;
-const filterOption = (input: any, option: any) => {
-  return option?.children?.toLowerCase().indexOf(input?.toLowerCase()) > -1;
+
+const filterOption = (
+  input: string,
+  option: OptionData | OptionGroupData | undefined
+): boolean => {
+  return option?.name?.toLowerCase().indexOf(input?.toLowerCase()) > -1;
 };
 // 筛选某一类型的字段
-export const filterFields = (type: string, customeFieldData: any) => {
-  return customeFieldData.filter((ele: any) => {
+export const filterFields = (
+  type: string,
+  customField: FieldAndItemProps[]
+) => {
+  return customField.filter((ele: FieldAndItemProps) => {
     return ele?.fieldType?.key === type;
   });
 };
 // 过滤不存在的字段
 export const filterDeleteFields = (
   id: string | undefined,
-  customeFieldData: any
+  customField: FieldAndItemProps[]
 ) => {
-  const filterData = find(customeFieldData, { objectId: id });
+  const filterData = find(customField, { objectId: id });
   return filterData ? filterData.objectId : null;
 };
 interface ItemModalProps {
   visible: boolean;
   handleCancel: () => void;
-  handleOk: (values: any) => void;
+  handleOk: (values: TimeItemProps) => void;
   currentItem: TimeItemProps;
   timeList?: TimeItemProps[];
-  itemTypeChange: (value: string) => void;
 }
 const ItemModal: React.FC<ItemModalProps> = ({
   visible,
@@ -36,12 +43,13 @@ const ItemModal: React.FC<ItemModalProps> = ({
   handleOk,
   currentItem,
   timeList,
-  itemTypeChange,
 }) => {
   const [form] = Form.useForm();
-  const { itemTypeData, customeFieldData } = useContext(ConfigHandleContext);
+  const { itemTypeData, getCustomFields } = useContext(ConfigHandleContext);
   // 设置isSelected变量，避免切换事项类型变化时引起form.setFieldsValue触发
   const [isSelected, setIsSelected] = useState(false);
+  const [customField, setCustomField] = useState([]);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   // 筛选字段类型为日期和数值的字段
   useEffect(() => {
     if (visible) {
@@ -50,33 +58,55 @@ const ItemModal: React.FC<ItemModalProps> = ({
       }
       form.resetFields();
       form.setFieldsValue({
-        endDate: filterDeleteFields(currentItem.endDate, customeFieldData),
+        endDate: filterDeleteFields(currentItem.endDate, customField),
         itemType: filterDeleteFields(`${currentItem.itemType}`, itemTypeData),
-        percentage: filterDeleteFields(
-          currentItem.percentage,
-          customeFieldData
-        ),
-        startDate: filterDeleteFields(currentItem.startDate, customeFieldData),
+        percentage: filterDeleteFields(currentItem.percentage, customField),
+        startDate: filterDeleteFields(currentItem.startDate, customField),
         isDefault: currentItem.isDefault,
       });
     }
-  }, [visible, currentItem, form, customeFieldData, itemTypeData, isSelected]);
+  }, [visible, currentItem, form, customField, itemTypeData, isSelected]);
+  useEffect(() => {
+    const fetch = async (currentItem: TimeItemProps) => {
+      const fields = await getCustomFields(currentItem);
+      setCustomField(fields);
+    };
+    if (visible) {
+      fetch(currentItem);
+    }
+  }, [visible, getCustomFields, currentItem]);
   useEffect(() => {
     if (!visible) {
       setIsSelected(false);
     }
   }, [visible]);
   const handleConfirm = () => {
+    setConfirmLoading(true);
     form
       .validateFields()
-      .then(values => {
-        handleOk(values);
+      .then(async values => {
+        // 保存时对已经删除的字段清空处理
+        const fields = await getCustomFields(currentItem);
+        Object.keys(omit(values, ["itemType"])).forEach(ele => {
+          const fileldFilter = fields.filter(
+            (f: FieldAndItemProps) => f.objectId === values[ele]
+          );
+          if (!fileldFilter.length) {
+            const obj = {};
+            obj[ele] = null;
+            form.setFieldsValue(obj);
+          }
+        });
+        form.validateFields().then(async () => {
+          await handleOk(values);
+          setConfirmLoading(false);
+        });
       })
       .catch(info => {
         console.log("Validate Failed:", info);
       });
   };
-  const itemCheck = (_: any, value: any) => {
+  const itemCheck = (_: any, value: string) => {
     if (value) {
       const itemFilter = timeList?.filter(item => item.itemType === value);
       if (itemFilter?.length && currentItem.itemType !== value) {
@@ -87,9 +117,10 @@ const ItemModal: React.FC<ItemModalProps> = ({
       return Promise.resolve();
     }
   };
-  const handelChange = (val: string) => {
+  const handelChange = async (val: string) => {
     setIsSelected(true);
-    itemTypeChange(val);
+    const fields = await getCustomFields({ itemType: val });
+    setCustomField(fields);
     form.setFieldsValue({
       startDate: undefined,
       endDate: undefined,
@@ -104,6 +135,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
       onCancel={handleCancel}
       cancelText="取消"
       okText="确定"
+      confirmLoading={confirmLoading}
     >
       <Form
         form={form}
@@ -123,8 +155,8 @@ const ItemModal: React.FC<ItemModalProps> = ({
               },
             ]}
           >
-            <Select placeholder="请选择" allowClear onChange={handelChange}>
-              {itemTypeData.map((ele: any) => {
+            <Select placeholder="请选择" onChange={handelChange}>
+              {itemTypeData.map((ele: FieldAndItemProps) => {
                 return (
                   <Option value={ele.value} key={ele.value}>
                     {ele.icon ? (
@@ -150,9 +182,9 @@ const ItemModal: React.FC<ItemModalProps> = ({
             filterOption={filterOption}
             allowClear
           >
-            {filterFields("Date", customeFieldData).map((ele: any) => {
+            {filterFields("Date", customField).map((ele: FieldAndItemProps) => {
               return (
-                <Option value={ele.value} key={ele.value}>
+                <Option value={ele.value} key={ele.value} name={ele.label}>
                   {ele.label}
                 </Option>
               );
@@ -170,9 +202,9 @@ const ItemModal: React.FC<ItemModalProps> = ({
             showSearch
             filterOption={filterOption}
           >
-            {filterFields("Date", customeFieldData).map((ele: any) => {
+            {filterFields("Date", customField).map((ele: FieldAndItemProps) => {
               return (
-                <Option value={ele.value} key={ele.value}>
+                <Option value={ele.value} key={ele.value} name={ele.label}>
                   {ele.label}
                 </Option>
               );
@@ -186,13 +218,15 @@ const ItemModal: React.FC<ItemModalProps> = ({
             showSearch
             filterOption={filterOption}
           >
-            {filterFields("Number", customeFieldData).map((ele: any) => {
-              return (
-                <Option value={ele.value} key={ele.value}>
-                  {ele.label}
-                </Option>
-              );
-            })}
+            {filterFields("Number", customField).map(
+              (ele: FieldAndItemProps) => {
+                return (
+                  <Option value={ele.value} key={ele.value} name={ele.label}>
+                    {ele.label}
+                  </Option>
+                );
+              }
+            )}
           </Select>
         </Form.Item>
       </Form>

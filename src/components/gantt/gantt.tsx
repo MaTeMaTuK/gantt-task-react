@@ -78,10 +78,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onSelect,
   renderTaskListComponent,
   itemTypeData, // 卡片类型
-  customeFieldData, // 字段
   configHandle, // 配置事件
   baseLineHandle, // 基线事件
-  setItemTypeValue, // 卡片类型
   setCurrentLog, // 选择基线log
   ganttConfig = {}, // 配置详情
   itemLinks = [], // 卡片关联
@@ -90,6 +88,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   baselineList,
   currentLog,
   actionRef,
+  workspaceId,
+  getCustomFields, // 获取字段
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -720,9 +720,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         <ConfigHandleContext.Provider
           value={{
             configHandle,
-            setItemTypeValue,
             itemTypeData,
-            customeFieldData,
+            workspaceId,
+            getCustomFields,
           }}
         >
           <GanttConfig

@@ -32,6 +32,12 @@ export const viewModeOptions = [
   },
 ];
 export type TaskType = "task" | "milestone" | "project" | "parent";
+
+export interface OptionsProp {
+  label: string;
+  value: string;
+  objectId?: string;
+}
 export interface Task {
   id: string;
   type: TaskType;
@@ -169,6 +175,14 @@ export interface TimeItemProps {
   percentage?: string;
   isDefault?: boolean;
 }
+export interface FieldsTypeProps extends OptionsProp {
+  [propName: string]: any;
+}
+export interface FieldAndItemProps extends OptionsProp {
+  fieldType: FieldsTypeProps;
+  icon?: string;
+}
+
 export interface MilestoneProps {
   itemType: string;
   startDate: string;
@@ -211,12 +225,11 @@ export interface GanttProps
   renderTaskListComponent?: () => JSX.Element;
   isUpdate?: boolean;
   currentLog?: BaselineProps;
-  actionRef?: any;
+  actionRef?: React.MutableRefObject<any>;
+  workspaceId?: string;
+  getCustomFields?: (val: TimeItemProps) => Promise<any>;
 }
-export interface OptionsProp {
-  label: string;
-  value: string;
-}
+
 export interface TabConfigProps {
   currentTab: string;
 }
