@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from "react";
+import React, { useState, useContext, useMemo, useCallback } from "react";
 import { Button, Table, Space, Modal, Tooltip } from "antd";
 import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import styles from "./index.module.css";
@@ -48,9 +48,7 @@ const Time: React.FC<TimeProps> = () => {
       ),
     },
   ];
-  const { configHandle, setItemTypeValue, itemTypeData } = useContext(
-    ConfigHandleContext
-  );
+  const { configHandle, itemTypeData } = useContext(ConfigHandleContext);
   const { ganttConfig } = useContext(GanttConfigContext);
   const [currentItem, setCurrentItem] = useState<any>({});
   const [index, setIndex] = useState(0);
@@ -59,10 +57,10 @@ const Time: React.FC<TimeProps> = () => {
       ganttConfig?.time?.length ? ganttConfig?.time : [{ isDefault: true }],
     [ganttConfig?.time]
   );
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setVisible(false);
-  };
-  const handleOk = (values: TimeItemProps) => {
+  }, []);
+  const handleOk = async (values: TimeItemProps) => {
     let newTimeList;
     if (Object.keys(currentItem).length) {
       newTimeList = [...timeList];
@@ -81,21 +79,18 @@ const Time: React.FC<TimeProps> = () => {
       time: newTimeList,
     });
   };
-  const addTime = () => {
+  const addTime = useCallback(() => {
     setVisible(true);
     setCurrentItem({});
-    setItemTypeValue("");
-  };
-  const editTime = (index: number) => {
-    setIndex(index);
-    setCurrentItem(timeList[index]);
-    setVisible(true);
-    if (timeList[index]?.["isDefault"]) {
-      setItemTypeValue("isDefault");
-    } else {
-      setItemTypeValue(timeList[index]?.itemType);
-    }
-  };
+  }, []);
+  const editTime = useCallback(
+    (index: number) => {
+      setIndex(index);
+      setCurrentItem(timeList[index]);
+      setVisible(true);
+    },
+    [timeList]
+  );
   const del = (index: number) => {
     Modal.confirm({
       title: "删除该配置",
@@ -113,9 +108,6 @@ const Time: React.FC<TimeProps> = () => {
       time: newTimeList,
     });
   };
-  const itemTypeChange = (val: string) => {
-    setItemTypeValue(val);
-  };
   return (
     <div>
       <TimeModal
@@ -124,7 +116,6 @@ const Time: React.FC<TimeProps> = () => {
         handleOk={handleOk}
         currentItem={currentItem}
         timeList={timeList} // 做卡片唯一性校验
-        itemTypeChange={itemTypeChange}
       />
       <h4 className={`${styles.timeTips}`}>
         <em>

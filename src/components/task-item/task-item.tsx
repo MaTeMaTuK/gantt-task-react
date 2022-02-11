@@ -48,7 +48,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         setTaskItem(<Bar {...props} />);
         break;
     }
-  }, [task, isSelected, jsPlumb]);
+  }, [task, isSelected, jsPlumb, props]);
 
   return (
     <g
