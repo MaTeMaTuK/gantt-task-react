@@ -1,4 +1,10 @@
-import React, { useState, SyntheticEvent, useRef, useEffect } from "react";
+import React, {
+  useState,
+  SyntheticEvent,
+  useRef,
+  useEffect,
+  useMemo,
+} from "react";
 import { ViewMode, GanttProps, Task } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import { ganttDateRange, seedDates } from "../../helpers/date-helper";
@@ -16,7 +22,7 @@ import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
-import { removeHiddenTasks } from "../../helpers/other-helper";
+import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
@@ -68,7 +74,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     undefined
   );
 
-  const [taskHeight, setTaskHeight] = useState((rowHeight * barFill) / 100);
   const [taskListWidth, setTaskListWidth] = useState(0);
   const [svgContainerWidth, setSvgContainerWidth] = useState(0);
   const [svgContainerHeight, setSvgContainerHeight] = useState(ganttHeight);
@@ -76,6 +81,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
   });
+  const taskHeight = useMemo(
+    () => (rowHeight * barFill) / 100,
+    [rowHeight, barFill]
+  );
 
   const [selectedTask, setSelectedTask] = useState<BarTask>();
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
@@ -95,6 +104,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     } else {
       filteredTasks = tasks;
     }
+    filteredTasks = filteredTasks.sort(sortTasks);
     const [startDate, endDate] = ganttDateRange(filteredTasks, viewMode);
     let newDates = seedDates(startDate, endDate, viewMode);
     if (rtl) {
@@ -212,13 +222,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       setFailedTask(null);
     }
   }, [failedTask, barTasks]);
-
-  useEffect(() => {
-    const newTaskHeight = (rowHeight * barFill) / 100;
-    if (newTaskHeight !== taskHeight) {
-      setTaskHeight(newTaskHeight);
-    }
-  }, [rowHeight, barFill, taskHeight]);
 
   useEffect(() => {
     if (!listCellWidth) {
