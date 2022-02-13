@@ -1,4 +1,10 @@
-import React, { useState, SyntheticEvent, useRef, useEffect } from "react";
+import React, {
+  useState,
+  SyntheticEvent,
+  useRef,
+  useEffect,
+  useMemo,
+} from "react";
 import { ViewMode, GanttProps, Task } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import { ganttDateRange, seedDates } from "../../helpers/date-helper";
@@ -16,7 +22,7 @@ import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
-import { removeHiddenTasks } from "../../helpers/other-helper";
+import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
@@ -47,6 +53,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   fontSize = "14px",
   arrowIndent = 20,
   todayColor = "rgba(252, 248, 227, 0.5)",
+  viewDate,
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
@@ -63,8 +70,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     const [startDate, endDate] = ganttDateRange(tasks, viewMode);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
+  const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
+    undefined
+  );
 
-  const [taskHeight, setTaskHeight] = useState((rowHeight * barFill) / 100);
   const [taskListWidth, setTaskListWidth] = useState(0);
   const [svgContainerWidth, setSvgContainerWidth] = useState(0);
   const [svgContainerHeight, setSvgContainerHeight] = useState(ganttHeight);
@@ -72,6 +81,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
   });
+  const taskHeight = useMemo(
+    () => (rowHeight * barFill) / 100,
+    [rowHeight, barFill]
+  );
 
   const [selectedTask, setSelectedTask] = useState<BarTask>();
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
@@ -91,6 +104,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     } else {
       filteredTasks = tasks;
     }
+    filteredTasks = filteredTasks.sort(sortTasks);
     const [startDate, endDate] = ganttDateRange(filteredTasks, viewMode);
     let newDates = seedDates(startDate, endDate, viewMode);
     if (rtl) {
@@ -146,6 +160,34 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ]);
 
   useEffect(() => {
+    if (
+      viewMode === dateSetup.viewMode &&
+      ((viewDate && !currentViewDate) ||
+        (viewDate && currentViewDate?.valueOf() !== viewDate.valueOf()))
+    ) {
+      const dates = dateSetup.dates;
+      const index = dates.findIndex(
+        (d, i) =>
+          viewDate.valueOf() >= d.valueOf() &&
+          i + 1 !== dates.length &&
+          viewDate.valueOf() < dates[i + 1].valueOf()
+      );
+      if (index === -1) {
+        return;
+      }
+      setCurrentViewDate(viewDate);
+      setScrollX(columnWidth * index);
+    }
+  }, [
+    viewDate,
+    columnWidth,
+    dateSetup.dates,
+    viewMode,
+    currentViewDate,
+    setCurrentViewDate,
+  ]);
+
+  useEffect(() => {
     const { changedTask, action } = ganttEvent;
     if (changedTask) {
       if (action === "delete") {
@@ -180,13 +222,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       setFailedTask(null);
     }
   }, [failedTask, barTasks]);
-
-  useEffect(() => {
-    const newTaskHeight = (rowHeight * barFill) / 100;
-    if (newTaskHeight !== taskHeight) {
-      setTaskHeight(newTaskHeight);
-    }
-  }, [rowHeight, barFill, taskHeight]);
 
   useEffect(() => {
     if (!listCellWidth) {
