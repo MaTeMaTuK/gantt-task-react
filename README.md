@@ -82,11 +82,12 @@ npm start
 
 ### DisplayOption
 
-| Parameter Name | Type    | Description                                                                                     |
-| :------------- | :------ | :---------------------------------------------------------------------------------------------- |
-| viewMode       | enum    | Specifies the time scale. Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month. |
-| locale         | string  | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                        |
-| rtl            | boolean | Sets rtl mode.                                                                                  |
+| Parameter Name | Type    | Description                                                                                           |
+| :------------- | :------ | :---------------------------------------------------------------------------------------------------- |
+| viewMode       | enum    | Specifies the time scale. Hour, Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month. |
+| viewDate       | date    | Specifies display date and time for display.                                                          |
+| locale         | string  | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                              |
+| rtl            | boolean | Sets rtl mode.                                                                                        |
 
 ### StylingOption
 
