@@ -211,7 +211,6 @@ export const TaskGanttArrows: React.FC<TaskGanttContentProps> = ({
         });
       }
     } else if (action === "mouseleave") {
-      console.log(33333)
       if (ganttEvent.action === "mouseenter") {
         setGanttEvent({ action: "" });
       }
@@ -249,12 +248,8 @@ export const TaskGanttArrows: React.FC<TaskGanttContentProps> = ({
       ref={svg}
       key={task.id}
       onMouseMove={(event: any) => {
-        console.log(2221,ganttEvent.action)
-        if (ganttEvent.action === "move" ||
-          ganttEvent.action === "end" ||
-          ganttEvent.action === "start" ||
-          ganttEvent.action === "progress") {
-            handleMouseMove(event);
+        if (["move", "end", "start", "progress"].includes(ganttEvent.action)) {
+          handleMouseMove(event);
         }
       }}
       onMouseUp={(event: any) => {

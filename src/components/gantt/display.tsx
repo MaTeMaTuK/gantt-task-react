@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Popover, Button, Switch, Row, Col } from "antd";
 import { GanttConfigProps } from "../../types/public-types";
 import styles from "./gantt.module.css";
@@ -50,11 +50,14 @@ export const Display: React.FC<DisplayProps> = ({
   configHandle,
 }) => {
   const [currentValue, setCurrentValue] = useState<any>(ganttConfig);
-  const handleVisibleChange = (value: boolean) => {
-    if (!value) {
-      configHandle?.(currentValue);
-    }
-  };
+  const handleVisibleChange = useCallback(
+    (value: boolean) => {
+      if (!value) {
+        configHandle?.(currentValue);
+      }
+    },
+    [configHandle, currentValue]
+  );
 
   return (
     <Popover

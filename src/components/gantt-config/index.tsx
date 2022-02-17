@@ -15,6 +15,7 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
   visible,
   currentPanel,
 }) => {
+  console.log("配置");
   const [tabs, setTabs] = useState("time");
   const tabChange = (val: string) => {
     setTabs(val);

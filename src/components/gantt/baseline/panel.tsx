@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import {
   PlusOutlined,
   EllipsisOutlined,
@@ -70,10 +70,13 @@ export const Panel: React.FC<panelProps> = ({
     setCurrentBaseline({});
     onClosePopver?.();
   };
-  const handleOk = (value: BaselineProps) => {
-    setVisible(false);
-    baseLineHandle(value, value.objectId ? "edit" : "add");
-  };
+  const handleOk = useCallback(
+    async (value: BaselineProps) => {
+      await baseLineHandle(value, value.objectId ? "edit" : "add");
+      setVisible(false);
+    },
+    [baseLineHandle]
+  );
   const handleCancel = () => {
     setVisible(false);
   };

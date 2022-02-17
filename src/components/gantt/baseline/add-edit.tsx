@@ -18,6 +18,7 @@ export const AddEdit: React.FC<ModalProps> = ({
 }) => {
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   useEffect(() => {
     setModalVisible(visible);
   }, [visible]);
@@ -28,13 +29,15 @@ export const AddEdit: React.FC<ModalProps> = ({
         : dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss"),
       description: currentBaseline?.description,
     });
-  }, [currentBaseline]);
+  }, [currentBaseline, form]);
   const onFinish = () => {};
   const confirmOk = () => {
     form
       .validateFields()
-      .then((values: BaselineProps) => {
-        handleOk(Object.assign(currentBaseline, values));
+      .then(async (values: BaselineProps) => {
+        setConfirmLoading(true);
+        await handleOk(Object.assign(currentBaseline, values));
+        setConfirmLoading(false);
       })
       .catch(info => {
         console.log("Validate Failed:", info);
@@ -48,6 +51,7 @@ export const AddEdit: React.FC<ModalProps> = ({
       onOk={confirmOk}
       okText="确认"
       cancelText="取消"
+      confirmLoading={confirmLoading}
     >
       <Form
         form={form}

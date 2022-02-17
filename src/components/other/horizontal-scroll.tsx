@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, forwardRef } from "react";
+import React, { SyntheticEvent, forwardRef, memo } from "react";
 import styles from "./horizontal-scroll.module.css";
 
 export const HorizontalScrollComponent: React.ForwardRefRenderFunction<
@@ -28,4 +28,4 @@ export const HorizontalScrollComponent: React.ForwardRefRenderFunction<
   );
 };
 
-export const HorizontalScroll = forwardRef(HorizontalScrollComponent);
+export const HorizontalScroll = memo(forwardRef(HorizontalScrollComponent));
