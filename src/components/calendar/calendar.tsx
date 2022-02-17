@@ -17,7 +17,6 @@ export type CalendarProps = {
   fontFamily: string;
   fontSize: string;
 };
-
 export const Calendar: React.FC<CalendarProps> = memo(
   ({
     dateSetup,
@@ -28,15 +27,15 @@ export const Calendar: React.FC<CalendarProps> = memo(
     fontFamily,
     fontSize,
   }) => {
-    const getCalendarValuesForYear = useCallback(() => {
-      const topValues: ReactChild[] = [];
-      const bottomValues: ReactChild[] = [];
-      for (let i = 0; i < dateSetup.dates.length; i++) {
-        const date = dateSetup.dates[i];
-        const bottomValue = date.getFullYear().toString();
-        bottomValues.push(
+    const bottomValuesInit = useCallback(
+      (bottomValue, date, headerHeight, i, type) => {
+        return (
           <text
-            key={bottomValue + date.getFullYear()}
+            key={
+              ["Day", "Other", "Week"].includes(type)
+                ? date.getTime()
+                : bottomValue + date.getFullYear()
+            }
             y={headerHeight * 0.6}
             x={columnWidth * i + columnWidth * 0.5}
             className={styles.calendarBottomText}
@@ -44,9 +43,21 @@ export const Calendar: React.FC<CalendarProps> = memo(
             {bottomValue}
           </text>
         );
+      },
+      [columnWidth]
+    );
+    const getCalendarValuesForYear = useCallback(() => {
+      const topValues: ReactChild[] = [];
+      const bottomValues: ReactChild[] = [];
+      for (let i = 0; i < dateSetup.dates.length; i++) {
+        const date = dateSetup.dates[i];
+        const bottomValue = date.getFullYear().toString();
+        bottomValues.push(
+          bottomValuesInit(bottomValue, date, headerHeight, i, "year")
+        );
       }
       return [topValues, bottomValues];
-    }, [columnWidth, dateSetup.dates, headerHeight]);
+    }, [dateSetup.dates, headerHeight, bottomValuesInit]);
     const getCalendarValuesForQuarter = useCallback(() => {
       const topValues: ReactChild[] = [];
       const bottomValues: ReactChild[] = [];
@@ -61,14 +72,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         );
         const bottomValue = `第${currentQuarter}季`;
         bottomValues.push(
-          <text
-            key={bottomValue + date.getFullYear()}
-            y={headerHeight * 0.8}
-            x={columnWidth * i + columnWidth * 0.5}
-            className={styles.calendarBottomText}
-          >
-            {bottomValue}
-          </text>
+          bottomValuesInit(bottomValue, date, headerHeight, i, "Quarter")
         );
         if (
           i === 0 ||
@@ -91,7 +95,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         }
       }
       return [topValues, bottomValues];
-    }, [columnWidth, dateSetup.dates, headerHeight]);
+    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit]);
     const getCalendarValuesForMonth = useCallback(() => {
       const topValues: ReactChild[] = [];
       const bottomValues: ReactChild[] = [];
@@ -101,14 +105,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         const date = dateSetup.dates[i];
         const bottomValue = getLocaleMonth(date, locale);
         bottomValues.push(
-          <text
-            key={bottomValue + date.getFullYear()}
-            y={headerHeight * 0.8}
-            x={columnWidth * i + columnWidth * 0.5}
-            className={styles.calendarBottomText}
-          >
-            {bottomValue}
-          </text>
+          bottomValuesInit(bottomValue, date, headerHeight, i, "Month")
         );
         if (
           i === 0 ||
@@ -133,7 +130,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         }
       }
       return [topValues, bottomValues];
-    }, [columnWidth, dateSetup.dates, headerHeight, locale]);
+    }, [columnWidth, dateSetup.dates, headerHeight, locale, bottomValuesInit]);
 
     const getCalendarValuesForWeek = useCallback(() => {
       const topValues: ReactChild[] = [];
@@ -152,14 +149,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         const bottomValue = `W${getWeekNumberISO8601(date)}`;
 
         bottomValues.push(
-          <text
-            key={date.getTime()}
-            y={headerHeight * 0.8}
-            x={columnWidth * i}
-            className={styles.calendarBottomText}
-          >
-            {bottomValue}
-          </text>
+          bottomValuesInit(bottomValue, date, headerHeight, i, "Week")
         );
 
         if (topValue) {
@@ -182,7 +172,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         weeksCount++;
       }
       return [topValues, bottomValues];
-    }, [columnWidth, dateSetup.dates, headerHeight]);
+    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit]);
 
     const getCalendarValuesForDay = useCallback(() => {
       const topValues: ReactChild[] = [];
@@ -194,14 +184,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         const bottomValue = date.getDate().toString();
 
         bottomValues.push(
-          <text
-            key={date.getTime()}
-            y={headerHeight * 0.8}
-            x={columnWidth * i + columnWidth * 0.5}
-            className={styles.calendarBottomText}
-          >
-            {bottomValue}
-          </text>
+          bottomValuesInit(bottomValue, date, headerHeight, i, "Day")
         );
         if (
           i + 1 !== dates.length &&
@@ -223,7 +206,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         }
       }
       return [topValues, bottomValues];
-    }, [columnWidth, dateSetup.dates, headerHeight]);
+    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit]);
 
     const getCalendarValuesForOther = useCallback(() => {
       const topValues: ReactChild[] = [];
@@ -238,15 +221,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         }).format(date);
 
         bottomValues.push(
-          <text
-            key={date.getTime()}
-            y={headerHeight * 0.8}
-            x={columnWidth * i}
-            className={styles.calendarBottomText}
-            fontFamily={fontFamily}
-          >
-            {bottomValue}
-          </text>
+          bottomValuesInit(bottomValue, date, headerHeight, i, "Other")
         );
         if (i === 0 || date.getDate() !== dates[i - 1].getDate()) {
           const topValue = `${date.getDate()} ${getLocaleMonth(date, locale)}`;
@@ -267,10 +242,10 @@ export const Calendar: React.FC<CalendarProps> = memo(
     }, [
       columnWidth,
       dateSetup.dates,
-      fontFamily,
       headerHeight,
       locale,
       viewMode,
+      bottomValuesInit,
     ]);
     const [topValues, bottomValues] = useMemo(() => {
       let topValues: ReactChild[] = [];

@@ -38,6 +38,13 @@ import {
   ConfigHandleContext,
   BaseLineContext,
 } from "../../contsxt";
+
+const widthData = {
+  [ViewMode.Month]: 300,
+  [ViewMode.Week]: 210,
+  [ViewMode.Year]: 240,
+  [ViewMode.Quarter]: 180,
+};
 export const Gantt: React.FunctionComponent<GanttProps> = memo(
   ({
     tasks,
@@ -704,17 +711,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
     }, []);
     const modeChange = useCallback((val: ViewMode) => {
       setViewMode(val);
-      if (val === ViewMode.Month) {
-        setColumnWidth(300);
-      } else if (val === ViewMode.Week) {
-        setColumnWidth(210);
-      } else if (val === ViewMode.Year) {
-        setColumnWidth(240);
-      } else if (val === ViewMode.Quarter) {
-        setColumnWidth(180);
-      } else {
-        setColumnWidth(60);
-      }
+      setColumnWidth(widthData[val] || 60);
     }, []);
 
     const handleDividerMouseDown = useCallback(

@@ -248,12 +248,7 @@ export const TaskGanttArrows: React.FC<TaskGanttContentProps> = ({
       ref={svg}
       key={task.id}
       onMouseMove={(event: any) => {
-        if (
-          ganttEvent.action === "move" ||
-          ganttEvent.action === "end" ||
-          ganttEvent.action === "start" ||
-          ganttEvent.action === "progress"
-        ) {
+        if (["move", "end", "start", "progress"].includes(ganttEvent.action)) {
           handleMouseMove(event);
         }
       }}
