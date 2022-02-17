@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   SyntheticEvent,
+  memo,
 } from "react";
 import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
@@ -98,4 +99,4 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
   );
 };
 
-export const TaskGantt = forwardRef(TaskGanttComponent);
+export const TaskGantt = memo(forwardRef(TaskGanttComponent));

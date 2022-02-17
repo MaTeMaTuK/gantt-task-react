@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 import { Modal } from "antd";
 import styles from "./gantt.module.css";
 interface ModaProps {
@@ -15,12 +15,12 @@ export const GuideModal: React.FC<ModaProps> = ({
   useEffect(() => {
     setModalVisible(visible);
   }, [visible]);
-  const toConfig = () => {
+  const toConfig = useCallback(() => {
     toPanel();
-  };
-  const handleCancel = () => {
+  }, [toPanel]);
+  const handleCancel = useCallback(() => {
     toCancel();
-  };
+  }, [toCancel]);
   return (
     <Modal
       closable={false}
@@ -41,4 +41,4 @@ export const GuideModal: React.FC<ModaProps> = ({
   );
 };
 
-export default GuideModal;
+export default memo(GuideModal);
