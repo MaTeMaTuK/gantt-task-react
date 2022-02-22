@@ -68,23 +68,26 @@ npm start
 
 ### EventOption
 
-| Parameter Name     | Type                                                        | Description                                                                             |
-| :----------------- | :---------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
-| onSelect           | (task: Task, isSelected: boolean) => void                   | Specifies the function to be executed on the taskbar select or unselect event.          |
-| onDoubleClick      | (task: Task) => void                                        | Specifies the function to be executed on the taskbar onDoubleClick event.               |
-| onDelete\*         | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed on the taskbar on Delete button press event.      |
-| onDateChange\*     | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar event on timeline has finished. |
-| onProgressChange\* | (task: Task) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar progress event has finished.    |
-| timeStep           | (task: Task) => number                                      | A time step value for onDateChange. Specify in milliseconds.                            |
+| Parameter Name     | Type                                                                          | Description                                                                             |
+| :----------------- | :---------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
+| onSelect           | (task: Task, isSelected: boolean) => void                                     | Specifies the function to be executed on the taskbar select or unselect event.          |
+| onDoubleClick      | (task: Task) => void                                                          | Specifies the function to be executed on the taskbar onDoubleClick event.               |
+| onDelete\*         | (task: Task) => void/boolean/Promise<void>/Promise<boolean>                   | Specifies the function to be executed on the taskbar on Delete button press event.      |
+| onDateChange\*     | (task: Task, children: Task[]) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar event on timeline has finished. |
+| onProgressChange\* | (task: Task, children: Task[]) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar progress event has finished.    |
+| onExpanderClick\*  | onExpanderClick: (task: Task) => void;                                        | Specifies the function to be executed on the table expander click                       |
+| timeStep           | number                                                                        | A time step value for onDateChange. Specify in milliseconds.                            |
 
-\* Chart undoes operation if method return false or error.
+\* Chart undoes operation if method return false or error. Parameter children returns one level deep records.
 
 ### DisplayOption
 
-| Parameter Name | Type   | Description                                                                                     |
-| :------------- | :----- | :---------------------------------------------------------------------------------------------- |
-| viewMode       | enum   | Specifies the time scale. Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month. |
-| locale         | string | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                        |
+| Parameter Name | Type    | Description                                                                                           |
+| :------------- | :------ | :---------------------------------------------------------------------------------------------------- |
+| viewMode       | enum    | Specifies the time scale. Hour, Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month. |
+| viewDate       | date    | Specifies display date and time for display.                                                          |
+| locale         | string  | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                              |
+| rtl            | boolean | Sets rtl mode.                                                                                        |
 
 ### StylingOption
 
@@ -134,6 +137,7 @@ npm start
 | isDisabled     | bool     | Disables all action for current task.                                                                 |
 | fontSize       | string   | Specifies the taskbar font size locally.                                                              |
 | project        | string   | Task project name                                                                                     |
+| hideChildren   | bool     | Hide children items. Parameter works with project type only                                           |
 
 \*Required
 

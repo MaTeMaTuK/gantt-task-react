@@ -26,6 +26,7 @@ export type TaskGanttContentProps = {
   arrowIndent: number;
   fontSize: string;
   fontFamily: string;
+  rtl: boolean;
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
@@ -45,6 +46,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   arrowIndent,
   fontFamily,
   fontSize,
+  rtl,
   setGanttEvent,
   setFailedTask,
   setSelectedTask,
@@ -85,7 +87,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         ganttEvent.changedTask,
         xStep,
         timeStep,
-        initEventX1Delta
+        initEventX1Delta,
+        rtl
       );
       if (isChanged) {
         setGanttEvent({ action: ganttEvent.action, changedTask });
@@ -108,7 +111,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         changedTask,
         xStep,
         timeStep,
-        initEventX1Delta
+        initEventX1Delta,
+        rtl
       );
 
       const isNotLikeOriginal =
@@ -130,7 +134,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         isNotLikeOriginal
       ) {
         try {
-          const result = await onDateChange(newChangedTask);
+          const result = await onDateChange(
+            newChangedTask,
+            newChangedTask.barChildren
+          );
           if (result !== undefined) {
             operationSuccess = result;
           }
@@ -139,7 +146,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         }
       } else if (onProgressChange && isNotLikeOriginal) {
         try {
-          const result = await onProgressChange(newChangedTask);
+          const result = await onProgressChange(
+            newChangedTask,
+            newChangedTask.barChildren
+          );
           if (result !== undefined) {
             operationSuccess = result;
           }
@@ -250,12 +260,13 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           return task.barChildren.map(child => {
             return (
               <Arrow
-                key={`Arrow from ${task.id} to ${tasks[child].id}`}
+                key={`Arrow from ${task.id} to ${tasks[child.index].id}`}
                 taskFrom={task}
-                taskTo={tasks[child]}
+                taskTo={tasks[child.index]}
                 rowHeight={rowHeight}
                 taskHeight={taskHeight}
                 arrowIndent={arrowIndent}
+                rtl={rtl}
               />
             );
           });
@@ -274,6 +285,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               onEventStart={handleBarEventStart}
               key={task.id}
               isSelected={!!selectedTask && task.id === selectedTask.id}
+              rtl={rtl}
             />
           );
         })}

@@ -1,4 +1,5 @@
 export enum ViewMode {
+  Hour = "Hour",
   QuarterDay = "Quarter Day",
   HalfDay = "Half Day",
   Day = "Day",
@@ -26,6 +27,8 @@ export interface Task {
   isDisabled?: boolean;
   project?: string;
   dependencies?: string[];
+  hideChildren?: boolean;
+  displayOrder?: number;
 }
 
 export interface EventOption {
@@ -45,26 +48,34 @@ export interface EventOption {
    * Invokes on end and start time change. Chart undoes operation if method return false or error.
    */
   onDateChange?: (
-    task: Task
+    task: Task,
+    children: Task[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Invokes on progress change. Chart undoes operation if method return false or error.
    */
   onProgressChange?: (
-    task: Task
+    task: Task,
+    children: Task[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Invokes on delete selected task. Chart undoes operation if method return false or error.
    */
   onDelete?: (task: Task) => void | boolean | Promise<void> | Promise<boolean>;
+  /**
+   * Invokes on expander on task list
+   */
+  onExpanderClick?: (task: Task) => void;
 }
 
 export interface DisplayOption {
   viewMode?: ViewMode;
+  viewDate?: Date;
   /**
    * Specifies the month name language. Able formats: ISO 639-2, Java Locale
    */
   locale?: string;
+  rtl?: boolean;
 }
 
 export interface StylingOption {
@@ -118,6 +129,7 @@ export interface StylingOption {
      * Sets selected task by id
      */
     setSelectedTask: (taskId: string) => void;
+    onExpanderClick: (task: Task) => void;
   }>;
 }
 
