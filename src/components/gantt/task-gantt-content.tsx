@@ -354,9 +354,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     const deleteConn = (conn: any) => {
       const currentLink = itemLinks.filter((ele: any) => {
         return (
-          ele.source.objectId === conn.sourceId &&
-          ele.destination.objectId === conn.targetId &&
-          ele.linkType.objectId === conn.getData()
+          ele.source?.objectId === conn?.sourceId &&
+          ele.destination?.objectId === conn?.targetId &&
+          ele.linkType?.objectId === conn.getData()
         );
       });
       if (currentLink.length) {
@@ -409,8 +409,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           }
           // 父卡片和子卡片不能相互连接，其他类型待定
           if (
-            (taskSource?.item?.subItem || []).includes(taskTarget.id) ||
-            (taskTarget?.item?.subItem || []).includes(taskSource.id)
+            (taskSource?.item?.subItem || []).includes(taskTarget?.id) ||
+            (taskTarget?.item?.subItem || []).includes(taskSource?.id)
           ) {
             message.warning("父子卡片之间不能存在关联关系");
             return;
@@ -422,9 +422,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           );
           const currentLink = itemLinks.filter((ele: any) => {
             return (
-              ele.source.objectId === conn.sourceId &&
-              ele.destination.objectId === conn.targetId &&
-              ele.linkType.objectId === linkTypeId
+              ele.source?.objectId === conn?.sourceId &&
+              ele.destination?.objectId === conn?.targetId &&
+              ele.linkType?.objectId === linkTypeId
             );
           });
           if (currentLink.length) {
@@ -462,8 +462,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             infor.connection.endpoints[1].anchor.cssClass
           );
           const params = {
-            source: infor.sourceId,
-            destination: infor.targetId,
+            source: infor?.sourceId,
+            destination: infor?.targetId,
             linkType: linkTypeId,
           };
           // init(infor.connection);
@@ -490,6 +490,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     ]);
 
     useEffect(() => {
+      console.log(itemLinks, "itemLinks");
       if (!itemLinks.length) {
         if (!isEqual(connectUuids, [])) {
           setConnectUuids([]);
@@ -500,29 +501,29 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
         tasks.forEach((task: any) => {
           // 找到需要连线的卡片
           const itemFilter = itemLinks?.filter((ele: any) => {
-            return ele.source.objectId === task.id;
+            return ele.source?.objectId === task?.id;
           });
           itemFilter.forEach((ele: any) => {
             let relationType = "";
             for (const key in ganttConfig.relation) {
-              if (ganttConfig.relation[key] === ele.linkType.objectId) {
+              if (ganttConfig.relation[key] === ele.linkType?.objectId) {
                 relationType = key;
                 continue;
               }
             }
             const isErrorLink = checkIsErrorLink(
               task,
-              ele.destination.objectId
+              ele.destination?.objectId
             );
             const isPivotalPathLink = checkIsPivotalPathLink(
               task,
-              ele.destination.objectId,
+              ele.destination?.objectId,
               tasks,
               relationType
             );
             newConnectUuids.push({
-              source: ele.source.objectId,
-              destination: ele.destination.objectId,
+              source: ele.source?.objectId,
+              destination: ele.destination?.objectId,
               relationType: relationType,
               isErrorLink: isErrorLink,
               isPivotalPathLink: isPivotalPathLink,
@@ -549,8 +550,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           } = uuidObj;
           if (source && destination && relationType) {
             const uuid = [
-              `${source}-${relationInit[relationType][0]}`,
-              `${destination}-${relationInit[relationType][1]}`,
+              `${source}-${relationInit[relationType]?.[0]}`,
+              `${destination}-${relationInit[relationType]?.[1]}`,
             ];
             const connect = jsPlumbInstance.connect({
               uuids: uuid,
