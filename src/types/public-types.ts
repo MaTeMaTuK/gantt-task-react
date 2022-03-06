@@ -76,6 +76,13 @@ export interface DisplayOption {
    */
   locale?: string;
   rtl?: boolean;
+  beforeRange?: number;
+  afterRange?: number;
+  headerTitle?: string;
+  headerStartTitle?: string;
+  headerEndTitle?: string;
+  isShowStartTime?: boolean;
+  isShowEndTime?: boolean;
 }
 
 export interface StylingOption {
@@ -106,6 +113,8 @@ export interface StylingOption {
   arrowColor?: string;
   arrowIndent?: number;
   todayColor?: string;
+  rightLabelColor?: string;
+  leftLabelColor?: string;
   TooltipContent?: React.FC<{
     task: Task;
     fontSize: string;

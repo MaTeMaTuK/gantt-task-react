@@ -29,6 +29,8 @@ export const TaskListTableDefault: React.FC<{
   locale: string;
   tasks: Task[];
   selectedTaskId: string;
+  isShowEndTime: boolean;
+  isShowStartTime: boolean;
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
 }> = ({
@@ -39,6 +41,8 @@ export const TaskListTableDefault: React.FC<{
   fontSize,
   locale,
   onExpanderClick,
+  isShowEndTime,
+  isShowStartTime
 }) => {
   const toLocaleDateString = useMemo(
     () => toLocaleDateStringFactory(locale),
@@ -89,7 +93,7 @@ export const TaskListTableDefault: React.FC<{
                 <div>{t.name}</div>
               </div>
             </div>
-            <div
+            {isShowStartTime && <div
               className={styles.taskListCell}
               style={{
                 minWidth: rowWidth,
@@ -98,7 +102,8 @@ export const TaskListTableDefault: React.FC<{
             >
               &nbsp;{toLocaleDateString(t.start, dateTimeOptions)}
             </div>
-            <div
+            }
+            {isShowEndTime && <div
               className={styles.taskListCell}
               style={{
                 minWidth: rowWidth,
@@ -107,6 +112,7 @@ export const TaskListTableDefault: React.FC<{
             >
               &nbsp;{toLocaleDateString(t.end, dateTimeOptions)}
             </div>
+            }
           </div>
         );
       })}

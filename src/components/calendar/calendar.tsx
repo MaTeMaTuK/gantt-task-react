@@ -4,7 +4,7 @@ import { TopPartOfCalendar } from "./top-part-of-calendar";
 import {
   getCachedDateTimeFormat,
   getDaysInMonth,
-  getLocalDayOfWeek,
+  // getLocalDayOfWeek,
   getLocaleMonth,
   getWeekNumberISO8601,
 } from "../../helpers/date-helper";
@@ -132,7 +132,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     const dates = dateSetup.dates;
     for (let i = 0; i < dates.length; i++) {
       const date = dates[i];
-      const bottomValue = `${getLocalDayOfWeek(date, locale, "short")}, ${date
+      const bottomValue = `${date
         .getDate()
         .toString()}`;
 
@@ -151,7 +151,6 @@ export const Calendar: React.FC<CalendarProps> = ({
         date.getMonth() !== dates[i + 1].getMonth()
       ) {
         const topValue = getLocaleMonth(date, locale);
-
         topValues.push(
           <TopPartOfCalendar
             key={topValue + date.getFullYear()}
@@ -197,11 +196,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         </text>
       );
       if (i === 0 || date.getDate() !== dates[i - 1].getDate()) {
-        const topValue = `${getLocalDayOfWeek(
-          date,
-          locale,
-          "short"
-        )}, ${date.getDate()} ${getLocaleMonth(date, locale)}`;
+        const topValue = `${date.getDate()} ${getLocaleMonth(date, locale)}`;
         topValues.push(
           <TopPartOfCalendar
             key={topValue + date.getFullYear()}
@@ -242,11 +237,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         </text>
       );
       if (i === 0 || date.getDate() !== dates[i - 1].getDate()) {
-        const topValue = `${getLocalDayOfWeek(
-          date,
-          locale,
-          "long"
-        )}, ${date.getDate()} ${getLocaleMonth(date, locale)}`;
+        const topValue = `${date.getDate()} ${getLocaleMonth(date, locale)}`;
         const topPosition = (date.getHours() - 24) / 2;
         topValues.push(
           <TopPartOfCalendar

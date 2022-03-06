@@ -23,8 +23,14 @@ import { DateSetup } from "../../types/date-setup";
 import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
+import todayTooltipStyles from '../other/tooltip.module.css'
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
+  headerTitle = '名称',
+  headerStartTitle = '开始时间',
+  headerEndTitle = '结束时间',
+  isShowStartTime = false,
+  isShowEndTime = false,
   tasks,
   headerHeight = 50,
   columnWidth = 60,
@@ -32,7 +38,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   rowHeight = 50,
   ganttHeight = 0,
   viewMode = ViewMode.Day,
-  locale = "en-GB",
+  locale = "zh-cn",
   barFill = 60,
   barCornerRadius = 3,
   barProgressColor = "#a3a3ff",
@@ -57,6 +63,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
+  beforeRange = -180,
+  afterRange = 180,
+  rightLabelColor = 'red',
+  leftLabelColor = 'red',
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -64,10 +74,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onSelect,
   onExpanderClick,
 }) => {
+  const [isShowTodayTooltip, setShowTodayTooltip] = useState(false)
+  const [toolTipX, setTooltipX] = useState(0)
+  // const [toolTipY, setTooltipY] = useState(0)
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
-    const [startDate, endDate] = ganttDateRange(tasks, viewMode);
+    const [startDate, endDate] = ganttDateRange(tasks, viewMode, beforeRange, afterRange);
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
   const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
@@ -96,6 +109,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [scrollX, setScrollX] = useState(-1);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
 
+  useEffect(() => {
+    // setScrollX(2300)
+  }, [])
+
   // task change events
   useEffect(() => {
     let filteredTasks: Task[];
@@ -105,7 +122,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       filteredTasks = tasks;
     }
     filteredTasks = filteredTasks.sort(sortTasks);
-    const [startDate, endDate] = ganttDateRange(filteredTasks, viewMode);
+    const [startDate, endDate] = ganttDateRange(filteredTasks, viewMode, beforeRange, afterRange);
     let newDates = seedDates(startDate, endDate, viewMode);
     if (rtl) {
       newDates = newDates.reverse();
@@ -288,6 +305,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     };
   }, [wrapperRef.current, scrollY, scrollX, ganttHeight, svgWidth, rtl]);
 
+  const handleTodayTooltip = (clientX:number, clientY:number) => {
+    console.log(clientX, clientY, 'nihao')
+    setShowTodayTooltip(true)
+    setTooltipX(clientX)
+    // setTooltipY(clientY)
+  }
+
+  const handleLeaveToday = () => {
+    setShowTodayTooltip(false)
+  }
+
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
       setScrollY(event.currentTarget.scrollTop);
@@ -296,10 +324,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
-    if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
-      setScrollX(event.currentTarget.scrollLeft);
-    }
-    setIgnoreScrollEvent(false);
+    requestAnimationFrame(() => {
+      if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
+        setScrollX(event.currentTarget.scrollLeft);
+      }
+      setIgnoreScrollEvent(false);
+    })
   };
 
   /**
@@ -379,6 +409,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     dates: dateSetup.dates,
     todayColor,
     rtl,
+    handleTodayTooltip,
+    handleLeaveToday,
+    type:dateSetup.viewMode
   };
   const calendarProps: CalendarProps = {
     dateSetup,
@@ -405,6 +438,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     arrowIndent,
     svgWidth,
     rtl,
+    rightLabelColor,
+    leftLabelColor,
     setGanttEvent,
     setFailedTask,
     setSelectedTask: handleSelectedTask,
@@ -415,6 +450,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   const tableProps: TaskListProps = {
+    headerTitle,
+    headerStartTitle,
+    headerEndTitle,
+    isShowStartTime,
+    isShowEndTime,
     rowHeight,
     rowWidth: listCellWidth,
     fontFamily,
@@ -449,6 +489,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           scrollY={scrollY}
           scrollX={scrollX}
         />
+        {
+          isShowTodayTooltip && (
+            <div className={todayTooltipStyles.todayTooltipDefaultContainer} style={{position:'absolute', left: `${toolTipX - 280}px`, top: '0px'}}>
+              <div className={todayTooltipStyles.todayTooltipText}>
+                今天
+              </div>
+            </div>
+          )
+        }
         {ganttEvent.changedTask && (
           <Tooltip
             arrowIndent={arrowIndent}

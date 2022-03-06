@@ -27,6 +27,8 @@ export type TaskGanttContentProps = {
   fontSize: string;
   fontFamily: string;
   rtl: boolean;
+  rightLabelColor: string;
+  leftLabelColor: string;
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
@@ -47,6 +49,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   fontFamily,
   fontSize,
   rtl,
+  rightLabelColor,
+  leftLabelColor,
   setGanttEvent,
   setFailedTask,
   setSelectedTask,
@@ -275,7 +279,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
         {tasks.map(task => {
           return (
-            <TaskItem
+              <TaskItem
               task={task}
               arrowIndent={arrowIndent}
               taskHeight={taskHeight}
@@ -286,6 +290,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               key={task.id}
               isSelected={!!selectedTask && task.id === selectedTask.id}
               rtl={rtl}
+              rightLabelColor={rightLabelColor}
+              leftLabelColor={leftLabelColor}
             />
           );
         })}
