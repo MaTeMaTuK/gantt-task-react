@@ -7,6 +7,7 @@ export type GanttContentMoveAction =
   | "delete"
   | "dblclick"
   | "select"
+  | 'click'
   | ""
   | BarMoveAction;
 

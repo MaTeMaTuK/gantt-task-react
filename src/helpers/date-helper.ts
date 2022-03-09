@@ -69,7 +69,7 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
   return newDate;
 };
 
-export const ganttDateRange = (tasks: Task[], viewMode: ViewMode, beforeRange: number, afterRanger:number) => {
+export const ganttDateRange = (tasks: Task[], viewMode: ViewMode | string, beforeRange: number, afterRanger:number) => {
   let newStartDate: Date = tasks[0].start;
   let newEndDate: Date = tasks[0].start;
   let beforeMonRange = 0;
@@ -128,7 +128,7 @@ export const ganttDateRange = (tasks: Task[], viewMode: ViewMode, beforeRange: n
 export const seedDates = (
   startDate: Date,
   endDate: Date,
-  viewMode: ViewMode
+  viewMode: ViewMode | string
 ) => {
   let currentDate: Date = new Date(startDate);
   const dates: Date[] = [currentDate];

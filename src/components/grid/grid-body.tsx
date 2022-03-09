@@ -15,6 +15,7 @@ export type GridBodyProps = {
   handleTodayTooltip: (clientX:number, clientY:number) => void;
   handleLeaveToday: () => void;
   type?: string;
+  todayLineColor?: string;
 };
 export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
@@ -23,6 +24,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   svgWidth,
   columnWidth,
   // todayColor,
+  todayLineColor,
   rtl,
   handleTodayTooltip,
   handleLeaveToday,
@@ -71,20 +73,32 @@ export const GridBody: React.FC<GridBodyProps> = ({
   let weeks: ReactChild[] = [];
   let todayLine: ReactChild = <line />
   let todayLineOffset:number = 0
+
+  const currentDayInWeek = now.getDay()
+  const currentHours = now.getHours()
+  const currentMinutes = now.getMinutes()
   switch(type) {
+    case ViewMode.Month:
+      todayLineOffset = columnWidth * now.getDate() / 31
+      break
+    case ViewMode.Week:
+      todayLineOffset = columnWidth * currentDayInWeek / 7
+      break
     case ViewMode.Day:
-      todayLineOffset = columnWidth/2
+      todayLineOffset = columnWidth * currentHours / 24
       break
     case ViewMode.HalfDay:
-      todayLineOffset = 0
+      todayLineOffset = columnWidth * (currentHours % 12) / 12
       break
     case ViewMode.QuarterDay:
-      todayLineOffset = 0
+      todayLineOffset = columnWidth * (currentHours % 6) / 6
+      break
+    case ViewMode.Hour:
+      todayLineOffset = columnWidth * currentMinutes / 60
       break
   }
   for (let i = 0; i < dates.length; i++) {
     const date = dates[i];
-    
     ticks.push(
       <line
         key={date.getTime()}
@@ -97,7 +111,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     );
     if (
       (i + 1 !== dates.length &&
-        date.getTime() < now.getTime() &&
+        date.getTime() <= now.getTime() &&
         dates[i + 1].getTime() >= now.getTime()) ||
       // if current date is last
       (i !== 0 &&
@@ -126,6 +140,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           y1 = '0'
           y2 = {y}
           className={styles.gridRowTodayLine}
+          style={{stroke:todayLineColor}}
         >
         </line>
       )
@@ -154,6 +169,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           y1 = '0'
           y2 = {y}
           className={styles.gridRowTodayLine}
+          style={{stroke:todayLineColor}}
         >
         </line>
       )
@@ -207,12 +223,12 @@ export const GridBody: React.FC<GridBodyProps> = ({
       <g className="ticks">{ticks}</g>
       {/* <g className="today">{today}</g> */}
       {isShowWeek && <g className="week">{weeks}</g>}
-      {isShowWeek && <g className="todayLine" 
+      <g className="todayLine" 
          onMouseOver={(e) => handleTodayTooltip(e.clientX, e.clientY)}
          onMouseLeave={() => handleLeaveToday()}
       >
         {todayLine}
-      </g>}
+      </g>
     </g>
   );
 };

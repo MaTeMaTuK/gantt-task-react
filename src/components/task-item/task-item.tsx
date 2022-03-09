@@ -135,6 +135,9 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       onFocus={() => {
         onEventStart("select", task);
       }}
+      onClick={(e) => {
+        onEventStart('click', task, e)
+      }}
     >
       {taskItem}
       {/* 左侧文字 */}

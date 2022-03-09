@@ -29,6 +29,8 @@ export interface Task {
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
+  rightLabel?: string;
+  leftLabel?: string;
 }
 
 export interface EventOption {
@@ -49,14 +51,14 @@ export interface EventOption {
    */
   onDateChange?: (
     task: Task,
-    children: Task[]
+    children?: Task[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Invokes on progress change. Chart undoes operation if method return false or error.
    */
   onProgressChange?: (
     task: Task,
-    children: Task[]
+    children?: Task[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Invokes on delete selected task. Chart undoes operation if method return false or error.
@@ -66,10 +68,11 @@ export interface EventOption {
    * Invokes on expander on task list
    */
   onExpanderClick?: (task: Task) => void;
+  onClick?: (task: Task) => void;
 }
 
 export interface DisplayOption {
-  viewMode?: ViewMode;
+  viewMode?: ViewMode | string;
   viewDate?: Date;
   /**
    * Specifies the month name language. Able formats: ISO 639-2, Java Locale
@@ -86,6 +89,7 @@ export interface DisplayOption {
 }
 
 export interface StylingOption {
+  todayLineColor?: string;
   headerHeight?: number;
   columnWidth?: number;
   listCellWidth?: string;

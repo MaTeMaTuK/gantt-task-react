@@ -58,6 +58,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onProgressChange,
   onDoubleClick,
   onDelete,
+  onClick
 }) => {
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
@@ -234,6 +235,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       }
     } else if (action === "dblclick") {
       !!onDoubleClick && onDoubleClick(task);
+    }
+    else if(action === 'click'){
+      !!onClick && onClick(task)
     }
     // Change task event start
     else if (action === "move") {

@@ -17,11 +17,6 @@
     stroke-opacity: 0.6;
 }
 
-.gridRowTodayLine:hover{
-  stroke: green;
-  cursor: pointer;
-}
-
 .gridTick {
   stroke: #e6e4e4;
 }

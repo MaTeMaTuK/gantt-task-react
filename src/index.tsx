@@ -7,3 +7,6 @@ export type {
   DisplayOption,
   EventOption,
 } from "./types/public-types";
+export type {
+  BarTask
+} from './types/bar-task'

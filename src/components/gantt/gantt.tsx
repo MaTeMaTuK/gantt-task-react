@@ -25,55 +25,58 @@ import { HorizontalScroll } from "../other/horizontal-scroll";
 import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
 import todayTooltipStyles from '../other/tooltip.module.css'
 
-export const Gantt: React.FunctionComponent<GanttProps> = ({
-  headerTitle = '名称',
-  headerStartTitle = '开始时间',
-  headerEndTitle = '结束时间',
-  isShowStartTime = false,
-  isShowEndTime = false,
-  tasks,
-  headerHeight = 50,
-  columnWidth = 60,
-  listCellWidth = "155px",
-  rowHeight = 50,
-  ganttHeight = 0,
-  viewMode = ViewMode.Day,
-  locale = "zh-cn",
-  barFill = 60,
-  barCornerRadius = 3,
-  barProgressColor = "#a3a3ff",
-  barProgressSelectedColor = "#8282f5",
-  barBackgroundColor = "#b8c2cc",
-  barBackgroundSelectedColor = "#aeb8c2",
-  projectProgressColor = "#7db59a",
-  projectProgressSelectedColor = "#59a985",
-  projectBackgroundColor = "#fac465",
-  projectBackgroundSelectedColor = "#f7bb53",
-  milestoneBackgroundColor = "#f1c453",
-  milestoneBackgroundSelectedColor = "#f29e4c",
-  rtl = false,
-  handleWidth = 8,
-  timeStep = 300000,
-  arrowColor = "grey",
-  fontFamily = "Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue",
-  fontSize = "14px",
-  arrowIndent = 20,
-  todayColor = "rgba(252, 248, 227, 0.5)",
-  viewDate,
-  TooltipContent = StandardTooltipContent,
-  TaskListHeader = TaskListHeaderDefault,
-  TaskListTable = TaskListTableDefault,
-  beforeRange = -180,
-  afterRange = 180,
-  rightLabelColor = 'red',
-  leftLabelColor = 'red',
-  onDateChange,
-  onProgressChange,
-  onDoubleClick,
-  onDelete,
-  onSelect,
-  onExpanderClick,
-}) => {
+export const Gantt: React.FunctionComponent<GanttProps> = (props) => {
+  const {
+    headerTitle = '名称',
+    headerStartTitle = '开始时间',
+    headerEndTitle = '结束时间',
+    isShowStartTime = false,
+    isShowEndTime = false,
+    tasks,
+    headerHeight = 50,
+    columnWidth = 60,
+    listCellWidth = "155px",
+    rowHeight = 50,
+    ganttHeight = 0,
+    viewMode = ViewMode.Day,
+    locale = "zh-cn",
+    barFill = 60,
+    barCornerRadius = 3,
+    barProgressColor = "#a3a3ff",
+    barProgressSelectedColor = "#8282f5",
+    barBackgroundColor = "#b8c2cc",
+    barBackgroundSelectedColor = "#aeb8c2",
+    projectProgressColor = "#7db59a",
+    projectProgressSelectedColor = "#59a985",
+    projectBackgroundColor = "#fac465",
+    projectBackgroundSelectedColor = "#f7bb53",
+    milestoneBackgroundColor = "#f1c453",
+    milestoneBackgroundSelectedColor = "#f29e4c",
+    rtl = false,
+    handleWidth = 8,
+    timeStep = 300000,
+    arrowColor = "grey",
+    fontFamily = "Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue",
+    fontSize = "14px",
+    arrowIndent = 20,
+    todayColor = "rgba(252, 248, 227, 0.5)",
+    viewDate,
+    TooltipContent = StandardTooltipContent,
+    TaskListHeader = TaskListHeaderDefault,
+    TaskListTable = TaskListTableDefault,
+    beforeRange = -180,
+    afterRange = 180,
+    rightLabelColor = 'red',
+    leftLabelColor = 'red',
+    todayLineColor = 'orange',
+    onDateChange,
+    onProgressChange,
+    onDoubleClick,
+    onDelete,
+    onSelect,
+    onExpanderClick,
+    onClick
+  } = {...props}
   const [isShowTodayTooltip, setShowTodayTooltip] = useState(false)
   const [toolTipX, setTooltipX] = useState(0)
   // const [toolTipY, setTooltipY] = useState(0)
@@ -110,8 +113,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
 
   useEffect(() => {
-    // setScrollX(2300)
-  }, [])
+    setCurrentViewDate(undefined)
+  }, [viewMode])
 
   // task change events
   useEffect(() => {
@@ -178,16 +181,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     if (
-      viewMode === dateSetup.viewMode &&
-      ((viewDate && !currentViewDate) ||
-        (viewDate && currentViewDate?.valueOf() !== viewDate.valueOf()))
+      viewMode === dateSetup.viewMode && 
+      (viewDate && !currentViewDate)
+      //  || (viewDate && currentViewDate?.valueOf() !== viewDate.valueOf()))
     ) {
       const dates = dateSetup.dates;
       const index = dates.findIndex(
-        (d, i) =>
-          viewDate.valueOf() >= d.valueOf() &&
+        (d, i) => {
+          return viewDate.valueOf() >= d.valueOf() &&
           i + 1 !== dates.length &&
           viewDate.valueOf() < dates[i + 1].valueOf()
+        }
       );
       if (index === -1) {
         return;
@@ -288,14 +292,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           event.preventDefault();
         }
       }
-
-      setIgnoreScrollEvent(true);
+      event.preventDefault();
+      setIgnoreScrollEvent(false);
     };
 
     // subscribe if scroll is necessary
     if (wrapperRef.current) {
       wrapperRef.current.addEventListener("wheel", handleWheel, {
-        passive: false,
+        passive:false
       });
     }
     return () => {
@@ -306,7 +310,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   }, [wrapperRef.current, scrollY, scrollX, ganttHeight, svgWidth, rtl]);
 
   const handleTodayTooltip = (clientX:number, clientY:number) => {
-    console.log(clientX, clientY, 'nihao')
+    console.log(clientX, clientY)
     setShowTodayTooltip(true)
     setTooltipX(clientX)
     // setTooltipY(clientY)
@@ -324,12 +328,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
-    requestAnimationFrame(() => {
-      if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
-        setScrollX(event.currentTarget.scrollLeft);
+      if (scrollX !== event.currentTarget?.scrollLeft && !ignoreScrollEvent) {
+        setScrollX(event.currentTarget?.scrollLeft);
       }
       setIgnoreScrollEvent(false);
-    })
   };
 
   /**
@@ -411,7 +413,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     rtl,
     handleTodayTooltip,
     handleLeaveToday,
-    type:dateSetup.viewMode
+    type:dateSetup.viewMode,
+    todayLineColor
   };
   const calendarProps: CalendarProps = {
     dateSetup,
@@ -447,8 +450,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onProgressChange,
     onDoubleClick,
     onDelete,
+    onClick
   };
-
   const tableProps: TaskListProps = {
     headerTitle,
     headerStartTitle,

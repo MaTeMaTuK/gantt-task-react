@@ -14,7 +14,7 @@ import styles from "./calendar.module.css";
 export type CalendarProps = {
   dateSetup: DateSetup;
   locale: string;
-  viewMode: ViewMode;
+  viewMode: ViewMode | string;
   rtl: boolean;
   headerHeight: number;
   columnWidth: number;
@@ -182,8 +182,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       const date = dates[i];
       const bottomValue = getCachedDateTimeFormat(locale, {
         hour: "numeric",
-      }).format(date);
-
+      }).format(date).slice(0, -1)
       bottomValues.push(
         <text
           key={date.getTime()}
@@ -223,7 +222,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       const date = dates[i];
       const bottomValue = getCachedDateTimeFormat(locale, {
         hour: "numeric",
-      }).format(date);
+      }).format(date).slice(0, -1)
 
       bottomValues.push(
         <text
