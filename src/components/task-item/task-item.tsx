@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BarTask } from "../../types/bar-task";
 import { GanttContentMoveAction } from "../../types/gantt-task-actions";
+import { ViewMode } from "../../types/public-types";
 import { Bar } from "./bar/bar";
 import { BarSmall } from "./bar/bar-small";
 import { Milestone } from "./milestone/milestone";
@@ -8,6 +9,8 @@ import { Project } from "./project/project";
 import style from "./task-list.module.css";
 
 export type TaskItemProps = {
+  columnWidth: number;
+  viewMode: ViewMode | string;
   task: BarTask;
   arrowIndent: number;
   taskHeight: number;
@@ -39,11 +42,17 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
   } = {
     ...props,
   };
+  // const [newProps, setNewProps] = useState(props)
+  const wrapperRef = useRef<SVGAElement>(null)
   const textRef = useRef<SVGTextElement>(null);
   const rightTextRef = useRef<SVGTextElement>(null);
   const leftTextRef = useRef<SVGTextElement>(null);
   const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
   const [isTextInside, setIsTextInside] = useState(true);
+  const [beforeX, setBeforeX] = useState<undefined | number>(undefined)
+  const [beforeY, setBeforeY] = useState<undefined | number>(undefined)
+  const [afterX, setAfterX] = useState<undefined | number>(undefined)
+  const [afterY, setAfterY] = useState<undefined | number>(undefined)
 
   useEffect(() => {
     switch (task.typeInternal) {
@@ -112,8 +121,19 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       return task.x1 - 20
     }
   };
+
+  wrapperRef.current?.addEventListener('mousedown', (e) => {
+    setBeforeX(e.offsetX)
+    setBeforeY(e.offsetY)
+  })
+
+  wrapperRef.current?.addEventListener('mouseup', (e) => {
+    setAfterX(e.offsetX)
+    setAfterY(e.offsetY)
+  })
   return (
     <g
+      ref={wrapperRef}
       onKeyDown={e => {
         switch (e.key) {
           case "Delete": {
@@ -136,7 +156,9 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         onEventStart("select", task);
       }}
       onClick={(e) => {
-        onEventStart('click', task, e)
+        if(beforeX === afterX && beforeY === afterY){
+          onEventStart('click', task, e)
+        }
       }}
     >
       {taskItem}

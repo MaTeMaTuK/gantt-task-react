@@ -153,7 +153,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = (props) => {
         projectBackgroundColor,
         projectBackgroundSelectedColor,
         milestoneBackgroundColor,
-        milestoneBackgroundSelectedColor
+        milestoneBackgroundSelectedColor,
+        viewMode
       )
     );
   }, [
@@ -309,11 +310,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = (props) => {
     };
   }, [wrapperRef.current, scrollY, scrollX, ganttHeight, svgWidth, rtl]);
 
-  const handleTodayTooltip = (clientX:number, clientY:number) => {
-    console.log(clientX, clientY)
+  const handleTodayTooltip = (clientX:number) => {
     setShowTodayTooltip(true)
     setTooltipX(clientX)
-    // setTooltipY(clientY)
   }
 
   const handleLeaveToday = () => {
@@ -427,6 +426,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = (props) => {
     rtl,
   };
   const barProps: TaskGanttContentProps = {
+    viewMode,
     tasks: barTasks,
     dates: dateSetup.dates,
     ganttEvent,

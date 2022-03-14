@@ -82,7 +82,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
       todayLineOffset = columnWidth * now.getDate() / 31
       break
     case ViewMode.Week:
-      todayLineOffset = columnWidth * currentDayInWeek / 7
+      todayLineOffset = columnWidth * (currentDayInWeek + 6) / 7
       break
     case ViewMode.Day:
       todayLineOffset = columnWidth * currentHours / 24
@@ -101,7 +101,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     const date = dates[i];
     ticks.push(
       <line
-        key={date.getTime()}
+        key={date.valueOf()}
         x1={tickX}
         y1={0}
         x2={tickX}
@@ -112,7 +112,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     if (
       (i + 1 !== dates.length &&
         date.getTime() <= now.getTime() &&
-        dates[i + 1].getTime() >= now.getTime()) ||
+        dates[i + 1].getTime() > now.getTime()) ||
       // if current date is last
       (i !== 0 &&
         i + 1 === dates.length &&
@@ -132,7 +132,6 @@ export const GridBody: React.FC<GridBodyProps> = ({
       //     fill={todayColor}
       //   />
       // );
-
       todayLine = (
         <line 
           x1={tickX + todayLineOffset}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { EventOption } from "../../types/public-types";
+import { EventOption, ViewMode } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
@@ -12,6 +12,7 @@ import {
 } from "../../types/gantt-task-actions";
 
 export type TaskGanttContentProps = {
+  viewMode: ViewMode | string,
   tasks: BarTask[];
   dates: Date[];
   ganttEvent: GanttEvent;
@@ -35,6 +36,7 @@ export type TaskGanttContentProps = {
 } & EventOption;
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
+  viewMode,
   tasks,
   dates,
   ganttEvent,
@@ -284,6 +286,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         {tasks.map(task => {
           return (
               <TaskItem
+              columnWidth={columnWidth}
+              viewMode={viewMode}
               task={task}
               arrowIndent={arrowIndent}
               taskHeight={taskHeight}

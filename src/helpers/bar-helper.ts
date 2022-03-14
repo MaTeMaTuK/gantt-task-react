@@ -1,4 +1,4 @@
-import { Task } from "../types/public-types";
+import { Task, ViewMode } from "../types/public-types";
 import { BarTask, TaskTypeInternal } from "../types/bar-task";
 import { BarMoveAction } from "../types/gantt-task-actions";
 
@@ -20,7 +20,8 @@ export const convertToBarTasks = (
   projectBackgroundColor: string,
   projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
-  milestoneBackgroundSelectedColor: string
+  milestoneBackgroundSelectedColor: string,
+  viewMode: ViewMode | string
 ) => {
   const dateDelta =
     dates[1].getTime() -
@@ -48,7 +49,8 @@ export const convertToBarTasks = (
       projectBackgroundColor,
       projectBackgroundSelectedColor,
       milestoneBackgroundColor,
-      milestoneBackgroundSelectedColor
+      milestoneBackgroundSelectedColor,
+      viewMode
     );
   });
 
@@ -87,7 +89,8 @@ const convertToBarTask = (
   projectBackgroundColor: string,
   projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
-  milestoneBackgroundSelectedColor: string
+  milestoneBackgroundSelectedColor: string,
+  viewMode: ViewMode | string
 ): BarTask => {
   let barTask: BarTask;
   switch (task.type) {
@@ -121,7 +124,8 @@ const convertToBarTask = (
         projectProgressColor,
         projectProgressSelectedColor,
         projectBackgroundColor,
-        projectBackgroundSelectedColor
+        projectBackgroundSelectedColor,
+        viewMode,
       );
       break;
     default:
@@ -139,7 +143,8 @@ const convertToBarTask = (
         barProgressColor,
         barProgressSelectedColor,
         barBackgroundColor,
-        barBackgroundSelectedColor
+        barBackgroundSelectedColor,
+        viewMode
       );
       break;
   }
@@ -160,16 +165,38 @@ const convertToBar = (
   barProgressColor: string,
   barProgressSelectedColor: string,
   barBackgroundColor: string,
-  barBackgroundSelectedColor: string
+  barBackgroundSelectedColor: string,
+  viewMode: ViewMode | string
 ): BarTask => {
+  const currentMonthDays = (() => {
+    var date = new Date();
+    var month = date.getMonth()+1;   //月份从0开始获取，所以需要加1
+    var year = date.getFullYear();
+ 
+    var lastDay = new Date(year,month,0);    
+    var days = lastDay.getDate(); 
+    return days
+  })()
   let x1: number;
   let x2: number;
   if (rtl) {
     x2 = taskXCoordinateRTL(task.start, dates, dateDelta, columnWidth);
     x1 = taskXCoordinateRTL(task.end, dates, dateDelta, columnWidth);
   } else {
-    x1 = taskXCoordinate(task.start, dates, dateDelta, columnWidth);
-    x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
+    switch(viewMode){
+      case ViewMode.Week:
+        x1 = taskXCoordinate(task.start, dates, dateDelta, columnWidth) + 2 / 7 * columnWidth
+        x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth) + 2 / 7 * columnWidth
+        break
+      case ViewMode.Month:
+        x1 = taskXCoordinate(task.start, dates, dateDelta, columnWidth) + 1 / currentMonthDays * columnWidth
+        x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth) + 1 / currentMonthDays * columnWidth
+        break
+      default:
+        x1 = taskXCoordinate(task.start, dates, dateDelta, columnWidth)
+        x2 = taskXCoordinate(task.end, dates, dateDelta, columnWidth)
+        break
+    }
   }
   let typeInternal: TaskTypeInternal = task.type;
   if (typeInternal === "task" && x2 - x1 < handleWidth * 2) {
@@ -262,7 +289,7 @@ const taskXCoordinate = (
   xDate: Date,
   dates: Date[],
   dateDelta: number,
-  columnWidth: number
+  columnWidth: number,
 ) => {
   const index = ~~(
     (xDate.getTime() -
