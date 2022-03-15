@@ -18,7 +18,7 @@ export const BarSmall: React.FC<TaskItemProps> = ({
     task.height
   );
   return (
-    <g className={styles.barWrapper} tabIndex={0}>
+    <g className={styles.barWrapper} tabIndex={0} key="bar-small-wrapper">
       <BarDisplay
         x={task.x1}
         y={task.y}
@@ -33,7 +33,7 @@ export const BarSmall: React.FC<TaskItemProps> = ({
           isDateChangeable && onEventStart("move", task, e);
         }}
       />
-      <g className="handleGroup">
+      <g className="handleGroup" key="small-handleGroup">
         {isProgressChangeable && (
           <BarProgressHandle
             progressPoint={progressPoint}

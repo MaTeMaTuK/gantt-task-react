@@ -29,7 +29,7 @@ export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
   ].join(",");
 
   return (
-    <g tabIndex={0} className={styles.projectWrapper}>
+    <g tabIndex={0} className={styles.projectWrapper} key="projectWrapper">
       <rect
         fill={barColor}
         x={task.x1}

@@ -216,13 +216,14 @@ export const GridBody: React.FC<GridBodyProps> = ({
   }
   const isShowWeek = type === ViewMode.Day || type === ViewMode.HalfDay || type === ViewMode.QuarterDay
   return (
-    <g className="gridBody">
-      <g className="rows">{gridRows}</g>
-      <g className="rowLines">{rowLines}</g>
-      <g className="ticks">{ticks}</g>
+    <g className="gridBody" key="gridBody">
+      <g className="rows" key="rows">{gridRows}</g>
+      <g className="rowLines" key="rowLines">{rowLines}</g>
+      <g className="ticks" key="ticks">{ticks}</g>
       {/* <g className="today">{today}</g> */}
-      {isShowWeek && <g className="week">{weeks}</g>}
+      {isShowWeek && <g className="week" key="week">{weeks}</g>}
       <g className="todayLine" 
+         key="todayLine"
          onMouseOver={(e) => handleTodayTooltip(e.clientX, e.clientY)}
          onMouseLeave={() => handleLeaveToday()}
       >
