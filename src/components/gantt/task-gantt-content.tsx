@@ -490,7 +490,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     ]);
 
     useEffect(() => {
-      console.log(itemLinks, "itemLinks");
       if (!itemLinks.length) {
         if (!isEqual(connectUuids, [])) {
           setConnectUuids([]);

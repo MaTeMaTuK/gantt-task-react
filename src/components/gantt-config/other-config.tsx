@@ -17,7 +17,7 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
       setChecked(otherConfig?.autoPatch);
       form.setFieldsValue({ autoPatch: otherConfig?.autoPatch });
     }
-  }, [currentTab]);
+  }, [currentTab, form, otherConfig?.autoPatch]);
   const onFinish = (values: OtherConfigProps) => {
     configHandle({
       ...ganttConfig,

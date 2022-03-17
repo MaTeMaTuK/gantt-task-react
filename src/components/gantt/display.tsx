@@ -7,64 +7,58 @@ interface DisplayProps {
   configHandle?: (value: GanttConfigProps) => void;
   visibleChange?: (value: GanttConfigProps) => void;
 }
-const Panel: React.FC<DisplayProps> = ({ ganttConfig, visibleChange }) => {
-  const [config, setConfig] = useState<any>({});
-  useEffect(() => {
-    setConfig(ganttConfig);
-  }, [ganttConfig]);
-  const handleChange = (value: boolean, type: string) => {
-    setConfig({
-      ...config,
-      otherConfig: { ...config.otherConfig, [type]: value },
-    });
-    visibleChange?.({
-      ...config,
-      otherConfig: { ...config.otherConfig, [type]: value },
-    });
-  };
-  return (
-    <div className={styles.displayPopover}>
-      <Row className={styles.displayRow}>
-        <Col span={14}>关键路径</Col>
-        <Col span={10} className={styles.textAlignR}>
-          <Switch
-            onChange={checked => handleChange(checked, "pivotalPath")}
-            checked={config?.otherConfig?.pivotalPath}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={14}>逾期的事项</Col>
-        <Col span={10} className={styles.textAlignR}>
-          <Switch
-            onChange={checked => handleChange(checked, "overdue")}
-            checked={config?.otherConfig?.overdue}
-          />
-        </Col>
-      </Row>
-    </div>
-  );
-};
 export const Display: React.FC<DisplayProps> = ({
   ganttConfig,
   configHandle,
 }) => {
-  const [currentValue, setCurrentValue] = useState<any>(ganttConfig);
+  const [currentValue, setCurrentValue] = useState<any>(null);
+  useEffect(() => {
+    setCurrentValue({ ...ganttConfig, isChanged: false });
+  }, [ganttConfig]);
   const handleVisibleChange = useCallback(
     (value: boolean) => {
-      if (!value) {
+      // 如果配置没变 不触发修改配置接口
+      if (!value && currentValue?.isChanged) {
         configHandle?.(currentValue);
       }
     },
     [configHandle, currentValue]
   );
-
+  const handleChange = (value: boolean, type: string) => {
+    setCurrentValue({
+      ...currentValue,
+      otherConfig: { ...currentValue.otherConfig, [type]: value },
+      isChanged: true,
+    });
+  };
+  const content = () => {
+    return (
+      <div className={styles.displayPopover}>
+        <Row className={styles.displayRow}>
+          <Col span={14}>关键路径</Col>
+          <Col span={10} className={styles.textAlignR}>
+            <Switch
+              onChange={checked => handleChange(checked, "pivotalPath")}
+              checked={currentValue?.otherConfig?.pivotalPath}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={14}>逾期的事项</Col>
+          <Col span={10} className={styles.textAlignR}>
+            <Switch
+              onChange={checked => handleChange(checked, "overdue")}
+              checked={currentValue?.otherConfig?.overdue}
+            />
+          </Col>
+        </Row>
+      </div>
+    );
+  };
   return (
     <Popover
       placement="bottomRight"
-      content={
-        <Panel ganttConfig={ganttConfig} visibleChange={setCurrentValue} />
-      }
+      content={content}
       trigger="click"
       onVisibleChange={handleVisibleChange}
     >

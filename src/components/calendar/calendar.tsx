@@ -36,7 +36,11 @@ export const Calendar: React.FC<CalendarProps> = memo(
                 ? date.getTime()
                 : bottomValue + date.getFullYear()
             }
-            y={headerHeight * 0.6}
+            y={
+              ["Day", "Week"].includes(type)
+                ? headerHeight * 0.6 + 6
+                : headerHeight * 0.6
+            }
             x={columnWidth * i + columnWidth * 0.5}
             className={styles.calendarBottomText}
           >
@@ -143,10 +147,10 @@ export const Calendar: React.FC<CalendarProps> = memo(
         let topValue = "";
         if (i === 0 || date.getMonth() !== dates[i - 1].getMonth()) {
           // top
-          topValue = `${date.getFullYear()}.${date.getMonth() + 1}`;
+          topValue = `${date.getFullYear()}年${date.getMonth() + 1}月`;
         }
         // bottom
-        const bottomValue = `W${getWeekNumberISO8601(date)}`;
+        const bottomValue = `第${getWeekNumberISO8601(date)}周`;
 
         bottomValues.push(
           bottomValuesInit(bottomValue, date, headerHeight, i, "Week")
@@ -163,7 +167,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
                 y1Line={0}
                 y2Line={topDefaultHeight}
                 xText={columnWidth * i + columnWidth * weeksCount * 0.5}
-                yText={topDefaultHeight * 0.9}
+                yText={topDefaultHeight * 0.9 - 4}
               />
             );
           }
@@ -200,7 +204,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
               y1Line={0}
               y2Line={topDefaultHeight}
               xText={columnWidth * (i + 1) - date.getDate() * columnWidth * 0.5}
-              yText={topDefaultHeight * 0.9}
+              yText={topDefaultHeight * 0.9 - 4}
             />
           );
         }
