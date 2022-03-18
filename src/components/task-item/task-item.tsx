@@ -184,7 +184,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         }
         ref={textRef}
       >
-        {task.name}
+        {task.title || task.name}
       </text>
       {/* 右侧文字 */}
        {/* task.rightLabel &&  */}

@@ -31,6 +31,7 @@ export interface Task {
   displayOrder?: number;
   rightLabel?: string;
   leftLabel?: string;
+  title?: string;
 }
 
 export interface EventOption {
