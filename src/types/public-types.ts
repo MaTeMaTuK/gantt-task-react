@@ -32,6 +32,7 @@ export interface Task {
   rightLabel?: string;
   leftLabel?: string;
   title?: string;
+  isShowTableTooltip?: boolean;
 }
 
 export interface EventOption {

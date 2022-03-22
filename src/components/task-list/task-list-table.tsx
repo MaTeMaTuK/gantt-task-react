@@ -1,19 +1,20 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./task-list-table.module.css";
 import { Task } from "../../types/public-types";
+import cloneDeep from 'lodash/cloneDeep'
 
 const localeDateStringCache = {};
 const toLocaleDateStringFactory =
   (locale: string) =>
-  (date: Date, dateTimeOptions: Intl.DateTimeFormatOptions) => {
-    const key = date.toString();
-    let lds = localeDateStringCache[key];
-    if (!lds) {
-      lds = date.toLocaleDateString(locale, dateTimeOptions);
-      localeDateStringCache[key] = lds;
-    }
-    return lds;
-  };
+    (date: Date, dateTimeOptions: Intl.DateTimeFormatOptions) => {
+      const key = date.toString();
+      let lds = localeDateStringCache[key];
+      if (!lds) {
+        lds = date.toLocaleDateString(locale, dateTimeOptions);
+        localeDateStringCache[key] = lds;
+      }
+      return lds;
+    };
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
   weekday: "short",
   year: "numeric",
@@ -44,78 +45,101 @@ export const TaskListTableDefault: React.FC<{
   isShowEndTime,
   isShowStartTime
 }) => {
-  const toLocaleDateString = useMemo(
-    () => toLocaleDateStringFactory(locale),
-    [locale]
-  );
+    const _tasks = cloneDeep(tasks)
+    const [currentTask, setCurrentTask] = useState(_tasks)
+    useEffect(()=>{
+      setCurrentTask(tasks)
+    }, [tasks])
+    const toLocaleDateString = useMemo(
+      () => toLocaleDateStringFactory(locale),
+      [locale]
+    );
+    const handleMouseOver = (index:number) => {
+      const arr = _tasks.map((item, i) => {
+        return i === index ? {...item, isShowTableTooltip:true} : {...item}
+      })
+      setCurrentTask(arr)
+    }
+    const handleMouseLeave = () => {
+      setCurrentTask(_tasks) 
+    }
+    return (
+      <div
+        className={styles.taskListWrapper}
+        style={{
+          fontFamily: fontFamily,
+          fontSize: fontSize,
+        }}
+      >
+        {currentTask.map((t, index) => {
+          let expanderSymbol = "";
+          if (t.hideChildren === false) {
+            expanderSymbol = "▼";
+          } else if (t.hideChildren === true) {
+            expanderSymbol = "▶";
+          }
 
-  return (
-    <div
-      className={styles.taskListWrapper}
-      style={{
-        fontFamily: fontFamily,
-        fontSize: fontSize,
-      }}
-    >
-      {tasks.map(t => {
-        let expanderSymbol = "";
-        if (t.hideChildren === false) {
-          expanderSymbol = "▼";
-        } else if (t.hideChildren === true) {
-          expanderSymbol = "▶";
-        }
-
-        return (
-          <div
-            className={styles.taskListTableRow}
-            style={{ height: rowHeight }}
-            key={`${t.id}row`}
-          >
+          return (
             <div
-              className={styles.taskListCell}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-              title={t.name}
+              className={styles.taskListTableRow}
+              style={{ height: rowHeight }}
+              key={`${t.id}row`}
             >
-              <div className={styles.taskListNameWrapper}>
-                <div
-                  className={
-                    expanderSymbol
-                      ? styles.taskListExpander
-                      : styles.taskListEmptyExpander
-                  }
-                  onClick={() => onExpanderClick(t)}
-                >
-                  {expanderSymbol}
+              <div
+                className={styles.taskListCell}
+                style={{
+                  minWidth: rowWidth,
+                  maxWidth: rowWidth,
+                }}
+              >
+                <div className={styles.taskListNameWrapper}>
+                  <div
+                    className={
+                      expanderSymbol
+                        ? styles.taskListExpander
+                        : styles.taskListEmptyExpander
+                    }
+                    onClick={() => onExpanderClick(t)}
+                  >
+                    {expanderSymbol}
+                  </div>
+                  <div onMouseOver={() => handleMouseOver(index)} onMouseLeave={() => handleMouseLeave()}>
+                    <span style={{width:'2px', height:'2px', borderRadius:'50%', color:'#000'}}></span>
+                    {t.name}
+                  </div>
                 </div>
-                <div>{t.name}</div>
               </div>
+              {
+              t?.isShowTableTooltip && 
+              <div className={styles.tooltipDefaultContainer} style={{top:`${index * rowHeight}px`}}>
+                <div className={styles.tooltipText}>
+                  {t.name}
+                </div>
+              </div>
+              }
+              {isShowStartTime && <div
+                className={styles.taskListCell}
+                style={{
+                  minWidth: rowWidth,
+                  maxWidth: rowWidth,
+                }}
+              >
+                &nbsp;{toLocaleDateString(t.start, dateTimeOptions)}
+              </div>
+              }
+              {isShowEndTime && <div
+                className={styles.taskListCell}
+                style={{
+                  minWidth: rowWidth,
+                  maxWidth: rowWidth,
+                }}
+              >
+                &nbsp;{toLocaleDateString(t.end, dateTimeOptions)}
+              </div>
+              }
             </div>
-            {isShowStartTime && <div
-              className={styles.taskListCell}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-            >
-              &nbsp;{toLocaleDateString(t.start, dateTimeOptions)}
-            </div>
-            }
-            {isShowEndTime && <div
-              className={styles.taskListCell}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-            >
-              &nbsp;{toLocaleDateString(t.end, dateTimeOptions)}
-            </div>
-            }
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+          );
+        })}
+      </div>
+    );
+  };

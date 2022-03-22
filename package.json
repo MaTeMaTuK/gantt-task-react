@@ -74,5 +74,9 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "@types/lodash": "^4.14.180",
+    "lodash": "^4.17.21"
+  }
 }
