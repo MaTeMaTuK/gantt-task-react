@@ -103,8 +103,7 @@ export const TaskListTableDefault: React.FC<{
                   >
                     {expanderSymbol}
                   </div>
-                  <div onMouseOver={() => handleMouseOver(index)} onMouseLeave={() => handleMouseLeave()}>
-                    <span style={{width:'2px', height:'2px', borderRadius:'50%', color:'#000'}}></span>
+                  <div style={expanderSymbol ? {} : {margin:'0 1rem'}} onMouseOver={() => handleMouseOver(index)} onMouseLeave={() => handleMouseLeave()}>
                     {t.name}
                   </div>
                 </div>
