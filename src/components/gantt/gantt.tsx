@@ -32,7 +32,9 @@ import { Button } from "antd";
 import GanttHeader from "./gantt-header";
 import ArrowIcon from "../icons/arrow";
 import utils from "../../helpers/utils";
+import { scrollBarHeight } from "../../helpers/dicts";
 import "./gantt.css";
+
 import {
   GanttConfigContext,
   ConfigHandleContext,
@@ -123,6 +125,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
     const [svgContainerHeight, setSvgContainerHeight] = useState(ganttHeight);
     const [barTasks, setBarTasks] = useState<BarTask[]>([]);
     const [logTasks, setLogTasks] = useState<BarTask[]>([]);
+    // 定义列表是否有横向滚动条，以适配甘特图的横向滚动条
+    const [isTableScrollX, setIsTableScrollX] = useState(true);
     const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
       action: "",
     });
@@ -373,13 +377,23 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
           event.stopPropagation();
           if (event.deltaY !== 0) {
             // Y轴滚动处理
+            // 判断列表是否有横向滚动条
+            const isScroll =
+              eleListTableBodyRef?.current?.clientWidth !==
+              eleListTableBodyRef.current.scrollWidth;
+            setIsTableScrollX(isScroll);
             const max = ganttFullHeight - ganttHeight;
             const scrollY = refScrollY.current;
             let newScrollY = scrollY + event.deltaY;
             if (newScrollY < 0) {
               newScrollY = 0;
             } else if (newScrollY > max) {
-              newScrollY = max;
+              if (isTableScrollX) {
+                // 16为横向滚动条的高度
+                newScrollY = max + scrollBarHeight;
+              } else {
+                newScrollY = max;
+              }
             }
             refScrollY.current = newScrollY;
             setElementsScrollY();
@@ -394,6 +408,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
         setElementsScrollX,
         setElementsScrollY,
         svgWidth,
+        isTableScrollX,
       ]
     );
 
@@ -729,6 +744,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
         const handleMouseUp = () => {
           window.removeEventListener("mousemove", handleMouseMove);
           window.removeEventListener("mouseup", handleMouseUp);
+          const isScroll =
+            eleListTableBodyRef?.current?.clientWidth !==
+            eleListTableBodyRef.current.scrollWidth;
+          setIsTableScrollX(isScroll);
         };
         dividerPositionRef.current.left = event.clientX;
         window.addEventListener("mousemove", handleMouseMove);
@@ -914,7 +933,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
             {tasks.length > 0 && (
               <HorizontalScroll
                 ref={horizontalScrollContainerRef}
-                listBottomHeight={listBottomHeight}
+                listBottomHeight={
+                  isTableScrollX
+                    ? listBottomHeight
+                    : listBottomHeight - scrollBarHeight
+                }
                 svgWidth={svgWidth}
                 taskListWidth={taskListWidth}
                 onScroll={handleScrollX}

@@ -9,6 +9,8 @@ import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
 import { TaskGanttArrows } from "./task-gantt-arrows";
+import { scrollBarHeight } from "../../helpers/dicts";
+
 import styles from "./gantt.module.css";
 
 export type TaskGanttProps = {
@@ -32,9 +34,6 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
   const newBarProps = { ...barProps, svg: ganttSVGRef };
-
-  // const [scrollLeft, setScrollLeft] = useState(0);
-
   useImperativeHandle(ref, () => ({
     horizontalContainerRef: horizontalContainerRef.current,
     verticalGanttContainerRef: verticalGanttContainerRef.current,
@@ -67,7 +66,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
           height={
             barProps.rowHeight * barProps.tasks.length < Number(taskListHieght)
               ? taskListHieght
-              : barProps.rowHeight * barProps.tasks.length
+              : barProps.rowHeight * barProps.tasks.length + scrollBarHeight
           }
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
