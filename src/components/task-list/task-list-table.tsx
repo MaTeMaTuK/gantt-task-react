@@ -92,7 +92,7 @@ export const TaskListTableDefault: React.FC<{
                   maxWidth: rowWidth,
                 }}
               >
-                <div className={styles.taskListNameWrapper}>
+                <div className={styles.taskListNameWrapper} style={expanderSymbol ? {}:{marginLeft:'10px'}}>
                   <div
                     className={
                       expanderSymbol
