@@ -23,6 +23,7 @@
 .taskListNameWrapper {
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .taskListExpander {
