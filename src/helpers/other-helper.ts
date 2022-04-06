@@ -1,6 +1,14 @@
 import { BarTask } from "../types/bar-task";
 import { Task } from "../types/public-types";
 
+interface Assignee {
+  enabled: boolean;
+  label: string;
+  nickname: string;
+  username: string;
+  value: string;
+}
+
 export function isKeyboardEvent(
   event: React.MouseEvent | React.KeyboardEvent | React.FocusEvent
 ): event is React.KeyboardEvent {
@@ -29,3 +37,17 @@ export function isLeapYear(year: number) {
 export function getQuarter(currMonth: number) {
   return Math.floor(currMonth % 3 === 0 ? currMonth / 3 : currMonth / 3 + 1);
 }
+export const initAssignee = (assignee: Assignee[]): string => {
+  let connectName = "";
+  if (assignee && assignee.length) {
+    connectName = assignee.reduce(
+      (str: string, cur: Assignee, index: number) => {
+        return index === assignee.length - 1
+          ? str + cur.username
+          : str + cur.username + "、";
+      },
+      ""
+    );
+  }
+  return connectName;
+};

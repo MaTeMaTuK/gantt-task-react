@@ -22,6 +22,7 @@ export type TaskItemProps = {
   ) => any;
   jsPlumb?: any;
   isLog?: boolean | undefined;
+  taskListHeight?: number;
 };
 
 export const TaskItem: React.FC<TaskItemProps> = props => {

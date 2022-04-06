@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState, memo } from "react";
 import { Task } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
+import { initAssignee } from "../../helpers/other-helper";
+
 import styles from "./tooltip.module.css";
 
 export type TooltipProps = {
@@ -72,7 +74,6 @@ export const Tooltip: React.FC<TooltipProps> = memo(
         setRelatedX(newRelatedX);
       }
     }, [
-      tooltipRef.current,
       task,
       arrowIndent,
       scrollX,
@@ -91,7 +92,10 @@ export const Tooltip: React.FC<TooltipProps> = memo(
             ? styles.tooltipDetailsContainer
             : styles.tooltipDetailsContainerHidden
         }
-        style={{ left: relatedX + 30, top: relatedY < -40 ? -40 : relatedY }}
+        style={{
+          left: task?.type === "milestone" ? relatedX + 10 : relatedX + 30,
+          top: relatedY < -40 ? -40 : relatedY,
+        }}
       >
         <TooltipContent
           task={task}
@@ -114,22 +118,48 @@ export const StandardTooltipContent: React.FC<{
   };
   return (
     <div className={styles.tooltipDefaultContainer} style={style}>
-      <div className={styles.tooltipId}>{task?.item?.key}</div>
+      {task.type !== "milestone" ? (
+        <div className={styles.tooltipId}>{task?.item?.key}</div>
+      ) : null}
       <div className={styles.tooltipName}>{task.name}</div>
-      <div>
-        <span className={styles.tooltipTimeBefor}>开始日期：</span>
-        <span className={styles.tooltipTime}>
-          {task.start.getFullYear()}/{task.start.getMonth() + 1}/
-          {task.start.getDate()}
-        </span>
-      </div>
-      <div>
-        <span className={styles.tooltipTimeBefor}>结束日期：</span>
-        <span className={styles.tooltipTime}>
-          {task.end.getFullYear()}/{task.end.getMonth() + 1}/
-          {task.end.getDate()}
-        </span>
-      </div>
+      {task.type === "milestone" ? (
+        <div className={styles.milestone}>
+          <div>
+            <span className={styles.lightColor}>状态：</span>
+            <span className={styles.status}>{task?.item?.status?.name}</span>
+          </div>
+          <div>
+            <span className={styles.lightColor}>负责人：</span>
+            <span className={styles.lightColor}>
+              {initAssignee(task?.item?.assignee)}
+            </span>
+          </div>
+          <div className={styles.lightColor}>
+            <span>完成日期：</span>
+            <span>
+              {task.end.getFullYear()}/{task.end.getMonth() + 1}/
+              {task.end.getDate()}
+            </span>
+          </div>
+        </div>
+      ) : (
+        <div className={styles.lightColor}>
+          <div>
+            <span>开始日期：</span>
+            <span>
+              {task.start.getFullYear()}/{task.start.getMonth() + 1}/
+              {task.start.getDate()}
+            </span>
+          </div>
+          <div>
+            <span>结束日期：</span>
+            <span>
+              {task.end.getFullYear()}/{task.end.getMonth() + 1}/
+              {task.end.getDate()}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

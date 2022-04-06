@@ -1,7 +1,9 @@
 .tooltipDefaultContainer {
   background: #fff;
-  padding: 12px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  padding: 16px;
+  box-shadow: 0px 4px 8px -2px rgba(9, 30, 66, 0.25),
+    0px 0px 1px 0px rgba(9, 30, 66, 0.31);
+  border-radius: 4px;
 }
 
 .tooltipDefaultContainerParagraph {
@@ -31,19 +33,33 @@
 .tooltipId {
   color: #3463ca;
   font-weight: 600;
-  font-size:16px;
+  font-size: 16px;
 }
 .tooltipName {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
   max-width: 200px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  font-family: PingFangSC-Regular, PingFang SC;
+  color: #213053;
+  margin-bottom: 10px;
 }
-.tooltipTimeBefor {
-  color: #838c9e;
+.lightColor {
+  color: #909aaa;
 }
-.tooltipTime {
-  font-weight: 600;
+.status {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #e6f3ff;
+  border-radius: 4px;
+  color: #0c62ff;
+  font-size: 12px;
+}
+.milestone div {
+  margin-bottom: 10px;
+}
+.milestone div:nth-last-child() {
+  margin-bottom: 0px;
 }

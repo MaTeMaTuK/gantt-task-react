@@ -273,7 +273,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
         }
       }
     }, [ganttEvent, barTasks]);
-
     useEffect(() => {
       if (failedTask) {
         setBarTasks(
@@ -866,7 +865,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
                 ganttHeight={ganttHeight}
                 scrollX={scrollX}
                 onScroll={handleScrollX}
-                taskListHieght={taskListRef?.current?.offsetHeight}
+                taskListHeight={taskListRef?.current?.offsetHeight}
               />
             )}
             <div
