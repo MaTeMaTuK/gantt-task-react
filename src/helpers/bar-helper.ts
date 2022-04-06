@@ -221,9 +221,6 @@ const convertToMilestone = (
 ) => {
   const x: any = taskXCoordinate(task.end, dates, dateDelta, columnWidth);
   const y = taskYCoordinate(index, rowHeight, taskHeight);
-  // if (!(x && y)) {
-  //   return;
-  // }
   const x1 = x - taskHeight * 0.5;
   const x2 = x + taskHeight * 0.5;
   const styles = {
