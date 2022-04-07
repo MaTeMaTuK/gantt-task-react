@@ -123,7 +123,7 @@ export const StandardTooltipContent: React.FC<{
       ) : null}
       <div className={styles.tooltipName}>{task.name}</div>
       {task.type === "milestone" ? (
-        <div className={styles.milestone}>
+        <div className={styles.item}>
           <div>
             <span className={styles.lightColor}>状态：</span>
             <span className={styles.status}>{task?.item?.status?.name}</span>
@@ -143,7 +143,7 @@ export const StandardTooltipContent: React.FC<{
           </div>
         </div>
       ) : (
-        <div className={styles.lightColor}>
+        <div className={`${styles.lightColor} ${styles.item}`}>
           <div>
             <span>开始日期：</span>
             <span>

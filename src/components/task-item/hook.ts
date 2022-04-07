@@ -24,8 +24,8 @@ export const barAnchor = {
     Right: [1, 0.5, 1, 0, -1, 0, "Right"],
   },
   normal: {
-    Left: [0, 0.5, -1, 0, -22, 0, "Left"],
-    Right: [1, 0.5, 1, 0, 22, 0, "Right"],
+    Left: [0, 0.5, -1, 0, 0, 0, "Left"],
+    Right: [1, 0.5, 1, 0, 0, 0, "Right"],
   },
 };
 export const useHover = (
@@ -68,6 +68,7 @@ export const useAddPoint = (
   type?: string
 ) => {
   useEffect(() => {
+    console.log(type, "type");
     if (jsPlumb) {
       // 生成新节点删除旧节点时需设置setIdChanged
       jsPlumb.setIdChanged(task.id, task.id);
@@ -76,8 +77,8 @@ export const useAddPoint = (
         {
           anchor:
             type === "milestone"
-              ? barAnchor.milestone.Left
-              : barAnchor.normal.Left,
+              ? barAnchor.milestone.Right
+              : barAnchor.normal.Right,
           uuid: task.id + "-Right",
         },
         commonConfig
@@ -93,8 +94,8 @@ export const useAddPoint = (
         {
           anchor:
             type === "milestone"
-              ? barAnchor.milestone.Right
-              : barAnchor.normal.Right,
+              ? barAnchor.milestone.Left
+              : barAnchor.normal.Left,
           uuid: task.id + "-Left",
         },
         commonConfig

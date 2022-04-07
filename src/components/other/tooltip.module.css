@@ -57,9 +57,9 @@
   color: #0c62ff;
   font-size: 12px;
 }
-.milestone div {
+.item div {
   margin-bottom: 10px;
 }
-.milestone div:nth-last-child() {
+.item div:nth-last-child() {
   margin-bottom: 0px;
 }
