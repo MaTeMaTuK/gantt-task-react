@@ -87,6 +87,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
     onDelete,
     onSelect,
     renderTaskListComponent,
+    renderUserAvatar,
     itemTypeData, // 卡片类型
     configHandle, // 配置事件
     baseLineHandle, // 基线事件
@@ -654,7 +655,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
       }
       return null;
     }, [renderTaskListComponent]);
-
     useEffect(() => {
       if (TaskListComponent) {
         eleListTableBodyRef.current = document.querySelector(
@@ -917,6 +917,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
                 headerHeight={headerHeight}
                 taskListWidth={taskListWidth}
                 TooltipContent={TooltipContent}
+                renderUserAvatar={renderUserAvatar}
               />
             )}
             {tasks.length > 0 && (

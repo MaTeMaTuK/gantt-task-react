@@ -1,13 +1,5 @@
 import { BarTask } from "../types/bar-task";
-import { Task } from "../types/public-types";
-
-interface Assignee {
-  enabled: boolean;
-  label: string;
-  nickname: string;
-  username: string;
-  value: string;
-}
+import { Task, Assignee } from "../types/public-types";
 
 export function isKeyboardEvent(
   event: React.MouseEvent | React.KeyboardEvent | React.FocusEvent

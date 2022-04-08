@@ -1,7 +1,6 @@
-import React, { useRef, useEffect, useState, memo } from "react";
-import { Task } from "../../types/public-types";
+import React, { useRef, useEffect, useState, memo, useMemo } from "react";
+import { Task, Assignee } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
-import { initAssignee } from "../../helpers/other-helper";
 
 import styles from "./tooltip.module.css";
 
@@ -21,7 +20,9 @@ export type TooltipProps = {
     task: Task;
     fontSize: string;
     fontFamily: string;
+    UserAvatar?: JSX.Element;
   }>;
+  renderUserAvatar?: (assignee: Assignee[]) => JSX.Element;
 };
 export const Tooltip: React.FC<TooltipProps> = memo(
   ({
@@ -37,10 +38,18 @@ export const Tooltip: React.FC<TooltipProps> = memo(
     headerHeight,
     taskListWidth,
     TooltipContent,
+    renderUserAvatar,
   }) => {
     const tooltipRef = useRef<HTMLDivElement | null>(null);
     const [relatedY, setRelatedY] = useState(0);
     const [relatedX, setRelatedX] = useState(0);
+    const UserAvatar = useMemo(() => {
+      if (typeof renderUserAvatar === "function") {
+        console.log(task?.item?.assignee);
+        return renderUserAvatar(task?.item?.assignee);
+      }
+      return <React.Fragment />;
+    }, [renderUserAvatar, task?.item?.assignee]);
     useEffect(() => {
       if (tooltipRef.current) {
         let newRelatedX =
@@ -101,6 +110,7 @@ export const Tooltip: React.FC<TooltipProps> = memo(
           task={task}
           fontSize={fontSize}
           fontFamily={fontFamily}
+          UserAvatar={UserAvatar}
         />
       </div>
     );
@@ -111,7 +121,8 @@ export const StandardTooltipContent: React.FC<{
   task: Task;
   fontSize: string;
   fontFamily: string;
-}> = ({ task, fontSize, fontFamily }) => {
+  UserAvatar?: JSX.Element;
+}> = ({ task, fontSize, fontFamily, UserAvatar }) => {
   const style = {
     fontSize,
     fontFamily,
@@ -130,9 +141,7 @@ export const StandardTooltipContent: React.FC<{
           </div>
           <div>
             <span className={styles.lightColor}>负责人：</span>
-            <span className={styles.lightColor}>
-              {initAssignee(task?.item?.assignee)}
-            </span>
+            {UserAvatar}
           </div>
           <div className={styles.lightColor}>
             <span>完成日期：</span>

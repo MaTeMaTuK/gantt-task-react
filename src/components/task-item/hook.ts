@@ -68,7 +68,6 @@ export const useAddPoint = (
   type?: string
 ) => {
   useEffect(() => {
-    console.log(type, "type");
     if (jsPlumb) {
       // 生成新节点删除旧节点时需设置setIdChanged
       jsPlumb.setIdChanged(task.id, task.id);
