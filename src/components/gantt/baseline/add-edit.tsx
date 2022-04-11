@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { Modal, Form, Input } from "antd";
-// import { RuleObject } from "antd/lib/form";
 import { BaselineProps } from "../../../types/public-types";
 import { BaseLineContext } from "../../../contsxt";
 import dayjs from "dayjs";
+
 const { TextArea } = Input;
 interface ModalProps {
   visible: boolean;
