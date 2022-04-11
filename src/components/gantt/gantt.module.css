@@ -45,6 +45,9 @@
   color: #4b8bff;
   background: #dbe8ff;
   border-radius: 4px;
+  width: 240px;
+  display: flex;
+  align-items: center;
 }
 .wrapper .choosedBaselIne,
 .wrapper button {
@@ -52,6 +55,7 @@
 }
 .choosedBaselIne .loaded {
   margin-right: 8px;
+  width: 175px;
 }
 .task-gantt-wrapper {
   position: absolute;

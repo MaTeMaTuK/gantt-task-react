@@ -33,6 +33,9 @@ li.activeBaseline {
 }
 .panel ul.list {
   padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+
 }
 .panel .createBaseline {
   margin-bottom: 10px;

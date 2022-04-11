@@ -87,6 +87,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
     onDelete,
     onSelect,
     renderTaskListComponent,
+    renderOverflowTooltip,
     itemTypeData, // 卡片类型
     configHandle, // 配置事件
     baseLineHandle, // 基线事件
@@ -789,6 +790,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
     const panelCanel = useCallback(() => {
       setGuideModalVisible(false);
     }, []);
+    const OverflowTooltip = useCallback(
+      (value: string) => {
+        if (typeof renderOverflowTooltip === "function") {
+          return renderOverflowTooltip(value);
+        }
+        return <React.Fragment />;
+      },
+      [renderOverflowTooltip]
+    );
     return (
       <div className={styles.box}>
         <GuideModal
@@ -816,7 +826,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
             />
           </ConfigHandleContext.Provider>
           <BaseLineContext.Provider
-            value={{ baseLineHandle, baselineList, setCurrentLog, currentLog }}
+            value={{
+              baseLineHandle,
+              baselineList,
+              setCurrentLog,
+              currentLog,
+              OverflowTooltip,
+            }}
           >
             <GanttHeader
               toToday={toToday}
@@ -836,7 +852,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
             {currentLog?.name && (
               <div className={styles.choosedBaselIne}>
                 <span className={styles.loaded}>
-                  已加载：{currentLog?.name}
+                  {OverflowTooltip(`已加载：${currentLog?.name}`)}
                 </span>
                 <Button size="small" onClick={baselineExit}>
                   退出
