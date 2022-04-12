@@ -151,7 +151,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
     const svgWidth = dateSetup.dates.length * columnWidth;
     const ganttFullHeight = barTasks.length * rowHeight;
     const minWidth = 2; // 面板折叠后，taskListWidth 设置成2（设置成0后，dom节点会移除）
-    const paddingLeft = 24; // wrapper的padding值， 用于dividerWrapper定位
+    const paddingLeft = 40; // wrapper的padding值， 用于dividerWrapper定位
 
     // task change events
     useEffect(() => {
