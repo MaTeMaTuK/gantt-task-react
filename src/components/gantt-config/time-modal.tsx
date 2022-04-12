@@ -81,7 +81,6 @@ const ItemModal: React.FC<ItemModalProps> = ({
     }
   }, [visible]);
   const handleConfirm = () => {
-    setConfirmLoading(true);
     form
       .validateFields()
       .then(async values => {
@@ -98,6 +97,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
           }
         });
         form.validateFields().then(async () => {
+          setConfirmLoading(true);
           await handleOk(values);
           setConfirmLoading(false);
         });

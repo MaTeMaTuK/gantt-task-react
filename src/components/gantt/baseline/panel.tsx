@@ -62,6 +62,7 @@ export const Panel: React.FC<panelProps> = ({
     baselineList,
     setCurrentLog,
     currentLog,
+    OverflowTooltip,
   } = useContext(BaseLineContext);
   const [visible, setVisible] = useState(false);
   const [currentBaseline, setCurrentBaseline] = useState<any>({});
@@ -119,7 +120,7 @@ export const Panel: React.FC<panelProps> = ({
                 className={`${styles.content} ${styles.cursor}`}
                 onClick={() => chooseLog(ele)}
               >
-                <div className={styles.name}>{ele.name}</div>
+                <div className={styles.name}>{OverflowTooltip(ele.name)}</div>
                 <div className={styles.time}>
                   创建于：
                   {dayjs(new Date(ele.createdAt)).format("YYYY-MM-DD HH:mm:ss")}
