@@ -792,7 +792,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = memo(
     }, []);
     const OverflowTooltip = useCallback(
       (value: string) => {
-        if (typeof renderOverflowTooltip === "function") {
+        if (typeof renderOverflowTooltip === 'function') {
           return renderOverflowTooltip(value);
         }
         return <React.Fragment />;
