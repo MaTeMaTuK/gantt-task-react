@@ -45,7 +45,6 @@ export const Tooltip: React.FC<TooltipProps> = memo(
     const [relatedX, setRelatedX] = useState(0);
     const UserAvatar = useMemo(() => {
       if (typeof renderUserAvatar === "function") {
-        console.log(task?.item?.assignee);
         return renderUserAvatar(task?.item?.assignee);
       }
       return <React.Fragment />;
@@ -144,7 +143,7 @@ export const StandardTooltipContent: React.FC<{
             {UserAvatar}
           </div>
           <div className={styles.lightColor}>
-            <span>完成日期：</span>
+            <span>计划完成时间：</span>
             <span>
               {task.end.getFullYear()}/{task.end.getMonth() + 1}/
               {task.end.getDate()}
