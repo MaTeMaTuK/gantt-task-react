@@ -144,7 +144,6 @@
 .dividerContainer > hr.maskLineTop {
   top: -39px;
   height: 39px;
-  /* left: 0; */
   background: #fff;
   cursor: default;
   width: 30px;
