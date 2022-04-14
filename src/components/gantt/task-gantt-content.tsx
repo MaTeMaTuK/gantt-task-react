@@ -51,6 +51,7 @@ export type TaskGanttContentProps = {
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
+  clickBaselineItem?: (offsetX: number, currentLogItem: BarTask) => void;
 } & EventOption &
   ConnectionProps;
 
@@ -80,6 +81,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     delConnection,
     addConnection,
     itemLinks,
+    clickBaselineItem,
   }) => {
     const [connectUuids, setConnectUuids] = useState([]);
     const point = svg?.current?.createSVGPoint();
@@ -247,6 +249,18 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           }
         } else if (action === "dblclick") {
           !!onDoubleClick && onDoubleClick(task);
+        } else if (action === "click") {
+          const offsetX = event?.nativeEvent?.offsetX;
+          console.log(tasks, "tasks");
+          console.log(offsetX);
+          // 当前基线时间块对应的item
+          const currentLogItem = tasks.filter(
+            (ele: BarTask) => ele.id === task.id
+          );
+          // item的开始时间和结束时间为空时，点击基线时间块可以添加时间
+          if (!(currentLogItem?.[0]?.end && currentLogItem?.[0]?.start)) {
+            clickBaselineItem?.(offsetX, currentLogItem[0]);
+          }
         }
         // Change task event start
         else if (action === "move") {

@@ -125,7 +125,7 @@
   position: absolute;
   right: 0;
   top: 1px;
-  width: 20px;
+  width: 33px;
   background: #fff;
   height: calc(100% - 1px);
   border: 0;
@@ -144,8 +144,10 @@
 .dividerContainer > hr.maskLineTop {
   top: -39px;
   height: 39px;
+  /* left: 0; */
   background: #fff;
   cursor: default;
+  width: 30px;
 }
 
 .dividerIconWarpper {
