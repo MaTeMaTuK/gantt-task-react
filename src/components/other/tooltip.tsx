@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, memo, useMemo } from "react";
 import { Task, Assignee } from "../../types/public-types";
+import dayjs from "dayjs";
 import { BarTask } from "../../types/bar-task";
 
 import styles from "./tooltip.module.css";
@@ -144,27 +145,18 @@ export const StandardTooltipContent: React.FC<{
           </div>
           <div className={styles.lightColor}>
             <span>计划完成时间：</span>
-            <span>
-              {task.end.getFullYear()}/{task.end.getMonth() + 1}/
-              {task.end.getDate()}
-            </span>
+            <span>{dayjs(task.end).format("YYYY/MM/DD")}</span>
           </div>
         </div>
       ) : (
         <div className={`${styles.lightColor} ${styles.item}`}>
           <div>
             <span>开始日期：</span>
-            <span>
-              {task.start.getFullYear()}/{task.start.getMonth() + 1}/
-              {task.start.getDate()}
-            </span>
+            <span>{dayjs(task.start).format("YYYY/MM/DD")}</span>
           </div>
           <div>
             <span>结束日期：</span>
-            <span>
-              {task.end.getFullYear()}/{task.end.getMonth() + 1}/
-              {task.end.getDate()}
-            </span>
+            <span>{dayjs(task.end).format("YYYY/MM/DD")}</span>
           </div>
         </div>
       )}
