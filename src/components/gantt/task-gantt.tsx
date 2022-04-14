@@ -10,7 +10,7 @@ import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
 import { TaskGanttArrows } from "./task-gantt-arrows";
-import { scrollBarHeight } from "../../helpers/dicts";
+import { scrollBarHeight, daySeconds } from "../../helpers/dicts";
 import { ViewMode } from "../../types/public-types";
 import { GanttConfigContext } from "../../contsxt";
 import { BarTask } from "../../types/bar-task";
@@ -50,10 +50,10 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
     let startDate, endDate;
     if (viewMode === ViewMode.Day) {
       startDate = dayjs(
-        dates[0].valueOf() + (offsetX / columnWidth) * 86400000
+        dates[0].valueOf() + (offsetX / columnWidth) * daySeconds
       );
       endDate = dayjs(
-        dates[0].valueOf() + (offsetX / columnWidth) * 86400000 + 86400000
+        dates[0].valueOf() + (offsetX / columnWidth) * daySeconds + daySeconds
       );
       onDateChange?.(
         Object.assign(currentLogItem, {
