@@ -203,6 +203,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       onDateChange,
       svg,
       isMoving,
+      point,
+      setFailedTask,
+      setGanttEvent,
     ]);
 
     /**
@@ -251,8 +254,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           !!onDoubleClick && onDoubleClick(task);
         } else if (action === "click") {
           const offsetX = event?.nativeEvent?.offsetX;
-          console.log(tasks, "tasks");
-          console.log(offsetX);
           // 当前基线时间块对应的item
           const currentLogItem = tasks.filter(
             (ele: BarTask) => ele.id === task.id
@@ -291,6 +292,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
         setGanttEvent,
         setSelectedTask,
         svg,
+        clickBaselineItem,
+        tasks,
       ]
     );
     const getLinkTypeId = useCallback(
@@ -365,24 +368,27 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       [getHasLinkItems]
     );
 
-    const deleteConn = (conn: any) => {
-      const currentLink = itemLinks.filter((ele: any) => {
-        return (
-          ele.source?.objectId === conn?.sourceId &&
-          ele.destination?.objectId === conn?.targetId &&
-          ele.linkType?.objectId === conn.getData()
-        );
-      });
-      if (currentLink.length) {
-        Modal.confirm({
-          title: "解除关联关系",
-          content: "确定要解除卡片的关联关系吗？",
-          okText: "确认",
-          cancelText: "取消",
-          onOk: () => delConnection(currentLink[0].objectId),
+    const deleteConn = useCallback(
+      (conn: any) => {
+        const currentLink = itemLinks.filter((ele: any) => {
+          return (
+            ele.source?.objectId === conn?.sourceId &&
+            ele.destination?.objectId === conn?.targetId &&
+            ele.linkType?.objectId === conn.getData()
+          );
         });
-      }
-    };
+        if (currentLink.length) {
+          Modal.confirm({
+            title: "解除关联关系",
+            content: "确定要解除卡片的关联关系吗？",
+            okText: "确认",
+            cancelText: "取消",
+            onOk: () => delConnection(currentLink[0].objectId),
+          });
+        }
+      },
+      [delConnection, itemLinks]
+    );
     useEffect(() => {
       import("jsplumb").then(({ jsPlumb }: any) => {
         jsPlumb.ready(() => {
@@ -509,6 +515,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           setConnectUuids([]);
         }
       }
+      console.info(itemLinks, "itemLinks");
+      console.info(tasks, "tasks");
       if (itemLinks.length && tasks.length && jsPlumbInstance) {
         const newConnectUuids: any = [];
         tasks.forEach((task: any) => {
@@ -516,6 +524,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           const itemFilter = itemLinks?.filter((ele: any) => {
             return ele.source?.objectId === task?.id;
           });
+          console.log(itemFilter, "itemFilter");
+          console.log(ganttConfig, "ganttConfig");
           itemFilter.forEach((ele: any) => {
             let relationType = "";
             for (const key in ganttConfig.relation) {
@@ -543,15 +553,29 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             });
           });
         });
+        console.log(connectUuids, "connectUuids");
+        console.log(newConnectUuids, "newConnectUuids");
+        console.log(isEqual(connectUuids, newConnectUuids), "qual");
         if (!isEqual(connectUuids, newConnectUuids)) {
           setConnectUuids(newConnectUuids);
         }
       }
-    }, [jsPlumbInstance, itemLinks, tasks, connectUuids, checkIsErrorLink]);
+    }, [
+      jsPlumbInstance,
+      itemLinks,
+      tasks,
+      connectUuids,
+      checkIsErrorLink,
+      checkIsPivotalPathLink,
+      ganttConfig.relation,
+      ganttConfig,
+    ]);
 
     useEffect(() => {
+      console.log("connectUuid变化了");
       if (jsPlumbInstance) {
         jsPlumbInstance.setSuspendDrawing(true);
+        console.log(connectUuids, "connectUuidsEffect");
         for (let i = 0; i < connectUuids.length; i++) {
           const uuidObj = connectUuids[i];
           const {
@@ -608,7 +632,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           jsPlumbInstance.deleteEveryConnection();
         }
       };
-    }, [jsPlumbInstance, connectUuids]);
+    }, [jsPlumbInstance, connectUuids, deleteConn, ganttConfig?.relation]);
     return (
       <g className="content">
         <g className="arrows" fill={arrowColor} stroke={arrowColor}>
