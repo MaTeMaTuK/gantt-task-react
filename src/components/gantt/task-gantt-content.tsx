@@ -90,6 +90,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   const [jsPlumbInstance, setJsPlumbInstance] = useState<any>(null);
   const { ganttConfig } = useContext(GanttConfigContext);
   const taskGanttContent = useRef<any>(null);
+  const taskRef = useRef<any>(null);
   useEffect(() => {
     const dateDelta =
       dates[1].getTime() -
@@ -395,12 +396,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         const instance = jsPlumb.getInstance();
         instance.fire("jsPlumbDemoLoaded", instance);
         setJsPlumbInstance(instance);
-        taskGanttContent.current = true;
       });
     });
-    return () => {
-      taskGanttContent.current = false;
-    };
   }, []);
   useEffect(() => {
     if (jsPlumbInstance) {
@@ -512,14 +509,15 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     ganttConfig.relation,
     getLinkTypeId,
   ]);
-
+  console.log(taskGanttContent.current, "taskGanttContent");
+  console.log(taskRef, "taskRef");
   useEffect(() => {
-    console.log(taskGanttContent.current);
     if (!itemLinks.length) {
       if (!isEqual(connectUuids, [])) {
         setConnectUuids([]);
       }
     }
+    // setConnectUuids([])
     console.info(itemLinks, "itemLinks");
     console.info(tasks, "tasks");
     if (itemLinks.length && tasks.length && jsPlumbInstance) {
@@ -530,7 +528,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           return ele.source?.objectId === task?.id;
         });
         console.log(itemFilter, "itemFilter");
-        console.log(ganttConfig, "ganttConfig");
         itemFilter.forEach((ele: any) => {
           let relationType = "";
           for (const key in ganttConfig.relation) {
@@ -561,7 +558,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       if (!isEqual(connectUuids, newConnectUuids)) {
         setConnectUuids(newConnectUuids);
       }
-      // setConnectUuids(newConnectUuids);
     }
   }, [
     jsPlumbInstance,
@@ -576,7 +572,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   useEffect(() => {
     console.log("connectUuid变化了");
-    if (jsPlumbInstance) {
+    console.log(taskRef, 'taskRef?.current');
+    if (jsPlumbInstance && taskRef?.current) {
       jsPlumbInstance.setSuspendDrawing(true);
       console.log(connectUuids, "connectUuidsEffect");
       for (let i = 0; i < connectUuids.length; i++) {
@@ -632,6 +629,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     }
     return () => {
       if (jsPlumbInstance) {
+        console.log("destory");
+        // setConnectUuids([]);
         jsPlumbInstance.deleteEveryConnection();
       }
     };
@@ -688,6 +687,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
                   onEventStart={handleBarEventStart}
                   key={task.id}
                   isSelected={!!selectedTask && task.id === selectedTask.id}
+                  ref={taskRef}
                 />
               )}
             </g>

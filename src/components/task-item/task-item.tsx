@@ -24,10 +24,8 @@ export type TaskItemProps = {
   isLog?: boolean | undefined;
 };
 
-export const TaskItem: React.FC<TaskItemProps> = props => {
-  const { task, isDelete, isSelected, onEventStart, jsPlumb } = {
-    ...props,
-  };
+export const TaskItem = React.forwardRef<TaskItemProps, any>((props, ref) => {
+  const { task, isDelete, isSelected, onEventStart, jsPlumb } = props;
   const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
 
   useEffect(() => {
@@ -52,6 +50,8 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
 
   return (
     <g
+      // @ts-ignores
+      ref={ref}
       onKeyDown={e => {
         switch (e.key) {
           case "Delete": {
@@ -77,4 +77,4 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       {taskItem}
     </g>
   );
-};
+});
