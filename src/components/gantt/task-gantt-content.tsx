@@ -392,7 +392,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   );
   useEffect(() => {
     import("jsplumb").then(({ jsPlumb }: any) => {
+      console.log("ready");
       jsPlumb.ready(() => {
+        // jsPlumbInstance?.reset();
         const instance = jsPlumb.getInstance();
         instance.fire("jsPlumbDemoLoaded", instance);
         setJsPlumbInstance(instance);
@@ -509,25 +511,22 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     ganttConfig.relation,
     getLinkTypeId,
   ]);
-  console.log(taskGanttContent.current, "taskGanttContent");
-  console.log(taskRef, "taskRef");
   useEffect(() => {
     if (!itemLinks.length) {
       if (!isEqual(connectUuids, [])) {
         setConnectUuids([]);
       }
     }
-    // setConnectUuids([])
-    console.info(itemLinks, "itemLinks");
-    console.info(tasks, "tasks");
+
     if (itemLinks.length && tasks.length && jsPlumbInstance) {
+      console.info(itemLinks, "itemLinks");
+      console.info(tasks, "tasks");
       const newConnectUuids: any = [];
       tasks.forEach((task: any) => {
         // 找到需要连线的卡片
         const itemFilter = itemLinks?.filter((ele: any) => {
           return ele.source?.objectId === task?.id;
         });
-        console.log(itemFilter, "itemFilter");
         itemFilter.forEach((ele: any) => {
           let relationType = "";
           for (const key in ganttConfig.relation) {
@@ -552,9 +551,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           });
         });
       });
-      console.log(connectUuids, "connectUuids");
-      console.log(newConnectUuids, "newConnectUuids");
       console.log(isEqual(connectUuids, newConnectUuids), "qual");
+      console.log(taskGanttContent?.current, " taskGanttContent?.current111");
       if (!isEqual(connectUuids, newConnectUuids)) {
         setConnectUuids(newConnectUuids);
       }
@@ -571,66 +569,67 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   ]);
 
   useEffect(() => {
-    console.log("connectUuid变化了");
-    console.log(taskRef, 'taskRef?.current');
-    if (jsPlumbInstance && taskRef?.current) {
-      jsPlumbInstance.setSuspendDrawing(true);
-      console.log(connectUuids, "connectUuidsEffect");
-      for (let i = 0; i < connectUuids.length; i++) {
-        const uuidObj = connectUuids[i];
-        const {
-          source,
-          destination,
-          relationType,
-          isErrorLink,
-          isPivotalPathLink,
-        } = uuidObj;
-        if (source && destination && relationType) {
-          const uuid = [
-            `${source}-${relationInit[relationType]?.[0]}`,
-            `${destination}-${relationInit[relationType]?.[1]}`,
-          ];
-          const connect = jsPlumbInstance.connect({
-            uuids: uuid,
-          });
-          // 给连线设置linkType
-          if (connect) {
-            connect.addOverlay([
-              "Label",
-              {
-                label: deleteIcon,
-                location: 0.5,
-                cssClass: "overlay-label",
-                events: {
-                  click: function () {
-                    deleteConn(connect);
+    setTimeout(() => {
+      console.log(taskGanttContent?.current, 'taskGanttContent?.current222')
+      if (jsPlumbInstance && taskGanttContent?.current && connectUuids.length) {
+        console.log("connectUuid变化了");
+        console.log(taskGanttContent, "taskGanttContentRef");
+        console.log(connectUuids, "connectUuids");
+        jsPlumbInstance.setSuspendDrawing(true);
+        for (let i = 0; i < connectUuids.length; i++) {
+          const uuidObj = connectUuids[i];
+          const {
+            source,
+            destination,
+            relationType,
+            isErrorLink,
+            isPivotalPathLink,
+          } = uuidObj;
+          if (source && destination && relationType) {
+            const uuid = [
+              `${source}-${relationInit[relationType]?.[0]}`,
+              `${destination}-${relationInit[relationType]?.[1]}`,
+            ];
+            const connect = jsPlumbInstance.connect({
+              uuids: uuid,
+            });
+            // 给连线设置linkType
+            if (connect) {
+              connect.addOverlay([
+                "Label",
+                {
+                  label: deleteIcon,
+                  location: 0.5,
+                  cssClass: "overlay-label",
+                  events: {
+                    click: function () {
+                      deleteConn(connect);
+                    },
                   },
+                  id: uuid[0],
                 },
-                id: uuid[0],
-              },
-            ]);
-            if (isErrorLink) {
-              // 设置连线错误的颜色
-              connect.setPaintStyle({
-                stroke: errorLinkBorderColor,
-              });
+              ]);
+              if (isErrorLink) {
+                // 设置连线错误的颜色
+                connect.setPaintStyle({
+                  stroke: errorLinkBorderColor,
+                });
+              }
+              if (isPivotalPathLink) {
+                // 设置关键路径连线的颜色
+                connect.setPaintStyle({
+                  stroke: pivotalPathLinkBorderColor,
+                });
+              }
+              connect.setData(ganttConfig?.relation?.[relationType]);
             }
-            if (isPivotalPathLink) {
-              // 设置关键路径连线的颜色
-              connect.setPaintStyle({
-                stroke: pivotalPathLinkBorderColor,
-              });
-            }
-            connect.setData(ganttConfig?.relation?.[relationType]);
           }
         }
+        jsPlumbInstance.setSuspendDrawing(false, true);
       }
-      jsPlumbInstance.setSuspendDrawing(false, true);
-    }
+    }, 20);
     return () => {
       if (jsPlumbInstance) {
-        console.log("destory");
-        // setConnectUuids([]);
         jsPlumbInstance.deleteEveryConnection();
       }
     };
@@ -654,13 +653,13 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         })}
       </g>
       <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
-        {tasks.map(task => {
+        {tasks.map((task, index) => {
           const cuttentLog = logTasks.find(ele => ele.id === task.id);
           if (cuttentLog) {
             cuttentLog.y = task.y;
           }
           return (
-            <g key={task.id}>
+            <g key={index}>
               {!cuttentLog?.start || !cuttentLog?.end ? null : (
                 <TaskItemLog
                   task={cuttentLog}
