@@ -46,7 +46,7 @@ export const Milestone: React.FC<TaskItemProps> = ({
         jsPlumb.deleteEndpoint(task.id + "-Right");
       }
     };
-  }, [jsPlumb, task.y]);
+  }, [jsPlumb, task.y, task.id]);
   useEffect(() => {
     if (jsPlumb) {
       // 重绘元素，解决拖动时间块连接点跟随
@@ -60,7 +60,7 @@ export const Milestone: React.FC<TaskItemProps> = ({
         jsPlumb.deleteEndpoint(task.id + "-Right");
       }
     };
-  }, [jsPlumb]);
+  }, [jsPlumb, task.id]);
   // const points = useMemo(() => {
   //   return `${task.x1},${task.y + 12.5} ${task.x1 + 12.5},${task.y - 12.5} ${
   //     task.x1 + 25

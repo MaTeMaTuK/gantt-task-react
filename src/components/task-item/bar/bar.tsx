@@ -29,7 +29,6 @@ export const Bar: React.FC<TaskItemProps> = ({
   const handleHeight = task.height - 12;
   // 设置端点
   const addPointFinished = useAddPoint(jsPlumb, task, barRef);
-  console.log(addPointFinished, "addPointFinished");
   useEffect(() => {
     if (addPointFinished) {
       setPointInited?.(addPointFinished);

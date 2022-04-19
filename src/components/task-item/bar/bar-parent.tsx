@@ -17,6 +17,7 @@ export const BarParent: React.FC<TaskItemProps> = ({
   isSelected,
   jsPlumb,
   isLog,
+  setPointInited,
 }) => {
   const barRef = useRef<any>(null);
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
@@ -26,7 +27,12 @@ export const BarParent: React.FC<TaskItemProps> = ({
     task.height
   );
   // 设置端点
-  useAddPoint(jsPlumb, task, barRef);
+  const addPointFinished = useAddPoint(jsPlumb, task, barRef);
+  useEffect(() => {
+    if (addPointFinished) {
+      setPointInited?.(addPointFinished);
+    }
+  }, [addPointFinished, setPointInited]);
   useEffect(() => {
     if (jsPlumb) {
       // 重绘元素，解决拖动时间块连接点跟随

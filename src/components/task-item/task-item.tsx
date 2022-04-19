@@ -25,7 +25,7 @@ export type TaskItemProps = {
   setPointInited?: (value: boolean) => void;
 };
 
-export const TaskItem = React.forwardRef<TaskItemProps, any>((props, ref) => {
+export const TaskItem: React.FC<TaskItemProps> = props => {
   const { task, isDelete, isSelected, onEventStart, jsPlumb } = props;
   const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
 
@@ -51,8 +51,6 @@ export const TaskItem = React.forwardRef<TaskItemProps, any>((props, ref) => {
 
   return (
     <g
-      // @ts-ignores
-      ref={ref}
       onKeyDown={e => {
         switch (e.key) {
           case "Delete": {
@@ -78,4 +76,4 @@ export const TaskItem = React.forwardRef<TaskItemProps, any>((props, ref) => {
       {taskItem}
     </g>
   );
-});
+};
