@@ -22,6 +22,7 @@ export type TaskItemProps = {
   ) => any;
   jsPlumb?: any;
   isLog?: boolean | undefined;
+  setPointInited?: (value: boolean) => void;
 };
 
 export const TaskItem = React.forwardRef<TaskItemProps, any>((props, ref) => {

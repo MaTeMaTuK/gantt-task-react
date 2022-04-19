@@ -91,6 +91,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   const { ganttConfig } = useContext(GanttConfigContext);
   const taskGanttContent = useRef<any>(null);
   const taskRef = useRef<any>(null);
+  const [pointInited, setPointInited] = useState(false);
+  console.log(pointInited, "pointInited1111");
   useEffect(() => {
     const dateDelta =
       dates[1].getTime() -
@@ -567,73 +569,78 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     ganttConfig.relation,
     ganttConfig,
   ]);
-
+  console.log(pointInited, "pointInited");
   useEffect(() => {
-    setTimeout(() => {
-      console.log(taskGanttContent?.current, 'taskGanttContent?.current222')
-      if (jsPlumbInstance && taskGanttContent?.current && connectUuids.length) {
-        console.log("connectUuid变化了");
-        console.log(taskGanttContent, "taskGanttContentRef");
-        console.log(connectUuids, "connectUuids");
-        jsPlumbInstance.setSuspendDrawing(true);
-        for (let i = 0; i < connectUuids.length; i++) {
-          const uuidObj = connectUuids[i];
-          const {
-            source,
-            destination,
-            relationType,
-            isErrorLink,
-            isPivotalPathLink,
-          } = uuidObj;
-          if (source && destination && relationType) {
-            const uuid = [
-              `${source}-${relationInit[relationType]?.[0]}`,
-              `${destination}-${relationInit[relationType]?.[1]}`,
-            ];
-            const connect = jsPlumbInstance.connect({
-              uuids: uuid,
-            });
-            // 给连线设置linkType
-            if (connect) {
-              connect.addOverlay([
-                "Label",
-                {
-                  label: deleteIcon,
-                  location: 0.5,
-                  cssClass: "overlay-label",
-                  events: {
-                    click: function () {
-                      deleteConn(connect);
-                    },
+    console.log(taskGanttContent?.current, "taskGanttContent?.current222");
+    if (jsPlumbInstance && connectUuids.length && pointInited) {
+      console.log("connectUuid变化了");
+      console.log(taskGanttContent, "taskGanttContentRef");
+      console.log(connectUuids, "connectUuids");
+      jsPlumbInstance.setSuspendDrawing(true);
+      for (let i = 0; i < connectUuids.length; i++) {
+        const uuidObj = connectUuids[i];
+        const {
+          source,
+          destination,
+          relationType,
+          isErrorLink,
+          isPivotalPathLink,
+        } = uuidObj;
+        if (source && destination && relationType) {
+          const uuid = [
+            `${source}-${relationInit[relationType]?.[0]}`,
+            `${destination}-${relationInit[relationType]?.[1]}`,
+          ];
+          const connect = jsPlumbInstance.connect({
+            uuids: uuid,
+          });
+          // 给连线设置linkType
+          if (connect) {
+            connect.addOverlay([
+              "Label",
+              {
+                label: deleteIcon,
+                location: 0.5,
+                cssClass: "overlay-label",
+                events: {
+                  click: function () {
+                    deleteConn(connect);
                   },
-                  id: uuid[0],
                 },
-              ]);
-              if (isErrorLink) {
-                // 设置连线错误的颜色
-                connect.setPaintStyle({
-                  stroke: errorLinkBorderColor,
-                });
-              }
-              if (isPivotalPathLink) {
-                // 设置关键路径连线的颜色
-                connect.setPaintStyle({
-                  stroke: pivotalPathLinkBorderColor,
-                });
-              }
-              connect.setData(ganttConfig?.relation?.[relationType]);
+                id: uuid[0],
+              },
+            ]);
+            if (isErrorLink) {
+              // 设置连线错误的颜色
+              connect.setPaintStyle({
+                stroke: errorLinkBorderColor,
+              });
             }
+            if (isPivotalPathLink) {
+              // 设置关键路径连线的颜色
+              connect.setPaintStyle({
+                stroke: pivotalPathLinkBorderColor,
+              });
+            }
+            connect.setData(ganttConfig?.relation?.[relationType]);
           }
         }
-        jsPlumbInstance.setSuspendDrawing(false, true);
       }
-    }, 20);
+      jsPlumbInstance.setSuspendDrawing(false, true);
+    }
+
     return () => {
       if (jsPlumbInstance) {
         jsPlumbInstance.deleteEveryConnection();
       }
     };
-  }, [jsPlumbInstance, deleteConn, ganttConfig?.relation, connectUuids]);
+  }, [
+    jsPlumbInstance,
+    deleteConn,
+    ganttConfig?.relation,
+    connectUuids,
+    pointInited,
+  ]);
   return (
     <g className="content" ref={taskGanttContent}>
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>
@@ -687,6 +694,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
                   key={task.id}
                   isSelected={!!selectedTask && task.id === selectedTask.id}
                   ref={taskRef}
+                  setPointInited={setPointInited}
                 />
               )}
             </g>

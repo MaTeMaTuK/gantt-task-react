@@ -17,6 +17,7 @@ export const Bar: React.FC<TaskItemProps> = ({
   isSelected,
   jsPlumb,
   isLog,
+  setPointInited,
 }) => {
   const barRef = useRef<any>(null);
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
@@ -27,7 +28,13 @@ export const Bar: React.FC<TaskItemProps> = ({
   );
   const handleHeight = task.height - 12;
   // 设置端点
-  useAddPoint(jsPlumb, task, barRef);
+  const addPointFinished = useAddPoint(jsPlumb, task, barRef);
+  console.log(addPointFinished, "addPointFinished");
+  useEffect(() => {
+    if (addPointFinished) {
+      setPointInited?.(addPointFinished);
+    }
+  }, [addPointFinished, setPointInited]);
   useEffect(() => {
     if (jsPlumb) {
       // 重绘元素，解决拖动时间块连接点跟随
@@ -41,7 +48,7 @@ export const Bar: React.FC<TaskItemProps> = ({
         jsPlumb.deleteEndpoint(task.id + "-Right");
       }
     };
-  }, [jsPlumb]);
+  }, [jsPlumb, task.id]);
   useHover(barRef, jsPlumb, task.id);
   return (
     <svg>
