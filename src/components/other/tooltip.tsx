@@ -145,18 +145,18 @@ export const StandardTooltipContent: React.FC<{
           </div>
           <div className={styles.lightColor}>
             <span>计划完成时间：</span>
-            <span>{dayjs(task.end).format("YYYY/MM/DD")}</span>
+            <span>{dayjs(task.end).format("YYYY-MM-DD")}</span>
           </div>
         </div>
       ) : (
         <div className={`${styles.lightColor} ${styles.item}`}>
           <div>
             <span>开始日期：</span>
-            <span>{dayjs(task.start).format("YYYY/MM/DD")}</span>
+            <span>{dayjs(task.start).format("YYYY-MM-DD")}</span>
           </div>
           <div>
             <span>结束日期：</span>
-            <span>{dayjs(task.end).format("YYYY/MM/DD")}</span>
+            <span>{dayjs(task.end).format("YYYY-MM-DD")}</span>
           </div>
         </div>
       )}
