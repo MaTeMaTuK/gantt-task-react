@@ -3600,6 +3600,18 @@ cliui@^6.0.0:
     strip-ansi "^6.0.0"
     wrap-ansi "^6.2.0"
 
+cnchar-types@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.npmjs.org/cnchar-types/-/cnchar-types-3.0.6.tgz#98bb9f0a59763eb7d4d5b33cd0647b15c5be4f7f"
+  integrity sha512-Gx14uR9WZhzKWPAnA2I7cXYooriS/G+A0NhzNblYmQ4VROqJtzPO+ePz8dm2lSJVr/K3/+R92W60n5LgPOOfHg==
+
+cnchar@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.npmjs.org/cnchar/-/cnchar-3.0.6.tgz#dd2fc8b44be9e943a8b2c22078c2260ed3ae70a3"
+  integrity sha512-k9W0VKWUFg1mJJvf9FYX7XzvJn2AS83edRcn5qWXBmWWXoaKKydyUrHUTt5oLoeZ/flUswQCwcT8XB8JhvQdFw==
+  dependencies:
+    cnchar-types "^3.0.6"
+
 co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.npmjs.org/co/-/co-4.6.0.tgz"
