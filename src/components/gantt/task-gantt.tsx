@@ -3,13 +3,18 @@ import React, {
   forwardRef,
   useImperativeHandle,
   SyntheticEvent,
+  useContext,
   memo,
 } from "react";
 import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
 import { TaskGanttArrows } from "./task-gantt-arrows";
-import { scrollBarHeight } from "../../helpers/dicts";
+import { scrollBarHeight, daySeconds } from "../../helpers/dicts";
+import { ViewMode } from "../../types/public-types";
+import { GanttConfigContext } from "../../contsxt";
+import { BarTask } from "../../types/bar-task";
+import dayjs from "dayjs";
 
 import styles from "./gantt.module.css";
 
@@ -30,6 +35,9 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
   { gridProps, calendarProps, barProps, scrollX, onScroll, taskListHieght },
   ref
 ) => {
+  const { dates, onDateChange, columnWidth } = gridProps;
+  const { viewMode } = calendarProps;
+  const { ganttConfig } = useContext(GanttConfigContext);
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
@@ -38,6 +46,27 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
     horizontalContainerRef: horizontalContainerRef.current,
     verticalGanttContainerRef: verticalGanttContainerRef.current,
   }));
+  const clickBaselineItem = (offsetX: number, currentLogItem: BarTask) => {
+    let startDate, endDate;
+    if (viewMode === ViewMode.Day) {
+      startDate = dayjs(
+        dates[0].valueOf() + (offsetX / columnWidth) * daySeconds
+      );
+      endDate = dayjs(
+        dates[0].valueOf() + (offsetX / columnWidth) * daySeconds + daySeconds
+      );
+      onDateChange?.(
+        Object.assign(currentLogItem, {
+          start: ganttConfig?.time?.length
+            ? startDate?.startOf("day").toDate()
+            : null,
+          end: ganttConfig?.time?.length
+            ? endDate?.startOf("day").toDate()
+            : null,
+        })
+      );
+    }
+  };
   return (
     <div
       className={styles.ganttVerticalContainer}
@@ -78,7 +107,10 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
             scrollX={scrollX}
             taskListHieght={taskListHieght}
           />
-          <TaskGanttContent {...newBarProps} />
+          <TaskGanttContent
+            {...newBarProps}
+            clickBaselineItem={clickBaselineItem}
+          />
         </svg>
 
         {false && (

@@ -8,3 +8,5 @@ export const pivotalPathLinkBorderColor = "#6554C0";
 
 // 滚动条的高度
 export const scrollBarHeight = 16;
+// 一天秒数
+export const daySeconds = 24 * 60 * 60 * 1000;

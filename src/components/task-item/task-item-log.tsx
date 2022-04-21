@@ -25,7 +25,7 @@ export type TaskItemProps = {
 };
 
 export const TaskItemLog: React.FC<TaskItemProps> = props => {
-  const { task, isSelected, jsPlumb } = {
+  const { task, onEventStart, isSelected, jsPlumb } = {
     ...props,
   };
 
@@ -51,5 +51,13 @@ export const TaskItemLog: React.FC<TaskItemProps> = props => {
     }
   }, [task, isSelected, jsPlumb]);
 
-  return <g>{taskItem}</g>;
+  return (
+    <g
+      onClick={e => {
+        onEventStart("click", task, e);
+      }}
+    >
+      {taskItem}
+    </g>
+  );
 };
