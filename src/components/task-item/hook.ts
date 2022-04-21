@@ -20,8 +20,8 @@ export const pointOutEvent = (
 };
 export const barAnchor = {
   milestone: {
-    Left: [0, 0.5, -1, 0, 2, 0, "Left"],
-    Right: [1, 0.5, 1, 0, -1, 0, "Right"],
+    Left: [0, 0.5, -1, 0, 5, 0, "Left"],
+    Right: [1, 0.5, 1, 0, -2, 0, "Right"],
   },
   normal: {
     Left: [0, 0.5, -1, 0, 0, 0, "Left"],

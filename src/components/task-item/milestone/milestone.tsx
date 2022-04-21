@@ -9,10 +9,16 @@ export const Milestone: React.FC<TaskItemProps> = ({
   onEventStart,
   // isSelected,
   jsPlumb,
+  setPointInited,
 }) => {
   const barRef = useRef<any>(null);
   // 设置端点
-  useAddPoint(jsPlumb, task, barRef, "milestone");
+  const addPointFinished = useAddPoint(jsPlumb, task, barRef, "milestone");
+  useEffect(() => {
+    if (addPointFinished) {
+      setPointInited?.(addPointFinished);
+    }
+  }, [addPointFinished, setPointInited]);
   useHover(barRef, jsPlumb, task.id);
   useEffect(() => {
     if (jsPlumb) {
@@ -57,10 +63,10 @@ export const Milestone: React.FC<TaskItemProps> = ({
       />
       <image
         href={base64Milestone}
-        x={task.x1}
-        y={task.y}
-        width={task.height}
-        height={task.height}
+        x={task.x1 + task.height / 6}
+        y={task.y + task.height / 6}
+        width={(task.height * 2) / 3}
+        height={(task.height * 2) / 3}
         onMouseDown={e => {
           isDateChangeable && onEventStart("move", task, e);
         }}

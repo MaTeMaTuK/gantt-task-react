@@ -7,7 +7,7 @@ export const errorLinkBorderColor = "#FF8F73";
 export const pivotalPathLinkBorderColor = "#6554C0";
 
 // 滚动条的高度
-export const scrollBarHeight = 16;
+export const scrollBarHeight = 4;
 
 export const dayFormat = "YYYY-MM-DD";
 // 一天秒数

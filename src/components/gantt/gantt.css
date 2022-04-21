@@ -9,6 +9,9 @@
 :global(.ganttHeaderGlobal .ant-space-item) {
   z-index: 2;
 }
+:global(.ganttHeaderGlobal) {
+  margin-top: 2px;
+}
 :global(.overlay-label) {
   width: 20px;
   height: 20px;
