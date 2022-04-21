@@ -651,13 +651,13 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           })}
         </g>
         <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
-          {tasks.map((task, index) => {
+          {tasks.map(task => {
             const cuttentLog = logTasks.find(ele => ele.id === task.id);
             if (cuttentLog) {
               cuttentLog.y = task.y;
             }
             return (
-              <g key={index}>
+              <g key={`g-${task.id}`}>
                 {!cuttentLog?.start || !cuttentLog?.end ? null : (
                   <TaskItemLog
                     task={cuttentLog}
