@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { commonConfig } from "../../helpers/jsPlumbConfig";
 export const pointOverEvent = (barRef: any, jsPlumb: any, id: string) => {
   // 鼠标移入连接点时会触发barWrapper失去hover,从而导致barHandle和handleGroup消失，所以采用动态添加class的方式
@@ -61,12 +61,14 @@ export const useHover = (
     }
   }, [barRef, jsPlumb, id]);
 };
+
 export const useAddPoint = (
   jsPlumb: any,
   task: any,
   barRef: any,
   type?: string
 ) => {
+  const [addPointFinished, setAddPointFinished] = useState(false);
   useEffect(() => {
     if (jsPlumb) {
       // 生成新节点删除旧节点时需设置setIdChanged
@@ -103,6 +105,7 @@ export const useAddPoint = (
         pointOverEvent(barRef, jsPlumb, task.id)
       );
       leftPoint.bind("mouseout", () => pointOutEvent(barRef, jsPlumb, task.id));
+      setAddPointFinished(true);
     }
     return () => {
       if (jsPlumb) {
@@ -111,4 +114,5 @@ export const useAddPoint = (
       }
     };
   }, [jsPlumb, task.y, barRef, task.id, type]);
+  return addPointFinished;
 };

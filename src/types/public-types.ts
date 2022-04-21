@@ -226,6 +226,7 @@ export interface GanttProps
   setCurrentLog?: (value: BaselineProps) => void;
   renderTaskListComponent?: () => JSX.Element;
   renderUserAvatar?: (assignee: Assignee[]) => JSX.Element;
+  renderOverflowTooltip?: (value: string) => JSX.Element;
   isUpdate?: boolean;
   currentLog?: BaselineProps;
   actionRef?: React.MutableRefObject<any>;

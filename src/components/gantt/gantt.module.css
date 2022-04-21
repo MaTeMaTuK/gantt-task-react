@@ -45,6 +45,9 @@
   color: #4b8bff;
   background: #dbe8ff;
   border-radius: 4px;
+  width: 240px;
+  display: flex;
+  align-items: center;
 }
 .wrapper .choosedBaselIne,
 .wrapper button {
@@ -52,6 +55,7 @@
 }
 .choosedBaselIne .loaded {
   margin-right: 8px;
+  width: 175px;
 }
 .task-gantt-wrapper {
   position: absolute;
@@ -121,7 +125,7 @@
   position: absolute;
   right: 0;
   top: 1px;
-  width: 20px;
+  width: 33px;
   background: #fff;
   height: calc(100% - 1px);
   border: 0;
@@ -142,6 +146,7 @@
   height: 39px;
   background: #fff;
   cursor: default;
+  width: 30px;
 }
 
 .dividerIconWarpper {

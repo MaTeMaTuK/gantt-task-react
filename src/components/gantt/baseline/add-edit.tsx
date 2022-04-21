@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { Modal, Form, Input } from "antd";
 import { BaselineProps } from "../../../types/public-types";
+import { BaseLineContext } from "../../../contsxt";
 import dayjs from "dayjs";
+
 const { TextArea } = Input;
 interface ModalProps {
   visible: boolean;
@@ -19,6 +21,11 @@ export const AddEdit: React.FC<ModalProps> = ({
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const { baselineList } = useContext(BaseLineContext);
+  console.log(currentBaseline, "currentBaseline");
+  const isEdit = useMemo(() => {
+    return !!currentBaseline?.objectId;
+  }, [currentBaseline]);
   useEffect(() => {
     setModalVisible(visible);
   }, [visible]);
@@ -43,9 +50,31 @@ export const AddEdit: React.FC<ModalProps> = ({
         console.log("Validate Failed:", info);
       });
   };
+  const nameValidator = (
+    {},
+    value: string,
+    callback: (error?: string) => void
+  ) => {
+    if (!value) {
+      callback();
+    } else {
+      const findRepeat = baselineList.filter(
+        (ele: BaselineProps) => ele.name === value
+      );
+      if (
+        findRepeat.length &&
+        currentBaseline &&
+        currentBaseline.name !== value
+      ) {
+        callback("该名称已存在");
+      } else {
+        callback();
+      }
+    }
+  };
   return (
     <Modal
-      title="新建基线"
+      title={`${isEdit ? "编辑" : "新建"}基线`}
       visible={modalVisible}
       onCancel={handleCancel}
       onOk={confirmOk}
@@ -64,9 +93,15 @@ export const AddEdit: React.FC<ModalProps> = ({
         <Form.Item
           label="基线名称"
           name="name"
-          rules={[{ required: true, message: "请输入基线名称" }]}
+          rules={[
+            { required: true, message: "请输入基线名称" },
+            { validator: nameValidator },
+          ]}
         >
-          <Input placeholder="请输入基线名称" />
+          <Input
+            placeholder="请输入基线名称，最大长度32个字符"
+            maxLength={32}
+          />
         </Form.Item>
         <Form.Item label="描述" name="description">
           <TextArea placeholder="请输入基线描述" />

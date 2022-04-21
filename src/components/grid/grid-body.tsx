@@ -10,7 +10,6 @@ import { Task, ViewMode, EventOption } from "../../types/public-types";
 import { addToDate } from "../../helpers/date-helper";
 import { GanttConfigContext } from "../../contsxt";
 
-// import { GanttContext } from "../../contsxt";
 import styles from "./grid.module.css";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
