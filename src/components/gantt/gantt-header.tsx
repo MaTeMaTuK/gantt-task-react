@@ -5,13 +5,14 @@ import {
   viewModeOptions,
   ViewMode,
   GanttConfigProps,
+  ConfigOption,
 } from "../../types/public-types";
 import SettingsIcon from "../icons/settings";
 import ToTodayIcon from "../icons/toToday";
 import Baseline from "./baseline/popover";
 import Display from "./display";
 const { Option } = Select;
-interface GanttHeaderProps {
+interface GanttHeaderProps extends ConfigOption {
   toToday: () => void;
   toConfig: () => void;
   modeChange: (val: ViewMode) => void;
@@ -24,6 +25,9 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
   modeChange,
   ganttConfig,
   configHandle,
+  isBaseLine,
+  isDisplayConfig,
+  isSetting,
 }) => {
   const handleOperation = () => {
     toConfig();
@@ -34,8 +38,11 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
   return (
     <div className={styles.ganttHeader}>
       <Space size={20} className="ganttHeaderGlobal">
-        <Baseline />
-        <Display ganttConfig={ganttConfig} configHandle={configHandle} />
+        {isBaseLine && <Baseline />}
+        {isDisplayConfig && (
+          <Display ganttConfig={ganttConfig} configHandle={configHandle} />
+        )}
+
         <span className="ganttCalendarSelect">
           <Select
             style={{ width: 50 }}
@@ -58,11 +65,13 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
             <ToTodayIcon />
           </span>
         </Tooltip>
-        <Tooltip placement="top" title="设置">
-          <span className={styles.cursor} onClick={handleOperation}>
-            <SettingsIcon />
-          </span>
-        </Tooltip>
+        {isSetting && (
+          <Tooltip placement="top" title="设置">
+            <span className={styles.cursor} onClick={handleOperation}>
+              <SettingsIcon />
+            </span>
+          </Tooltip>
+        )}
       </Space>
     </div>
   );

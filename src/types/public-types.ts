@@ -100,7 +100,11 @@ export interface DisplayOption {
    */
   locale?: string;
 }
-
+export interface ConfigOption {
+  isBaseLine?: boolean; // 是否显示基线
+  isDisplayConfig?: boolean; // 是否有显示配置
+  isSetting?: boolean; // 是否显示配置按钮
+}
 export interface StylingOption {
   headerHeight?: number;
   columnWidth?: number;
@@ -179,7 +183,7 @@ export interface FieldsTypeProps extends OptionsProp {
   [propName: string]: any;
 }
 export interface FieldAndItemProps extends OptionsProp {
-  fieldType: FieldsTypeProps;
+  fieldType?: FieldsTypeProps;
   icon?: string;
 }
 
@@ -208,6 +212,7 @@ export interface GanttProps
   extends EventOption,
     DisplayOption,
     StylingOption,
+    ConfigOption,
     ConnectionProps {
   tasks: Task[];
   baseLineLog?: Task[];
@@ -229,6 +234,7 @@ export interface GanttProps
   actionRef?: React.MutableRefObject<any>;
   workspaceId?: string;
   getCustomFields?: (val: TimeItemProps) => Promise<any>;
+  isConnect?: boolean; // 是否允许连线
 }
 
 export interface TabConfigProps {

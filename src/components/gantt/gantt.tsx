@@ -50,12 +50,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   baseLineLog,
   isUpdate,
-  headerHeight = 40,
+  headerHeight = 41,
   // columnWidth = 60,
   listCellWidth = "155px",
   listWidth = 496,
-  listBottomHeight = 48,
-  rowHeight = 40,
+  listBottomHeight = 0,
+  rowHeight = 41,
   // viewMode = ViewMode.Day,
   // locale = "en-GB",
   locale = "zh-cn",
@@ -94,11 +94,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   itemLinks = [], // 卡片关联
   addConnection,
   delConnection,
-  baselineList,
+  baselineList = [],
   currentLog,
   actionRef,
   workspaceId,
   getCustomFields, // 获取字段
+  isConnect = true,
+  isBaseLine = true,
+  isDisplayConfig = true,
+  isSetting = true,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -200,29 +204,31 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
     const newDates = seedDates(startDate, endDate, viewMode);
-    setLogTasks(
-      convertToBarTasks(
-        // @ts-ignore
-        (tasks = baseLineLog),
-        newDates,
-        columnWidth,
-        rowHeight,
-        taskHeight,
-        barCornerRadius,
-        handleWidth,
-        barProgressColor,
-        barProgressSelectedColor,
-        barBackgroundColor,
-        barBackgroundSelectedColor,
-        projectProgressColor,
-        projectProgressSelectedColor,
-        projectBackgroundColor,
-        projectBackgroundSelectedColor,
-        milestoneBackgroundColor,
-        milestoneBackgroundSelectedColor,
-        viewMode
-      )
-    );
+    if (baseLineLog?.length) {
+      setLogTasks(
+        convertToBarTasks(
+          // @ts-ignore
+          (tasks = baseLineLog),
+          newDates,
+          columnWidth,
+          rowHeight,
+          taskHeight,
+          barCornerRadius,
+          handleWidth,
+          barProgressColor,
+          barProgressSelectedColor,
+          barBackgroundColor,
+          barBackgroundSelectedColor,
+          projectProgressColor,
+          projectProgressSelectedColor,
+          projectBackgroundColor,
+          projectBackgroundSelectedColor,
+          milestoneBackgroundColor,
+          milestoneBackgroundSelectedColor,
+          viewMode
+        )
+      );
+    }
   }, [
     baseLineLog,
     isUpdate,
@@ -290,6 +296,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     if (!listCellWidth) {
       setTaskListWidth(0);
     }
+    console.log(taskListRef, "taskListRef.current");
     if (taskListRef.current) {
       setTaskListWidth(taskListRef.current.offsetWidth);
     }
@@ -618,6 +625,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       delConnection,
       addConnection,
       itemLinks,
+      isConnect,
     };
   }, [
     barTasks,
@@ -644,6 +652,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     addConnection,
     itemLinks,
     handleSelectedTask,
+    isConnect,
   ]);
   const TaskListComponent = useMemo(() => {
     if (typeof renderTaskListComponent === "function") {
@@ -835,6 +844,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             modeChange={modeChange}
             ganttConfig={ganttConfig}
             configHandle={configHandle}
+            isBaseLine={isBaseLine} // 是否显示基线
+            isDisplayConfig={isDisplayConfig} // 是否有显示配置
+            isSetting={isSetting}
           />
         </BaseLineContext.Provider>
 
@@ -878,6 +890,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               scrollX={scrollX}
               onScroll={handleScrollX}
               taskListHieght={taskListRef?.current?.offsetHeight}
+              listBottomHeight={listBottomHeight}
             />
           )}
           <div

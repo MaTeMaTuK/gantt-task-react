@@ -52,6 +52,7 @@ export type TaskGanttContentProps = {
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
   clickBaselineItem?: (offsetX: number, currentLogItem: BarTask) => void;
+  isConnect?: boolean;
 } & EventOption &
   ConnectionProps;
 
@@ -82,6 +83,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     addConnection,
     itemLinks,
     clickBaselineItem,
+    isConnect,
   }) => {
     const [connectUuids, setConnectUuids] = useState([]);
     const point = svg?.current?.createSVGPoint();
@@ -391,14 +393,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       [delConnection, itemLinks]
     );
     useEffect(() => {
-      import("jsplumb").then(({ jsPlumb }: any) => {
-        jsPlumb.ready(() => {
-          const instance = jsPlumb.getInstance();
-          instance.fire("jsPlumbDemoLoaded", instance);
-          setJsPlumbInstance(instance);
+      if (isConnect) {
+        import("jsplumb").then(({ jsPlumb }: any) => {
+          jsPlumb.ready(() => {
+            const instance = jsPlumb.getInstance();
+            instance.fire("jsPlumbDemoLoaded", instance);
+            setJsPlumbInstance(instance);
+          });
         });
-      });
-    }, []);
+      }
+    }, [isConnect]);
     useEffect(() => {
       if (jsPlumbInstance) {
         const originalOffset = jsPlumbInstance.getOffset;
