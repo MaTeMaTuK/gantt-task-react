@@ -27,6 +27,7 @@ export type TaskGanttProps = {
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
   taskListHieght?: number;
   listBottomHeight?: number;
+  taskListHeight?: number;
   // onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 const TaskGanttComponent: React.ForwardRefRenderFunction<
@@ -39,9 +40,10 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
     barProps,
     scrollX,
     onScroll,
-    taskListHieght,
+    taskListHeight,
     listBottomHeight,
   },
+
   ref
 ) => {
   const { dates, onDateChange, columnWidth } = gridProps;
@@ -105,8 +107,8 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
           height={
-            barProps.rowHeight * barProps.tasks.length < Number(taskListHieght)
-              ? taskListHieght
+            barProps.rowHeight * barProps.tasks.length < Number(taskListHeight)
+              ? taskListHeight
               : barProps.rowHeight * barProps.tasks.length + scrollBarHeight
           }
           fontFamily={barProps.fontFamily}
@@ -117,10 +119,11 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
             {...gridProps}
             viewMode={calendarProps.viewMode}
             scrollX={scrollX}
-            taskListHieght={taskListHieght}
+            taskListHeight={taskListHeight}
           />
           <TaskGanttContent
             {...newBarProps}
+            taskListHeight={taskListHeight}
             clickBaselineItem={clickBaselineItem}
           />
         </svg>

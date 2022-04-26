@@ -86,6 +86,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onSelect,
   renderTaskListComponent,
   renderOverflowTooltip,
+  renderUserAvatar,
   itemTypeData, // 卡片类型
   configHandle, // 配置事件
   baseLineHandle, // 基线事件
@@ -889,8 +890,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               ganttHeight={ganttHeight}
               scrollX={scrollX}
               onScroll={handleScrollX}
-              taskListHieght={taskListRef?.current?.offsetHeight}
               listBottomHeight={listBottomHeight}
+              taskListHeight={taskListRef?.current?.offsetHeight}
             />
           )}
           <div
@@ -940,6 +941,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               headerHeight={headerHeight}
               taskListWidth={taskListWidth}
               TooltipContent={TooltipContent}
+              renderUserAvatar={renderUserAvatar}
             />
           )}
           {tasks.length > 0 && (

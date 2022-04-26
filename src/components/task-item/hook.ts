@@ -18,7 +18,16 @@ export const pointOutEvent = (
     jsPlumb.selectEndpoints({ element: id }).removeClass("endpoint-hover");
   }
 };
-
+export const barAnchor = {
+  milestone: {
+    Left: [0, 0.5, -1, 0, 5, 0, "Left"],
+    Right: [1, 0.5, 1, 0, -2, 0, "Right"],
+  },
+  normal: {
+    Left: [0, 0.5, -1, 0, 0, 0, "Left"],
+    Right: [1, 0.5, 1, 0, 0, 0, "Right"],
+  },
+};
 export const useHover = (
   barRef: React.RefObject<Element>,
   jsPlumb: any,
@@ -52,7 +61,13 @@ export const useHover = (
     }
   }, [barRef, jsPlumb, id]);
 };
-export const useAddPoint = (jsPlumb: any, task: any, barRef: any) => {
+
+export const useAddPoint = (
+  jsPlumb: any,
+  task: any,
+  barRef: any,
+  type?: string
+) => {
   const [addPointFinished, setAddPointFinished] = useState(false);
   useEffect(() => {
     if (jsPlumb) {
@@ -61,8 +76,10 @@ export const useAddPoint = (jsPlumb: any, task: any, barRef: any) => {
       const rightPoint = jsPlumb.addEndpoint(
         task.id,
         {
-          // anchor: [1, 0.5, 1, 0, 22, 0, "Right"],
-          anchor: [1, 0.5, 1, 0, 0, 0, "Right"],
+          anchor:
+            type === "milestone"
+              ? barAnchor.milestone.Right
+              : barAnchor.normal.Right,
           uuid: task.id + "-Right",
         },
         commonConfig
@@ -76,8 +93,10 @@ export const useAddPoint = (jsPlumb: any, task: any, barRef: any) => {
       const leftPoint = jsPlumb.addEndpoint(
         task.id,
         {
-          // anchor: [0, 0.5, -1, 0, -22, 0, "Left"],
-          anchor: [0, 0.5, -1, 0, 0, 0, "Left"],
+          anchor:
+            type === "milestone"
+              ? barAnchor.milestone.Left
+              : barAnchor.normal.Left,
           uuid: task.id + "-Left",
         },
         commonConfig
@@ -94,6 +113,6 @@ export const useAddPoint = (jsPlumb: any, task: any, barRef: any) => {
         jsPlumb.deleteEndpoint(task.id + "-Right");
       }
     };
-  }, [jsPlumb, task.y, barRef, task.id]);
+  }, [jsPlumb, task.y, barRef, task.id, type]);
   return addPointFinished;
 };

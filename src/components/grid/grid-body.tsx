@@ -24,7 +24,7 @@ export type GridBodyProps = {
   viewMode?: string;
   scrollX: number;
   offsetLeft: number;
-  taskListHieght?: number;
+  taskListHeight?: number;
 } & EventOption;
 // 判断是否为周末
 // 之前用是dayjs的weekday()方法获取周几，本地运行可以，但是线上包计算有无，具体原因不确定，所以采用getDay方法
@@ -43,7 +43,7 @@ export const GridBody: React.FC<GridBodyProps> = memo(
     viewMode,
     scrollX,
     offsetLeft,
-    taskListHieght,
+    taskListHeight,
     onDateChange,
   }) => {
     const { ganttConfig } = useContext(GanttConfigContext);
@@ -301,7 +301,7 @@ export const GridBody: React.FC<GridBodyProps> = memo(
             x1={tickX}
             y1={0}
             x2={tickX}
-            y2={y < Number(taskListHieght) ? taskListHieght : y}
+            y2={y < Number(taskListHeight) ? taskListHeight : y}
             className={styles.gridTick}
           />
           {isRestDay(date) && viewMode === ViewMode.Day && (
@@ -310,7 +310,7 @@ export const GridBody: React.FC<GridBodyProps> = memo(
               x={tickX + 1}
               y="0"
               width={columnWidth - 1}
-              height={y < Number(taskListHieght) ? taskListHieght : y}
+              height={y < Number(taskListHeight) ? taskListHeight : y}
               className={styles.gridTickWeekday}
             />
           )}
@@ -365,7 +365,7 @@ export const GridBody: React.FC<GridBodyProps> = memo(
               x1={newTickX}
               y1="0"
               x2={newTickX}
-              y2={y < Number(taskListHieght) ? taskListHieght : y}
+              y2={y < Number(taskListHeight) ? taskListHeight : y}
               style={{ stroke: todayColor, strokeWidth: "1" }}
             />
           </g>
