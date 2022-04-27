@@ -32,6 +32,50 @@ export const Calendar: React.FC<CalendarProps> = ({
   fontFamily,
   fontSize,
 }) => {
+  const getCalendarValuesForYear = () => {
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
+    const topDefaultHeight = headerHeight * 0.5;
+    for (let i = 0; i < dateSetup.dates.length; i++) {
+      const date = dateSetup.dates[i];
+      const bottomValue = date.getFullYear();
+      bottomValues.push(
+        <text
+          key={date.getFullYear()}
+          y={headerHeight * 0.8}
+          x={columnWidth * i + columnWidth * 0.5}
+          className={styles.calendarBottomText}
+        >
+          {bottomValue}
+        </text>
+      );
+      if (
+        i === 0 ||
+        date.getFullYear() !== dateSetup.dates[i - 1].getFullYear()
+      ) {
+        const topValue = date.getFullYear().toString();
+        let xText: number;
+        if (rtl) {
+          xText = (6 + i + date.getFullYear() + 1) * columnWidth;
+        } else {
+          xText = (6 + i - date.getFullYear()) * columnWidth;
+        }
+        topValues.push(
+          <TopPartOfCalendar
+            key={topValue}
+            value={topValue}
+            x1Line={columnWidth * i}
+            y1Line={0}
+            y2Line={headerHeight}
+            xText={xText}
+            yText={topDefaultHeight * 0.9}
+          />
+        );
+      }
+    }
+    return [topValues, bottomValues];
+  };
+
   const getCalendarValuesForMonth = () => {
     const topValues: ReactChild[] = [];
     const bottomValues: ReactChild[] = [];
@@ -268,10 +312,13 @@ export const Calendar: React.FC<CalendarProps> = ({
   let topValues: ReactChild[] = [];
   let bottomValues: ReactChild[] = [];
   switch (dateSetup.viewMode) {
-    case ViewMode.Month:
-      [topValues, bottomValues] = getCalendarValuesForMonth();
+    case ViewMode.Year:
+      [topValues, bottomValues] = getCalendarValuesForYear();
       break;
-    case ViewMode.Week:
+    case ViewMode.Month:
+        [topValues, bottomValues] = getCalendarValuesForMonth();
+        break;
+      case ViewMode.Week:
       [topValues, bottomValues] = getCalendarValuesForWeek();
       break;
     case ViewMode.Day:
