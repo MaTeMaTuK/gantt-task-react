@@ -87,7 +87,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   renderTaskListComponent,
   renderOverflowTooltip,
   renderUserAvatar,
-  itemTypeData, // 卡片类型
+  itemTypeData = [], // 卡片类型
   configHandle, // 配置事件
   baseLineHandle, // 基线事件
   setCurrentLog, // 选择基线log
@@ -104,9 +104,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   isBaseLine = true,
   isDisplayConfig = true,
   isSetting = true,
+  onMouseEvent,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
+  const onMouseEventRef = useRef<any>(null);
   const taskGanttContainerRef = useRef<any>({});
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
@@ -253,6 +255,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const { changedTask, action } = ganttEvent;
     if (changedTask) {
+      onMouseEventRef.current = changedTask;
+      onMouseEvent?.(action, changedTask);
       if (action === "delete") {
         setGanttEvent({ action: "" });
         setBarTasks(barTasks.filter(t => t.id !== changedTask.id));
@@ -276,8 +280,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           setBarTasks(newTaskList);
         }
       }
+    } else if (onMouseEventRef.current) {
+      onMouseEvent?.(action, changedTask);
     }
-  }, [ganttEvent, barTasks]);
+  }, [ganttEvent, barTasks, onMouseEvent]);
 
   useEffect(() => {
     if (failedTask) {
