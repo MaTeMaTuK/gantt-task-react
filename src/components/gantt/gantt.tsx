@@ -903,6 +903,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               onScroll={handleScrollX}
               listBottomHeight={listBottomHeight}
               taskListHeight={taskListRef?.current?.offsetHeight}
+              headerHeight={headerHeight}
             />
           )}
           <div
@@ -921,7 +922,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               height: `calc(100% - ${listBottomHeight}px)`,
             }}
           >
-            <div className={styles.dividerContainer}>
+            <div
+              className={styles.dividerContainer}
+              style={{
+                height: `calc(100% - ${headerHeight}px)`,
+                top: `${headerHeight}px`,
+              }}
+            >
               <hr
                 onMouseDown={
                   taskListWidth <= minWidth ? undefined : handleDividerMouseDown

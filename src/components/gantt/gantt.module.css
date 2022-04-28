@@ -63,9 +63,6 @@
   left: 0;
 }
 
-.calendarWrapper {
-  height: 40px;
-}
 .ganttHeader {
   text-align: right;
   margin: 0 0 16px;
@@ -117,10 +114,7 @@
 
 .dividerContainer {
   position: relative;
-  height: calc(100% - 40px);
-  top: 40px;
 }
-
 .dividerContainer > hr {
   position: absolute;
   right: 0;

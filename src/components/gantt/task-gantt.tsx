@@ -28,6 +28,7 @@ export type TaskGanttProps = {
   taskListHieght?: number;
   listBottomHeight?: number;
   taskListHeight?: number;
+  headerHeight: number;
   // onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 const TaskGanttComponent: React.ForwardRefRenderFunction<
@@ -42,6 +43,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
     onScroll,
     taskListHeight,
     listBottomHeight,
+    headerHeight,
   },
 
   ref
@@ -87,7 +89,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
         marginBottom: `${listBottomHeight}px`,
       }}
     >
-      <div className={styles.calendarWrapper}>
+      <div style={{ height: `${headerHeight}px` }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
