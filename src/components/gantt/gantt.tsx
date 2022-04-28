@@ -54,7 +54,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // columnWidth = 60,
   listCellWidth = "155px",
   listWidth = 496,
-  listBottomHeight = 0,
+  listBottomHeight = 48,
   rowHeight = 41,
   // viewMode = ViewMode.Day,
   // locale = "en-GB",
@@ -105,6 +105,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   isDisplayConfig = true,
   isSetting = true,
   onMouseEvent,
+  onClickEvent,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -255,8 +256,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const { changedTask, action } = ganttEvent;
     if (changedTask) {
+      // 用于判断mouseLeave事件
       onMouseEventRef.current = changedTask;
-      onMouseEvent?.(action, changedTask);
       if (action === "delete") {
         setGanttEvent({ action: "" });
         setBarTasks(barTasks.filter(t => t.id !== changedTask.id));
@@ -279,11 +280,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           );
           setBarTasks(newTaskList);
         }
+      } else if (action === "click") {
+        onClickEvent?.(action, changedTask);
+      } else if (action === "mouseenter") {
+        onMouseEvent?.(action, changedTask);
       }
     } else if (onMouseEventRef.current) {
       onMouseEvent?.(action, changedTask);
     }
-  }, [ganttEvent, barTasks, onMouseEvent]);
+  }, [ganttEvent, barTasks, onMouseEvent, onClickEvent]);
 
   useEffect(() => {
     if (failedTask) {

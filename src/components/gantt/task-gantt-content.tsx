@@ -252,9 +252,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             });
           }
         } else if (action === "mouseleave") {
-          if (ganttEvent.action === "mouseenter") {
-            setGanttEvent({ action: "" });
-          }
+          // if (ganttEvent.action === "mouseenter") {
+          //   setGanttEvent({ action: "" });
+          // }
+          setGanttEvent({ action: "" });
         } else if (action === "dblclick") {
           !!onDoubleClick && onDoubleClick(task);
         } else if (action === "click") {
@@ -267,6 +268,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           if (!(currentLogItem?.[0]?.end && currentLogItem?.[0]?.start)) {
             clickBaselineItem?.(offsetX, currentLogItem[0]);
           }
+          setGanttEvent({ action, changedTask: task });
         }
         // Change task event start
         else if (action === "move") {

@@ -239,6 +239,7 @@ export interface GanttProps
   getCustomFields?: (val: TimeItemProps) => Promise<any>;
   isConnect?: boolean; // 是否允许连线
   onMouseEvent?: (type?: string, task?: Task) => void;
+  onClickEvent?: (type?: string, task?: Task) => void;
 }
 
 export interface TabConfigProps {
