@@ -28,6 +28,8 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
   isBaseLine,
   isDisplayConfig,
   isSetting,
+  isViewModeChange,
+  isToToday,
 }) => {
   const handleOperation = () => {
     toConfig();
@@ -42,29 +44,33 @@ export const GanttHeader: React.FC<GanttHeaderProps> = ({
         {isDisplayConfig && (
           <Display ganttConfig={ganttConfig} configHandle={configHandle} />
         )}
-
-        <span className="ganttCalendarSelect">
-          <Select
-            style={{ width: 50 }}
-            onChange={handleChange}
-            defaultValue={ViewMode.Day}
-            virtual={false}
-            dropdownClassName="calendarSwitch"
-          >
-            {viewModeOptions.map(ele => {
-              return (
-                <Option key={ele.value} value={ele.value}>
-                  {ele.label}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <Tooltip placement="top" title="今天">
-          <span className={styles.cursor} onClick={toToday}>
-            <ToTodayIcon />
+        {isViewModeChange && (
+          <span className="ganttCalendarSelect">
+            <Select
+              style={{ width: 50 }}
+              onChange={handleChange}
+              defaultValue={ViewMode.Day}
+              virtual={false}
+              dropdownClassName="calendarSwitch"
+            >
+              {viewModeOptions.map(ele => {
+                return (
+                  <Option key={ele.value} value={ele.value}>
+                    {ele.label}
+                  </Option>
+                );
+              })}
+            </Select>
           </span>
-        </Tooltip>
+        )}
+        {isToToday && (
+          <Tooltip placement="top" title="今天">
+            <span className={styles.cursor} onClick={toToday}>
+              <ToTodayIcon />
+            </span>
+          </Tooltip>
+        )}
+
         {isSetting && (
           <Tooltip placement="top" title="设置">
             <span className={styles.cursor} onClick={handleOperation}>

@@ -106,6 +106,8 @@ export interface ConfigOption {
   isBaseLine?: boolean; // 是否显示基线
   isDisplayConfig?: boolean; // 是否有显示配置
   isSetting?: boolean; // 是否显示配置按钮
+  isViewModeChange?: boolean; // 是否视图切换
+  isToToday?: boolean; // 是否定位到当天
 }
 export interface StylingOption {
   headerHeight?: number;

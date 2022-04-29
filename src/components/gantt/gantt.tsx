@@ -104,6 +104,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   isBaseLine = true,
   isDisplayConfig = true,
   isSetting = true,
+  isViewModeChange = true,
+  isToToday = true,
   onMouseEvent,
   onClickEvent,
 }) => {
@@ -856,8 +858,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             modeChange={modeChange}
             ganttConfig={ganttConfig}
             configHandle={configHandle}
-            isBaseLine={isBaseLine} // 是否显示基线
-            isDisplayConfig={isDisplayConfig} // 是否有显示配置
+            isBaseLine={isBaseLine}
+            isDisplayConfig={isDisplayConfig}
+            isViewModeChange={isViewModeChange} // 是否视图切换
+            isToToday={isToToday} // 是否定位到当天
             isSetting={isSetting}
           />
         </BaseLineContext.Provider>
