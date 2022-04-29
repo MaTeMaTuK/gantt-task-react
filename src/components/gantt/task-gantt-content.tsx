@@ -52,6 +52,7 @@ export type TaskGanttContentProps = {
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
   clickBaselineItem?: (offsetX: number, currentLogItem: BarTask) => void;
+  containerRef?: React.MutableRefObject<any>;
 } & EventOption &
   ConnectionProps;
 
@@ -82,6 +83,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     addConnection,
     itemLinks,
     clickBaselineItem,
+    setConnection,
+    containerRef,
   }) => {
     const [connectUuids, setConnectUuids] = useState([]);
     const point = svg?.current?.createSVGPoint();
@@ -89,8 +92,24 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     const [initEventX1Delta, setInitEventX1Delta] = useState(0);
     const [isMoving, setIsMoving] = useState(false);
     const [jsPlumbInstance, setJsPlumbInstance] = useState<any>(null);
+    const [currentConnection, setCurrentConnection] = useState<any>(null);
     const { ganttConfig } = useContext(GanttConfigContext);
     const [pointInited, setPointInited] = useState(false);
+
+    useEffect(() => {
+      const connectClickHandle = () => {
+        if (currentConnection) {
+          currentConnection.removeClass("select-connection");
+          setCurrentConnection(null);
+          setConnection?.(null);
+        }
+      };
+      const container = containerRef?.current;
+      container?.addEventListener("click", connectClickHandle, true);
+      return () => {
+        container?.removeEventListener("click", connectClickHandle, true);
+      };
+    }, [containerRef, currentConnection, setConnection]);
     useEffect(() => {
       const dateDelta =
         dates[1].getTime() -
@@ -482,6 +501,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             infor.connection.endpoints[0].anchor.cssClass,
             infor.connection.endpoints[1].anchor.cssClass
           );
+          console.log(linkTypeId, "linkTypeId");
           const params = {
             source: infor?.sourceId,
             destination: infor?.targetId,
@@ -492,6 +512,17 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             infor.connection.setData(linkTypeId);
             addConnection(params);
           }
+        });
+        jsPlumbInstance.bind("click", (connection: any, originalEvent: any) => {
+          jsPlumbInstance.select().removeClass("select-connection");
+          connection.addClass("select-connection");
+          setCurrentConnection(connection);
+          setConnection?.({
+            sourceId: connection.sourceId,
+            targetId: connection.targetId,
+            linkTypeId: connection.getData(),
+            originalEvent: originalEvent,
+          });
         });
       }
       return () => {
@@ -564,9 +595,15 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       ganttConfig.relation,
       ganttConfig,
     ]);
+    // useEffect(() => {
+    //   // pointInited是连接点初始化完成的标志，解决jsPlumbInstance.connect连线时，由于连接点未初始化完成导致连线加载不出来
+    //   if (jsPlumbInstance && connectUuids.length && pointInited) {
+    // ]);
+
     useEffect(() => {
       // pointInited是连接点初始化完成的标志，解决jsPlumbInstance.connect连线时，由于连接点未初始化完成导致连线加载不出来
       if (jsPlumbInstance && connectUuids.length && pointInited) {
+        console.log(deleteIcon, "deleteIcon");
         jsPlumbInstance.setSuspendDrawing(true);
         for (let i = 0; i < connectUuids.length; i++) {
           const uuidObj = connectUuids[i];
@@ -590,7 +627,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
               connect.addOverlay([
                 "Label",
                 {
-                  label: deleteIcon,
+                  label: `<div>11111</div>`,
                   location: 0.5,
                   cssClass: "overlay-label",
                   events: {

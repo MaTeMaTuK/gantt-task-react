@@ -165,6 +165,7 @@ export interface ConnectionProps {
     linkType: string;
   }) => void;
   itemLinks: any[];
+  setConnection?: (connection: any) => void;
 }
 export interface TimeItemProps {
   itemType?: string;

@@ -26,6 +26,7 @@ export type TaskGanttProps = {
   scrollX: number;
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
   taskListHieght?: number;
+  setConnection?: (connection: any) => void;
   // onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 const TaskGanttComponent: React.ForwardRefRenderFunction<
@@ -110,6 +111,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
           <TaskGanttContent
             {...newBarProps}
             clickBaselineItem={clickBaselineItem}
+            containerRef={horizontalContainerRef}
           />
         </svg>
 

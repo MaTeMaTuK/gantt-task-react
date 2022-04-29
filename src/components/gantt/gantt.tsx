@@ -129,7 +129,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
   });
-
+  const [connection, setConnection] = useState(null);
   const [selectedTask, setSelectedTask] = useState<BarTask>();
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
 
@@ -150,6 +150,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const ganttFullHeight = barTasks.length * rowHeight;
   const minWidth = 2; // 面板折叠后，taskListWidth 设置成2（设置成0后，dom节点会移除）
   const paddingLeft = 38; // wrapper的padding值， 用于dividerWrapper定位
+  console.log(connection, "connection111");
   // task change events
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
@@ -618,6 +619,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       delConnection,
       addConnection,
       itemLinks,
+      setConnection,
     };
   }, [
     barTasks,
@@ -924,6 +926,23 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               scrollX={scrollX}
               scrollY={scrollY}
               task={ganttEvent.changedTask}
+              headerHeight={headerHeight}
+              taskListWidth={taskListWidth}
+              TooltipContent={TooltipContent}
+            />
+          )}
+          {connection && (
+            <Tooltip
+              arrowIndent={arrowIndent}
+              rowHeight={rowHeight}
+              svgContainerHeight={svgContainerHeight}
+              svgContainerWidth={svgContainerWidth}
+              fontFamily={fontFamily}
+              fontSize={fontSize}
+              scrollX={scrollX}
+              scrollY={scrollY}
+              // @ts-ignore
+              task={tasks[0]}
               headerHeight={headerHeight}
               taskListWidth={taskListWidth}
               TooltipContent={TooltipContent}
