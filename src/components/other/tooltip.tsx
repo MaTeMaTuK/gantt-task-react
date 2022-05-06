@@ -40,7 +40,6 @@ export const Tooltip: React.FC<TooltipProps> = memo(
     const [relatedY, setRelatedY] = useState(0);
     const [relatedX, setRelatedX] = useState(0);
     useEffect(() => {
-      console.log(task, 'task')
       if (tooltipRef.current) {
         let newRelatedX =
           task.x2 + arrowIndent + arrowIndent * 0.5 + taskListWidth - scrollX;
@@ -73,7 +72,6 @@ export const Tooltip: React.FC<TooltipProps> = memo(
         setRelatedX(newRelatedX);
       }
     }, [
-      tooltipRef.current,
       task,
       arrowIndent,
       scrollX,
@@ -94,7 +92,6 @@ export const Tooltip: React.FC<TooltipProps> = memo(
         }
         style={{ left: relatedX + 30, top: relatedY < -40 ? -40 : relatedY }}
       >
-        <div>pesorjfreofjfjwe</div>
         <TooltipContent
           task={task}
           fontSize={fontSize}

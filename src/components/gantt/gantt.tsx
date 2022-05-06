@@ -6,7 +6,6 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-// import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import {
@@ -17,6 +16,8 @@ import {
 import { CalendarProps } from "../calendar/calendar";
 import { TaskGanttContentProps } from "./task-gantt-content";
 import { StandardTooltipContent, Tooltip } from "../other/tooltip";
+import { DeleteTooltip } from "../other/deleteTooltip";
+
 import { VerticalScroll } from "../other/vertical-scroll";
 import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
@@ -129,7 +130,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
   });
-  const [connection, setConnection] = useState(null);
+  const [currentConnection, setCurrentConnection] = useState(null);
   const [selectedTask, setSelectedTask] = useState<BarTask>();
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
 
@@ -150,7 +151,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const ganttFullHeight = barTasks.length * rowHeight;
   const minWidth = 2; // 面板折叠后，taskListWidth 设置成2（设置成0后，dom节点会移除）
   const paddingLeft = 38; // wrapper的padding值， 用于dividerWrapper定位
-  console.log(connection, "connection111");
   // task change events
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
@@ -432,6 +432,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         setScrollY(refScrollY.current);
       }
       setIgnoreScrollEvent(false);
+      console.log(111);
+      setCurrentConnection(null);
     },
     [ignoreScrollEvent, setElementsScrollY]
   );
@@ -445,6 +447,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         setScrollX(refScrollX.current);
       }
       setIgnoreScrollEvent(false);
+      setCurrentConnection(null);
     },
     [ignoreScrollEvent, setElementsScrollX]
   );
@@ -548,6 +551,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     [barTasks, onSelect, selectedTask]
   );
   const boundLeft = wrapperRef.current?.getBoundingClientRect().left || 0;
+  const boundTop = wrapperRef.current?.getBoundingClientRect().top || 0;
   const offsetLeft = taskListRef.current?.clientWidth || 0;
   const gridProps: GridProps = useMemo(() => {
     return {
@@ -619,7 +623,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       delConnection,
       addConnection,
       itemLinks,
-      setConnection,
+      setCurrentConnection,
+      currentConnection,
     };
   }, [
     barTasks,
@@ -646,6 +651,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     addConnection,
     itemLinks,
     handleSelectedTask,
+    currentConnection,
   ]);
   const TaskListComponent = useMemo(() => {
     if (typeof renderTaskListComponent === "function") {
@@ -931,21 +937,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               TooltipContent={TooltipContent}
             />
           )}
-          {connection && (
-            <Tooltip
-              arrowIndent={arrowIndent}
-              rowHeight={rowHeight}
-              svgContainerHeight={svgContainerHeight}
-              svgContainerWidth={svgContainerWidth}
-              fontFamily={fontFamily}
-              fontSize={fontSize}
-              scrollX={scrollX}
-              scrollY={scrollY}
-              // @ts-ignore
-              task={tasks[0]}
-              headerHeight={headerHeight}
+          {currentConnection && (
+            <DeleteTooltip
+              tasks={tasks}
               taskListWidth={taskListWidth}
-              TooltipContent={TooltipContent}
+              currentConnection={currentConnection}
+              boundTop={boundTop}
+              itemLinks={itemLinks}
+              delConnection={delConnection}
+              setCurrentConnection={setCurrentConnection}
+              svgContainerHeight={svgContainerHeight}
             />
           )}
           {tasks.length > 0 && (

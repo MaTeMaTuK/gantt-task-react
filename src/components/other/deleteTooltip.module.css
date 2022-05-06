@@ -1,0 +1,66 @@
+.tooltipDeleteDefaultContainer {
+  background: #f4f5f7;
+  padding: 12px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  padding: 20px;
+  border-radius: 4px;
+  width: 300px;
+}
+
+.tooltipDeleteContainer {
+  position: absolute;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  color: #172b4d;
+}
+.title img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+.title span {
+  line-height: 16px;
+}
+.taskInfo {
+  background: #fff;
+  padding: 8px 16px;
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+  border-radius: 4px;
+}
+.date {
+  color: #6b778c;
+  padding-left: 30px;
+}
+.connect {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.unconnectionIcon:hover {
+  background-color: #ccc;
+  cursor: pointer;
+}
+.connection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 16px;
+}
+.connectionLine {
+  height: 12px;
+  border: 1px solid rgb(75, 139, 255);
+}
+.connectionIcon {
+  border-radius: 50%;
+  background: rgb(75, 139, 255);
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+}

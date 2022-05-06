@@ -1,137 +1,139 @@
-import React, { useRef, useEffect, useState, memo } from "react";
-import { Task } from "../../types/public-types";
-import { BarTask } from "../../types/bar-task";
-import styles from "./tooltip.module.css";
+import React, { useRef, useEffect, useState, memo, useMemo } from "react";
+// import { Button } from "antd";
+import { Task, ConnectionProps } from "../../types/public-types";
+import UnconnectionIcon from "../icons/unconnection";
+import ConnectionIcon from "../icons/connection";
+import { Tooltip } from "antd";
+import styles from "./deleteTooltip.module.css";
 
-export type TooltipProps = {
-  task: BarTask;
-  arrowIndent: number;
-  svgContainerHeight: number;
-  svgContainerWidth: number;
-  headerHeight: number;
+export type TooltipProps = ConnectionProps & {
+  tasks: Task[];
   taskListWidth: number;
-  scrollX: number;
-  scrollY: number;
-  rowHeight: number;
-  fontSize: string;
-  fontFamily: string;
-  TooltipContent: React.FC<{
-    task: Task;
-    fontSize: string;
-    fontFamily: string;
-  }>;
+  currentConnection?: any;
+  boundTop: number;
+  svgContainerHeight: number;
 };
-export const Tooltip: React.FC<TooltipProps> = memo(
+export const DeleteTooltip: React.FC<TooltipProps> = memo(
   ({
-    task,
-    rowHeight,
-    svgContainerHeight,
-    svgContainerWidth,
-    scrollX,
-    scrollY,
-    arrowIndent,
-    fontSize,
-    fontFamily,
-    headerHeight,
+    tasks,
+    delConnection,
     taskListWidth,
-    TooltipContent,
+    itemLinks,
+    currentConnection,
+    boundTop,
+    setCurrentConnection,
+    svgContainerHeight,
   }) => {
+    const path = window.location.origin;
     const tooltipRef = useRef<HTMLDivElement | null>(null);
     const [relatedY, setRelatedY] = useState(0);
     const [relatedX, setRelatedX] = useState(0);
+    const sourceTask = useMemo(() => {
+      return tasks.filter(ele => {
+        return ele.id === currentConnection.connection.sourceId;
+      });
+    }, [currentConnection.connection.sourceId, tasks]);
+    const targetTask = useMemo(() => {
+      return tasks.filter(
+        ele => ele.id === currentConnection.connection.targetId
+      );
+    }, [currentConnection.connection.targetId, tasks]);
     useEffect(() => {
-      console.log(task, 'task')
       if (tooltipRef.current) {
-        let newRelatedX =
-          task.x2 + arrowIndent + arrowIndent * 0.5 + taskListWidth - scrollX;
-        let newRelatedY = task.index * rowHeight - scrollY + headerHeight;
-
-        const tooltipHeight = tooltipRef.current.offsetHeight * 1.1;
-        const tooltipWidth = tooltipRef.current.offsetWidth * 1.1;
-
-        const tooltipLowerPoint = tooltipHeight + newRelatedY - scrollY;
-        const tooltipLeftmostPoint = tooltipWidth + newRelatedX;
-        const fullChartWidth = taskListWidth + svgContainerWidth;
-
-        if (tooltipLeftmostPoint > fullChartWidth) {
-          newRelatedX =
-            task.x1 +
-            taskListWidth -
-            arrowIndent -
-            arrowIndent * 0.5 -
-            scrollX -
-            tooltipWidth;
-        }
-        if (newRelatedX < taskListWidth) {
-          newRelatedX = svgContainerWidth + taskListWidth - tooltipWidth;
-          newRelatedY += rowHeight;
-        } else if (tooltipLowerPoint > svgContainerHeight - scrollY) {
-          newRelatedX = newRelatedX + 50;
-          newRelatedY = svgContainerHeight - tooltipHeight;
-        }
+        const tooltipHeight = tooltipRef.current.offsetHeight;
+        const newRelatedY =
+          currentConnection?.originalEvent?.clientY - boundTop + tooltipHeight >
+          svgContainerHeight
+            ? currentConnection?.originalEvent?.clientY -
+              boundTop -
+              tooltipHeight
+            : currentConnection?.originalEvent?.clientY - boundTop;
+        const newRelatedX =
+          currentConnection?.originalEvent?.clientX - taskListWidth;
         setRelatedY(newRelatedY);
         setRelatedX(newRelatedX);
       }
     }, [
-      tooltipRef.current,
-      task,
-      arrowIndent,
-      scrollX,
-      scrollY,
-      headerHeight,
+      tasks,
       taskListWidth,
-      rowHeight,
+      boundTop,
+      currentConnection?.originalEvent?.clientX,
+      currentConnection?.originalEvent?.clientY,
       svgContainerHeight,
-      svgContainerWidth,
     ]);
+    const removeConnection = async () => {
+      const currentLink = itemLinks?.filter((ele: any) => {
+        return (
+          ele.source?.objectId === currentConnection.connection?.sourceId &&
+          ele.destination?.objectId ===
+            currentConnection.connection?.targetId &&
+          ele.linkType?.objectId === currentConnection.connection.getData()
+        );
+      });
+      if (currentLink?.length) {
+        await delConnection?.(currentLink?.[0]?.objectId);
+        setCurrentConnection?.(null);
+      }
+    };
     return (
       <div
         ref={tooltipRef}
-        className={
-          relatedX
-            ? styles.tooltipDetailsContainer
-            : styles.tooltipDetailsContainerHidden
-        }
+        className={styles.tooltipDeleteContainer}
         style={{ left: relatedX + 30, top: relatedY < -40 ? -40 : relatedY }}
       >
-        <div>pesorjfreofjfjwe</div>
-        <TooltipContent
-          task={task}
-          fontSize={fontSize}
-          fontFamily={fontFamily}
-        />
+        {currentConnection && (
+          <div className={styles.tooltipDeleteDefaultContainer}>
+            <div className={styles.taskInfo}>
+              <div className={styles.title}>
+                <img
+                  src={`${path}${sourceTask[0]?.item?.itemType?.icon}`}
+                  alt=""
+                />
+                <span> {sourceTask[0]?.name}</span>
+              </div>
+              <div className={styles.date}>
+                {currentConnection.connection?.endpoints?.[0].anchor
+                  ?.cssClass === "Right"
+                  ? `结束日期：2022/09/12`
+                  : `开始日期：2022/09/12`}
+              </div>
+            </div>
+            <div className={styles.connect}>
+              {/* <Button type="link" onClick={removeConnection}>
+                解除关联
+                <ConnectionIcon />
+              </Button> */}
+              <div className={styles.connection}>
+                <div className={styles.connectionLine} />
+                <span className={styles.connectionIcon}>
+                  <ConnectionIcon style={{ fontSize: "18px" }} />
+                </span>
+                <div className={styles.connectionLine} />
+              </div>
+              <Tooltip title="解除事项链接" className={styles.unconnectionIcon}>
+                <span onClick={removeConnection}>
+                  <UnconnectionIcon />
+                </span>
+              </Tooltip>
+            </div>
+            <div className={styles.taskInfo}>
+              <div className={styles.title}>
+                <img
+                  src={`${path}${targetTask[0]?.item?.itemType?.icon}`}
+                  alt=""
+                />
+                <span>{targetTask[0]?.name}</span>
+              </div>
+              <div className={styles.date}>
+                {currentConnection.connection?.endpoints[1]?.anchor
+                  ?.cssClass === "Right"
+                  ? `结束日期：2022/09/12`
+                  : `开始日期：2022/09/12}`}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
 );
-
-export const StandardTooltipContent: React.FC<{
-  task: Task;
-  fontSize: string;
-  fontFamily: string;
-}> = ({ task, fontSize, fontFamily }) => {
-  const style = {
-    fontSize,
-    fontFamily,
-  };
-  return (
-    <div className={styles.tooltipDefaultContainer} style={style}>
-      <div className={styles.tooltipId}>{task?.item?.key}</div>
-      <div className={styles.tooltipName}>{task?.name}</div>
-      <div>
-        <span className={styles.tooltipTimeBefor}>开始日期：</span>
-        <span className={styles.tooltipTime}>
-          {task?.start?.getFullYear()}/{task?.start?.getMonth() + 1}/
-          {task?.start?.getDate()}
-        </span>
-      </div>
-      <div>
-        <span className={styles.tooltipTimeBefor}>结束日期：</span>
-        <span className={styles.tooltipTime}>
-          {task?.end?.getFullYear()}/{task?.end?.getMonth() + 1}/
-          {task?.end?.getDate()}
-        </span>
-      </div>
-    </div>
-  );
-};

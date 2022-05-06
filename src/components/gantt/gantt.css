@@ -63,3 +63,7 @@
 :global(.barHandleDate) {
   fill: #ccc;
 }
+
+:global(.jtk-connector.jtk-hover) {
+  cursor: pointer;
+}
