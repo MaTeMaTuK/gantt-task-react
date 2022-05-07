@@ -117,12 +117,12 @@ const Time: React.FC<TimeProps> = () => {
         currentItem={currentItem}
         timeList={timeList} // 做卡片唯一性校验
       />
-      <h4 className={`${styles.timeTips}`}>
+      <div className={`${styles.timeTips}`}>
         <em>
-          <WarningIcon />
+          <WarningIcon style={{ color: "red" }} />
         </em>
         为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应事项的哪个时间字段
-      </h4>
+      </div>
       <Table
         columns={columns}
         dataSource={timeList}
@@ -132,8 +132,8 @@ const Time: React.FC<TimeProps> = () => {
           return columns.itemType || "default";
         }}
       />
-      <Button icon={<PlusOutlined />} onClick={addTime}>
-        添加事项类型
+      <Button icon={<PlusOutlined />} type="link" onClick={addTime}>
+        新增配置
       </Button>
     </div>
   );

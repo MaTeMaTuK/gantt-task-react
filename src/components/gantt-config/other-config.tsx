@@ -1,11 +1,13 @@
 import React, { useState, useContext, useMemo, useEffect } from "react";
-import { Form, Button, Switch, Modal } from "antd";
+import { Switch, Modal, Tooltip } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { GanttConfigContext, ConfigHandleContext } from "../../contsxt";
-import { TabConfigProps, OtherConfigProps } from "../../types/public-types";
+
+import styles from "./index.module.css";
+
 const { confirm } = Modal;
 
-const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
-  const [form] = Form.useForm();
+const OtherConfig: React.FC = () => {
   const [checked, setChecked] = useState(false);
   const { ganttConfig } = useContext(GanttConfigContext);
   const { configHandle } = useContext(ConfigHandleContext);
@@ -13,20 +15,18 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
     ganttConfig?.otherConfig,
   ]);
   useEffect(() => {
-    if (currentTab === "otherConfig") {
-      setChecked(otherConfig?.autoPatch);
-      form.setFieldsValue({ autoPatch: otherConfig?.autoPatch });
-    }
-  }, [currentTab, form, otherConfig?.autoPatch]);
-  const onFinish = (values: OtherConfigProps) => {
-    configHandle({
-      ...ganttConfig,
-      otherConfig: { ...ganttConfig.otherConfig, ...values },
-    });
-  };
+    setChecked(otherConfig?.autoPatch);
+  }, [otherConfig?.autoPatch]);
   const onChange = (value: boolean) => {
     if (!value) {
       setChecked(value);
+      configHandle({
+        ...ganttConfig,
+        otherConfig: {
+          ...ganttConfig.otherConfig,
+          ...{ autoPatch: value },
+        },
+      });
       return;
     }
     confirm({
@@ -37,6 +37,13 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
         "开启自动编排时，将按当前的事项关系自动调整所有事项的时间。确认开启？",
       onOk() {
         setChecked(value);
+        configHandle({
+          ...ganttConfig,
+          otherConfig: {
+            ...ganttConfig.otherConfig,
+            ...{ autoPatch: value },
+          },
+        });
       },
       onCancel() {
         setChecked(false);
@@ -44,21 +51,18 @@ const OtherConfig: React.FC<TabConfigProps> = ({ currentTab }) => {
     });
   };
   return (
-    <div>
-      <Form form={form} name="basic" onFinish={onFinish}>
-        <Form.Item
-          label="自动编排"
-          name="autoPatch"
-          tooltip="根据卡片之间的关系，自动调整卡片时间，避免出现逻辑错误"
-        >
-          <Switch onChange={onChange} checked={checked} />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            保存
-          </Button>
-        </Form.Item>
-      </Form>
+    <div className={styles.otherConfig}>
+      <div>
+        自动编排
+        <span className={styles.question}>
+          <Tooltip title="根据卡片之间的关系，自动调整卡片时间，避免出现逻辑错误">
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      </div>
+      <div>
+        <Switch onChange={onChange} checked={checked} />
+      </div>
     </div>
   );
 };

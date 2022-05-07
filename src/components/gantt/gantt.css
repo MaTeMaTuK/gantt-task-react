@@ -52,3 +52,12 @@
 :global(.barHandleDate) {
   fill: #ccc;
 }
+div ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: transparent;
+}
+div ::-webkit-scrollbar-thumb {
+  background: #C1C5CF;
+  border-radius: 3px;
+}

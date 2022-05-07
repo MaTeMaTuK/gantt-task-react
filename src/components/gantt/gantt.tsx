@@ -814,11 +814,23 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             getCustomFields,
           }}
         >
-          <GanttConfig
-            toGantt={toGantt}
-            visible={visible}
-            currentPanel={currentPanel}
-          />
+          <BaseLineContext.Provider
+            value={{
+              baseLineHandle,
+              baselineList,
+              setCurrentLog,
+              currentLog,
+              OverflowTooltip,
+            }}
+          >
+            <GanttConfig
+              toGantt={toGantt}
+              visible={visible}
+              currentPanel={currentPanel}
+              configHandle={configHandle}
+              ganttConfig={ganttConfig}
+            />
+          </BaseLineContext.Provider>
         </ConfigHandleContext.Provider>
         <BaseLineContext.Provider
           value={{

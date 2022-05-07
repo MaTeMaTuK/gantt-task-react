@@ -214,8 +214,12 @@
   margin-right: 5px;
 }
 
-.displayPopover {
-  width: 150px;
+.displayPopover :global(.ant-row) {
+  background-color: rgba(250, 251, 251, 1);
+  border-radius: 4px;
+  height: 40px;
+  margin-top: 12px;
+  padding: 9px 16px;
 }
 .displayPopover .displayRow {
   margin-bottom: 12px;
