@@ -4,6 +4,9 @@ import { Task, ConnectionProps } from "../../types/public-types";
 import UnconnectionIcon from "../icons/unconnection";
 import ConnectionIcon from "../icons/connection";
 import { Tooltip } from "antd";
+import { dayFormat } from "../../helpers/dicts";
+import dayjs from "dayjs";
+
 import styles from "./deleteTooltip.module.css";
 
 export type TooltipProps = ConnectionProps & {
@@ -94,8 +97,10 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
               <div className={styles.date}>
                 {currentConnection.connection?.endpoints?.[0].anchor
                   ?.cssClass === "Right"
-                  ? `结束日期：2022/09/12`
-                  : `开始日期：2022/09/12`}
+                  ? `结束日期：${dayjs(sourceTask[0]?.end).format(dayFormat)}`
+                  : `开始日期：${dayjs(sourceTask[0]?.start).format(
+                      dayFormat
+                    )}`}
               </div>
             </div>
             <div className={styles.connect}>
@@ -127,8 +132,10 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
               <div className={styles.date}>
                 {currentConnection.connection?.endpoints[1]?.anchor
                   ?.cssClass === "Right"
-                  ? `结束日期：2022/09/12`
-                  : `开始日期：2022/09/12}`}
+                  ? `结束日期：${dayjs(targetTask[0]?.end).format(dayFormat)}`
+                  : `开始日期：${dayjs(targetTask[0]?.start).format(
+                      dayFormat
+                    )}`}
               </div>
             </div>
           </div>

@@ -50,6 +50,7 @@ export type TaskGanttContentProps = {
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
+  taskListHeight?: number;
   clickBaselineItem?: (offsetX: number, currentLogItem: BarTask) => void;
   containerRef?: React.MutableRefObject<any>;
   // setCurrentConnection?: (connection: any) => void;
@@ -81,6 +82,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     onDelete,
     addConnection,
     itemLinks,
+    taskListHeight,
     clickBaselineItem,
     setCurrentConnection,
     currentConnection,
@@ -685,6 +687,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
                     onEventStart={handleBarEventStart}
                     key={task.id}
                     isSelected={!!selectedTask && task.id === selectedTask.id}
+                    taskListHeight={taskListHeight}
                     setPointInited={setPointInited}
                   />
                 )}

@@ -51,12 +51,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   baseLineLog,
   isUpdate,
-  headerHeight = 40,
+  headerHeight = 41,
   // columnWidth = 60,
   listCellWidth = "155px",
   listWidth = 496,
   listBottomHeight = 48,
-  rowHeight = 40,
+  rowHeight = 41,
   // viewMode = ViewMode.Day,
   // locale = "en-GB",
   locale = "zh-cn",
@@ -87,6 +87,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onSelect,
   renderTaskListComponent,
   renderOverflowTooltip,
+  renderUserAvatar,
   itemTypeData, // 卡片类型
   configHandle, // 配置事件
   baseLineHandle, // 基线事件
@@ -885,7 +886,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               ganttHeight={ganttHeight}
               scrollX={scrollX}
               onScroll={handleScrollX}
-              taskListHieght={taskListRef?.current?.offsetHeight}
+              taskListHeight={taskListRef?.current?.offsetHeight}
             />
           )}
           <div
@@ -935,6 +936,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               headerHeight={headerHeight}
               taskListWidth={taskListWidth}
               TooltipContent={TooltipContent}
+              renderUserAvatar={renderUserAvatar}
             />
           )}
           {currentConnection && (

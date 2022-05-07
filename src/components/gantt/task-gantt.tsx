@@ -26,12 +26,14 @@ export type TaskGanttProps = {
   scrollX: number;
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
   taskListHieght?: number;
+  taskListHeight?: number;
+  // onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 const TaskGanttComponent: React.ForwardRefRenderFunction<
   any,
   TaskGanttProps
 > = (
-  { gridProps, calendarProps, barProps, scrollX, onScroll, taskListHieght },
+  { gridProps, calendarProps, barProps, scrollX, onScroll, taskListHeight },
   ref
 ) => {
   const { dates, onDateChange, columnWidth } = gridProps;
@@ -92,8 +94,8 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
           height={
-            barProps.rowHeight * barProps.tasks.length < Number(taskListHieght)
-              ? taskListHieght
+            barProps.rowHeight * barProps.tasks.length < Number(taskListHeight)
+              ? taskListHeight
               : barProps.rowHeight * barProps.tasks.length + scrollBarHeight
           }
           fontFamily={barProps.fontFamily}
@@ -104,10 +106,11 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
             {...gridProps}
             viewMode={calendarProps.viewMode}
             scrollX={scrollX}
-            taskListHieght={taskListHieght}
+            taskListHeight={taskListHeight}
           />
           <TaskGanttContent
             {...newBarProps}
+            taskListHeight={taskListHeight}
             clickBaselineItem={clickBaselineItem}
             containerRef={horizontalContainerRef}
           />
