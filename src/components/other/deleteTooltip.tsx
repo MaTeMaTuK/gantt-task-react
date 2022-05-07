@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState, memo, useMemo } from "react";
-// import { Button } from "antd";
 import { Task, ConnectionProps } from "../../types/public-types";
 import UnconnectionIcon from "../icons/unconnection";
 import ConnectionIcon from "../icons/connection";
@@ -88,10 +87,10 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
           <div className={styles.tooltipDeleteDefaultContainer}>
             <div className={styles.taskInfo}>
               <div className={styles.title}>
-                <img
-                  src={`${path}${sourceTask[0]?.item?.itemType?.icon}`}
-                  alt=""
-                />
+                {sourceTask[0]?.item?.itemType?.icon && (
+                  <img src={`${path}${sourceTask[0].item.itemType.icon}`} />
+                )}
+
                 <span> {sourceTask[0]?.name}</span>
               </div>
               <div className={styles.date}>
@@ -104,10 +103,6 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
               </div>
             </div>
             <div className={styles.connect}>
-              {/* <Button type="link" onClick={removeConnection}>
-                解除关联
-                <ConnectionIcon />
-              </Button> */}
               <div className={styles.connection}>
                 <div className={styles.connectionLine} />
                 <span className={styles.connectionIcon}>
@@ -123,10 +118,10 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
             </div>
             <div className={styles.taskInfo}>
               <div className={styles.title}>
-                <img
-                  src={`${path}${targetTask[0]?.item?.itemType?.icon}`}
-                  alt=""
-                />
+                {targetTask[0]?.item?.itemType?.icon && (
+                  <img src={`${path}${targetTask[0].item.itemType.icon}`} />
+                )}
+
                 <span>{targetTask[0]?.name}</span>
               </div>
               <div className={styles.date}>
