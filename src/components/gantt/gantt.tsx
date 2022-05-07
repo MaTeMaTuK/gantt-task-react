@@ -433,7 +433,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         setScrollY(refScrollY.current);
       }
       setIgnoreScrollEvent(false);
-      console.log(111);
       setCurrentConnection(null);
     },
     [ignoreScrollEvent, setElementsScrollY]

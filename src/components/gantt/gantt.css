@@ -17,19 +17,14 @@
   height: 40px;
   cursor: pointer;
   border-radius: 50%;
-  /* visibility: hidden; */
 }
 :global(.overlay-label) {
   width: 40px;
   height: 40px;
   cursor: pointer;
   border-radius: 50%;
-  /* visibility: hidden; */
 }
 :global(svg.select-connection) > * {
-  /* visibility: visible;
-  display: visible; */
-  /* fill: #1a8cff; */
   stroke: #1a8cff;
   stroke-width: 2px;
   overflow: hidden;

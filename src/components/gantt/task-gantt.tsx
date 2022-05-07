@@ -27,7 +27,6 @@ export type TaskGanttProps = {
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
   taskListHieght?: number;
   taskListHeight?: number;
-  // onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 const TaskGanttComponent: React.ForwardRefRenderFunction<
   any,

@@ -46,10 +46,6 @@ export const commonConfig = {
   },
   // 设置连接线悬浮样式
   connectorHoverStyle: {
-    // stroke: "#0C62FF",
-    // strokeWidth: 2,
-    // cursor: "pointer",
-
     strokeWidth: 2,
     stroke: "#0C62FF",
     outlineWidth: 5,

@@ -53,7 +53,6 @@ export type TaskGanttContentProps = {
   taskListHeight?: number;
   clickBaselineItem?: (offsetX: number, currentLogItem: BarTask) => void;
   containerRef?: React.MutableRefObject<any>;
-  // setCurrentConnection?: (connection: any) => void;
 } & EventOption &
   ConnectionProps;
 
@@ -578,11 +577,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       ganttConfig.relation,
       ganttConfig,
     ]);
-    // useEffect(() => {
-    //   // pointInited是连接点初始化完成的标志，解决jsPlumbInstance.connect连线时，由于连接点未初始化完成导致连线加载不出来
-    //   if (jsPlumbInstance && connectUuids.length && pointInited) {
-    // ]);
-
     useEffect(() => {
       // pointInited是连接点初始化完成的标志，解决jsPlumbInstance.connect连线时，由于连接点未初始化完成导致连线加载不出来
       if (jsPlumbInstance && connectUuids.length && pointInited) {
