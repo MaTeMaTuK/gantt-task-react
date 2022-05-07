@@ -22,7 +22,7 @@ export type TooltipProps = {
     task: Task;
     fontSize: string;
     fontFamily: string;
-    UserAvatar?: JSX.Element;
+    userAvatar?: JSX.Element;
   }>;
   renderUserAvatar?: (assignee: Assignee[]) => JSX.Element;
 };
@@ -111,7 +111,7 @@ export const Tooltip: React.FC<TooltipProps> = memo(
           task={task}
           fontSize={fontSize}
           fontFamily={fontFamily}
-          UserAvatar={UserAvatar}
+          userAvatar={UserAvatar}
         />
       </div>
     );
@@ -122,8 +122,8 @@ export const StandardTooltipContent: React.FC<{
   task: Task;
   fontSize: string;
   fontFamily: string;
-  UserAvatar?: JSX.Element;
-}> = ({ task, fontSize, fontFamily, UserAvatar }) => {
+  userAvatar?: JSX.Element;
+}> = ({ task, fontSize, fontFamily, userAvatar }) => {
   const style = {
     fontSize,
     fontFamily,
@@ -142,7 +142,7 @@ export const StandardTooltipContent: React.FC<{
           </div>
           <div>
             <span className={styles.lightColor}>负责人：</span>
-            {UserAvatar}
+            {userAvatar}
           </div>
           <div className={styles.lightColor}>
             <span>计划完成时间：</span>
