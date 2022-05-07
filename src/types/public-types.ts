@@ -1,3 +1,5 @@
+import React from "react";
+
 export enum ViewMode {
   QuarterDay = "Quarter Day",
   HalfDay = "Half Day",
@@ -223,6 +225,7 @@ export interface GanttProps
   setItemTypeValue?: (value: string) => void;
   setCurrentLog?: (value: BaselineProps) => void;
   renderTaskListComponent?: () => JSX.Element;
+  renderUserAvatar?: (assignee: Assignee[]) => JSX.Element;
   renderOverflowTooltip?: (value: string) => JSX.Element;
   isUpdate?: boolean;
   currentLog?: BaselineProps;
@@ -263,3 +266,10 @@ export const DateDeltaInit = {
   LeapMounth: 29 * 24 * 3600 * 1000,
   LeapQuarter: (31 + 29 + 31) * 24 * 3600 * 1000,
 };
+export interface Assignee {
+  enabled?: boolean;
+  label: string;
+  nickname: string;
+  username: string;
+  value: string;
+}
