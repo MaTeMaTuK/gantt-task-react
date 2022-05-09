@@ -46,9 +46,6 @@ export interface Task {
   name: string;
   start: Date;
   end: Date;
-  /**
-   * From 0 to 100
-   */
   progress: number;
   styles?: {
     backgroundColor?: string;
@@ -62,6 +59,13 @@ export interface Task {
   item?: {
     [propName: string]: any;
   };
+}
+export interface ItemLink {
+  objectId: string;
+  destination: object;
+  linkType: object;
+  source: object;
+  [propName: string]: any;
 }
 
 export interface EventOption {
@@ -160,13 +164,15 @@ export interface StylingOption {
 }
 
 export interface ConnectionProps {
-  delConnection: (value: string) => void;
-  addConnection: (params: {
+  delConnection?: (value: string) => void;
+  addConnection?: (params: {
     source: string;
     destination: string;
     linkType: string;
   }) => void;
-  itemLinks: any[];
+  itemLinks?: ItemLink[];
+  setCurrentConnection?: (connection: any) => void;
+  currentConnection?: any;
 }
 export interface TimeItemProps {
   itemType?: string;

@@ -46,9 +46,12 @@ export const commonConfig = {
   },
   // 设置连接线悬浮样式
   connectorHoverStyle: {
+    strokeWidth: 2,
     stroke: "#0C62FF",
-    strokeWidth: 1.5,
+    outlineWidth: 5,
+    outlineStroke: "F7F7F7",
   },
+
   // 设置连接线的箭头
   // 可以设置箭头的长宽以及箭头的位置，location 0.5表示箭头位于中间，location 1表示箭头设置在连接线末端。 一根连接线是可以添加多个箭头的。
   connectorOverlays: [
