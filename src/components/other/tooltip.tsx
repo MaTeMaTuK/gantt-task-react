@@ -1,6 +1,9 @@
-import React, { useRef, useEffect, useState, memo } from "react";
-import { Task } from "../../types/public-types";
+import React, { useRef, useEffect, useState, memo, useMemo } from "react";
+import { Task, Assignee } from "../../types/public-types";
+import { dayFormat } from "../../helpers/dicts";
+import dayjs from "dayjs";
 import { BarTask } from "../../types/bar-task";
+
 import styles from "./tooltip.module.css";
 
 export type TooltipProps = {
@@ -19,7 +22,9 @@ export type TooltipProps = {
     task: Task;
     fontSize: string;
     fontFamily: string;
+    userAvatar?: JSX.Element;
   }>;
+  renderUserAvatar?: (assignee: Assignee[]) => JSX.Element;
 };
 export const Tooltip: React.FC<TooltipProps> = memo(
   ({
@@ -35,10 +40,17 @@ export const Tooltip: React.FC<TooltipProps> = memo(
     headerHeight,
     taskListWidth,
     TooltipContent,
+    renderUserAvatar,
   }) => {
     const tooltipRef = useRef<HTMLDivElement | null>(null);
     const [relatedY, setRelatedY] = useState(0);
     const [relatedX, setRelatedX] = useState(0);
+    const UserAvatar = useMemo(() => {
+      if (typeof renderUserAvatar === "function") {
+        return renderUserAvatar(task?.item?.assignee);
+      }
+      return <React.Fragment />;
+    }, [renderUserAvatar, task?.item?.assignee]);
     useEffect(() => {
       if (tooltipRef.current) {
         let newRelatedX =
@@ -72,7 +84,6 @@ export const Tooltip: React.FC<TooltipProps> = memo(
         setRelatedX(newRelatedX);
       }
     }, [
-      tooltipRef.current,
       task,
       arrowIndent,
       scrollX,
@@ -91,12 +102,16 @@ export const Tooltip: React.FC<TooltipProps> = memo(
             ? styles.tooltipDetailsContainer
             : styles.tooltipDetailsContainerHidden
         }
-        style={{ left: relatedX + 30, top: relatedY < -40 ? -40 : relatedY }}
+        style={{
+          left: task?.type === "milestone" ? relatedX + 10 : relatedX + 30,
+          top: relatedY < -40 ? -40 : relatedY,
+        }}
       >
         <TooltipContent
           task={task}
           fontSize={fontSize}
           fontFamily={fontFamily}
+          userAvatar={UserAvatar}
         />
       </div>
     );
@@ -107,29 +122,45 @@ export const StandardTooltipContent: React.FC<{
   task: Task;
   fontSize: string;
   fontFamily: string;
-}> = ({ task, fontSize, fontFamily }) => {
+  userAvatar?: JSX.Element;
+}> = ({ task, fontSize, fontFamily, userAvatar }) => {
   const style = {
     fontSize,
     fontFamily,
   };
   return (
     <div className={styles.tooltipDefaultContainer} style={style}>
-      <div className={styles.tooltipId}>{task?.item?.key}</div>
+      {task.type !== "milestone" ? (
+        <div className={styles.tooltipId}>{task?.item?.key}</div>
+      ) : null}
       <div className={styles.tooltipName}>{task.name}</div>
-      <div>
-        <span className={styles.tooltipTimeBefor}>开始日期：</span>
-        <span className={styles.tooltipTime}>
-          {task.start.getFullYear()}/{task.start.getMonth() + 1}/
-          {task.start.getDate()}
-        </span>
-      </div>
-      <div>
-        <span className={styles.tooltipTimeBefor}>结束日期：</span>
-        <span className={styles.tooltipTime}>
-          {task.end.getFullYear()}/{task.end.getMonth() + 1}/
-          {task.end.getDate()}
-        </span>
-      </div>
+      {task.type === "milestone" ? (
+        <div className={styles.item}>
+          <div>
+            <span className={styles.lightColor}>状态：</span>
+            <span className={styles.status}>{task?.item?.status?.name}</span>
+          </div>
+          <div>
+            <span className={styles.lightColor}>负责人：</span>
+            {userAvatar}
+          </div>
+          <div className={styles.lightColor}>
+            <span>计划完成时间：</span>
+            <span>{dayjs(task.end).format(dayFormat)}</span>
+          </div>
+        </div>
+      ) : (
+        <div className={`${styles.lightColor} ${styles.item}`}>
+          <div>
+            <span>开始日期：</span>
+            <span>{dayjs(task.start).format(dayFormat)}</span>
+          </div>
+          <div>
+            <span>结束日期：</span>
+            <span>{dayjs(task.end).format(dayFormat)}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

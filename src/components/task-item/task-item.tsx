@@ -22,6 +22,7 @@ export type TaskItemProps = {
   ) => any;
   jsPlumb?: any;
   isLog?: boolean | undefined;
+  taskListHeight?: number;
   setPointInited?: (value: boolean) => void;
 };
 

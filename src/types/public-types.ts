@@ -1,3 +1,5 @@
+import React from "react";
+
 export enum ViewMode {
   QuarterDay = "Quarter Day",
   HalfDay = "Half Day",
@@ -44,9 +46,6 @@ export interface Task {
   name: string;
   start: Date;
   end: Date;
-  /**
-   * From 0 to 100
-   */
   progress: number;
   styles?: {
     backgroundColor?: string;
@@ -60,6 +59,13 @@ export interface Task {
   item?: {
     [propName: string]: any;
   };
+}
+export interface ItemLink {
+  objectId: string;
+  destination: object;
+  linkType: object;
+  source: object;
+  [propName: string]: any;
 }
 
 export interface EventOption {
@@ -158,13 +164,15 @@ export interface StylingOption {
 }
 
 export interface ConnectionProps {
-  delConnection: (value: string) => void;
-  addConnection: (params: {
+  delConnection?: (value: string) => void;
+  addConnection?: (params: {
     source: string;
     destination: string;
     linkType: string;
   }) => void;
-  itemLinks: any[];
+  itemLinks?: ItemLink[];
+  setCurrentConnection?: (connection: any) => void;
+  currentConnection?: any;
 }
 export interface TimeItemProps {
   itemType?: string;
@@ -224,6 +232,7 @@ export interface GanttProps
   setItemTypeValue?: (value: string) => void;
   setCurrentLog?: (value: BaselineProps) => void;
   renderTaskListComponent?: () => JSX.Element;
+  renderUserAvatar?: (assignee: Assignee[]) => JSX.Element;
   renderOverflowTooltip?: (value: string) => JSX.Element;
   isUpdate?: boolean;
   currentLog?: BaselineProps;
@@ -264,3 +273,10 @@ export const DateDeltaInit = {
   LeapMounth: 29 * 24 * 3600 * 1000,
   LeapQuarter: (31 + 29 + 31) * 24 * 3600 * 1000,
 };
+export interface Assignee {
+  enabled?: boolean;
+  label: string;
+  nickname: string;
+  username: string;
+  value: string;
+}

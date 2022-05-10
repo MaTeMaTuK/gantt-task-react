@@ -9,16 +9,25 @@
 :global(.ganttHeaderGlobal .ant-space-item) {
   z-index: 2;
 }
+:global(.ganttHeaderGlobal) {
+  margin-top: 3px;
+}
 :global(.overlay-label) {
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   border-radius: 50%;
-  visibility: hidden;
 }
-:global(.overlay-label.jtk-hover) {
-  visibility: visible;
-  display: visible;
+:global(.overlay-label) {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+:global(svg.select-connection) > * {
+  stroke: #1a8cff;
+  stroke-width: 2px;
+  overflow: hidden;
 }
 :global(.ant-switch-checked .ant-switch-handle) {
   left: calc(100% - 20px);
@@ -63,4 +72,7 @@ div ::-webkit-scrollbar-thumb {
 }
 :global(.ant-tabs-dropdown-menu-item) {
   min-width: 40px;
+}
+:global(.jtk-connector.jtk-hover) {
+  cursor: pointer;
 }
