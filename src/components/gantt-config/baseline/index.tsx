@@ -4,6 +4,7 @@ import { Button, Modal } from "antd";
 import AddEdit from "./add-edit";
 import { BaseLineContext } from "../../../contsxt";
 import { BaselineProps } from "../../../types/public-types";
+import Checked from "../../icons/checked";
 import { omit } from "lodash";
 
 import dayjs from "dayjs";
@@ -92,6 +93,11 @@ export const BaseLine: React.FC = () => {
                   : undefined
               }
             >
+              {ele.objectId === currentLog?.objectId && (
+                <div className={styles.checkedIcon}>
+                  <Checked />
+                </div>
+              )}
               <div
                 className={`${styles.content} ${styles.cursor}`}
                 onClick={() => chooseLog(ele)}

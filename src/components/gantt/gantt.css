@@ -58,6 +58,9 @@ div ::-webkit-scrollbar {
   background: transparent;
 }
 div ::-webkit-scrollbar-thumb {
-  background: #C1C5CF;
+  background: #c1c5cf;
   border-radius: 3px;
+}
+:global(.ant-tabs-dropdown-menu-item) {
+  min-width: 40px;
 }

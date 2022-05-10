@@ -8,6 +8,7 @@
   background-color: rgba(250, 251, 251, 1);
   border-radius: 4px;
   margin-top: 12px;
+  position: relative;
 }
 li.activeBaseline {
   background: #dbe8ff;
@@ -59,4 +60,13 @@ li.activeBaseline {
 }
 .ml8 {
   margin-left: 8px;
+}
+.checkedIcon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px 0 0 0;
+  overflow: hidden;
 }

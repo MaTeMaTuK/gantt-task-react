@@ -196,6 +196,7 @@ export interface OtherConfigProps {
 export interface GanttConfigProps {
   time?: TimeItemProps[];
   milestone?: MilestoneProps;
+  currentPanel?: string;
   otherConfig?: OtherConfigProps;
   [propName: string]: any;
 }

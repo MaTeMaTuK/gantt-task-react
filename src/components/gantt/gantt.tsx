@@ -6,7 +6,6 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-// import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import {
@@ -32,6 +31,8 @@ import GanttHeader from "./gantt-header";
 import ArrowIcon from "../icons/arrow";
 import utils from "../../helpers/utils";
 import { scrollBarHeight } from "../../helpers/dicts";
+import DataMode from "./data-mode";
+
 import "./gantt.css";
 
 import {
@@ -39,7 +40,6 @@ import {
   ConfigHandleContext,
   BaseLineContext,
 } from "../../contsxt";
-
 const widthData = {
   [ViewMode.Month]: 300,
   [ViewMode.Week]: 210,
@@ -659,8 +659,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       );
     }
   }, [TaskListComponent]);
-
-  const toToday = useCallback(() => {
+  const todayX = useMemo(() => {
     // 之前考虑通过context， 在grid-body中setState 传递移动的距离，但是页面会抖动
     const now = new Date();
     let tickX = 0;
@@ -699,16 +698,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       }
       tickX += columnWidth;
     }
-    refScrollX.current = newTickX - svgContainerWidth / 2;
+    return newTickX;
+  }, [columnWidth, dateSetup.dates]);
+  const toToday = useCallback(() => {
+    refScrollX.current = todayX - svgContainerWidth / 2;
     setElementsScrollX();
     setScrollX(refScrollX.current);
-  }, [
-    JSON.stringify(dateSetup),
-    columnWidth,
-    dateSetup.dates,
-    setElementsScrollX,
-    svgContainerWidth,
-  ]);
+  }, [setElementsScrollX, svgContainerWidth, todayX]);
 
   useEffect(() => {
     toToday();
@@ -724,7 +720,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setViewMode(val);
     setColumnWidth(widthData[val] || 60);
   }, []);
-
   const handleDividerMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       const handleMouseMove = (event: MouseEvent) => {
@@ -832,24 +827,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             />
           </BaseLineContext.Provider>
         </ConfigHandleContext.Provider>
-        <BaseLineContext.Provider
-          value={{
-            baseLineHandle,
-            baselineList,
-            setCurrentLog,
-            currentLog,
-            OverflowTooltip,
-          }}
-        >
-          <GanttHeader
-            toToday={toToday}
-            toConfig={toConfig}
-            modeChange={modeChange}
-            ganttConfig={ganttConfig}
-            configHandle={configHandle}
-          />
-        </BaseLineContext.Provider>
-
+        <GanttHeader toConfig={toConfig} />
         <div
           className={styles.wrapper}
           onKeyDown={handleKeyDown}
@@ -925,6 +903,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               </span>
             </div>
           </div>
+          <DataMode
+            toToday={toToday}
+            modeChange={modeChange}
+            todayX={todayX}
+            svgContainerWidth={svgContainerWidth}
+            refScrollX={refScrollX.current}
+          />
           {ganttEvent.changedTask && (
             <Tooltip
               arrowIndent={arrowIndent}

@@ -66,3 +66,17 @@
 .displayPopover .textAlignR {
   text-align: right;
 }
+.activeRotate {
+  transform: rotate(90deg);
+}
+.collapse :global(.ant-collapse-extra) {
+  float: none !important;
+  display: inline-block;
+}
+.collapseExtra {
+  padding-left: 10px;
+  font-size: 12px;
+  color: #848c9f;
+  display: flex;
+  align-items: center;
+}

@@ -70,6 +70,8 @@
   text-align: right;
   margin: 0 0 16px;
   padding: 0 24px;
+  height: 32px;
+  line-height: 36px;
 }
 .cursor {
   cursor: pointer;
@@ -226,4 +228,56 @@
 }
 .displayPopover .textAlignR {
   text-align: right;
+}
+.viewMode {
+  position: absolute;
+  right: 40px;
+  bottom: 90px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  height: 28px;
+}
+.viewMode .todayBtn {
+  margin-right: 9px;
+  background-color: #213053;
+  height: 28px;
+  color: #fff;
+  padding: 4px 12px;
+}
+.viewMode .todayBtn:hover,
+.todayBtn:focus {
+  border-color: #fff;
+}
+.dataMode {
+  height: 28px;
+  width: 156px;
+  box-shadow: 0px 4px 8px -2px rgba(9, 25, 64, 0.25),
+    0px 0px 1px 0px rgba(9, 25, 64, 0.3);
+  border-radius: 4px;
+}
+.dataMode :global(.ant-tabs-tab) {
+  padding: 3px 12px;
+  margin-left: 0 !important;
+  height: 28px;
+  border-right: 1px solid #f1f2f4;
+}
+.dataMode :global(.ant-tabs-tab):first-child {
+  border-radius: 4px 0 0 4px;
+}
+.dataMode :global(.ant-tabs-tab.ant-tabs-tab-active) {
+  background: #0c62ff;
+}
+.dataMode :global(.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn) {
+  color: #fff;
+}
+.dataMode :global(.ant-tabs-ink-bar) {
+  display: none;
+}
+.dataMode :global(.ant-tabs-nav-operations button) {
+  width: 39px;
+}
+.dataMode :global(.ant-tabs-nav-operations button) {
+  height: 28px;
+  cursor: pointer;
 }
