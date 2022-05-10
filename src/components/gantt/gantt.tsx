@@ -29,7 +29,6 @@ import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttConfig from "../gantt-config/index";
 import GuideModal from "./guide-modal";
 import { Button } from "antd";
-import GanttHeader from "./gantt-header";
 import ArrowIcon from "../icons/arrow";
 import utils from "../../helpers/utils";
 import { scrollBarHeight } from "../../helpers/dicts";
@@ -379,7 +378,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           // 判断列表是否有横向滚动条
           const isScroll =
             eleListTableBodyRef?.current?.clientWidth !==
-            eleListTableBodyRef.current.scrollWidth;
+            eleListTableBodyRef?.current?.scrollWidth;
           setIsTableScrollX(isScroll);
           const max = ganttFullHeight - ganttHeight;
           const scrollY = refScrollY.current;
@@ -746,7 +745,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         window.removeEventListener("mouseup", handleMouseUp);
         const isScroll =
           eleListTableBodyRef?.current?.clientWidth !==
-          eleListTableBodyRef.current.scrollWidth;
+          eleListTableBodyRef?.current?.scrollWidth;
         setIsTableScrollX(isScroll);
       };
       dividerPositionRef.current.left = event.clientX;
@@ -776,16 +775,18 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setCurrentLog?.({});
     setLogTasks([]);
   };
+  const toPanel = useCallback(() => {
+    setGuideModalVisible(false);
+    toConfig();
+  }, [toConfig]);
   React.useImperativeHandle(actionRef, () => ({
     openGuide(type: string) {
       setCurrentPanel(type);
       setGuideModalVisible(true);
     },
+    toPanel: toPanel,
   }));
-  const toPanel = useCallback(() => {
-    setGuideModalVisible(false);
-    toConfig();
-  }, [toConfig]);
+
   const panelCanel = useCallback(() => {
     setGuideModalVisible(false);
   }, []);
@@ -836,7 +837,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             />
           </BaseLineContext.Provider>
         </ConfigHandleContext.Provider>
-        <GanttHeader toConfig={toConfig} />
         <div
           className={styles.wrapper}
           onKeyDown={handleKeyDown}

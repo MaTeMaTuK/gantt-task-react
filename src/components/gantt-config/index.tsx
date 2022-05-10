@@ -44,6 +44,9 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
       getContainer={false}
       className={styles.settingsModalContainer}
       contentWrapperStyle={{ maxWidth: "721px" }}
+      style={{ position: "absolute" }}
+      maskClosable={false}
+      mask={false}
     >
       <h3 className={styles.settingModalTitle} onClick={() => toGantt()}>
         甘特图设置
