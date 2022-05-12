@@ -101,6 +101,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   actionRef,
   workspaceId,
   getCustomFields, // 获取字段
+  configVisibleChange, // 甘特图配置页面显示和隐藏
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -720,10 +721,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const toConfig = useCallback(() => {
     setVisible(true);
-  }, []);
+    configVisibleChange?.(true);
+  }, [configVisibleChange]);
   const toGantt = useCallback(() => {
     setVisible(false);
-  }, []);
+    configVisibleChange?.(false);
+  }, [configVisibleChange]);
   const modeChange = useCallback((val: ViewMode) => {
     setViewMode(val);
     setColumnWidth(widthData[val] || 60);

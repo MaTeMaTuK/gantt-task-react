@@ -66,7 +66,7 @@ export const BaseLine: React.FC = () => {
     <div className={styles.panel}>
       <div className={styles.createBaseline}>
         <Button
-          type="link"
+          type="dashed"
           icon={<PlusOutlined />}
           onClick={addBaseline}
           disabled={baselineList.length >= 10}

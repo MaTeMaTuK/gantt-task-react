@@ -1,5 +1,19 @@
-.mb20 {
-  margin-bottom: 20px;
+.timeConfigTable :global(.ant-table-thead > tr > th),
+.timeConfigTable :global(.ant-table-tbody > tr > td) {
+  padding: 8px 0;
+  background: #fff;
+  height: 40px;
+}
+.timeConfigTable :global(.ant-table-thead > tr > th) {
+  color: #848c9f;
+}
+.timeConfigAddBtn {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 3px 0;
+  height: 40px;
+}
+.timeConfigAddBtn :global(.ant-btn) {
+  padding-left: 0;
 }
 .width100 {
   width: 100%;
@@ -32,14 +46,16 @@
   margin-right: 10px;
   height: 15px;
 }
-.settingModalTitle {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  font-family: PingFangSC-Medium, PingFang SC;
-}
 .settingsModalContainer :global(.ant-collapse-item) {
   margin-bottom: 32px;
+}
+.settingsModalContainer :global(.ant-drawer-body) {
+  padding: 0 24px 16px 24px;
+}
+.settingsModalContainer :global(.ant-drawer-header) {
+  color: #091940;
+  font-size: 16px;
+  border-bottom: none;
 }
 .otherConfig {
   display: flex;
@@ -73,10 +89,27 @@
   float: none !important;
   display: inline-block;
 }
-.collapseExtra {
-  padding-left: 10px;
+.collapse :global(.ant-collapse-header) {
+  display: flex;
+  align-items: center;
+  color: #091940;
+}
+.extraHeader {
   font-size: 12px;
   color: #848c9f;
   display: flex;
   align-items: center;
+}
+.extraHeader .title {
+  font-weight: 600;
+  color: #213053;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+.extraHeader span {
+  font-weight: normal;
+}
+.extraHeader .des {
+  height: 20px;
 }

@@ -6,7 +6,6 @@ import Baseline from "./baseline";
 import Display from "./display";
 import { GanttConfigProps } from "../../types/public-types";
 import CollapseIcon from "../icons/collapseIcon";
-import { QuestionCircleOutlined } from "@ant-design/icons";
 
 import styles from "./index.module.css";
 
@@ -30,17 +29,18 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
   const onChange = (val: any) => {
     setActiveKey([...val]);
   };
-  const genExtra = () => (
-    <span className={styles.collapseExtra}>
-      <QuestionCircleOutlined />
-      <span>（点击基线卡片可选择显示基线）</span>
+  const genHeader = () => (
+    <span className={styles.extraHeader}>
+      <span className={styles.title}>基线</span>
+      <span className={styles.des}>（点击基线卡片可选择显示基线）</span>
     </span>
   );
   return (
     <Drawer
+      title="甘特图设置"
       visible={visible}
       onClose={() => toGantt()}
-      width="50%"
+      width={600}
       getContainer={false}
       className={styles.settingsModalContainer}
       contentWrapperStyle={{ maxWidth: "721px" }}
@@ -48,9 +48,6 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
       maskClosable={false}
       mask={false}
     >
-      <h3 className={styles.settingModalTitle} onClick={() => toGantt()}>
-        甘特图设置
-      </h3>
       <Collapse
         activeKey={activeKey}
         onChange={onChange}
@@ -59,7 +56,7 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
         )}
         className={styles.collapse}
       >
-        <Panel header="基线" key="baseLine" extra={genExtra()}>
+        <Panel header={genHeader()} key="baseLine">
           <Baseline />
         </Panel>
 

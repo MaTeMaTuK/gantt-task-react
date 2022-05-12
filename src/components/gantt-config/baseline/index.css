@@ -46,13 +46,11 @@ li.activeBaseline {
   max-height: 260px;
   overflow-y: auto;
 }
-.panel .createBaseline {
-  margin-bottom: 10px;
-}
 .createBaseline button {
   width: 100%;
   text-align: left;
   color: rgba(12, 98, 255, 1);
+  border-color: #3683ff;
 }
 .dot {
   cursor: pointer;

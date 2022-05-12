@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Tabs, Button } from "antd";
+import { Tabs } from "antd";
 import { viewModeOptions, ViewMode } from "../../types/public-types";
 
 import styles from "./gantt.module.css";
@@ -30,9 +30,9 @@ const DataMode: React.FC<DateModeProps> = ({
   return (
     <div className={styles.viewMode}>
       {isShowToday && (
-        <Button className={styles.todayBtn} onClick={toToday}>
+        <span className={styles.todayBtn} onClick={toToday}>
           今天
-        </Button>
+        </span>
       )}
 
       <div className={styles.dataMode}>

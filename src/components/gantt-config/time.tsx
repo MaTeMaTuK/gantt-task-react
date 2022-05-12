@@ -11,7 +11,7 @@ const Time: React.FC<TimeProps> = () => {
   const [visible, setVisible] = useState(false);
   const columns = [
     {
-      title: "事项类型",
+      title: "关联事项",
       dataIndex: "itemType",
       key: "name",
       render: (text: string) => {
@@ -121,20 +121,22 @@ const Time: React.FC<TimeProps> = () => {
         <em>
           <WarningIcon style={{ color: "red" }} />
         </em>
-        为了让甘特图正确显示，您需要在这里设置甘特图中时间区块的起止时间对应事项的哪个时间字段
+        为了让甘特图正确显示，您需要设置甘特图中时间区块的起止时间对应事项的哪个时间字段
       </div>
       <Table
         columns={columns}
         dataSource={timeList}
         pagination={false}
-        className={styles.mb20}
+        className={styles.timeConfigTable}
         rowKey={columns => {
           return columns.itemType || "default";
         }}
       />
-      <Button icon={<PlusOutlined />} type="link" onClick={addTime}>
-        新增配置
-      </Button>
+      <div className={styles.timeConfigAddBtn}>
+        <Button icon={<PlusOutlined />} type="link" onClick={addTime}>
+          新增配置
+        </Button>
+      </div>
     </div>
   );
 };

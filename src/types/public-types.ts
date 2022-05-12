@@ -239,6 +239,7 @@ export interface GanttProps
   actionRef?: React.MutableRefObject<any>;
   workspaceId?: string;
   getCustomFields?: (val: TimeItemProps) => Promise<any>;
+  configVisibleChange?: (val: boolean) => void;
 }
 
 export interface TabConfigProps {
