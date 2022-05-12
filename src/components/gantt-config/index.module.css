@@ -47,7 +47,7 @@
   height: 15px;
 }
 .settingsModalContainer :global(.ant-collapse-item) {
-  margin-bottom: 32px;
+  margin-bottom: 48px;
 }
 .settingsModalContainer :global(.ant-drawer-body) {
   padding: 0 24px 16px 24px;

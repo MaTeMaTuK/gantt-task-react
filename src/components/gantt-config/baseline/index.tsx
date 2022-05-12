@@ -17,6 +17,7 @@ export const BaseLine: React.FC = () => {
     setCurrentLog,
     currentLog,
     OverflowTooltip,
+    setLogTasks,
   } = useContext(BaseLineContext);
   const deleteBaseline = () => {
     Modal.confirm({
@@ -60,7 +61,13 @@ export const BaseLine: React.FC = () => {
     setVisible(false);
   };
   const chooseLog = (infor: BaselineProps) => {
-    setCurrentLog(infor);
+    // 取消选中基线
+    if (currentLog?.objectId === infor?.objectId) {
+      setCurrentLog([]);
+      setLogTasks([]);
+    } else {
+      setCurrentLog(infor);
+    }
   };
   return (
     <div className={styles.panel}>

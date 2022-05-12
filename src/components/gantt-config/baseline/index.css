@@ -20,6 +20,7 @@ li.activeBaseline {
   font-size: 14px;
   color: rgba(33, 48, 83, 1);
   line-height: 22px;
+  margin-bottom: 4px;
 }
 .list .time {
   font-size: 16px;

@@ -827,6 +827,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               baseLineHandle,
               baselineList,
               setCurrentLog,
+              setLogTasks,
               currentLog,
               OverflowTooltip,
             }}
