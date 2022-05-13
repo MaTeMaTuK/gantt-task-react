@@ -1,26 +1,131 @@
-.mb20 {
-  margin-bottom: 20px;
+.timeConfigTable :global(.ant-table-thead > tr > th),
+.timeConfigTable :global(.ant-table-tbody > tr > td) {
+  padding: 8px 0;
+  background: #fff;
+  height: 40px;
 }
+
+.timeConfigTable :global(.ant-table-thead > tr > th) {
+  color: #848c9f;
+}
+
+.timeConfigAddBtn {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 3px 0;
+  height: 40px;
+}
+
+.timeConfigAddBtn :global(.ant-btn) {
+  padding-left: 0;
+}
+
 .width100 {
   width: 100%;
 }
+
 .icon {
   height: 16px;
   width: 16px;
   margin-right: 5px;
 }
+
 .timeTips {
-  padding: 9px 5px;
-  text-align: center;
-  background: #FFFFFF;
-  box-shadow: 0px 4px 8px -2px rgba(21, 29, 43, 0.25), 0px 0px 1px 0px rgba(21, 29, 43, 0.3);
+  padding: 6px 16px;
   border-radius: 4px;
-  margin: 12px 3px 33px;
+  height: 32px;
+  text-align: left;
+  font-size: 12px;
+  box-shadow: 0px 1px 1px 0px rgba(9, 25, 64, 0.25),
+    0px 0px 1px 0px rgba(9, 25, 64, 0.3);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
 }
-.timeTips em{
+
+.timeTips em {
   margin-right: 10px;
+  height: 15px;
 }
-.settingModalTitle {
-  font-size: 18px;
-  font-weight: 900;
+
+.settingsModalContainer :global(.ant-collapse-item) {
+  margin-bottom: 48px;
+}
+
+.settingsModalContainer :global(.ant-drawer-body) {
+  padding: 0 24px 16px 24px;
+}
+
+.settingsModalContainer :global(.ant-drawer-header) {
+  color: #091940;
+  font-size: 16px;
+  border-bottom: none;
+}
+
+.otherConfig {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 16px;
+  height: 40px;
+  background: #fafbfb;
+  border-radius: 4px;
+}
+
+.otherConfig .question {
+  margin-left: 5px;
+}
+
+.displayPopover :global(.ant-row) {
+  background-color: rgba(250, 251, 251, 1);
+  border-radius: 4px;
+  height: 40px;
+  margin-top: 12px;
+  padding: 9px 16px;
+}
+
+.displayPopover .displayRow {
+  margin-bottom: 12px;
+}
+
+.displayPopover .textAlignR {
+  text-align: right;
+}
+
+.activeRotate {
+  transform: rotate(90deg);
+}
+
+.collapse :global(.ant-collapse-extra) {
+  float: none !important;
+  display: inline-block;
+}
+
+.collapse :global(.ant-collapse-header) {
+  display: flex;
+  align-items: center;
+  color: #091940;
+}
+
+.extraHeader {
+  font-size: 12px;
+  color: #848c9f;
+  display: flex;
+  align-items: center;
+}
+
+.extraHeader .title {
+  font-weight: 600;
+  color: #213053;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.extraHeader span {
+  font-weight: normal;
+}
+
+.extraHeader .des {
+  height: 20px;
 }

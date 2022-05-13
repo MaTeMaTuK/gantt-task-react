@@ -10,5 +10,9 @@ export const pivotalPathLinkBorderColor = "#6554C0";
 export const scrollBarHeight = 4;
 
 export const dayFormat = "YYYY-MM-DD";
+export const dayTimeFormat = " YYYY-MM-DD HH:mm:ss";
+
+export const drawerWidth = 600;
+
 // 一天秒数
 export const daySeconds = 24 * 60 * 60 * 1000;

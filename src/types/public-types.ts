@@ -204,6 +204,7 @@ export interface OtherConfigProps {
 export interface GanttConfigProps {
   time?: TimeItemProps[];
   milestone?: MilestoneProps;
+  currentPanel?: string;
   otherConfig?: OtherConfigProps;
   [propName: string]: any;
 }
@@ -238,6 +239,7 @@ export interface GanttProps
   actionRef?: React.MutableRefObject<any>;
   workspaceId?: string;
   getCustomFields?: (val: TimeItemProps) => Promise<any>;
+  configVisibleChange?: (val: boolean) => void;
 }
 
 export interface TabConfigProps {

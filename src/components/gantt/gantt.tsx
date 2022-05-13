@@ -29,10 +29,11 @@ import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttConfig from "../gantt-config/index";
 import GuideModal from "./guide-modal";
 import { Button } from "antd";
-import GanttHeader from "./gantt-header";
 import ArrowIcon from "../icons/arrow";
 import utils from "../../helpers/utils";
 import { scrollBarHeight } from "../../helpers/dicts";
+import DataMode from "./data-mode";
+
 import "./gantt.css";
 
 import {
@@ -40,7 +41,6 @@ import {
   ConfigHandleContext,
   BaseLineContext,
 } from "../../contsxt";
-
 const widthData = {
   [ViewMode.Month]: 300,
   [ViewMode.Week]: 210,
@@ -101,6 +101,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   actionRef,
   workspaceId,
   getCustomFields, // 获取字段
+  configVisibleChange, // 甘特图配置页面显示和隐藏
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -378,7 +379,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           // 判断列表是否有横向滚动条
           const isScroll =
             eleListTableBodyRef?.current?.clientWidth !==
-            eleListTableBodyRef.current.scrollWidth;
+            eleListTableBodyRef?.current?.scrollWidth;
           setIsTableScrollX(isScroll);
           const max = ganttFullHeight - ganttHeight;
           const scrollY = refScrollY.current;
@@ -667,8 +668,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       );
     }
   }, [TaskListComponent]);
-
-  const toToday = useCallback(() => {
+  const todayX = useMemo(() => {
     // 之前考虑通过context， 在grid-body中setState 传递移动的距离，但是页面会抖动
     const now = new Date();
     let tickX = 0;
@@ -707,16 +707,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       }
       tickX += columnWidth;
     }
-    refScrollX.current = newTickX - svgContainerWidth / 2;
+    return newTickX;
+  }, [columnWidth, dateSetup.dates]);
+  const toToday = useCallback(() => {
+    refScrollX.current = todayX - svgContainerWidth / 2;
     setElementsScrollX();
     setScrollX(refScrollX.current);
-  }, [
-    JSON.stringify(dateSetup),
-    columnWidth,
-    dateSetup.dates,
-    setElementsScrollX,
-    svgContainerWidth,
-  ]);
+  }, [setElementsScrollX, svgContainerWidth, todayX]);
 
   useEffect(() => {
     toToday();
@@ -724,15 +721,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const toConfig = useCallback(() => {
     setVisible(true);
-  }, []);
+    configVisibleChange?.(true);
+  }, [configVisibleChange]);
   const toGantt = useCallback(() => {
     setVisible(false);
-  }, []);
+    configVisibleChange?.(false);
+  }, [configVisibleChange]);
   const modeChange = useCallback((val: ViewMode) => {
     setViewMode(val);
     setColumnWidth(widthData[val] || 60);
   }, []);
-
   const handleDividerMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       const handleMouseMove = (event: MouseEvent) => {
@@ -750,7 +748,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         window.removeEventListener("mouseup", handleMouseUp);
         const isScroll =
           eleListTableBodyRef?.current?.clientWidth !==
-          eleListTableBodyRef.current.scrollWidth;
+          eleListTableBodyRef?.current?.scrollWidth;
         setIsTableScrollX(isScroll);
       };
       dividerPositionRef.current.left = event.clientX;
@@ -780,16 +778,18 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setCurrentLog?.({});
     setLogTasks([]);
   };
+  const toPanel = useCallback(() => {
+    setGuideModalVisible(false);
+    toConfig();
+  }, [toConfig]);
   React.useImperativeHandle(actionRef, () => ({
     openGuide(type: string) {
       setCurrentPanel(type);
       setGuideModalVisible(true);
     },
+    toPanel: toPanel,
   }));
-  const toPanel = useCallback(() => {
-    setGuideModalVisible(false);
-    toConfig();
-  }, [toConfig]);
+
   const panelCanel = useCallback(() => {
     setGuideModalVisible(false);
   }, []);
@@ -822,30 +822,25 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             getCustomFields,
           }}
         >
-          <GanttConfig
-            toGantt={toGantt}
-            visible={visible}
-            currentPanel={currentPanel}
-          />
+          <BaseLineContext.Provider
+            value={{
+              baseLineHandle,
+              baselineList,
+              setCurrentLog,
+              setLogTasks,
+              currentLog,
+              OverflowTooltip,
+            }}
+          >
+            <GanttConfig
+              toGantt={toGantt}
+              visible={visible}
+              currentPanel={currentPanel}
+              configHandle={configHandle}
+              ganttConfig={ganttConfig}
+            />
+          </BaseLineContext.Provider>
         </ConfigHandleContext.Provider>
-        <BaseLineContext.Provider
-          value={{
-            baseLineHandle,
-            baselineList,
-            setCurrentLog,
-            currentLog,
-            OverflowTooltip,
-          }}
-        >
-          <GanttHeader
-            toToday={toToday}
-            toConfig={toConfig}
-            modeChange={modeChange}
-            ganttConfig={ganttConfig}
-            configHandle={configHandle}
-          />
-        </BaseLineContext.Provider>
-
         <div
           className={styles.wrapper}
           onKeyDown={handleKeyDown}
@@ -921,6 +916,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               </span>
             </div>
           </div>
+          <DataMode
+            toToday={toToday}
+            modeChange={modeChange}
+            todayX={todayX}
+            svgContainerWidth={svgContainerWidth}
+            refScrollX={refScrollX.current}
+          />
           {ganttEvent.changedTask && (
             <Tooltip
               arrowIndent={arrowIndent}

@@ -1,0 +1,84 @@
+.list li {
+  height: 64px;
+  list-style: none;
+  text-align: left;
+  padding: 9px 16px;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(250, 251, 251, 1);
+  border-radius: 4px;
+  margin-top: 12px;
+  position: relative;
+}
+
+li.activeBaseline {
+  background: #dbe8ff;
+}
+
+.list .content {
+  flex: 1;
+}
+
+.list .name {
+  font-size: 14px;
+  color: rgba(33, 48, 83, 1);
+  line-height: 22px;
+  margin-bottom: 4px;
+}
+
+.list .time {
+  font-size: 16px;
+  color: rgba(132, 140, 159, 1);
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.createTime {
+  font-size: 12px;
+}
+
+.handleIcon :global(.anticon-delete) {
+  margin-left: 16px;
+}
+
+.handleIcon span:hover {
+  color: #0c62ff;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.panel ul.list {
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.createBaseline button {
+  width: 100%;
+  text-align: left;
+  color: rgba(12, 98, 255, 1);
+  border-color: #3683ff;
+}
+
+.dot {
+  cursor: pointer;
+  visibility: hidden;
+}
+
+.ml8 {
+  margin-left: 8px;
+}
+
+.checkedIcon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px 0 0 0;
+  overflow: hidden;
+}
