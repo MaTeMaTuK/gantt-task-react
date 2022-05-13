@@ -11,7 +11,7 @@ export const Display: React.FC<DisplayProps> = ({
   ganttConfig,
   configHandle,
 }) => {
-  const [currentValue, setCurrentValue] = useState<any>(null);
+  const [currentValue, setCurrentValue] = useState<GanttConfigProps>({});
   useEffect(() => {
     setCurrentValue({ ...ganttConfig, isChanged: false });
   }, [ganttConfig]);
