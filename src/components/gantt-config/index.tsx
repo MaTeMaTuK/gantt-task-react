@@ -6,6 +6,8 @@ import Baseline from "./baseline";
 import Display from "./display";
 import { GanttConfigProps } from "../../types/public-types";
 import CollapseIcon from "../icons/collapseIcon";
+import { drawerWidth } from "../../helpers/dicts";
+import { isArray } from "lodash";
 
 import styles from "./index.module.css";
 
@@ -26,8 +28,10 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
       setActiveKey([]);
     }
   }, [currentPanel]);
-  const onChange = (val: any) => {
-    setActiveKey([...val]);
+  const onChange = (val: string | string[]) => {
+    if (isArray(val)) {
+      setActiveKey([...val]);
+    }
   };
   const genHeader = () => (
     <span className={styles.extraHeader}>
@@ -40,7 +44,7 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
       title="甘特图设置"
       visible={visible}
       onClose={() => toGantt()}
-      width={600}
+      width={drawerWidth}
       getContainer={false}
       className={styles.settingsModalContainer}
       contentWrapperStyle={{ maxWidth: "721px" }}

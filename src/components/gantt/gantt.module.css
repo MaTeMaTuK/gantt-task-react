@@ -25,6 +25,7 @@
   height: 100%;
   /* position: relative; */
 }
+
 .wrapper {
   position: relative;
   display: flex;
@@ -35,6 +36,7 @@
   overflow: hidden;
   padding: 0 20px 0px 24px;
 }
+
 .wrapper .choosedBaselIne {
   position: absolute;
   right: 50px;
@@ -49,14 +51,17 @@
   display: flex;
   align-items: center;
 }
+
 .wrapper .choosedBaselIne,
 .wrapper button {
   font-size: 12px;
 }
+
 .choosedBaselIne .loaded {
   margin-right: 8px;
   width: 175px;
 }
+
 .task-gantt-wrapper {
   position: absolute;
   top: 0;
@@ -66,6 +71,7 @@
 .calendarWrapper {
   height: 40px;
 }
+
 .ganttHeader {
   text-align: right;
   margin: 0 0 16px;
@@ -73,6 +79,7 @@
   height: 32px;
   line-height: 36px;
 }
+
 .cursor {
   cursor: pointer;
 }
@@ -82,6 +89,7 @@
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
 }
+
 .taskListWrapper::after {
   content: "";
   position: absolute;
@@ -91,6 +99,7 @@
   width: 1px;
   height: 47px;
 }
+
 .taskListWrapper > div {
   padding: 0;
 }
@@ -134,6 +143,7 @@
   margin: 0;
   cursor: col-resize;
 }
+
 .dividerContainer > hr.maskLine {
   display: none;
   top: unset;
@@ -207,9 +217,11 @@
   background-color: #2e405e;
   border-radius: 1px;
 }
+
 .guideInfor {
   font-weight: 600;
 }
+
 .guideInfor .clickThis {
   color: #3d7eff;
   cursor: pointer;
@@ -223,12 +235,15 @@
   margin-top: 12px;
   padding: 9px 16px;
 }
+
 .displayPopover .displayRow {
   margin-bottom: 12px;
 }
+
 .displayPopover .textAlignR {
   text-align: right;
 }
+
 .viewMode {
   position: absolute;
   right: 40px;
@@ -238,6 +253,7 @@
   align-items: center;
   height: 28px;
 }
+
 .viewMode .todayBtn {
   display: inline-block;
   margin-right: 9px;
@@ -251,10 +267,12 @@
   font-size: 14px;
   cursor: pointer;
 }
+
 .viewMode .todayBtn:hover,
 .todayBtn:focus {
   border-color: #fff;
 }
+
 .dataMode {
   height: 28px;
   width: 156px;
@@ -262,27 +280,34 @@
     0px 0px 1px 0px rgba(9, 25, 64, 0.3);
   border-radius: 4px;
 }
+
 .dataMode :global(.ant-tabs-tab) {
   padding: 3px 12px;
   margin-left: 0 !important;
   height: 28px;
   border-right: 1px solid #f1f2f4;
 }
+
 .dataMode :global(.ant-tabs-tab):first-child {
   border-radius: 4px 0 0 4px;
 }
+
 .dataMode :global(.ant-tabs-tab.ant-tabs-tab-active) {
   background: #0c62ff;
 }
+
 .dataMode :global(.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn) {
   color: #fff;
 }
+
 .dataMode :global(.ant-tabs-ink-bar) {
   display: none;
 }
+
 .dataMode :global(.ant-tabs-nav-operations button) {
   width: 39px;
 }
+
 .dataMode :global(.ant-tabs-nav-operations button) {
   height: 28px;
   cursor: pointer;

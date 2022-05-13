@@ -6,6 +6,7 @@ import { BaseLineContext } from "../../../contsxt";
 import { BaselineProps } from "../../../types/public-types";
 import Checked from "../../icons/checked";
 import { omit } from "lodash";
+import { dayTimeFormat } from "../../../helpers/dicts";
 
 import dayjs from "dayjs";
 
@@ -113,9 +114,7 @@ export const BaseLine: React.FC = () => {
                 <div className={styles.time}>
                   <div className={styles.createTime}>
                     创建于：
-                    {dayjs(new Date(ele.createdAt)).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )}
+                    {dayjs(new Date(ele.createdAt)).format(dayTimeFormat)}
                   </div>
                   <div className={styles.handleIcon}>
                     <EditOutlined
