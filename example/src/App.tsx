@@ -81,20 +81,6 @@ const App = () => {
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
       />
-      <h3>Gantt With Limited Height</h3>
-      <Gantt
-        tasks={tasks}
-        viewMode={view}
-        onDateChange={handleTaskChange}
-        onDelete={handleTaskDelete}
-        onProgressChange={handleProgressChange}
-        onDoubleClick={handleDblClick}
-        onSelect={handleSelect}
-        onExpanderClick={handleExpanderClick}
-        listCellWidth={isChecked ? "155px" : ""}
-        ganttHeight={300}
-        columnWidth={columnWidth}
-      />
     </div>
   );
 };
