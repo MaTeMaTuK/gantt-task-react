@@ -47,7 +47,7 @@
   margin-right: 10px;
   height: 15px;
 }
-.settingsModalContainer{
+.settingsModalContainer {
   z-index: 99;
 }
 .settingsModalContainer :global(.ant-collapse-item) {
