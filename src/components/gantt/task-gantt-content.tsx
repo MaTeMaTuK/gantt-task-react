@@ -186,6 +186,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     onDateChange,
     svg,
     isMoving,
+    point,
+    rtl,
+    setFailedTask,
+    setGanttEvent,
   ]);
 
   /**

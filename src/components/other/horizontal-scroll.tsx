@@ -24,11 +24,11 @@ export const HorizontalScroll: React.FC<{
           ? `0px ${taskListWidth}px 0px 0px`
           : `0px 0px 0px ${taskListWidth}px`,
       }}
-      className={styles.scroll}
+      className={styles.scrollWrapper}
       onScroll={onScroll}
       ref={scrollRef}
     >
-      <div style={{ width: svgWidth, height: 1 }} />
+      <div style={{ width: svgWidth }} className={styles.scroll} />
     </div>
   );
 };

@@ -36,7 +36,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^17.0.2"
+    "react": "^18.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.12.0",
@@ -44,33 +44,21 @@
     "@testing-library/user-event": "^13.1.8",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.0.1",
-    "@types/react": "^17.0.38",
-    "@types/react-dom": "^17.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.10.0",
-    "@typescript-eslint/parser": "^5.9.1",
-    "babel-eslint": "^10.0.3",
+    "@types/react": "^18.0.5",
+    "@types/react-dom": "^18.0.1",
     "cross-env": "^7.0.3",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-config-standard-react": "^9.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-promise": "^5.2.0",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-standard": "^4.1.0",
     "gh-pages": "^3.1.0",
     "microbundle-crl": "^0.13.11",
     "mini-css-extract-plugin": "^2.5.1",
     "npm-run-all": "^4.1.5",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-normalize": "^10.0.1",
-    "postcss-preset-env": "^7.2.3",
+    "postcss-preset-env": "^7.6.0",
     "prettier": "^2.5.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "^5.0.0",
-    "typescript": "^4.5.4"
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-scripts": "^5.0.1",
+    "typescript": "^4.6.4"
   },
   "files": [
     "dist"
