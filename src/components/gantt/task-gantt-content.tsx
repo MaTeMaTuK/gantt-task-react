@@ -252,9 +252,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             });
           }
         } else if (action === "mouseleave") {
-          // if (ganttEvent.action === "mouseenter") {
-          //   setGanttEvent({ action: "" });
-          // }
           setGanttEvent({ action: "" });
         } else if (action === "dblclick") {
           !!onDoubleClick && onDoubleClick(task);
