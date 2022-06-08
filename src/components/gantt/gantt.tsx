@@ -391,7 +391,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       } else {
         event.preventDefault();
         event.stopPropagation();
-        console.log(eleListTableBodyRef?.current, "111");
         if (event.deltaY !== 0) {
           // Y轴滚动处理
           // 判断列表是否有横向滚动条
