@@ -18,7 +18,9 @@ export const Bar: React.FC<TaskItemProps> = ({
   jsPlumb,
   isLog,
   setPointInited,
-  ganttEvent,
+  ganttEvent = {
+    action: "",
+  },
 }) => {
   const { action } = ganttEvent;
   const barRef = useRef<any>(null);

@@ -10,7 +10,9 @@ export const Milestone: React.FC<TaskItemProps> = ({
   // isSelected,
   jsPlumb,
   setPointInited,
-  ganttEvent,
+  ganttEvent = {
+    action: "",
+  },
 }) => {
   const barRef = useRef<any>(null);
   const { action } = ganttEvent;
