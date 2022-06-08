@@ -6,7 +6,6 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-// import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import { ViewMode, GanttProps } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import {
@@ -17,6 +16,8 @@ import {
 import { CalendarProps } from "../calendar/calendar";
 import { TaskGanttContentProps } from "./task-gantt-content";
 import { StandardTooltipContent, Tooltip } from "../other/tooltip";
+import { DeleteTooltip } from "../other/deleteTooltip";
+
 import { VerticalScroll } from "../other/vertical-scroll";
 import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
@@ -28,10 +29,11 @@ import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttConfig from "../gantt-config/index";
 import GuideModal from "./guide-modal";
 import { Button } from "antd";
-import GanttHeader from "./gantt-header";
 import ArrowIcon from "../icons/arrow";
 import utils from "../../helpers/utils";
 import { scrollBarHeight } from "../../helpers/dicts";
+import DataMode from "./data-mode";
+
 import "./gantt.css";
 
 import {
@@ -39,7 +41,6 @@ import {
   ConfigHandleContext,
   BaseLineContext,
 } from "../../contsxt";
-
 const widthData = {
   [ViewMode.Month]: 300,
   [ViewMode.Week]: 210,
@@ -101,13 +102,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   workspaceId,
   getCustomFields, // 获取字段
   isConnect = true,
-  isBaseLine = true,
-  isDisplayConfig = true,
-  isSetting = true,
+
   isViewModeChange = true,
-  isToToday = true,
+
   onMouseEvent,
   onClickEvent,
+  configVisibleChange, // 甘特图配置页面显示和隐藏
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -139,7 +139,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
   });
-
+  const [currentConnection, setCurrentConnection] = useState(null);
   const [selectedTask, setSelectedTask] = useState<BarTask>();
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
 
@@ -310,7 +310,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     if (!listCellWidth) {
       setTaskListWidth(0);
     }
-    console.log(taskListRef, "taskListRef.current");
     if (taskListRef.current) {
       setTaskListWidth(taskListRef.current.offsetWidth);
     }
@@ -397,7 +396,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           // 判断列表是否有横向滚动条
           const isScroll =
             eleListTableBodyRef?.current?.clientWidth !==
-            eleListTableBodyRef.current.scrollWidth;
+            eleListTableBodyRef?.current?.scrollWidth;
           setIsTableScrollX(isScroll);
           const max = ganttFullHeight - ganttHeight;
           const scrollY = refScrollY.current;
@@ -452,6 +451,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         setScrollY(refScrollY.current);
       }
       setIgnoreScrollEvent(false);
+      setCurrentConnection(null);
     },
     [ignoreScrollEvent, setElementsScrollY]
   );
@@ -465,6 +465,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         setScrollX(refScrollX.current);
       }
       setIgnoreScrollEvent(false);
+      setCurrentConnection(null);
     },
     [ignoreScrollEvent, setElementsScrollX]
   );
@@ -568,6 +569,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     [barTasks, onSelect, selectedTask]
   );
   const boundLeft = wrapperRef.current?.getBoundingClientRect().left || 0;
+  const boundTop = wrapperRef.current?.getBoundingClientRect().top || 0;
   const offsetLeft = taskListRef.current?.clientWidth || 0;
   const gridProps: GridProps = useMemo(() => {
     return {
@@ -640,6 +642,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       addConnection,
       itemLinks,
       isConnect,
+      setCurrentConnection,
+      currentConnection,
     };
   }, [
     barTasks,
@@ -667,6 +671,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     itemLinks,
     handleSelectedTask,
     isConnect,
+    currentConnection,
   ]);
   const TaskListComponent = useMemo(() => {
     if (typeof renderTaskListComponent === "function") {
@@ -682,8 +687,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       );
     }
   }, [TaskListComponent]);
-
-  const toToday = useCallback(() => {
+  const todayX = useMemo(() => {
     // 之前考虑通过context， 在grid-body中setState 传递移动的距离，但是页面会抖动
     const now = new Date();
     let tickX = 0;
@@ -722,16 +726,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       }
       tickX += columnWidth;
     }
-    refScrollX.current = newTickX - svgContainerWidth / 2;
+    return newTickX;
+  }, [columnWidth, dateSetup.dates]);
+  const toToday = useCallback(() => {
+    refScrollX.current = todayX - svgContainerWidth / 2;
     setElementsScrollX();
     setScrollX(refScrollX.current);
-  }, [
-    JSON.stringify(dateSetup),
-    columnWidth,
-    dateSetup.dates,
-    setElementsScrollX,
-    svgContainerWidth,
-  ]);
+  }, [setElementsScrollX, svgContainerWidth, todayX]);
 
   useEffect(() => {
     toToday();
@@ -739,15 +740,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const toConfig = useCallback(() => {
     setVisible(true);
-  }, []);
+    configVisibleChange?.(true);
+  }, [configVisibleChange]);
   const toGantt = useCallback(() => {
     setVisible(false);
-  }, []);
+    configVisibleChange?.(false);
+  }, [configVisibleChange]);
   const modeChange = useCallback((val: ViewMode) => {
     setViewMode(val);
     setColumnWidth(widthData[val] || 60);
   }, []);
-
   const handleDividerMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       const handleMouseMove = (event: MouseEvent) => {
@@ -765,7 +767,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         window.removeEventListener("mouseup", handleMouseUp);
         const isScroll =
           eleListTableBodyRef?.current?.clientWidth !==
-          eleListTableBodyRef.current.scrollWidth;
+          eleListTableBodyRef?.current?.scrollWidth;
         setIsTableScrollX(isScroll);
       };
       dividerPositionRef.current.left = event.clientX;
@@ -795,16 +797,18 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setCurrentLog?.({});
     setLogTasks([]);
   };
+  const toPanel = useCallback(() => {
+    setGuideModalVisible(false);
+    toConfig();
+  }, [toConfig]);
   React.useImperativeHandle(actionRef, () => ({
     openGuide(type: string) {
       setCurrentPanel(type);
       setGuideModalVisible(true);
     },
+    toPanel: toPanel,
   }));
-  const toPanel = useCallback(() => {
-    setGuideModalVisible(false);
-    toConfig();
-  }, [toConfig]);
+
   const panelCanel = useCallback(() => {
     setGuideModalVisible(false);
   }, []);
@@ -837,12 +841,26 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             getCustomFields,
           }}
         >
-          <GanttConfig
-            toGantt={toGantt}
-            visible={visible}
-            currentPanel={currentPanel}
-          />
+          <BaseLineContext.Provider
+            value={{
+              baseLineHandle,
+              baselineList,
+              setCurrentLog,
+              setLogTasks,
+              currentLog,
+              OverflowTooltip,
+            }}
+          >
+            <GanttConfig
+              toGantt={toGantt}
+              visible={visible}
+              currentPanel={currentPanel}
+              configHandle={configHandle}
+              ganttConfig={ganttConfig}
+            />
+          </BaseLineContext.Provider>
         </ConfigHandleContext.Provider>
+        {/* <<<<<<< HEAD
         <BaseLineContext.Provider
           value={{
             baseLineHandle,
@@ -866,6 +884,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           />
         </BaseLineContext.Provider>
 
+=======
+>>>>>>> 9d5e251572f03d89d2d48d395de408ff89136f0f */}
         <div
           className={styles.wrapper}
           onKeyDown={handleKeyDown}
@@ -949,6 +969,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               </span>
             </div>
           </div>
+          {isViewModeChange && (
+            <DataMode
+              toToday={toToday}
+              modeChange={modeChange}
+              todayX={todayX}
+              svgContainerWidth={svgContainerWidth}
+              refScrollX={refScrollX.current}
+            />
+          )}
+
           {ganttEvent.changedTask && (
             <Tooltip
               arrowIndent={arrowIndent}
@@ -964,6 +994,18 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               taskListWidth={taskListWidth}
               TooltipContent={TooltipContent}
               renderUserAvatar={renderUserAvatar}
+            />
+          )}
+          {currentConnection && (
+            <DeleteTooltip
+              tasks={tasks}
+              taskListWidth={taskListWidth}
+              currentConnection={currentConnection}
+              boundTop={boundTop}
+              itemLinks={itemLinks}
+              delConnection={delConnection}
+              setCurrentConnection={setCurrentConnection}
+              svgContainerHeight={svgContainerHeight}
             />
           )}
           {tasks.length > 0 && (

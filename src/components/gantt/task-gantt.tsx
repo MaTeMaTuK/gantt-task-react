@@ -127,6 +127,7 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
             {...newBarProps}
             taskListHeight={taskListHeight}
             clickBaselineItem={clickBaselineItem}
+            containerRef={horizontalContainerRef}
           />
         </svg>
 

@@ -23,14 +23,13 @@ import {
   sizeCalculators,
   relationReverse,
   relationInit,
-  deleteIcon,
 } from "../../helpers/jsPlumbConfig";
 import {
   BarMoveAction,
   GanttContentMoveAction,
   GanttEvent,
 } from "../../types/gantt-task-actions";
-import { message, Modal } from "antd";
+import { message } from "antd";
 
 export type TaskGanttContentProps = {
   tasks: BarTask[];
@@ -54,6 +53,7 @@ export type TaskGanttContentProps = {
   taskListHeight?: number;
   clickBaselineItem?: (offsetX: number, currentLogItem: BarTask) => void;
   isConnect?: boolean;
+  containerRef?: React.MutableRefObject<any>;
 } & EventOption &
   ConnectionProps;
 
@@ -80,12 +80,14 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     onProgressChange,
     onDoubleClick,
     onDelete,
-    delConnection,
     addConnection,
     itemLinks,
     taskListHeight,
     clickBaselineItem,
     isConnect,
+    setCurrentConnection,
+    currentConnection,
+    containerRef,
   }) => {
     const [connectUuids, setConnectUuids] = useState([]);
     const point = svg?.current?.createSVGPoint();
@@ -95,6 +97,28 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     const [jsPlumbInstance, setJsPlumbInstance] = useState<any>(null);
     const { ganttConfig } = useContext(GanttConfigContext);
     const [pointInited, setPointInited] = useState(false);
+
+    useEffect(() => {
+      const connectClickHandle = () => {
+        if (currentConnection) {
+          currentConnection?.connection?.removeClass("select-connection");
+          setCurrentConnection?.(null);
+        }
+      };
+      const container = containerRef?.current;
+      container?.addEventListener("click", connectClickHandle, true);
+      return () => {
+        container?.removeEventListener("click", connectClickHandle, true);
+      };
+    }, [containerRef, setCurrentConnection, currentConnection]);
+    useEffect(() => {
+      if (!currentConnection && jsPlumbInstance) {
+        const connections = jsPlumbInstance.getConnections();
+        connections.forEach((ele: any) => {
+          ele.removeClass("select-connection");
+        });
+      }
+    }, [currentConnection, jsPlumbInstance]);
     useEffect(() => {
       const dateDelta =
         dates[1].getTime() -
@@ -371,28 +395,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       },
       [getHasLinkItems]
     );
-
-    const deleteConn = useCallback(
-      (conn: any) => {
-        const currentLink = itemLinks.filter((ele: any) => {
-          return (
-            ele.source?.objectId === conn?.sourceId &&
-            ele.destination?.objectId === conn?.targetId &&
-            ele.linkType?.objectId === conn.getData()
-          );
-        });
-        if (currentLink.length) {
-          Modal.confirm({
-            title: "解除关联关系",
-            content: "确定要解除卡片的关联关系吗？",
-            okText: "确认",
-            cancelText: "取消",
-            onOk: () => delConnection(currentLink[0].objectId),
-          });
-        }
-      },
-      [delConnection, itemLinks]
-    );
     useEffect(() => {
       if (isConnect) {
         import("jsplumb").then(({ jsPlumb }: any) => {
@@ -446,14 +448,14 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             conn.connection.endpoints[0].anchor.cssClass,
             conn.dropEndpoint.anchor.cssClass
           );
-          const currentLink = itemLinks.filter((ele: any) => {
+          const currentLink = itemLinks?.filter((ele: any) => {
             return (
               ele.source?.objectId === conn?.sourceId &&
               ele.destination?.objectId === conn?.targetId &&
               ele.linkType?.objectId === linkTypeId
             );
           });
-          if (currentLink.length) {
+          if (currentLink?.length) {
             message.warning("连线有误");
             return false;
           }
@@ -495,8 +497,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           // init(infor.connection);
           if (originalEvent) {
             infor.connection.setData(linkTypeId);
-            addConnection(params);
+            addConnection?.(params);
           }
+        });
+        jsPlumbInstance.bind("click", (connection: any, originalEvent: any) => {
+          jsPlumbInstance.select().removeClass("select-connection");
+          connection.addClass("select-connection");
+          setCurrentConnection?.({
+            originalEvent: originalEvent,
+            connection: connection,
+          });
         });
       }
       return () => {
@@ -513,15 +523,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       addConnection,
       ganttConfig.relation,
       getLinkTypeId,
+      setCurrentConnection,
     ]);
     useEffect(() => {
-      if (!itemLinks.length) {
+      if (!itemLinks?.length) {
         if (!isEqual(connectUuids, [])) {
           setConnectUuids([]);
         }
       }
 
-      if (itemLinks.length && tasks.length && jsPlumbInstance) {
+      if (itemLinks?.length && tasks.length && jsPlumbInstance) {
         const newConnectUuids: any = [];
         tasks.forEach((task: any) => {
           // 找到需要连线的卡片
@@ -592,20 +603,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             });
             // 给连线设置linkType
             if (connect) {
-              connect.addOverlay([
-                "Label",
-                {
-                  label: deleteIcon,
-                  location: 0.5,
-                  cssClass: "overlay-label",
-                  events: {
-                    click: function () {
-                      deleteConn(connect);
-                    },
-                  },
-                  id: uuid[0],
-                },
-              ]);
               if (isErrorLink) {
                 // 设置连线错误的颜色
                 connect.setPaintStyle({
@@ -630,13 +627,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           jsPlumbInstance.deleteEveryConnection();
         }
       };
-    }, [
-      jsPlumbInstance,
-      deleteConn,
-      ganttConfig?.relation,
-      connectUuids,
-      pointInited,
-    ]);
+    }, [jsPlumbInstance, ganttConfig?.relation, connectUuids, pointInited]);
     return (
       <g className="content">
         <g className="arrows" fill={arrowColor} stroke={arrowColor}>

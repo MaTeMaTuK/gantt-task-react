@@ -1,26 +1,25 @@
 import React, { useState, useContext, useCallback } from "react";
-import {
-  PlusOutlined,
-  EllipsisOutlined,
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
-import { Menu, Dropdown, Button, Modal } from "antd";
+import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Button, Modal } from "antd";
 import AddEdit from "./add-edit";
 import { BaseLineContext } from "../../../contsxt";
 import { BaselineProps } from "../../../types/public-types";
+import Checked from "../../icons/checked";
 import { omit } from "lodash";
+import { dayTimeFormat } from "../../../helpers/dicts";
+
 import dayjs from "dayjs";
 
 import styles from "./index.css";
-interface panelProps {
-  onClosePopver: () => void;
-  setPopoverVisible?: React.Dispatch<React.SetStateAction<boolean>>;
-}
-export const Panel: React.FC<panelProps> = ({
-  onClosePopver,
-  setPopoverVisible,
-}) => {
+export const BaseLine: React.FC = () => {
+  const {
+    baseLineHandle,
+    baselineList,
+    setCurrentLog,
+    currentLog,
+    OverflowTooltip,
+    setLogTasks,
+  } = useContext(BaseLineContext);
   const deleteBaseline = () => {
     Modal.confirm({
       title: "删除基线",
@@ -30,9 +29,14 @@ export const Panel: React.FC<panelProps> = ({
       onOk: () => baseLineHandle(currentBaseline),
     });
   };
-  const handleMenuClick = (e: any) => {
-    onClosePopver?.();
-    switch (e.key) {
+  const handleMenuClick = (
+    type: string,
+    e: React.SyntheticEvent,
+    currentBaseLine: BaselineProps
+  ) => {
+    setCurrentBaseline(omit(currentBaseLine, ["createdAt", "updatedAt"]));
+    e.stopPropagation();
+    switch (type) {
       case "edit":
         setVisible(true);
         break;
@@ -41,35 +45,11 @@ export const Panel: React.FC<panelProps> = ({
         break;
     }
   };
-  const BaselineConfig = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="edit">
-        <span>
-          <EditOutlined />
-          <span className={styles.ml8}>编辑基线</span>
-        </span>
-      </Menu.Item>
-      <Menu.Item key="del">
-        <span>
-          <DeleteOutlined />
-          <span className={styles.ml8}>删除基线</span>
-        </span>
-      </Menu.Item>
-    </Menu>
-  );
-  const {
-    baseLineHandle,
-    baselineList,
-    setCurrentLog,
-    currentLog,
-    OverflowTooltip,
-  } = useContext(BaseLineContext);
   const [visible, setVisible] = useState(false);
   const [currentBaseline, setCurrentBaseline] = useState<any>({});
   const addBaseline = () => {
     setVisible(true);
     setCurrentBaseline({});
-    onClosePopver?.();
   };
   const handleOk = useCallback(
     async (value: BaselineProps) => {
@@ -82,14 +62,19 @@ export const Panel: React.FC<panelProps> = ({
     setVisible(false);
   };
   const chooseLog = (infor: BaselineProps) => {
-    setCurrentLog(infor);
-    setPopoverVisible?.(false);
+    // 取消选中基线
+    if (currentLog?.objectId === infor?.objectId) {
+      setCurrentLog([]);
+      setLogTasks([]);
+    } else {
+      setCurrentLog(infor);
+    }
   };
   return (
     <div className={styles.panel}>
       <div className={styles.createBaseline}>
         <Button
-          type="link"
+          type="dashed"
           icon={<PlusOutlined />}
           onClick={addBaseline}
           disabled={baselineList?.length >= 10}
@@ -116,30 +101,31 @@ export const Panel: React.FC<panelProps> = ({
                   : undefined
               }
             >
+              {ele.objectId === currentLog?.objectId && (
+                <div className={styles.checkedIcon}>
+                  <Checked />
+                </div>
+              )}
               <div
                 className={`${styles.content} ${styles.cursor}`}
                 onClick={() => chooseLog(ele)}
               >
                 <div className={styles.name}>{OverflowTooltip(ele.name)}</div>
                 <div className={styles.time}>
-                  创建于：
-                  {dayjs(new Date(ele.createdAt)).format("YYYY-MM-DD HH:mm:ss")}
+                  <div className={styles.createTime}>
+                    创建于：
+                    {dayjs(new Date(ele.createdAt)).format(dayTimeFormat)}
+                  </div>
+                  <div className={styles.handleIcon}>
+                    <EditOutlined
+                      onClick={e => handleMenuClick("edit", e, ele)}
+                    />
+                    <DeleteOutlined
+                      onClick={e => handleMenuClick("del", e, ele)}
+                    />
+                  </div>
                 </div>
               </div>
-              <Dropdown
-                overlay={BaselineConfig}
-                placement="bottomRight"
-                trigger={["click"]}
-              >
-                <span
-                  className={styles.dot}
-                  onClick={() => {
-                    setCurrentBaseline(omit(ele, ["createdAt", "updatedAt"]));
-                  }}
-                >
-                  <EllipsisOutlined />
-                </span>
-              </Dropdown>
             </li>
           );
         })}
@@ -148,4 +134,4 @@ export const Panel: React.FC<panelProps> = ({
   );
 };
 
-export default Panel;
+export default BaseLine;
