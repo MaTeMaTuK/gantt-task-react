@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BarTask } from "../../types/bar-task";
-import { GanttContentMoveAction } from "../../types/gantt-task-actions";
+import {
+  GanttContentMoveAction,
+  GanttEvent,
+} from "../../types/gantt-task-actions";
 import { Bar } from "./bar/bar";
 import { BarSmall } from "./bar/bar-small";
 import { BarParent } from "./bar/bar-parent";
@@ -24,6 +27,8 @@ export type TaskItemProps = {
   isLog?: boolean | undefined;
   taskListHeight?: number;
   setPointInited?: (value: boolean) => void;
+  isMoving?: boolean;
+  ganttEvent?: GanttEvent;
 };
 
 export const TaskItem: React.FC<TaskItemProps> = props => {

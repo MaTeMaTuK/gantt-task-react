@@ -10,8 +10,10 @@ export const Milestone: React.FC<TaskItemProps> = ({
   // isSelected,
   jsPlumb,
   setPointInited,
+  ganttEvent,
 }) => {
   const barRef = useRef<any>(null);
+  const { action } = ganttEvent;
   // 设置端点
   const addPointFinished = useAddPoint(jsPlumb, task, barRef, "milestone");
   useEffect(() => {
@@ -19,7 +21,7 @@ export const Milestone: React.FC<TaskItemProps> = ({
       setPointInited?.(addPointFinished);
     }
   }, [addPointFinished, setPointInited]);
-  useHover(barRef, jsPlumb, task.id);
+  useHover(barRef, jsPlumb, task.id, action);
   useEffect(() => {
     if (jsPlumb) {
       // 重绘元素，解决拖动时间块连接点跟随

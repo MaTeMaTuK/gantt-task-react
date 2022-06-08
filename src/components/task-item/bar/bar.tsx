@@ -18,7 +18,9 @@ export const Bar: React.FC<TaskItemProps> = ({
   jsPlumb,
   isLog,
   setPointInited,
+  ganttEvent,
 }) => {
+  const { action } = ganttEvent;
   const barRef = useRef<any>(null);
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const progressPoint = getProgressPoint(
@@ -48,7 +50,7 @@ export const Bar: React.FC<TaskItemProps> = ({
       }
     };
   }, [jsPlumb, task.id]);
-  useHover(barRef, jsPlumb, task.id);
+  useHover(barRef, jsPlumb, task.id, action);
   return (
     <svg>
       <g ref={barRef} className={styles.barWrapper} tabIndex={0}>
@@ -98,7 +100,7 @@ export const Bar: React.FC<TaskItemProps> = ({
               />
               {/* right */}
               <BarDateHandle
-                x={task.x2 - task.handleWidth}
+                x={task.x2}
                 y={task.y}
                 width={task.handleWidth}
                 height={handleHeight}

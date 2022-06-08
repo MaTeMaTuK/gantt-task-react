@@ -660,7 +660,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     return null;
   }, [renderTaskListComponent]);
-
+  const isHiddenShowTooltip = useMemo(() => {
+    return ["move", "start", "end", "progress"].includes(ganttEvent.action);
+  }, [ganttEvent]);
   useEffect(() => {
     if (TaskListComponent) {
       eleListTableBodyRef.current = document.querySelector(
@@ -923,7 +925,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             svgContainerWidth={svgContainerWidth}
             refScrollX={refScrollX.current}
           />
-          {ganttEvent.changedTask && (
+          {ganttEvent.changedTask && !isHiddenShowTooltip && (
             <Tooltip
               arrowIndent={arrowIndent}
               rowHeight={rowHeight}
