@@ -863,32 +863,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
             />
           </BaseLineContext.Provider>
         </ConfigHandleContext.Provider>
-        {/* <<<<<<< HEAD
-        <BaseLineContext.Provider
-          value={{
-            baseLineHandle,
-            baselineList,
-            setCurrentLog,
-            currentLog,
-            OverflowTooltip,
-          }}
-        >
-          <GanttHeader
-            toToday={toToday}
-            toConfig={toConfig}
-            modeChange={modeChange}
-            ganttConfig={ganttConfig}
-            configHandle={configHandle}
-            isBaseLine={isBaseLine}
-            isDisplayConfig={isDisplayConfig}
-            isViewModeChange={isViewModeChange} // 是否视图切换
-            isToToday={isToToday} // 是否定位到当天
-            isSetting={isSetting}
-          />
-        </BaseLineContext.Provider>
-
-=======
->>>>>>> 9d5e251572f03d89d2d48d395de408ff89136f0f */}
         <div
           className={styles.wrapper}
           onKeyDown={handleKeyDown}
