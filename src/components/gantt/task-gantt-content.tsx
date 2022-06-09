@@ -512,6 +512,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
         if (jsPlumbInstance) {
           jsPlumbInstance.unbind("beforeDrop");
           jsPlumbInstance.unbind("connection");
+          jsPlumbInstance.unbind("click");
         }
       };
     }, [
