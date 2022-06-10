@@ -53,7 +53,8 @@
 }
 .connectionLine {
   height: 12px;
-  border: 1px solid rgb(75, 139, 255);
+  width: 2px;
+  background: rgb(75, 139, 255);
 }
 .connectionIcon {
   border-radius: 50%;

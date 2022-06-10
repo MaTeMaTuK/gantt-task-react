@@ -93,7 +93,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     const point = svg?.current?.createSVGPoint();
     const [xStep, setXStep] = useState(0);
     const [initEventX1Delta, setInitEventX1Delta] = useState(0);
+    // 是否正在拖动时间bar
     const [isMoving, setIsMoving] = useState(false);
+    // 是否正在连线
     const [jsPlumbInstance, setJsPlumbInstance] = useState<any>(null);
     const { ganttConfig } = useContext(GanttConfigContext);
     const [pointInited, setPointInited] = useState(false);
@@ -513,6 +515,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
         if (jsPlumbInstance) {
           jsPlumbInstance.unbind("beforeDrop");
           jsPlumbInstance.unbind("connection");
+          jsPlumbInstance.unbind("click");
         }
       };
     }, [
@@ -686,6 +689,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
                     isSelected={!!selectedTask && task.id === selectedTask.id}
                     taskListHeight={taskListHeight}
                     setPointInited={setPointInited}
+                    isMoving={isMoving}
+                    ganttEvent={ganttEvent}
                   />
                 )}
               </g>

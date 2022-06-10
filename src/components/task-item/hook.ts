@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { commonConfig } from "../../helpers/jsPlumbConfig";
 export const pointOverEvent = (barRef: any, jsPlumb: any, id: string) => {
   // 鼠标移入连接点时会触发barWrapper失去hover,从而导致barHandle和handleGroup消失，所以采用动态添加class的方式
@@ -31,35 +31,46 @@ export const barAnchor = {
 export const useHover = (
   barRef: React.RefObject<Element>,
   jsPlumb: any,
-  id: string
+  id: string,
+  action: string
 ): any => {
+  const passiveAction = useMemo(() => {
+    return ["start", "end", "progress", "move"].includes(action);
+  }, [action]);
   useEffect((): any => {
-    if (barRef.current) {
+    if (barRef.current && jsPlumb) {
       const addHoverClass = () => {
-        barRef?.current?.classList.add("barHover");
-        if (jsPlumb) {
+        if (!passiveAction) {
+          barRef?.current?.classList.add("barHover");
+
           jsPlumb.selectEndpoints({ element: id }).addClass("endpoint-hover");
+          jsPlumb.selectEndpoints({ element: id }).setVisible(true);
+        } else {
+          barRef?.current?.classList.remove("barHover");
+          jsPlumb
+            .selectEndpoints({ element: id })
+            .removeClass("endpoint-hover");
+          jsPlumb
+            .selectEndpoints({ element: id })
+            .setVisible(false, true, true);
         }
       };
       const removeHoverClass = () => {
         barRef?.current?.classList.remove("barHover");
-        if (jsPlumb) {
-          jsPlumb
-            .selectEndpoints({ element: id })
-            .removeClass("endpoint-hover");
-        }
+
+        jsPlumb.selectEndpoints({ element: id }).removeClass("endpoint-hover");
       };
       const nodeDom = barRef.current;
-      nodeDom.addEventListener("mouseover", addHoverClass);
+      nodeDom.addEventListener("mousemove", addHoverClass);
       nodeDom.addEventListener("mouseout", removeHoverClass);
       return () => {
         if (nodeDom) {
-          nodeDom.removeEventListener("mouseover", addHoverClass);
+          nodeDom.removeEventListener("mousemove", addHoverClass);
           nodeDom.removeEventListener("mouseout", removeHoverClass);
         }
       };
     }
-  }, [barRef, jsPlumb, id]);
+  }, [barRef, jsPlumb, id, passiveAction]);
 };
 
 export const useAddPoint = (

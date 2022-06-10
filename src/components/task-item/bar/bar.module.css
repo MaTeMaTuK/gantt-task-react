@@ -3,10 +3,6 @@
   outline: none;
 }
 
-.handleGroup {
-  cursor: ew-resize;
-}
-
 .barHandle {
   fill: #fff;
   opacity: 0;

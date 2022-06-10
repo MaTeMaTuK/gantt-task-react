@@ -679,7 +679,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     return null;
   }, [renderTaskListComponent]);
-
+  const isHiddenShowTooltip = useMemo(() => {
+    return ["move", "start", "end", "progress"].includes(ganttEvent.action);
+  }, [ganttEvent]);
   useEffect(() => {
     if (TaskListComponent) {
       // 解决获取不到dom元素
@@ -955,8 +957,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               refScrollX={refScrollX.current}
             />
           )}
-
-          {ganttEvent.changedTask && (
+          {ganttEvent.changedTask && !isHiddenShowTooltip && (
             <Tooltip
               arrowIndent={arrowIndent}
               rowHeight={rowHeight}

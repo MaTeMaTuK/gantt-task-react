@@ -18,8 +18,12 @@ export const BarParent: React.FC<TaskItemProps> = ({
   jsPlumb,
   isLog,
   setPointInited,
+  ganttEvent = {
+    action: "",
+  },
 }) => {
   const barRef = useRef<any>(null);
+  const { action } = ganttEvent;
   const progressWidth = progressWithByParams(task.x1, task.x2, task.progress);
   const progressPoint = getProgressPoint(
     progressWidth + task.x1 + 1,
@@ -47,7 +51,7 @@ export const BarParent: React.FC<TaskItemProps> = ({
       }
     };
   }, [jsPlumb, task?.id]);
-  useHover(barRef, jsPlumb, task.id);
+  useHover(barRef, jsPlumb, task.id, action);
   const handleHeight = task.height - 10;
   return (
     <g ref={barRef} className={styles.barWrapper} tabIndex={0}>
