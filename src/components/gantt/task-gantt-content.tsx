@@ -52,6 +52,7 @@ export type TaskGanttContentProps = {
   setSelectedTask: (taskId: string) => void;
   taskListHeight?: number;
   clickBaselineItem?: (offsetX: number, currentLogItem: BarTask) => void;
+  isConnect?: boolean;
   containerRef?: React.MutableRefObject<any>;
 } & EventOption &
   ConnectionProps;
@@ -83,6 +84,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     itemLinks,
     taskListHeight,
     clickBaselineItem,
+    isConnect,
     setCurrentConnection,
     currentConnection,
     containerRef,
@@ -276,9 +278,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             });
           }
         } else if (action === "mouseleave") {
-          if (ganttEvent.action === "mouseenter") {
-            setGanttEvent({ action: "" });
-          }
+          setGanttEvent({ action: "" });
         } else if (action === "dblclick") {
           !!onDoubleClick && onDoubleClick(task);
         } else if (action === "click") {
@@ -291,6 +291,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           if (!(currentLogItem?.[0]?.end && currentLogItem?.[0]?.start)) {
             clickBaselineItem?.(offsetX, currentLogItem[0]);
           }
+          setGanttEvent({ action, changedTask: task });
         }
         // Change task event start
         else if (action === "move") {
@@ -397,14 +398,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       [getHasLinkItems]
     );
     useEffect(() => {
-      import("jsplumb").then(({ jsPlumb }: any) => {
-        jsPlumb.ready(() => {
-          const instance = jsPlumb.getInstance();
-          instance.fire("jsPlumbDemoLoaded", instance);
-          setJsPlumbInstance(instance);
+      if (isConnect) {
+        import("jsplumb").then(({ jsPlumb }: any) => {
+          jsPlumb.ready(() => {
+            const instance = jsPlumb.getInstance();
+            instance.fire("jsPlumbDemoLoaded", instance);
+            setJsPlumbInstance(instance);
+          });
         });
-      });
-    }, []);
+      }
+    }, [isConnect]);
     useEffect(() => {
       if (jsPlumbInstance) {
         const originalOffset = jsPlumbInstance.getOffset;

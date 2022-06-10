@@ -75,6 +75,9 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       onDoubleClick={e => {
         onEventStart("dblclick", task, e);
       }}
+      onClick={e => {
+        onEventStart("click", task, e);
+      }}
       onFocus={() => {
         onEventStart("select", task);
       }}
