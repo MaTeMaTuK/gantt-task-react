@@ -58,7 +58,7 @@ export const AddEdit: React.FC<ModalProps> = ({
     if (!value) {
       callback();
     } else {
-      const findRepeat = baselineList.filter(
+      const findRepeat = baselineList?.filter(
         (ele: BaselineProps) => ele.name === value
       );
       if (

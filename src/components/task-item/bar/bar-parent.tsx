@@ -42,16 +42,16 @@ export const BarParent: React.FC<TaskItemProps> = ({
   useEffect(() => {
     return () => {
       if (jsPlumb) {
-        jsPlumb.deleteEndpoint(task.id + "-Left");
-        jsPlumb.deleteEndpoint(task.id + "-Right");
+        jsPlumb.deleteEndpoint(task?.id + "-Left");
+        jsPlumb.deleteEndpoint(task?.id + "-Right");
       }
     };
-  }, [jsPlumb]);
+  }, [jsPlumb, task?.id]);
   useHover(barRef, jsPlumb, task.id);
   const handleHeight = task.height - 10;
   return (
     <g ref={barRef} className={styles.barWrapper} tabIndex={0}>
-      {!isLog && (
+      {!isLog && isDateChangeable && (
         <g className="barHandle">
           <rect
             x={task.x1 - 20}

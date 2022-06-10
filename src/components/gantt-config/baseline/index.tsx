@@ -77,7 +77,7 @@ export const BaseLine: React.FC = () => {
           type="dashed"
           icon={<PlusOutlined />}
           onClick={addBaseline}
-          disabled={baselineList.length >= 10}
+          disabled={baselineList?.length >= 10}
         >
           {`创建基线（${baselineList?.length}/10）`}
         </Button>

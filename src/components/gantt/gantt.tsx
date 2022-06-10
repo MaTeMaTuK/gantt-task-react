@@ -88,7 +88,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   renderTaskListComponent,
   renderOverflowTooltip,
   renderUserAvatar,
-  itemTypeData, // 卡片类型
+  itemTypeData = [], // 卡片类型
   configHandle, // 配置事件
   baseLineHandle, // 基线事件
   setCurrentLog, // 选择基线log
@@ -96,15 +96,22 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   itemLinks = [], // 卡片关联
   addConnection,
   delConnection,
-  baselineList,
+  baselineList = [],
   currentLog,
   actionRef,
   workspaceId,
   getCustomFields, // 获取字段
+  isConnect = true,
+
+  isViewModeChange = true,
+
+  onMouseEvent,
+  onClickEvent,
   configVisibleChange, // 甘特图配置页面显示和隐藏
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
+  const onMouseEventRef = useRef<any>(null);
   const taskGanttContainerRef = useRef<any>({});
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
@@ -203,29 +210,31 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const [startDate, endDate] = ganttDateRange(viewMode);
     const newDates = seedDates(startDate, endDate, viewMode);
-    setLogTasks(
-      convertToBarTasks(
-        // @ts-ignore
-        (tasks = baseLineLog),
-        newDates,
-        columnWidth,
-        rowHeight,
-        taskHeight,
-        barCornerRadius,
-        handleWidth,
-        barProgressColor,
-        barProgressSelectedColor,
-        barBackgroundColor,
-        barBackgroundSelectedColor,
-        projectProgressColor,
-        projectProgressSelectedColor,
-        projectBackgroundColor,
-        projectBackgroundSelectedColor,
-        milestoneBackgroundColor,
-        milestoneBackgroundSelectedColor,
-        viewMode
-      )
-    );
+    if (baseLineLog?.length) {
+      setLogTasks(
+        convertToBarTasks(
+          // @ts-ignore
+          (tasks = baseLineLog),
+          newDates,
+          columnWidth,
+          rowHeight,
+          taskHeight,
+          barCornerRadius,
+          handleWidth,
+          barProgressColor,
+          barProgressSelectedColor,
+          barBackgroundColor,
+          barBackgroundSelectedColor,
+          projectProgressColor,
+          projectProgressSelectedColor,
+          projectBackgroundColor,
+          projectBackgroundSelectedColor,
+          milestoneBackgroundColor,
+          milestoneBackgroundSelectedColor,
+          viewMode
+        )
+      );
+    }
   }, [
     baseLineLog,
     isUpdate,
@@ -249,6 +258,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const { changedTask, action } = ganttEvent;
     if (changedTask) {
+      // 用于判断mouseLeave事件
+      onMouseEventRef.current = changedTask;
       if (action === "delete") {
         setGanttEvent({ action: "" });
         setBarTasks(barTasks.filter(t => t.id !== changedTask.id));
@@ -271,9 +282,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           );
           setBarTasks(newTaskList);
         }
+      } else if (action === "click") {
+        onClickEvent?.(action, changedTask);
+      } else if (action === "mouseenter") {
+        onMouseEvent?.(action, changedTask);
       }
+    } else if (onMouseEventRef.current) {
+      onMouseEvent?.(action, changedTask);
     }
-  }, [ganttEvent, barTasks]);
+  }, [ganttEvent, barTasks, onMouseEvent, onClickEvent]);
 
   useEffect(() => {
     if (failedTask) {
@@ -624,6 +641,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       delConnection,
       addConnection,
       itemLinks,
+      isConnect,
       setCurrentConnection,
       currentConnection,
     };
@@ -652,6 +670,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     addConnection,
     itemLinks,
     handleSelectedTask,
+    isConnect,
     currentConnection,
   ]);
   const TaskListComponent = useMemo(() => {
@@ -663,9 +682,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     if (TaskListComponent) {
-      eleListTableBodyRef.current = document.querySelector(
-        ".BaseTable__table-main .BaseTable__body"
-      );
+      // 解决获取不到dom元素
+      setTimeout(() => {
+        eleListTableBodyRef.current = document.querySelector(
+          ".BaseTable__table-main .BaseTable__body"
+        );
+      });
     }
   }, [TaskListComponent]);
   const todayX = useMemo(() => {
@@ -880,7 +902,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               ganttHeight={ganttHeight}
               scrollX={scrollX}
               onScroll={handleScrollX}
+              listBottomHeight={listBottomHeight}
               taskListHeight={taskListRef?.current?.offsetHeight}
+              headerHeight={headerHeight}
             />
           )}
           <div
@@ -899,7 +923,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               height: `calc(100% - ${listBottomHeight}px)`,
             }}
           >
-            <div className={styles.dividerContainer}>
+            <div
+              className={styles.dividerContainer}
+              style={{
+                height: `calc(100% - ${headerHeight}px)`,
+                top: `${headerHeight}px`,
+              }}
+            >
               <hr
                 onMouseDown={
                   taskListWidth <= minWidth ? undefined : handleDividerMouseDown
@@ -916,13 +946,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               </span>
             </div>
           </div>
-          <DataMode
-            toToday={toToday}
-            modeChange={modeChange}
-            todayX={todayX}
-            svgContainerWidth={svgContainerWidth}
-            refScrollX={refScrollX.current}
-          />
+          {isViewModeChange && (
+            <DataMode
+              toToday={toToday}
+              modeChange={modeChange}
+              todayX={todayX}
+              svgContainerWidth={svgContainerWidth}
+              refScrollX={refScrollX.current}
+            />
+          )}
+
           {ganttEvent.changedTask && (
             <Tooltip
               arrowIndent={arrowIndent}

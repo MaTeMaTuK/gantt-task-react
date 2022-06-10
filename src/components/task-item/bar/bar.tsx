@@ -52,7 +52,7 @@ export const Bar: React.FC<TaskItemProps> = ({
   return (
     <svg>
       <g ref={barRef} className={styles.barWrapper} tabIndex={0}>
-        {!isLog && (
+        {!isLog && isDateChangeable && (
           <g className="barHandle">
             <rect
               x={task.x1 - 20}

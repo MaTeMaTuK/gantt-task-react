@@ -26,13 +26,26 @@ export type TaskGanttProps = {
   scrollX: number;
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
   taskListHieght?: number;
+  listBottomHeight?: number;
   taskListHeight?: number;
+  headerHeight: number;
+  // onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 const TaskGanttComponent: React.ForwardRefRenderFunction<
   any,
   TaskGanttProps
 > = (
-  { gridProps, calendarProps, barProps, scrollX, onScroll, taskListHeight },
+  {
+    gridProps,
+    calendarProps,
+    barProps,
+    scrollX,
+    onScroll,
+    taskListHeight,
+    listBottomHeight,
+    headerHeight,
+  },
+
   ref
 ) => {
   const { dates, onDateChange, columnWidth } = gridProps;
@@ -72,8 +85,11 @@ const TaskGanttComponent: React.ForwardRefRenderFunction<
       className={styles.ganttVerticalContainer}
       ref={verticalGanttContainerRef}
       onScroll={onScroll}
+      style={{
+        marginBottom: `${listBottomHeight}px`,
+      }}
     >
-      <div className={styles.calendarWrapper}>
+      <div style={{ height: `${headerHeight}px` }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
