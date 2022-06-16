@@ -87,6 +87,12 @@ export const ganttDateRange = (tasks: Task[], viewMode: ViewMode) => {
       newEndDate = addToDate(newEndDate, 1, "year");
       newEndDate = startOfDate(newEndDate, "year");
       break;
+    case ViewMode.QuarterYear:
+      newStartDate = addToDate(newStartDate, -3, "month");
+      newStartDate = startOfDate(newStartDate, "month");
+      newEndDate = addToDate(newEndDate, 3, "year");
+      newEndDate = startOfDate(newEndDate, "year");
+      break;
     case ViewMode.Month:
       newStartDate = addToDate(newStartDate, -1, "month");
       newStartDate = startOfDate(newStartDate, "month");
@@ -138,6 +144,9 @@ export const seedDates = (
     switch (viewMode) {
       case ViewMode.Year:
         currentDate = addToDate(currentDate, 1, "year");
+        break;
+      case ViewMode.QuarterYear:
+        currentDate = addToDate(currentDate, 3, "month");
         break;
       case ViewMode.Month:
         currentDate = addToDate(currentDate, 1, "month");

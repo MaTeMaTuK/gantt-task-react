@@ -52,6 +52,12 @@ export const ViewSwitcher: React.SFC<ViewSwitcherProps> = ({
       >
         Year
       </button>
+      <button
+        className="Button"
+        onClick={() => onViewModeChange(ViewMode.QuarterYear)}
+      >
+        Year
+      </button>
       <div className="Switch">
         <label className="Switch_Toggle">
           <input
