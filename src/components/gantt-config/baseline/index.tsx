@@ -7,11 +7,13 @@ import { BaselineProps } from "../../../types/public-types";
 import Checked from "../../icons/checked";
 import { omit } from "lodash";
 import { dayTimeFormat } from "../../../helpers/dicts";
+import useI18n from "../../../lib/hooks/useI18n";
 
 import dayjs from "dayjs";
 
 import styles from "./index.css";
 export const BaseLine: React.FC = () => {
+  const { t } = useI18n();
   const {
     baseLineHandle,
     baselineList,
@@ -79,7 +81,9 @@ export const BaseLine: React.FC = () => {
           onClick={addBaseline}
           disabled={baselineList?.length >= 10}
         >
-          {`创建基线（${baselineList?.length}/10）`}
+          {`${t("ganttconfiguration.baseLineConfiguration.createBaseline")}（${
+            baselineList?.length
+          }/10）`}
         </Button>
       </div>
       {visible && (
@@ -113,7 +117,7 @@ export const BaseLine: React.FC = () => {
                 <div className={styles.name}>{OverflowTooltip(ele.name)}</div>
                 <div className={styles.time}>
                   <div className={styles.createTime}>
-                    创建于：
+                    {t("global.updatedAt")}：
                     {dayjs(new Date(ele.createdAt)).format(dayTimeFormat)}
                   </div>
                   <div className={styles.handleIcon}>

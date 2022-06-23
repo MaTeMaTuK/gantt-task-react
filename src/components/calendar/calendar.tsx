@@ -4,8 +4,11 @@ import { TopPartOfCalendar } from "./top-part-of-calendar";
 import {
   getLocaleMonth,
   getWeekNumberISO8601,
+  getLocalYearMonth,
 } from "../../helpers/date-helper";
 import { DateSetup } from "../../types/date-setup";
+import { zhList } from "../../helpers/dicts";
+
 import styles from "./calendar.module.css";
 
 export type CalendarProps = {
@@ -74,7 +77,9 @@ export const Calendar: React.FC<CalendarProps> = memo(
             ? date.getMonth() / 3 + 1
             : date.getMonth() / 3 + 1
         );
-        const bottomValue = `第${currentQuarter}季`;
+        const bottomValue = zhList.includes(locale)
+          ? `第${currentQuarter}季`
+          : `Q${currentQuarter}`;
         bottomValues.push(
           bottomValuesInit(bottomValue, date, headerHeight, i, "Quarter")
         );
@@ -99,7 +104,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         }
       }
       return [topValues, bottomValues];
-    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit]);
+    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit, locale]);
     const getCalendarValuesForMonth = useCallback(() => {
       const topValues: ReactChild[] = [];
       const bottomValues: ReactChild[] = [];
@@ -146,11 +151,12 @@ export const Calendar: React.FC<CalendarProps> = memo(
         const date = dates[i];
         let topValue = "";
         if (i === 0 || date.getMonth() !== dates[i - 1].getMonth()) {
-          // top
-          topValue = `${date.getFullYear()}年${date.getMonth() + 1}月`;
+          topValue = getLocalYearMonth(date, locale);
         }
         // bottom
-        const bottomValue = `第${getWeekNumberISO8601(date)}周`;
+        const bottomValue = zhList.includes(locale)
+          ? `第${getWeekNumberISO8601(date)}周`
+          : `w${getWeekNumberISO8601(date)}`;
 
         bottomValues.push(
           bottomValuesInit(bottomValue, date, headerHeight, i, "Week")
@@ -176,7 +182,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         weeksCount++;
       }
       return [topValues, bottomValues];
-    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit]);
+    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit, locale]);
 
     const getCalendarValuesForDay = useCallback(() => {
       const topValues: ReactChild[] = [];
@@ -194,8 +200,9 @@ export const Calendar: React.FC<CalendarProps> = memo(
           i + 1 !== dates.length &&
           date.getMonth() !== dates[i + 1].getMonth()
         ) {
-          const topValue = `${date.getFullYear()}年${date.getMonth() + 1}月`;
-
+          // const topValue = `${date.getFullYear()}年${date.getMonth() + 1}月`;
+          // const topValue = getLocaleMonth(date, locale);
+          const topValue = getLocalYearMonth(date, locale);
           topValues.push(
             <TopPartOfCalendar
               key={topValue + date.getFullYear()}
@@ -210,7 +217,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         }
       }
       return [topValues, bottomValues];
-    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit]);
+    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit, locale]);
 
     const getCalendarValuesForOther = useCallback(() => {
       const topValues: ReactChild[] = [];

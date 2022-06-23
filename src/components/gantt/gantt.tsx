@@ -28,11 +28,14 @@ import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttConfig from "../gantt-config/index";
 import GuideModal from "./guide-modal";
-import { Button } from "antd";
+import { Button, ConfigProvider } from "antd";
 import ArrowIcon from "../icons/arrow";
 import utils from "../../helpers/utils";
 import { scrollBarHeight } from "../../helpers/dicts";
 import DataMode from "./data-mode";
+import { getMessages } from "../../lib/locales";
+
+import I18n from "../../lib/i18n";
 
 import "./gantt.css";
 
@@ -58,7 +61,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   listBottomHeight = 48,
   rowHeight = 41,
   // viewMode = ViewMode.Day,
-  // locale = "en-GB",
   locale = "zh-cn",
   barFill = 60, // bar占的百分比
   barCornerRadius = 4,
@@ -679,6 +681,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     return null;
   }, [renderTaskListComponent]);
+  const [langBundle, antdLang] = useMemo(() => {
+    return getMessages(locale);
+  }, [locale]);
+  console.log(langBundle, antdLang);
   const isHiddenShowTooltip = useMemo(() => {
     return ["move", "start", "end", "progress"].includes(ganttEvent.action);
   }, [ganttEvent]);
@@ -826,191 +832,198 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     },
     [renderOverflowTooltip]
   );
+  // console.log(antdLang);
   return (
     <div className={styles.box}>
-      <GuideModal
-        visible={guideModalVisible}
-        toPanel={toPanel}
-        toCancel={panelCanel}
-      />
-      <GanttConfigContext.Provider
-        value={{
-          ganttConfig,
-        }}
-      >
-        <ConfigHandleContext.Provider
-          value={{
-            configHandle,
-            itemTypeData,
-            workspaceId,
-            getCustomFields,
-          }}
-        >
-          <BaseLineContext.Provider
+      <I18n lngDict={langBundle} locale={locale}>
+        <ConfigProvider>
+          <GuideModal
+            visible={guideModalVisible}
+            toPanel={toPanel}
+            toCancel={panelCanel}
+          />
+          <GanttConfigContext.Provider
             value={{
-              baseLineHandle,
-              baselineList,
-              setCurrentLog,
-              setLogTasks,
-              currentLog,
-              OverflowTooltip,
+              ganttConfig,
             }}
           >
-            <GanttConfig
-              toGantt={toGantt}
-              visible={visible}
-              currentPanel={currentPanel}
-              configHandle={configHandle}
-              ganttConfig={ganttConfig}
-            />
-          </BaseLineContext.Provider>
-        </ConfigHandleContext.Provider>
-        <div
-          className={styles.wrapper}
-          onKeyDown={handleKeyDown}
-          tabIndex={0}
-          ref={wrapperRef}
-        >
-          {currentLog?.name && (
-            <div className={styles.choosedBaselIne}>
-              <span className={styles.loaded}>
-                {OverflowTooltip(`已加载：${currentLog?.name}`)}
-              </span>
-              <Button size="small" onClick={baselineExit}>
-                退出
-              </Button>
-            </div>
-          )}
-
-          {listCellWidth && TaskListComponent && (
-            <div
-              ref={taskListRef}
-              className={styles.taskListWrapper}
-              id="ganttTaskListWrapper"
-              style={{
-                width: `${taskListWidth}px`,
-                visibility: tasks?.length ? "visible" : "hidden",
+            <ConfigHandleContext.Provider
+              value={{
+                configHandle,
+                itemTypeData,
+                workspaceId,
+                getCustomFields,
               }}
             >
-              {TaskListComponent}
-            </div>
-          )}
-          {tasks.length > 0 && (
-            <TaskGantt
-              ref={taskGanttContainerRef}
-              gridProps={gridProps}
-              calendarProps={calendarProps}
-              barProps={barProps}
-              ganttHeight={ganttHeight}
-              scrollX={scrollX}
-              onScroll={handleScrollX}
-              listBottomHeight={listBottomHeight}
-              taskListHeight={taskListRef?.current?.offsetHeight}
-              headerHeight={headerHeight}
-            />
-          )}
-          <div
-            className={
-              taskListWidth <= minWidth
-                ? `${styles.dividerWrapper} ${styles.reverse}`
-                : styles.dividerWrapper
-            }
-            style={{
-              left: `${
-                taskListWidth - minWidth > 0
-                  ? taskListWidth + paddingLeft
-                  : paddingLeft
-              }px`,
-              visibility: tasks?.length ? "visible" : "hidden",
-              height: `calc(100% - ${listBottomHeight}px)`,
-            }}
-          >
-            <div
-              className={styles.dividerContainer}
-              style={{
-                height: `calc(100% - ${headerHeight}px)`,
-                top: `${headerHeight}px`,
-              }}
-            >
-              <hr
-                onMouseDown={
-                  taskListWidth <= minWidth ? undefined : handleDividerMouseDown
-                }
-              />
-              <hr className={styles.maskLine} />
-              <hr className={styles.maskLineTop} />
-              <span
-                className={styles.dividerIconWarpper}
-                onMouseDown={e => e.stopPropagation()}
-                onClick={handleDividerClick}
+              <BaseLineContext.Provider
+                value={{
+                  baseLineHandle,
+                  baselineList,
+                  setCurrentLog,
+                  setLogTasks,
+                  currentLog,
+                  OverflowTooltip,
+                }}
               >
-                <ArrowIcon />
-              </span>
+                <GanttConfig
+                  toGantt={toGantt}
+                  visible={visible}
+                  currentPanel={currentPanel}
+                  configHandle={configHandle}
+                  ganttConfig={ganttConfig}
+                />
+              </BaseLineContext.Provider>
+            </ConfigHandleContext.Provider>
+            <div
+              className={styles.wrapper}
+              onKeyDown={handleKeyDown}
+              tabIndex={0}
+              ref={wrapperRef}
+            >
+              {currentLog?.name && (
+                <div className={styles.choosedBaselIne}>
+                  <span className={styles.loaded}>
+                    {OverflowTooltip(`已加载：${currentLog?.name}`)}
+                  </span>
+                  <Button size="small" onClick={baselineExit}>
+                    退出
+                  </Button>
+                </div>
+              )}
+
+              {listCellWidth && TaskListComponent && (
+                <div
+                  ref={taskListRef}
+                  className={styles.taskListWrapper}
+                  id="ganttTaskListWrapper"
+                  style={{
+                    width: `${taskListWidth}px`,
+                    visibility: tasks?.length ? "visible" : "hidden",
+                  }}
+                >
+                  {TaskListComponent}
+                </div>
+              )}
+              {tasks.length > 0 && (
+                <TaskGantt
+                  ref={taskGanttContainerRef}
+                  gridProps={gridProps}
+                  calendarProps={calendarProps}
+                  barProps={barProps}
+                  ganttHeight={ganttHeight}
+                  scrollX={scrollX}
+                  onScroll={handleScrollX}
+                  listBottomHeight={listBottomHeight}
+                  taskListHeight={taskListRef?.current?.offsetHeight}
+                  headerHeight={headerHeight}
+                />
+              )}
+              <div
+                className={
+                  taskListWidth <= minWidth
+                    ? `${styles.dividerWrapper} ${styles.reverse}`
+                    : styles.dividerWrapper
+                }
+                style={{
+                  left: `${
+                    taskListWidth - minWidth > 0
+                      ? taskListWidth + paddingLeft
+                      : paddingLeft
+                  }px`,
+                  visibility: tasks?.length ? "visible" : "hidden",
+                  height: `calc(100% - ${listBottomHeight}px)`,
+                }}
+              >
+                <div
+                  className={styles.dividerContainer}
+                  style={{
+                    height: `calc(100% - ${headerHeight}px)`,
+                    top: `${headerHeight}px`,
+                  }}
+                >
+                  <hr
+                    onMouseDown={
+                      taskListWidth <= minWidth
+                        ? undefined
+                        : handleDividerMouseDown
+                    }
+                  />
+                  <hr className={styles.maskLine} />
+                  <hr className={styles.maskLineTop} />
+                  <span
+                    className={styles.dividerIconWarpper}
+                    onMouseDown={e => e.stopPropagation()}
+                    onClick={handleDividerClick}
+                  >
+                    <ArrowIcon />
+                  </span>
+                </div>
+              </div>
+              {isViewModeChange && (
+                <DataMode
+                  toToday={toToday}
+                  modeChange={modeChange}
+                  todayX={todayX}
+                  svgContainerWidth={svgContainerWidth}
+                  refScrollX={refScrollX.current}
+                />
+              )}
+              {ganttEvent.changedTask && !isHiddenShowTooltip && (
+                <Tooltip
+                  arrowIndent={arrowIndent}
+                  rowHeight={rowHeight}
+                  svgContainerHeight={svgContainerHeight}
+                  svgContainerWidth={svgContainerWidth}
+                  fontFamily={fontFamily}
+                  fontSize={fontSize}
+                  scrollX={scrollX}
+                  scrollY={scrollY}
+                  task={ganttEvent.changedTask}
+                  headerHeight={headerHeight}
+                  taskListWidth={taskListWidth}
+                  TooltipContent={TooltipContent}
+                  renderUserAvatar={renderUserAvatar}
+                />
+              )}
+              {currentConnection && (
+                <DeleteTooltip
+                  tasks={tasks}
+                  taskListWidth={taskListWidth}
+                  currentConnection={currentConnection}
+                  boundTop={boundTop}
+                  itemLinks={itemLinks}
+                  delConnection={delConnection}
+                  setCurrentConnection={setCurrentConnection}
+                  svgContainerHeight={svgContainerHeight}
+                />
+              )}
+              {tasks.length > 0 && (
+                <VerticalScroll
+                  ref={verticalScrollContainerRef}
+                  ganttFullHeight={ganttFullHeight}
+                  ganttHeight={ganttHeight}
+                  headerHeight={headerHeight}
+                  listBottomHeight={listBottomHeight}
+                  onScroll={handleScrollY}
+                />
+              )}
+              {tasks.length > 0 && (
+                <HorizontalScroll
+                  ref={horizontalScrollContainerRef}
+                  listBottomHeight={
+                    isTableScrollX
+                      ? listBottomHeight
+                      : listBottomHeight - scrollBarHeight
+                  }
+                  svgWidth={svgWidth}
+                  taskListWidth={taskListWidth}
+                  onScroll={handleScrollX}
+                />
+              )}
             </div>
-          </div>
-          {isViewModeChange && (
-            <DataMode
-              toToday={toToday}
-              modeChange={modeChange}
-              todayX={todayX}
-              svgContainerWidth={svgContainerWidth}
-              refScrollX={refScrollX.current}
-            />
-          )}
-          {ganttEvent.changedTask && !isHiddenShowTooltip && (
-            <Tooltip
-              arrowIndent={arrowIndent}
-              rowHeight={rowHeight}
-              svgContainerHeight={svgContainerHeight}
-              svgContainerWidth={svgContainerWidth}
-              fontFamily={fontFamily}
-              fontSize={fontSize}
-              scrollX={scrollX}
-              scrollY={scrollY}
-              task={ganttEvent.changedTask}
-              headerHeight={headerHeight}
-              taskListWidth={taskListWidth}
-              TooltipContent={TooltipContent}
-              renderUserAvatar={renderUserAvatar}
-            />
-          )}
-          {currentConnection && (
-            <DeleteTooltip
-              tasks={tasks}
-              taskListWidth={taskListWidth}
-              currentConnection={currentConnection}
-              boundTop={boundTop}
-              itemLinks={itemLinks}
-              delConnection={delConnection}
-              setCurrentConnection={setCurrentConnection}
-              svgContainerHeight={svgContainerHeight}
-            />
-          )}
-          {tasks.length > 0 && (
-            <VerticalScroll
-              ref={verticalScrollContainerRef}
-              ganttFullHeight={ganttFullHeight}
-              ganttHeight={ganttHeight}
-              headerHeight={headerHeight}
-              listBottomHeight={listBottomHeight}
-              onScroll={handleScrollY}
-            />
-          )}
-          {tasks.length > 0 && (
-            <HorizontalScroll
-              ref={horizontalScrollContainerRef}
-              listBottomHeight={
-                isTableScrollX
-                  ? listBottomHeight
-                  : listBottomHeight - scrollBarHeight
-              }
-              svgWidth={svgWidth}
-              taskListWidth={taskListWidth}
-              onScroll={handleScrollX}
-            />
-          )}
-        </div>
-      </GanttConfigContext.Provider>
+          </GanttConfigContext.Provider>
+        </ConfigProvider>
+      </I18n>
     </div>
   );
 };
