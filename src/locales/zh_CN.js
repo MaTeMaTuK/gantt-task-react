@@ -17,6 +17,10 @@ const date = {
   Quarter: "季",
   Year: "年",
   Today: "Today",
+  format: {
+    week: "第w周",
+    quarter: "第Q季度",
+  },
 };
 
 const zhCN = {
@@ -74,7 +78,12 @@ const zhCN = {
       otherConfigurationDescription:
         "根据卡片之间的关系，自动调整卡片时间，避免出现逻辑错误",
       otherConfigurationTips:
-        "When auto-scheduling is turned on, the time of all events is automatically adjusted according to the current event relationship. Confirmation of turning on？",
+        "开启自动编排时，将按当前的事项关系自动调整所有事项的时间。确认开启？",
+    },
+    unconfigurationModal: {
+      unconfigurationTip: "还没有配置甘特图中卡片的时间字段",
+      clickHere: "点此",
+      performConfiguration: "进行配置",
     },
   },
   errorMessage: {

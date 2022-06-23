@@ -1,16 +1,17 @@
 import React, { ReactChild, memo, useCallback, useMemo } from "react";
 import { ViewMode } from "../../types/public-types";
 import { TopPartOfCalendar } from "./top-part-of-calendar";
-import {
-  getLocaleMonth,
-  getWeekNumberISO8601,
-  getLocalYearMonth,
-} from "../../helpers/date-helper";
+import { getLocaleMonth, getLocalYearMonth } from "../../helpers/date-helper";
 import { DateSetup } from "../../types/date-setup";
-import { zhList } from "../../helpers/dicts";
+import dayjs from "dayjs";
+import useI18n from "../../lib/hooks/useI18n";
 
 import styles from "./calendar.module.css";
 
+const advancedFormat = require("dayjs/plugin/advancedFormat");
+const weekOfYear = require("dayjs/plugin/weekOfYear");
+dayjs.extend(weekOfYear);
+dayjs.extend(advancedFormat);
 export type CalendarProps = {
   dateSetup: DateSetup;
   locale: string;
@@ -30,6 +31,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
     fontFamily,
     fontSize,
   }) => {
+    const { t } = useI18n();
     const bottomValuesInit = useCallback(
       (bottomValue, date, headerHeight, i, type) => {
         return (
@@ -77,9 +79,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
             ? date.getMonth() / 3 + 1
             : date.getMonth() / 3 + 1
         );
-        const bottomValue = zhList.includes(locale)
-          ? `第${currentQuarter}季`
-          : `Q${currentQuarter}`;
+        const bottomValue = dayjs(date).format(t("date.format.quarter"));
         bottomValues.push(
           bottomValuesInit(bottomValue, date, headerHeight, i, "Quarter")
         );
@@ -104,7 +104,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         }
       }
       return [topValues, bottomValues];
-    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit, locale]);
+    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit, t]);
     const getCalendarValuesForMonth = useCallback(() => {
       const topValues: ReactChild[] = [];
       const bottomValues: ReactChild[] = [];
@@ -153,11 +153,7 @@ export const Calendar: React.FC<CalendarProps> = memo(
         if (i === 0 || date.getMonth() !== dates[i - 1].getMonth()) {
           topValue = getLocalYearMonth(date, locale);
         }
-        // bottom
-        const bottomValue = zhList.includes(locale)
-          ? `第${getWeekNumberISO8601(date)}周`
-          : `w${getWeekNumberISO8601(date)}`;
-
+        const bottomValue = dayjs(date).format(t("date.format.week"));
         bottomValues.push(
           bottomValuesInit(bottomValue, date, headerHeight, i, "Week")
         );
@@ -182,7 +178,14 @@ export const Calendar: React.FC<CalendarProps> = memo(
         weeksCount++;
       }
       return [topValues, bottomValues];
-    }, [columnWidth, dateSetup.dates, headerHeight, bottomValuesInit, locale]);
+    }, [
+      columnWidth,
+      dateSetup.dates,
+      headerHeight,
+      bottomValuesInit,
+      locale,
+      t,
+    ]);
 
     const getCalendarValuesForDay = useCallback(() => {
       const topValues: ReactChild[] = [];
@@ -200,8 +203,6 @@ export const Calendar: React.FC<CalendarProps> = memo(
           i + 1 !== dates.length &&
           date.getMonth() !== dates[i + 1].getMonth()
         ) {
-          // const topValue = `${date.getFullYear()}年${date.getMonth() + 1}月`;
-          // const topValue = getLocaleMonth(date, locale);
           const topValue = getLocalYearMonth(date, locale);
           topValues.push(
             <TopPartOfCalendar

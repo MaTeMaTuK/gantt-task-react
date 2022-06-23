@@ -681,10 +681,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     return null;
   }, [renderTaskListComponent]);
-  const [langBundle, antdLang] = useMemo(() => {
+  const [langBundle] = useMemo(() => {
     return getMessages(locale);
   }, [locale]);
-  console.log(langBundle, antdLang);
   const isHiddenShowTooltip = useMemo(() => {
     return ["move", "start", "end", "progress"].includes(ganttEvent.action);
   }, [ganttEvent]);

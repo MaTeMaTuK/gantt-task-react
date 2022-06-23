@@ -20,7 +20,8 @@ const date = {
   Quarter: "Quarter",
   Year: "Year",
   format: {
-    week: "YYYY wo",
+    week: "wo",
+    quarter: "q Q",
   },
   Today: "Today",
 };
