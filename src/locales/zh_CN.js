@@ -39,8 +39,8 @@ const zhCN = {
   },
   global,
   date,
-  ganttconfiguration: {
-    ganttConfigurationTitle: "甘特图设置",
+  configuration: {
+   title: "甘特图设置",
     baseLineConfiguration: {
       baseline: "基线基线",
       baseLineTitleDescription: "点击基线卡片可选择显示基线",
