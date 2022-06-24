@@ -51,6 +51,8 @@ const zhCN = {
       baselineName: "基线名称",
       baselineDescription: "描述",
       loaded: "已加載",
+      deleteBaseline: "删除基线",
+      deleteDescription: "删除的基线无法恢复，确认删除",
     },
     displayItemsConfiguration: {
       displayItems: "显示项",

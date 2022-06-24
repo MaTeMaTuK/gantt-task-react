@@ -24,10 +24,10 @@ export const BaseLine: React.FC = () => {
   } = useContext(BaseLineContext);
   const deleteBaseline = () => {
     Modal.confirm({
-      title: "删除基线",
-      content: "删除的基线无法恢复，确认删除？",
-      okText: "确认",
-      cancelText: "取消",
+      title: t("configuration.baseLineConfiguration.deleteBaseline"),
+      content: `${t("configuration.baseLineConfiguration.deleteDescription")}?`,
+      okText: t("global.complete"),
+      cancelText: t("global.cancle"),
       onOk: () => baseLineHandle(currentBaseline),
     });
   };

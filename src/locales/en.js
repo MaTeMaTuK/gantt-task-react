@@ -54,6 +54,9 @@ const en = {
       baselineName: "Baseline name",
       baselineDescription: "Baseline description",
       loaded: "Loaded",
+      deleteBaseline: "Delete baseline",
+      deleteDescription:
+        "Deleted baselines cannot be recovered, confirm deletion",
     },
     displayItemsConfiguration: {
       displayItems: "Display items",
