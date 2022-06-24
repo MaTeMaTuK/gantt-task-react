@@ -32,12 +32,10 @@ const OtherConfig: React.FC = () => {
       return;
     }
     confirm({
-      title: t("ganttconfiguration.otherConfiguration.automaticScheduling"),
+      title: t("configuration.otherConfiguration.automaticScheduling"),
       okText: t("global.complete"),
       cancelText: t("global.cancel"),
-      content: t(
-        "ganttconfiguration.otherConfiguration.otherConfigurationTips"
-      ),
+      content: t("configuration.otherConfiguration.otherConfigurationTips"),
       onOk() {
         setChecked(value);
         configHandle({
@@ -56,11 +54,11 @@ const OtherConfig: React.FC = () => {
   return (
     <div className={styles.otherConfig}>
       <div>
-        {t("ganttconfiguration.otherConfiguration.automaticScheduling")}
+        {t("configuration.otherConfiguration.automaticScheduling")}
         <span className={styles.question}>
           <Tooltip
             title={t(
-              "ganttconfiguration.otherConfiguration.otherConfigurationDescription"
+              "configuration.otherConfiguration.otherConfigurationDescription"
             )}
           >
             <QuestionCircleOutlined />

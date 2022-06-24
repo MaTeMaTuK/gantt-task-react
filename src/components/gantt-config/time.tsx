@@ -14,7 +14,7 @@ const Time: React.FC<TimeProps> = () => {
   const [visible, setVisible] = useState(false);
   const columns = [
     {
-      title: t("ganttconfiguration.timeFieldConfiguration.relatedItems"),
+      title: t("configuration.timeFieldConfiguration.relatedItems"),
       dataIndex: "itemType",
       key: "name",
       render: (text: string) => {
@@ -27,7 +27,7 @@ const Time: React.FC<TimeProps> = () => {
           res[0]?.label || (
             <Tooltip
               title={t(
-                "ganttconfiguration.timeFieldConfiguration.noConfigurationTip"
+                "configuration.timeFieldConfiguration.noConfigurationTip"
               )}
             >
               {t("global.default")} &nbsp;
@@ -38,13 +38,13 @@ const Time: React.FC<TimeProps> = () => {
       },
     },
     {
-      title: t("ganttconfiguration.timeFieldConfiguration.configuration"),
+      title: t("configuration.timeFieldConfiguration.configuration"),
       key: "action",
       width: 120,
       render: (_text: string, record: TimeItemProps, index: number) => (
         <Space>
           <a type="link" onClick={() => editTime(index)}>
-            {t("ganttconfiguration.timeFieldConfiguration.configuration")}
+            {t("configuration.timeFieldConfiguration.configuration")}
           </a>
           {!record?.isDefault && (
             <a type="link" onClick={() => del(index)}>
@@ -100,8 +100,8 @@ const Time: React.FC<TimeProps> = () => {
   );
   const del = (index: number) => {
     Modal.confirm({
-      title: t("ganttconfiguration.timeFieldConfiguration.deleteTitle"),
-      content: t("ganttconfiguration.timeFieldConfiguration.deleteTip"),
+      title: t("configuration.timeFieldConfiguration.deleteTitle"),
+      content: t("configuration.timeFieldConfiguration.deleteTip"),
       okText: t("global:complete"),
       cancelText: t("global:cancel"),
       onOk: () => delConfig(index),
@@ -129,7 +129,7 @@ const Time: React.FC<TimeProps> = () => {
           <WarningIcon style={{ color: "red" }} />
         </em>
         {t(
-          "ganttconfiguration.timeFieldConfiguration.timeFieldConfigurationDescription"
+          "configuration.timeFieldConfiguration.timeFieldConfigurationDescription"
         )}
       </div>
       <Table
@@ -143,7 +143,7 @@ const Time: React.FC<TimeProps> = () => {
       />
       <div className={styles.timeConfigAddBtn}>
         <Button icon={<PlusOutlined />} type="link" onClick={addTime}>
-          {t("ganttconfiguration.timeFieldConfiguration.addConfiguration")}
+          {t("configuration.timeFieldConfiguration.addConfiguration")}
         </Button>
       </div>
     </div>

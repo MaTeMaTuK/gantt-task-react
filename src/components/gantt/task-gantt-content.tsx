@@ -5,7 +5,11 @@ import React, {
   useCallback,
   memo,
 } from "react";
-import { EventOption, ConnectionProps } from "../../types/public-types";
+import {
+  EventOption,
+  ConnectionProps,
+  BaselineProps,
+} from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
@@ -29,6 +33,7 @@ import {
   GanttContentMoveAction,
   GanttEvent,
 } from "../../types/gantt-task-actions";
+
 import { message } from "antd";
 
 export type TaskGanttContentProps = {
@@ -54,6 +59,7 @@ export type TaskGanttContentProps = {
   clickBaselineItem?: (offsetX: number, currentLogItem: BarTask) => void;
   isConnect?: boolean;
   containerRef?: React.MutableRefObject<any>;
+  currentLog?: BaselineProps;
 } & EventOption &
   ConnectionProps;
 
@@ -88,6 +94,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     setCurrentConnection,
     currentConnection,
     containerRef,
+    currentLog: currentLogSelect,
   }) => {
     const [connectUuids, setConnectUuids] = useState([]);
     const point = svg?.current?.createSVGPoint();
@@ -651,15 +658,17 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
         </g>
         <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
           {tasks.map(task => {
-            const cuttentLog = logTasks.find(ele => ele.id === task.id);
-            if (cuttentLog) {
-              cuttentLog.y = task.y;
+            const currentLog = logTasks.find(ele => ele.id === task.id);
+            if (currentLog) {
+              currentLog.y = task.y;
             }
             return (
               <g key={`g-${task.id}`}>
-                {!cuttentLog?.start || !cuttentLog?.end ? null : (
+                {!currentLog?.start ||
+                !currentLog?.end ||
+                !currentLogSelect ? null : (
                   <TaskItemLog
-                    task={cuttentLog}
+                    task={currentLog}
                     arrowIndent={arrowIndent}
                     taskHeight={taskHeight}
                     isProgressChangeable={

@@ -133,9 +133,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
   };
   return (
     <Modal
-      title={t(
-        "ganttconfiguration.timeFieldConfiguration.timeFieldConfiguration"
-      )}
+      title={t("configuration.timeFieldConfiguration.timeFieldConfiguration")}
       visible={visible}
       onOk={handleConfirm}
       onCancel={handleCancel}
@@ -152,7 +150,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
       >
         {!currentItem?.isDefault && (
           <Form.Item
-            label={t("ganttconfiguration.timeFieldConfiguration.itemType")}
+            label={t("configuration.timeFieldConfiguration.itemType")}
             name="itemType"
             rules={[
               {
@@ -183,7 +181,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
         )}
 
         <Form.Item
-          label={t("ganttconfiguration.timeFieldConfiguration.startTime")}
+          label={t("configuration.timeFieldConfiguration.startTime")}
           name="startDate"
           rules={[
             { required: true, message: t("errorMessage.startTimeError") },
@@ -206,7 +204,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
           </Select>
         </Form.Item>
         <Form.Item
-          label={t("ganttconfiguration.timeFieldConfiguration.endTime")}
+          label={t("configuration.timeFieldConfiguration.endTime")}
           name="endDate"
           rules={[{ required: true, message: t("errorMessage.endTimeError") }]}
         >
@@ -227,7 +225,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
         </Form.Item>
         <Form.Item
           label={t(
-            "ganttconfiguration.timeFieldConfiguration.percentageOfCompletion"
+            "configuration.timeFieldConfiguration.percentageOfCompletion"
           )}
           name="percentage"
         >

@@ -33,11 +33,11 @@ export const GuideModal: React.FC<ModaProps> = ({
       onCancel={handleCancel}
     >
       <span className={styles.guideInfor}>
-        {t("ganttconfiguration.unconfigurationModal.unconfigurationTip")}，
+        {t("configuration.unconfigurationModal.unconfigurationTip")}，
         <span onClick={toConfig} className={styles.clickThis}>
-          {t("ganttconfiguration.unconfigurationModal.clickHere")}
+          {t("configuration.unconfigurationModal.clickHere")}
         </span>
-        {t("ganttconfiguration.unconfigurationModal.performConfiguration")}
+        {t("configuration.unconfigurationModal.performConfiguration")}
       </span>
     </Modal>
   );

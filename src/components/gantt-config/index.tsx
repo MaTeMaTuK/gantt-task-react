@@ -38,18 +38,16 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
   const genHeader = () => (
     <span className={styles.extraHeader}>
       <span className={styles.title}>
-        {t("ganttconfiguration.baseLineConfiguration.baseline")}
+        {t("configuration.baseLineConfiguration.baseline")}
       </span>
       <span className={styles.des}>
-        （
-        {t("ganttconfiguration.baseLineConfiguration.baseLineTitleDescription")}
-        ）
+        （{t("configuration.baseLineConfiguration.baseLineTitleDescription")}）
       </span>
     </span>
   );
   return (
     <Drawer
-      title={t("ganttconfiguration.ganttConfigurationTitle")}
+      title={t("configuration.title")}
       visible={visible}
       onClose={() => toGantt()}
       width={drawerWidth}
@@ -73,25 +71,21 @@ const GanttConfig: React.FC<GanttConfigProps> = ({
         </Panel>
 
         <Panel
-          header={t(
-            "ganttconfiguration.displayItemsConfiguration.displayItems"
-          )}
+          header={t("configuration.displayItemsConfiguration.displayItems")}
           key="display"
         >
           <Display ganttConfig={ganttConfig} configHandle={configHandle} />
         </Panel>
         <Panel
           header={t(
-            "ganttconfiguration.timeFieldConfiguration.timeFieldConfigurationTitle"
+            "configuration.timeFieldConfiguration.timeFieldConfigurationTitle"
           )}
           key="time"
         >
           <Time />
         </Panel>
         <Panel
-          header={t(
-            "ganttconfiguration.otherConfiguration.otherConfigurationTitle"
-          )}
+          header={t("configuration.otherConfiguration.otherConfigurationTitle")}
           key="other"
         >
           <OtherConfig />

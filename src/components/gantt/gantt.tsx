@@ -28,14 +28,14 @@ import styles from "./gantt.module.css";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import GanttConfig from "../gantt-config/index";
 import GuideModal from "./guide-modal";
-import { Button, ConfigProvider } from "antd";
+import { ConfigProvider } from "antd";
 import ArrowIcon from "../icons/arrow";
 import utils from "../../helpers/utils";
 import { scrollBarHeight } from "../../helpers/dicts";
 import DataMode from "./data-mode";
 import { getMessages } from "../../lib/locales";
-
 import I18n from "../../lib/i18n";
+import BaselineSelect from "./baselineSelect";
 
 import "./gantt.css";
 
@@ -646,6 +646,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       isConnect,
       setCurrentConnection,
       currentConnection,
+      currentLog,
     };
   }, [
     barTasks,
@@ -674,6 +675,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     handleSelectedTask,
     isConnect,
     currentConnection,
+    currentLog,
   ]);
   const TaskListComponent = useMemo(() => {
     if (typeof renderTaskListComponent === "function") {
@@ -831,7 +833,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     },
     [renderOverflowTooltip]
   );
-  // console.log(antdLang);
   return (
     <div className={styles.box}>
       <I18n lngDict={langBundle} locale={locale}>
@@ -880,16 +881,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
               ref={wrapperRef}
             >
               {currentLog?.name && (
-                <div className={styles.choosedBaselIne}>
-                  <span className={styles.loaded}>
-                    {OverflowTooltip(`已加载：${currentLog?.name}`)}
-                  </span>
-                  <Button size="small" onClick={baselineExit}>
-                    退出
-                  </Button>
-                </div>
+                <BaselineSelect
+                  OverflowTooltip={OverflowTooltip}
+                  currentLog={currentLog}
+                  baselineExit={baselineExit}
+                />
               )}
-
               {listCellWidth && TaskListComponent && (
                 <div
                   ref={taskListRef}

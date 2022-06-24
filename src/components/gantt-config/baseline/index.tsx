@@ -66,7 +66,7 @@ export const BaseLine: React.FC = () => {
   const chooseLog = (infor: BaselineProps) => {
     // 取消选中基线
     if (currentLog?.objectId === infor?.objectId) {
-      setCurrentLog([]);
+      setCurrentLog(null);
       setLogTasks([]);
     } else {
       setCurrentLog(infor);
@@ -81,7 +81,7 @@ export const BaseLine: React.FC = () => {
           onClick={addBaseline}
           disabled={baselineList?.length >= 10}
         >
-          {`${t("ganttconfiguration.baseLineConfiguration.createBaseline")}（${
+          {`${t("configuration.baseLineConfiguration.createBaseline")}（${
             baselineList?.length
           }/10）`}
         </Button>

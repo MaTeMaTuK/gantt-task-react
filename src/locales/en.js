@@ -10,6 +10,7 @@ const global = {
   createdAt: "Created At",
   delete: "Delete",
   default: "Default",
+  exit: "Exit",
 };
 
 const date = {
@@ -41,8 +42,8 @@ const en = {
   },
   global,
   date,
-  ganttconfiguration: {
-    ganttConfigurationTitle: "Gantt config",
+  configuration: {
+    title: "Gantt config",
     baseLineConfiguration: {
       baseline: "Baseline",
       baseLineTitleDescription:
@@ -52,6 +53,7 @@ const en = {
       editBaseline: "Edit baseline",
       baselineName: "Baseline name",
       baselineDescription: "Baseline description",
+      loaded: "Loaded",
     },
     displayItemsConfiguration: {
       displayItems: "Display items",

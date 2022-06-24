@@ -7,6 +7,7 @@ const global = {
   success: "成功",
   fail: "失败",
   updatedAt: "更新于",
+  exit: "退出",
 };
 
 const date = {
@@ -40,7 +41,7 @@ const zhCN = {
   global,
   date,
   configuration: {
-   title: "甘特图设置",
+    title: "甘特图设置",
     baseLineConfiguration: {
       baseline: "基线基线",
       baseLineTitleDescription: "点击基线卡片可选择显示基线",
@@ -49,6 +50,7 @@ const zhCN = {
       editBaseline: "编辑基线",
       baselineName: "基线名称",
       baselineDescription: "描述",
+      loaded: "已加載",
     },
     displayItemsConfiguration: {
       displayItems: "显示项",

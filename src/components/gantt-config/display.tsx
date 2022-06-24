@@ -31,7 +31,7 @@ export const Display: React.FC<DisplayProps> = ({
     <div className={styles.displayPopover}>
       <Row className={styles.displayRow}>
         <Col span={14}>
-          {t("ganttconfiguration.displayItemsConfiguration.criticalPath")}
+          {t("configuration.displayItemsConfiguration.criticalPath")}
         </Col>
         <Col span={10} className={styles.textAlignR}>
           <Switch
@@ -42,7 +42,7 @@ export const Display: React.FC<DisplayProps> = ({
       </Row>
       <Row>
         <Col span={14}>
-          {t("ganttconfiguration.displayItemsConfiguration.overdueItems")}
+          {t("configuration.displayItemsConfiguration.overdueItems")}
         </Col>
         <Col span={10} className={styles.textAlignR}>
           <Switch

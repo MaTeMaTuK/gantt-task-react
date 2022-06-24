@@ -3,15 +3,11 @@ import { ViewMode } from "../../types/public-types";
 import { TopPartOfCalendar } from "./top-part-of-calendar";
 import { getLocaleMonth, getLocalYearMonth } from "../../helpers/date-helper";
 import { DateSetup } from "../../types/date-setup";
-import dayjs from "dayjs";
+import dayjs from "../../lib/day";
 import useI18n from "../../lib/hooks/useI18n";
 
 import styles from "./calendar.module.css";
 
-const advancedFormat = require("dayjs/plugin/advancedFormat");
-const weekOfYear = require("dayjs/plugin/weekOfYear");
-dayjs.extend(weekOfYear);
-dayjs.extend(advancedFormat);
 export type CalendarProps = {
   dateSetup: DateSetup;
   locale: string;

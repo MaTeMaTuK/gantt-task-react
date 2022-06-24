@@ -24,7 +24,6 @@ export const AddEdit: React.FC<ModalProps> = ({
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const { baselineList } = useContext(BaseLineContext);
-  console.log(currentBaseline, "currentBaseline");
   const isEdit = useMemo(() => {
     return !!currentBaseline?.objectId;
   }, [currentBaseline]);
@@ -78,8 +77,8 @@ export const AddEdit: React.FC<ModalProps> = ({
     <Modal
       title={
         isEdit
-          ? t("ganttconfiguration.baseLineConfiguration.newBaseline")
-          : t("ganttconfiguration.baseLineConfiguration.editBaseline")
+          ? t("configuration.baseLineConfiguration.newBaseline")
+          : t("configuration.baseLineConfiguration.editBaseline")
       }
       visible={modalVisible}
       onCancel={handleCancel}
@@ -97,7 +96,7 @@ export const AddEdit: React.FC<ModalProps> = ({
         onFinish={onFinish}
       >
         <Form.Item
-          label={t("ganttconfiguration.baseLineConfiguration.baselineName")}
+          label={t("configuration.baseLineConfiguration.baselineName")}
           name="name"
           rules={[
             { required: true, message: t("errorMessage.baselineNameError") },
@@ -110,9 +109,7 @@ export const AddEdit: React.FC<ModalProps> = ({
           />
         </Form.Item>
         <Form.Item
-          label={t(
-            "ganttconfiguration.baseLineConfiguration.baselineDescription"
-          )}
+          label={t("configuration.baseLineConfiguration.baselineDescription")}
           name="description"
         >
           <TextArea
