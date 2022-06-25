@@ -835,6 +835,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     },
     [renderOverflowTooltip]
   );
+  console.log(locale, 'locale')
   return (
     <div className={styles.box}>
       <I18n lngDict={langBundle} locale={locale}>
