@@ -111,6 +111,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onClickEvent,
   configVisibleChange, // 甘特图配置页面显示和隐藏
 }) => {
+  console.log(locale, 'locale')
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const onMouseEventRef = useRef<any>(null);
@@ -686,6 +687,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [langBundle] = useMemo(() => {
     return getMessages(locale);
   }, [locale]);
+  console.log(langBundle, 'langBundle')
   const isHiddenShowTooltip = useMemo(() => {
     return ["move", "start", "end", "progress"].includes(ganttEvent.action);
   }, [ganttEvent]);
