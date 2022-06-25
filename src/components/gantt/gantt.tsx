@@ -61,7 +61,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   listBottomHeight = 48,
   rowHeight = 41,
   // viewMode = ViewMode.Day,
-  locale = "zh-cn",
+  locale = "zh-CN",
   barFill = 60, // bar占的百分比
   barCornerRadius = 4,
   barProgressColor = "#4B8BFF",
@@ -111,6 +111,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onClickEvent,
   configVisibleChange, // 甘特图配置页面显示和隐藏
 }) => {
+  // 调试
   console.log(locale, 'locale')
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -687,7 +688,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [langBundle] = useMemo(() => {
     return getMessages(locale);
   }, [locale]);
-  console.log(langBundle, 'langBundle')
   const isHiddenShowTooltip = useMemo(() => {
     return ["move", "start", "end", "progress"].includes(ganttEvent.action);
   }, [ganttEvent]);
@@ -835,7 +835,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     },
     [renderOverflowTooltip]
   );
-  console.log(locale, 'locale')
   return (
     <div className={styles.box}>
       <I18n lngDict={langBundle} locale={locale}>

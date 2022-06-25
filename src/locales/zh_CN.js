@@ -17,7 +17,7 @@ const date = {
   Month: "月",
   Quarter: "季",
   Year: "年",
-  Today: "Today",
+  Today: "今天",
   format: {
     week: "第w周",
     quarter: "第Q季度",
