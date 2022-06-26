@@ -43,6 +43,7 @@
     "@types/node": "^15.0.1",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
+    "@types/debug": "^4.1.6",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "babel-eslint": "^10.0.3",
@@ -75,6 +76,7 @@
     "dayjs": "^1.10.5",
     "jsplumb": "^2.15.6",
     "lodash": "^4.17.21",
-    "rosetta": "^1.1.0"
+    "rosetta": "^1.1.0",
+    "debug": "^4.3.3"
   }
 }
