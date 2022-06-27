@@ -22,7 +22,7 @@ const date = {
   Year: "Year",
   format: {
     week: "wo",
-    quarter: "q Q",
+    quarter: "qQ",
   },
   Today: "Today",
 };

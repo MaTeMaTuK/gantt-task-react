@@ -189,7 +189,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
         >
           {/* 代码没有抽离，原因是会影响from的校验触发 */}
           <Select
-            placeholder="请选择"
+            placeholder={t("placeholder.pleaseSelect")}
             showSearch
             filterOption={filterOption}
             allowClear
@@ -209,7 +209,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
           rules={[{ required: true, message: t("errorMessage.endTimeError") }]}
         >
           <Select
-            placeholder="请选择"
+            placeholder={t("placeholder.pleaseSelect")}
             allowClear
             showSearch
             filterOption={filterOption}
@@ -230,7 +230,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
           name="percentage"
         >
           <Select
-            placeholder="请选择"
+            placeholder={t("placeholder.pleaseSelect")}
             allowClear
             showSearch
             filterOption={filterOption}

@@ -5,8 +5,11 @@ import { getLocaleMonth, getLocalYearMonth } from "../../helpers/date-helper";
 import { DateSetup } from "../../types/date-setup";
 import dayjs from "../../lib/day";
 import useI18n from "../../lib/hooks/useI18n";
+import debug from "debug";
 
 import styles from "./calendar.module.css";
+
+const logger = debug("calender:week");
 
 export type CalendarProps = {
   dateSetup: DateSetup;
@@ -150,6 +153,12 @@ export const Calendar: React.FC<CalendarProps> = memo(
           topValue = getLocalYearMonth(date, locale);
         }
         const bottomValue = dayjs(date).format(t("date.format.week"));
+        logger(
+          "当前周",
+          dayjs(new Date(1656300612208)).format(t("date.format.week"))
+        );
+        logger("周格式wo", dayjs(new Date(1656300612208)).format("wo"));
+        logger("周格式wo", dayjs(new Date(1656300612208)).format("W"));
         bottomValues.push(
           bottomValuesInit(bottomValue, date, headerHeight, i, "Week")
         );
