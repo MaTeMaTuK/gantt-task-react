@@ -30,9 +30,8 @@ export const Calendar: React.FC<CalendarProps> = memo(
     fontFamily,
     fontSize,
   }) => {
-    console.log(dayjs(1656300612208).format("wo"), "wo");
     const { t } = useI18n();
-    console.log(dayjs.locale(), "date-locale");
+    logger(dayjs.locale(), "date-locale");
     const bottomValuesInit = useCallback(
       (bottomValue, date, headerHeight, i, type) => {
         return (
@@ -155,12 +154,6 @@ export const Calendar: React.FC<CalendarProps> = memo(
           topValue = getLocalYearMonth(date, locale);
         }
         const bottomValue = dayjs(date).format(t("date.format.week"));
-        logger(
-          "当前周",
-          dayjs(new Date(1656300612208)).format(t("date.format.week"))
-        );
-        logger("周格式wo", dayjs(date).format("wo"));
-        logger("周格式W", dayjs(new Date(1656300612208)).format("W"));
         bottomValues.push(
           bottomValuesInit(bottomValue, date, headerHeight, i, "Week")
         );
