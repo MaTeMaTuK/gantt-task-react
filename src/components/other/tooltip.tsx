@@ -84,7 +84,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       setRelatedX(newRelatedX);
     }
   }, [
-    tooltipRef.current,
+    tooltipRef,
     task,
     arrowIndent,
     scrollX,
@@ -94,6 +94,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     rowHeight,
     svgContainerHeight,
     svgContainerWidth,
+    rtl,
   ]);
 
   return (
