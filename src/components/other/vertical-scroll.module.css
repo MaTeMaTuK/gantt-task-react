@@ -2,6 +2,8 @@
   overflow: hidden auto;
   width: 17px;
   flex-shrink: 0;
+  /*firefox*/
+  scrollbar-width: thin;
 }
 .scroll::-webkit-scrollbar {
   width: 1.1rem;

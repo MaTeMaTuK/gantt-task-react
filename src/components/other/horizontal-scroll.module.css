@@ -1,6 +1,10 @@
 .scrollWrapper {
   overflow: auto;
   max-width: 100%;
+  /*firefox*/
+  scrollbar-width: thin;
+  /*iPad*/
+  height: 1.1rem;
 }
 .scrollWrapper::-webkit-scrollbar {
   width: 1.1rem;
