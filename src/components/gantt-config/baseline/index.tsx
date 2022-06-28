@@ -20,7 +20,7 @@ export const BaseLine: React.FC = () => {
     OverflowTooltip,
     setLogTasks,
   } = useContext(BaseLineContext);
-  const deleteBaseline = () => {
+  const deleteBaseline = (currentBaseline: BaselineProps) => {
     Modal.confirm({
       title: "删除基线",
       content: "删除的基线无法恢复，确认删除？",
@@ -34,14 +34,18 @@ export const BaseLine: React.FC = () => {
     e: React.SyntheticEvent,
     currentBaseLine: BaselineProps
   ) => {
-    setCurrentBaseline(omit(currentBaseLine, ["createdAt", "updatedAt"]));
+    const currentBaselineOmit = omit(currentBaseLine, [
+      "createdAt",
+      "updatedAt",
+    ]);
+    setCurrentBaseline(currentBaselineOmit);
     e.stopPropagation();
     switch (type) {
       case "edit":
         setVisible(true);
         break;
       case "del":
-        deleteBaseline();
+        deleteBaseline(currentBaselineOmit);
         break;
     }
   };
