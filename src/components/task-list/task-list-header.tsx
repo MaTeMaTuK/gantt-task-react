@@ -8,6 +8,7 @@ export const TaskListHeaderDefault: React.FC<{
   fontSize: string;
   headersList: [string];
 }> = ({ headerHeight, fontFamily, fontSize, rowWidth, headersList }) => {
+  console.log("headersList", headersList);
   return (
     <div
       className={styles.ganttTable}
