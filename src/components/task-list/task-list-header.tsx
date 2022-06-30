@@ -6,9 +6,7 @@ export const TaskListHeaderDefault: React.FC<{
   rowWidth: string;
   fontFamily: string;
   fontSize: string;
-  headersList: [string];
-}> = ({ headerHeight, fontFamily, fontSize, rowWidth, headersList }) => {
-  console.log("headersList", headersList);
+}> = ({ headerHeight, fontFamily, fontSize, rowWidth }) => {
   return (
     <div
       className={styles.ganttTable}
@@ -23,29 +21,59 @@ export const TaskListHeaderDefault: React.FC<{
           height: headerHeight - 2,
         }}
       >
-        {headersList.map((e, i, array) => {
-          <div
-            className={styles.ganttTable_HeaderItem}
-            style={{
-              minWidth: rowWidth,
-            }}
-          >
-            &nbsp;{e}
-          </div>;
-
-          console.log("e", e);
-          {
-            array.length !== i + 1 && (
-              <div
-                className={styles.ganttTable_HeaderSeparator}
-                style={{
-                  height: headerHeight * 0.5,
-                  marginTop: headerHeight * 0.25,
-                }}
-              />
-            );
-          }
-        })}
+        <div
+          className={styles.ganttTable_HeaderItem}
+          style={{
+            minWidth: rowWidth,
+          }}
+        >
+          &nbsp;Name
+        </div>
+        <div
+          className={styles.ganttTable_HeaderSeparator}
+          style={{
+            height: headerHeight * 0.5,
+            marginTop: headerHeight * 0.2,
+          }}
+        />
+        <div
+          className={styles.ganttTable_HeaderItem}
+          style={{
+            minWidth: rowWidth,
+          }}
+        >
+          &nbsp;From
+        </div>
+        <div
+          className={styles.ganttTable_HeaderSeparator}
+          style={{
+            height: headerHeight * 0.5,
+            marginTop: headerHeight * 0.25,
+          }}
+        />
+        <div
+          className={styles.ganttTable_HeaderItem}
+          style={{
+            minWidth: rowWidth,
+          }}
+        >
+          &nbsp;To
+        </div>
+        <div
+          className={styles.ganttTable_HeaderSeparator}
+          style={{
+            height: headerHeight * 0.5,
+            marginTop: headerHeight * 0.25,
+          }}
+        />
+        <div
+          className={styles.ganttTable_HeaderItem}
+          style={{
+            minWidth: rowWidth,
+          }}
+        >
+          &nbsp;Something else
+        </div>
       </div>
     </div>
   );
