@@ -26,6 +26,7 @@ import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
+  headersList,
   headerHeight = 50,
   columnWidth = 60,
   listCellWidth = "155px",
@@ -422,6 +423,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     tasks: barTasks,
     locale,
     headerHeight,
+    headersList,
     scrollY,
     ganttHeight,
     horizontalContainerClass: styles.horizontalContainer,

@@ -32,6 +32,7 @@ export type TaskListProps = {
     fontSize: string;
     locale: string;
     tasks: Task[];
+    headersList: [string];
     selectedTaskId: string;
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
@@ -78,6 +79,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontFamily,
     fontSize,
     tasks,
+    headersList,
     locale,
     selectedTaskId: selectedTaskId,
     setSelectedTask,
