@@ -8,7 +8,6 @@ export const TaskListHeaderDefault: React.FC<{
   fontSize: string;
   headersList: [string];
 }> = ({ headerHeight, fontFamily, fontSize, rowWidth, headersList }) => {
-  console.log("headersList", headersList);
   return (
     <div
       className={styles.ganttTable}
@@ -23,27 +22,28 @@ export const TaskListHeaderDefault: React.FC<{
           height: headerHeight - 2,
         }}
       >
-        {headersList.map((e, i, array) => {
+        {headersList.map(e => {
           return (
-            <div className={styles.ganttTable_HeaderItem} key={e}>
-              <div
-                style={{
-                  minWidth: rowWidth,
-                }}
-              >
-                &nbsp;{e}
-              </div>
-
-              {array.length !== i + 1 && (
-                <div
-                  className={styles.ganttTable_HeaderSeparator}
-                  style={{
-                    height: headerHeight * 0.5,
-                    marginTop: headerHeight * 0.25,
-                  }}
-                />
-              )}
+            // <span>
+            <div
+              className={styles.ganttTable_HeaderItem}
+              style={{
+                minWidth: rowWidth,
+              }}
+            >
+              &nbsp;{e}
             </div>
+
+            // {array.length !== i + 1 && (
+            //   <div
+            //     className={styles.ganttTable_HeaderSeparator}
+            //     style={{
+            //       height: headerHeight * 0.5,
+            //       marginTop: headerHeight * 0.25,
+            //     }}
+            //   />
+            // )}
+            // </span>
           );
         })}
       </div>

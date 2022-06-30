@@ -14,7 +14,7 @@ export interface Task {
   name: string;
   start: Date;
   end: Date;
-  additionalTableData: any;
+  tableDisplayData: any;
   /**
    * From 0 to 100
    */

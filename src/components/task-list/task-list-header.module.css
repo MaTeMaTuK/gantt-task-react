@@ -10,14 +10,16 @@
   list-style: none;
 }
 
+.ganttTable_HeaderItem {
+  display: table-cell;
+  vertical-align: -webkit-baseline-middle;
+  vertical-align: middle;
+}
+
 .ganttTable_HeaderSeparator {
   border-right: 1px solid rgb(196, 196, 196);
   opacity: 1;
   margin-left: -2px;
 }
 
-.ganttTable_HeaderItem {
-  display: table-cell;
-  vertical-align: -webkit-baseline-middle;
-  vertical-align: middle;
-}
+
