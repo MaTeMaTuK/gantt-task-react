@@ -25,9 +25,8 @@ export const TaskListHeaderDefault: React.FC<{
       >
         {headersList.map((e, i, array) => {
           return (
-            <div>
+            <div className={styles.ganttTable_HeaderItem} key={e}>
               <div
-                className={styles.ganttTable_HeaderItem}
                 style={{
                   minWidth: rowWidth,
                 }}
