@@ -33,6 +33,7 @@ export const TaskListHeaderDefault: React.FC<{
             &nbsp;{e}
           </div>;
 
+          console.log("e", e);
           {
             array.length !== i + 1 && (
               <div
