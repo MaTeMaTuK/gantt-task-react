@@ -23,17 +23,17 @@ export const TaskListHeaderDefault: React.FC<{
         }}
       >
         {headersList.map((e, i, array) => {
-          <>
-            <div
-              className={styles.ganttTable_HeaderItem}
-              style={{
-                minWidth: rowWidth,
-              }}
-            >
-              &nbsp;{e}
-            </div>
+          <div
+            className={styles.ganttTable_HeaderItem}
+            style={{
+              minWidth: rowWidth,
+            }}
+          >
+            &nbsp;{e}
+          </div>;
 
-            {array.length !== i + 1 && (
+          {
+            array.length !== i + 1 && (
               <div
                 className={styles.ganttTable_HeaderSeparator}
                 style={{
@@ -41,8 +41,8 @@ export const TaskListHeaderDefault: React.FC<{
                   marginTop: headerHeight * 0.25,
                 }}
               />
-            )}
-          </>;
+            );
+          }
         })}
       </div>
     </div>
