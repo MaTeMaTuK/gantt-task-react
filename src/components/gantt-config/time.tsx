@@ -48,7 +48,7 @@ const Time: React.FC<TimeProps> = () => {
           </a>
           {!record?.isDefault && (
             <a type="link" onClick={() => del(index)}>
-              {t("global:delete")}
+              {t("global.delete")}
             </a>
           )}
         </Space>

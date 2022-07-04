@@ -114,6 +114,7 @@ export const AddEdit: React.FC<ModalProps> = ({
         >
           <TextArea
             placeholder={t("placeholder.baselineDescriptionPlaceholder")}
+            maxLength={300}
           />
         </Form.Item>
       </Form>

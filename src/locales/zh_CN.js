@@ -8,6 +8,7 @@ const global = {
   fail: "失败",
   updatedAt: "更新于",
   exit: "退出",
+  delete: "删除",
 };
 
 const date = {
