@@ -7,10 +7,11 @@ const global = {
   success: "成功",
   fail: "失败",
   updatedAt: "更新于",
-  exit: "退出",
+  createdAt: "创建于",
   delete: "删除",
+  default: "默认",
+  exit: "退出",
 };
-
 const date = {
   DateTime: "日期时间",
   Day: "日",
@@ -24,7 +25,6 @@ const date = {
     quarter: "第Q季度",
   },
 };
-
 const zhCN = {
   index: {
     hello: "你好, {{name}}。",
@@ -102,6 +102,7 @@ const zhCN = {
   placeholder: {
     baselineNamePlaceholder: "请输入基线名称，最大长度32个字符",
     baselineDescriptionPlaceholder: "请输入基线描述",
+    pleaseSelect: "请选择",
   },
 };
 

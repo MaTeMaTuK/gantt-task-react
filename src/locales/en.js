@@ -12,7 +12,6 @@ const global = {
   default: "Default",
   exit: "Exit",
 };
-
 const date = {
   DateTime: "DateTime",
   Day: "Day",
