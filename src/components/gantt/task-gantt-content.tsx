@@ -536,7 +536,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       ganttConfig.relation,
       getLinkTypeId,
       setCurrentConnection,
-      t,
     ]);
     useEffect(() => {
       if (!itemLinks?.length) {
