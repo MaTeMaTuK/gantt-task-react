@@ -33,6 +33,7 @@ import {
   GanttContentMoveAction,
   GanttEvent,
 } from "../../types/gantt-task-actions";
+import useI18n from "../../lib/hooks/useI18n";
 
 import { message } from "antd";
 
@@ -96,6 +97,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     containerRef,
     currentLog: currentLogSelect,
   }) => {
+    const { t } = useI18n();
     const [connectUuids, setConnectUuids] = useState([]);
     const point = svg?.current?.createSVGPoint();
     const [xStep, setXStep] = useState(0);
@@ -437,11 +439,11 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           const taskSource = filter(tasks, { id: conn.sourceId })[0];
           const taskTarget = filter(tasks, { id: conn.targetId })[0];
           if (!ganttConfig.relation) {
-            message.warning("未配置关联关系");
+            message.warning(t("errorMessage.noRelation"));
             return;
           }
           if (conn.targetId === conn.sourceId) {
-            message.warning("连线有误");
+            message.warning(t("errorMessage.connectionError"));
             return;
           }
           // 父卡片和子卡片不能相互连接，其他类型待定
@@ -449,7 +451,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             (taskSource?.item?.subItem || []).includes(taskTarget?.id) ||
             (taskTarget?.item?.subItem || []).includes(taskSource?.id)
           ) {
-            message.warning("父子卡片之间不能存在关联关系");
+            message.warning(t("errorMessage.connectionErrorParent"));
             return;
           }
           // 两个卡片只能存在一种关联关系
@@ -465,7 +467,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             );
           });
           if (currentLink?.length) {
-            message.warning("连线有误");
+            message.warning(t("errorMessage.connectionError"));
             return false;
           }
           let sourceTask: BarTask | undefined;
@@ -481,14 +483,14 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           const hasLinkItems = getHasLinkItems(sourceTask);
           // 两个事项有多条关联关系
           if (hasLinkItems.includes(conn.targetId)) {
-            message.warning("连线有误");
+            message.warning(t("errorMessage.connectionError"));
             return false;
           }
           if (
             desinationTask?.item?.subItem.includes(conn.sourceId) ||
             sourceTask?.item?.subItem.includes(conn.targetId)
           ) {
-            message.warning("连线有误");
+            message.warning(t("errorMessage.connectionError"));
             return false;
           }
           return true;
@@ -534,6 +536,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       ganttConfig.relation,
       getLinkTypeId,
       setCurrentConnection,
+      t,
     ]);
     useEffect(() => {
       if (!itemLinks?.length) {

@@ -104,12 +104,24 @@ const en = {
     itemsTypeError: "Please select the items type",
     startTimeError: "Please select the start date field",
     endTimeError: "Please select the end date field",
+    noRelation: "No association configured",
+    connectionError: "The connection is wrong",
+    connectionErrorParent:
+      "There can be no relationship between parent and child items",
   },
   placeholder: {
     baselineNamePlaceholder:
       "Please enter the baseline name Maximum length 32 characters",
     baselineDescriptionPlaceholder: "Please enter the baseline description",
     pleaseSelect: "Please select",
+  },
+  fields: {
+    startDate: "Start date",
+    endDate: "End date",
+    release: "Release item link",
+    status: "status",
+    charge: "Person in charge",
+    completeTime: "Planned completion time",
   },
 };
 

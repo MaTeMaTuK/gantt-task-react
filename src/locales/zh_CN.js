@@ -98,11 +98,22 @@ const zhCN = {
     itemsTypeError: "请输入事项类型",
     startTimeError: "请选择开始日期字段",
     endTimeError: "请选择结束日期字段",
+    noRelation: "未配置关联关系",
+    connectionError: "连线有误",
+    connectionErrorParent: "父子卡片之间不能存在关联关系",
   },
   placeholder: {
     baselineNamePlaceholder: "请输入基线名称，最大长度32个字符",
     baselineDescriptionPlaceholder: "请输入基线描述",
     pleaseSelect: "请选择",
+  },
+  fields: {
+    startDate: "开始日期",
+    endDate: "结束日期",
+    release: "解除事项关联",
+    status: "状态",
+    charge: "负责人",
+    completeTime: "计划完成时间",
   },
 };
 
