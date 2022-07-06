@@ -82,12 +82,12 @@ export const ganttDateRange = (tasks: Task[], viewMode: ViewMode | string, befor
       newEndDate = task.end;
     }
   }
-  beforeMonRange = beforeRange > -180 ? -180 : beforeRange
-  afterMonRange = afterRanger < 180 ? 180 : afterRanger
+  beforeMonRange = beforeRange >= -180 ? -180 : beforeRange
+  afterMonRange = afterRanger <= 180 ? 180 : afterRanger
   switch (viewMode) {
     case ViewMode.Month:
-      newEndDate = startOfDate(newEndDate, "year");
-      newStartDate = startOfDate(newStartDate, "month");
+      newEndDate = startOfDate(newEndDate, "day");
+      newStartDate = startOfDate(newStartDate, "day");
       newStartDate = addToDate(newStartDate, beforeMonRange, "day");
       newEndDate = addToDate(newEndDate, afterMonRange, "day");
       break;
