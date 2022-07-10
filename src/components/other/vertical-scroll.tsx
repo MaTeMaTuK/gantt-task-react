@@ -29,7 +29,7 @@ export const VerticalScroll: React.FC<{
       style={{
         height: ganttHeight,
         marginTop: headerHeight,
-        marginLeft: rtl ? "" : "-17px",
+        marginLeft: rtl ? "" : "-1rem",
       }}
       className={styles.scroll}
       onScroll={onScroll}

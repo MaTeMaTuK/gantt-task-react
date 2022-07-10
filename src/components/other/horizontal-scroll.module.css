@@ -4,9 +4,9 @@
   /*firefox*/
   scrollbar-width: thin;
   /*iPad*/
-  height: 1.1rem;
+  height: 1.2rem;
 }
-/*.scrollWrapper::-webkit-scrollbar {
+.scrollWrapper::-webkit-scrollbar {
   width: 1.1rem;
   height: 1.1rem;
 }
@@ -27,7 +27,7 @@
   background-clip: padding-box;
 }
 @media only screen and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) {
-}*/
+}
 .scroll {
   height: 1px;
 }

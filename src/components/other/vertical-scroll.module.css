@@ -1,6 +1,6 @@
 .scroll {
   overflow: hidden auto;
-  width: 17px;
+  width: 1rem;
   flex-shrink: 0;
   /*firefox*/
   scrollbar-width: thin;
