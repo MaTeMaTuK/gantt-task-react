@@ -1,3 +1,6 @@
+.Wrapper {
+  margin-bottom: 2rem;
+}
 .ViewContainer {
   list-style: none;
   -ms-box-orient: horizontal;

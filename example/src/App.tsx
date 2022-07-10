@@ -66,7 +66,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="Wrapper">
       <ViewSwitcher
         onViewModeChange={viewMode => setView(viewMode)}
         onViewListChange={setIsChecked}
