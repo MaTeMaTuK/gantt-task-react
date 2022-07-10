@@ -10,7 +10,9 @@ const App = () => {
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
   const [isChecked, setIsChecked] = React.useState(true);
   let columnWidth = 65;
-  if (view === ViewMode.Month) {
+  if (view === ViewMode.Year) {
+    columnWidth = 350;
+  } else if (view === ViewMode.Month) {
     columnWidth = 300;
   } else if (view === ViewMode.Week) {
     columnWidth = 250;
