@@ -285,16 +285,17 @@ export const Calendar: React.FC<CalendarProps> = ({
           {bottomValue}
         </text>
       );
-      if (i === 0 || date.getDate() !== dates[i - 1].getDate()) {
+      if (i !== 0 && date.getDate() !== dates[i - 1].getDate()) {
+        const displayDate = dates[i - 1];
         const topValue = `${getLocalDayOfWeek(
-          date,
+          displayDate,
           locale,
           "long"
-        )}, ${date.getDate()} ${getLocaleMonth(date, locale)}`;
+        )}, ${displayDate.getDate()} ${getLocaleMonth(displayDate, locale)}`;
         const topPosition = (date.getHours() - 24) / 2;
         topValues.push(
           <TopPartOfCalendar
-            key={topValue + date.getFullYear()}
+            key={topValue + displayDate.getFullYear()}
             value={topValue}
             x1Line={columnWidth * i}
             y1Line={0}

@@ -44,6 +44,7 @@ You may handle actions
   onTaskDelete={onTaskDelete}
   onProgressChange={onProgressChange}
   onDoubleClick={onDblClick}
+  onClick={onClick}
 />
 ```
 
@@ -72,6 +73,7 @@ npm start
 | :----------------- | :---------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
 | onSelect           | (task: Task, isSelected: boolean) => void                                     | Specifies the function to be executed on the taskbar select or unselect event.          |
 | onDoubleClick      | (task: Task) => void                                                          | Specifies the function to be executed on the taskbar onDoubleClick event.               |
+| onClick            | (task: Task) => void                                                          | Specifies the function to be executed on the taskbar onClick event.                     |
 | onDelete\*         | (task: Task) => void/boolean/Promise<void>/Promise<boolean>                   | Specifies the function to be executed on the taskbar on Delete button press event.      |
 | onDateChange\*     | (task: Task, children: Task[]) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar event on timeline has finished. |
 | onProgressChange\* | (task: Task, children: Task[]) => void/boolean/Promise<void>/Promise<boolean> | Specifies the function to be executed when drag taskbar progress event has finished.    |
@@ -86,6 +88,7 @@ npm start
 | :------------- | :------ | :---------------------------------------------------------------------------------------------------------- |
 | viewMode       | enum    | Specifies the time scale. Hour, Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month, Year. |
 | viewDate       | date    | Specifies display date and time for display.                                                                |
+| preStepsCount  | number  | Specifies empty space before the fist task                                                                  |
 | locale         | string  | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                                    |
 | rtl            | boolean | Sets rtl mode.                                                                                              |
 
