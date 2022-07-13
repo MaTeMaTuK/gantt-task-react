@@ -114,8 +114,9 @@ export const TaskListTableDefault: React.FC<{
                 maxWidth: rowWidth,
               }}
             >
-              &nbsp;{t.assignedUser}{toLocaleDateString(t.end, dateTimeOptions)} kkk
+              &nbsp;assignedTo
             </div>
+            
           </div>
         );
       })}
