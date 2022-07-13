@@ -250,6 +250,7 @@ export interface GanttProps
   onMouseEvent?: (type?: string, task?: Task) => void;
   onClickEvent?: (type?: string, task?: Task) => void;
   configVisibleChange?: (val: boolean) => void;
+  tableQuerySelector?: string;
 }
 
 export interface TabConfigProps {

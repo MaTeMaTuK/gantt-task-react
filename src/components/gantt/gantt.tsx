@@ -102,12 +102,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   workspaceId,
   getCustomFields, // 获取字段
   isConnect = true,
-
   isViewModeChange = true,
-
   onMouseEvent,
   onClickEvent,
   configVisibleChange, // 甘特图配置页面显示和隐藏
+  tableQuerySelector = ".BaseTable__table-main .BaseTable__body",
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -687,11 +686,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       // 解决获取不到dom元素
       setTimeout(() => {
         eleListTableBodyRef.current = document.querySelector(
-          ".BaseTable__table-main .BaseTable__body"
+          tableQuerySelector
         );
       });
     }
-  }, [TaskListComponent]);
+  }, [TaskListComponent, tableQuerySelector]);
   const todayX = useMemo(() => {
     // 之前考虑通过context， 在grid-body中setState 传递移动的距离，但是页面会抖动
     const now = new Date();
