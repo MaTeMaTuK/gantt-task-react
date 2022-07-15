@@ -253,7 +253,6 @@ export const TaskGanttArrows: React.FC<TaskGanttContentProps> = ({
         }
       }}
       onMouseUp={(event: any) => {
-        console.log(ganttEvent.action);
         handleMouseUp(event);
       }}
     >

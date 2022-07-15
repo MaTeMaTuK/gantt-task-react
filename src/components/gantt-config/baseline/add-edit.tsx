@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useMemo } from "react";
 import { Modal, Form, Input } from "antd";
 import { BaselineProps } from "../../../types/public-types";
 import { BaseLineContext } from "../../../contsxt";
+import useI18n from "../../../lib/hooks/useI18n";
 import dayjs from "dayjs";
 
 const { TextArea } = Input;
@@ -18,11 +19,11 @@ export const AddEdit: React.FC<ModalProps> = ({
   handleCancel,
   currentBaseline,
 }) => {
+  const { t } = useI18n();
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const { baselineList } = useContext(BaseLineContext);
-  console.log(currentBaseline, "currentBaseline");
   const isEdit = useMemo(() => {
     return !!currentBaseline?.objectId;
   }, [currentBaseline]);
@@ -66,7 +67,7 @@ export const AddEdit: React.FC<ModalProps> = ({
         currentBaseline &&
         currentBaseline.name !== value
       ) {
-        callback("该名称已存在");
+        callback(t("errorMessage.nameAlreadyExists"));
       } else {
         callback();
       }
@@ -74,12 +75,16 @@ export const AddEdit: React.FC<ModalProps> = ({
   };
   return (
     <Modal
-      title={`${isEdit ? "编辑" : "新建"}基线`}
+      title={
+        isEdit
+          ? t("configuration.baseLineConfiguration.newBaseline")
+          : t("configuration.baseLineConfiguration.editBaseline")
+      }
       visible={modalVisible}
       onCancel={handleCancel}
       onOk={confirmOk}
-      okText="确认"
-      cancelText="取消"
+      okText={t("global.complete")}
+      cancelText={t("global.cancel")}
       confirmLoading={confirmLoading}
     >
       <Form
@@ -91,20 +96,26 @@ export const AddEdit: React.FC<ModalProps> = ({
         onFinish={onFinish}
       >
         <Form.Item
-          label="基线名称"
+          label={t("configuration.baseLineConfiguration.baselineName")}
           name="name"
           rules={[
-            { required: true, message: "请输入基线名称" },
+            { required: true, message: t("errorMessage.baselineNameError") },
             { validator: nameValidator },
           ]}
         >
           <Input
-            placeholder="请输入基线名称，最大长度32个字符"
+            placeholder={t("placeholder.baselineNamePlaceholder")}
             maxLength={32}
           />
         </Form.Item>
-        <Form.Item label="描述" name="description">
-          <TextArea placeholder="请输入基线描述" />
+        <Form.Item
+          label={t("configuration.baseLineConfiguration.baselineDescription")}
+          name="description"
+        >
+          <TextArea
+            placeholder={t("placeholder.baselineDescriptionPlaceholder")}
+            maxLength={300}
+          />
         </Form.Item>
       </Form>
     </Modal>
