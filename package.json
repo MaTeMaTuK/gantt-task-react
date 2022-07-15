@@ -71,7 +71,7 @@
   ],
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
-    "antd": "4.15.4",
+    "antd": "4.16.13",
     "dayjs": "^1.10.5",
     "jsplumb": "^2.15.6",
     "lodash": "^4.17.21"
