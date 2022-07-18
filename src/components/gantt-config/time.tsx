@@ -112,8 +112,6 @@ const Time: React.FC<TimeProps> = () => {
       time: newTimeList,
     });
   };
-  console.log(timeList, "timeList");
-  console.log(canAddConfig, "canAddConfig");
   return (
     <div>
       <TimeModal
