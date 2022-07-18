@@ -242,7 +242,7 @@ var dayTimeFormat = " YYYY-MM-DD HH:mm:ss";
 var drawerWidth = 600;
 var daySeconds = 24 * 60 * 60 * 1000;
 
-var styles = {"tooltipDefaultContainer":"_3T42e","tooltipDefaultContainerParagraph":"_29NTg","tooltipDetailsContainer":"_25P-K","tooltipDetailsContainerHidden":"_3gVAq","tooltipId":"_1089R","tooltipName":"_1LUF2","lightColor":"_3fzTV","status":"_1FA7R","item":"_3WF3F"};
+var styles = {"tooltipDefaultContainer":"_tooltip-module__tooltipDefaultContainer__3T42e","tooltipDefaultContainerParagraph":"_tooltip-module__tooltipDefaultContainerParagraph__29NTg","tooltipDetailsContainer":"_tooltip-module__tooltipDetailsContainer__25P-K","tooltipDetailsContainerHidden":"_tooltip-module__tooltipDetailsContainerHidden__3gVAq","tooltipId":"_tooltip-module__tooltipId__1089R","tooltipName":"_tooltip-module__tooltipName__1LUF2","lightColor":"_tooltip-module__lightColor__3fzTV","status":"_tooltip-module__status__1FA7R","item":"_tooltip-module__item__3WF3F"};
 
 var Tooltip = React.memo(function (_ref) {
   var _task$item2;
@@ -415,7 +415,7 @@ var IconComponent$1 = function IconComponent(props) {
   }, props));
 };
 
-var styles$1 = {"tooltipDeleteDefaultContainer":"_1E0Mg","tooltipDeleteContainer":"_3a-sg","title":"_TXuno","taskInfo":"_3kijo","date":"_36kyr","connect":"_1r7Sh","unconnectionIcon":"_r1q0R","connection":"_3jYhQ","connectionLine":"_3UKWM","connectionIcon":"_18-g_"};
+var styles$1 = {"tooltipDeleteDefaultContainer":"_deleteTooltip-module__tooltipDeleteDefaultContainer__1E0Mg","tooltipDeleteContainer":"_deleteTooltip-module__tooltipDeleteContainer__3a-sg","title":"_deleteTooltip-module__title__TXuno","taskInfo":"_deleteTooltip-module__taskInfo__3kijo","date":"_deleteTooltip-module__date__36kyr","connect":"_deleteTooltip-module__connect__1r7Sh","unconnectionIcon":"_deleteTooltip-module__unconnectionIcon__r1q0R","connection":"_deleteTooltip-module__connection__3jYhQ","connectionLine":"_deleteTooltip-module__connectionLine__3UKWM","connectionIcon":"_deleteTooltip-module__connectionIcon__18-g_"};
 
 var DeleteTooltip = React.memo(function (_ref) {
   var _currentConnection$or5, _currentConnection$or6, _sourceTask$, _sourceTask$$item, _sourceTask$$item$ite, _sourceTask$2, _currentConnection$co3, _currentConnection$co4, _currentConnection$co5, _sourceTask$3, _sourceTask$4, _targetTask$, _targetTask$$item, _targetTask$$item$ite, _targetTask$2, _currentConnection$co6, _currentConnection$co7, _currentConnection$co8, _targetTask$3, _targetTask$4;
@@ -532,7 +532,7 @@ var DeleteTooltip = React.memo(function (_ref) {
   }, ((_currentConnection$co6 = currentConnection.connection) === null || _currentConnection$co6 === void 0 ? void 0 : (_currentConnection$co7 = _currentConnection$co6.endpoints[1]) === null || _currentConnection$co7 === void 0 ? void 0 : (_currentConnection$co8 = _currentConnection$co7.anchor) === null || _currentConnection$co8 === void 0 ? void 0 : _currentConnection$co8.cssClass) === "Right" ? "\u7ED3\u675F\u65E5\u671F\uFF1A" + dayjs((_targetTask$3 = targetTask[0]) === null || _targetTask$3 === void 0 ? void 0 : _targetTask$3.end).format(dayFormat) : "\u5F00\u59CB\u65E5\u671F\uFF1A" + dayjs((_targetTask$4 = targetTask[0]) === null || _targetTask$4 === void 0 ? void 0 : _targetTask$4.start).format(dayFormat)))));
 });
 
-var styles$2 = {"scroll":"_1eT-t"};
+var styles$2 = {"scroll":"_vertical-scroll-module__scroll__1eT-t"};
 
 var VerticalScrollComponent = function VerticalScrollComponent(_ref, ref) {
   var ganttHeight = _ref.ganttHeight,
@@ -564,7 +564,7 @@ var GanttConfigContext = React.createContext(null);
 var ConfigHandleContext = React.createContext(null);
 var BaseLineContext = React.createContext(null);
 
-var styles$3 = {"gridRow":"_2dZTy","gridRowLine":"_3rUKi","gridTick":"_RuwuK","gridTickWeekday":"_3JhzT"};
+var styles$3 = {"gridRow":"_grid-module__gridRow__2dZTy","gridRowLine":"_grid-module__gridRowLine__3rUKi","gridTick":"_grid-module__gridTick__RuwuK","gridTickWeekday":"_grid-module__gridTickWeekday__3JhzT"};
 
 dayjs.extend(weekday);
 
@@ -892,7 +892,7 @@ var Grid = React.memo(function (props) {
   }, React__default.createElement(GridBody, Object.assign({}, props)));
 });
 
-var styles$4 = {"calendarBottomText":"_9w8d5","calendarTopTick":"_1rLuZ","calendarTopText":"_2q1Kt","calendarHeader":"_35nLX"};
+var styles$4 = {"calendarBottomText":"_calendar-module__calendarBottomText__9w8d5","calendarTopTick":"_calendar-module__calendarTopTick__1rLuZ","calendarTopText":"_calendar-module__calendarTopText__2q1Kt","calendarHeader":"_calendar-module__calendarHeader__35nLX"};
 
 var TopPartOfCalendar = function TopPartOfCalendar(_ref) {
   var value = _ref.value,
@@ -1537,7 +1537,7 @@ var handleTaskBySVGMouseEventForMilestone = function handleTaskBySVGMouseEventFo
   };
 };
 
-var styles$5 = {"barWrapper":"_KxSXS","barHandle":"_3w_5u","barHandleProgress":"_2TAN0","barHandleDate":"_ebM68","barHandleBg":"_3Mox9","barHandleBackground":"_tv31v","barBackground":"_31ERP"};
+var styles$5 = {"barWrapper":"_bar-module__barWrapper__KxSXS","barHandle":"_bar-module__barHandle__3w_5u","barHandleProgress":"_bar-module__barHandleProgress__2TAN0","barHandleDate":"_bar-module__barHandleDate__ebM68","barHandleBg":"_bar-module__barHandleBg__3Mox9","barHandleBackground":"_bar-module__barHandleBackground__tv31v","barBackground":"_bar-module__barBackground__31ERP"};
 
 var BarDisplay = function BarDisplay(_ref) {
   var x = _ref.x,
@@ -2131,7 +2131,7 @@ var BarParent = function BarParent(_ref) {
   })));
 };
 
-var styles$6 = {"milestoneWrapper":"_RRr13","milestoneBackground":"_2P2B1"};
+var styles$6 = {"milestoneWrapper":"_milestone-module__milestoneWrapper__RRr13","milestoneBackground":"_milestone-module__milestoneBackground__2P2B1"};
 
 var base64Milestone = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAATpJREFUeNqslUEOATEUQL9exDiARCJhRYRbIDE2HIONA4iVFYux5gISYmfnBizsrViO32qbwZj+tn7yTTqdeW865v9CHMdgk51mHNhcn+M/lOi2YIyHEDOPucccR1vYme4jCRC+xEMvZaqPkmXWvcwG3h4ATCOASk1PL3A+dBZ8wqv11/nOkC5htnAVVAlzgdtImCucKmE+cIqE+cJNElEHsohGrvBkrOYAx4MeFtQKwn/A1UqKZT0MGT59IMvfG64iISgxLPWz7C1ieb5xvQCsIz3cqFfE/wPx7nwkHD6bADzuYnjifUoIZFfs+0g+4ZiNt89UdkUnSRocebevQnORZMFTW4WNxAT/2ewoEgo8s11nSahw0pYpe8pCFRBP/p1T4DZ7spYkwggnC6QkkD2rxCvUtNmreAowAEKnBro8dl0wAAAAAElFTkSuQmCC";
 
@@ -2194,7 +2194,7 @@ var Milestone = function Milestone(_ref) {
   }));
 };
 
-var styles$7 = {"projectWrapper":"_1KJ6x","projectBackground":"_2RbVy","projectTop":"_2pZMF"};
+var styles$7 = {"projectWrapper":"_project-module__projectWrapper__1KJ6x","projectBackground":"_project-module__projectBackground__2RbVy","projectTop":"_project-module__projectTop__2pZMF"};
 
 var Project = function Project(_ref) {
   var task = _ref.task,
@@ -2974,7 +2974,7 @@ var TaskGanttContent = React.memo(function (_ref) {
   })));
 });
 
-var styles$8 = {"ganttVerticalContainer":"_CZjuD","horizontalContainer":"_2B2zv","box":"_1OUoh","wrapper":"_3eULf","choosedBaselIne":"_1Dj-F","loaded":"_3Z0-o","task-gantt-wrapper":"_1XY6X","calendarWrapper":"_1Yq_L","ganttHeader":"_3AK9_","cursor":"_1s6IU","taskListWrapper":"_1WqXP","backgroundSvg":"_2g59X","contextContainer":"_3thyu","dividerWrapper":"_vHXuk","dividerContainer":"_8wIQn","maskLine":"_2Zpkt","maskLineTop":"_3FMpN","dividerIconWarpper":"__Gn1R","reverse":"_277Zr","guideInfor":"_3jotN","clickThis":"_1QPSE","displayPopover":"_3WXVd","displayRow":"_3YNAF","textAlignR":"_1zkpu","viewMode":"_2lFUt","todayBtn":"_25AiV","dataMode":"_gHoVA"};
+var styles$8 = {"ganttVerticalContainer":"_gantt-module__ganttVerticalContainer__CZjuD","horizontalContainer":"_gantt-module__horizontalContainer__2B2zv","box":"_gantt-module__box__1OUoh","wrapper":"_gantt-module__wrapper__3eULf","choosedBaselIne":"_gantt-module__choosedBaselIne__1Dj-F","loaded":"_gantt-module__loaded__3Z0-o","task-gantt-wrapper":"_gantt-module__task-gantt-wrapper__1XY6X","calendarWrapper":"_gantt-module__calendarWrapper__1Yq_L","ganttHeader":"_gantt-module__ganttHeader__3AK9_","cursor":"_gantt-module__cursor__1s6IU","taskListWrapper":"_gantt-module__taskListWrapper__1WqXP","backgroundSvg":"_gantt-module__backgroundSvg__2g59X","contextContainer":"_gantt-module__contextContainer__3thyu","dividerWrapper":"_gantt-module__dividerWrapper__vHXuk","dividerContainer":"_gantt-module__dividerContainer__8wIQn","maskLine":"_gantt-module__maskLine__2Zpkt","maskLineTop":"_gantt-module__maskLineTop__3FMpN","dividerIconWarpper":"_gantt-module__dividerIconWarpper___Gn1R","reverse":"_gantt-module__reverse__277Zr","guideInfor":"_gantt-module__guideInfor__3jotN","clickThis":"_gantt-module__clickThis__1QPSE","displayPopover":"_gantt-module__displayPopover__3WXVd","displayRow":"_gantt-module__displayRow__3YNAF","textAlignR":"_gantt-module__textAlignR__1zkpu","viewMode":"_gantt-module__viewMode__2lFUt","todayBtn":"_gantt-module__todayBtn__25AiV","dataMode":"_gantt-module__dataMode__gHoVA"};
 
 var TaskGanttComponent = function TaskGanttComponent(_ref, ref) {
   var gridProps = _ref.gridProps,
@@ -3068,7 +3068,7 @@ var TaskGanttComponent = function TaskGanttComponent(_ref, ref) {
 
 var TaskGantt = React.memo(React.forwardRef(TaskGanttComponent));
 
-var styles$9 = {"scroll":"_19jgW"};
+var styles$9 = {"scroll":"_horizontal-scroll-module__scroll__19jgW"};
 
 var HorizontalScrollComponent = function HorizontalScrollComponent(_ref, ref) {
   var svgWidth = _ref.svgWidth,
@@ -3094,7 +3094,7 @@ var HorizontalScrollComponent = function HorizontalScrollComponent(_ref, ref) {
 };
 var HorizontalScroll = React.memo(React.forwardRef(HorizontalScrollComponent));
 
-var styles$a = {"timeConfigTable":"_RtxeF","timeConfigAddBtn":"_z7sOS","width100":"_3YVQm","icon":"_J9ThB","timeTips":"_3yvG2","settingsModalContainer":"_3rfkd","otherConfig":"_FPmvI","question":"_212e-","displayPopover":"_31Cvc","displayRow":"_cYuLc","textAlignR":"_3mW_D","activeRotate":"_13Q7Y","collapse":"_ik7_-","extraHeader":"_2M_je","title":"_2tmi3","des":"_3U2u7"};
+var styles$a = {"timeConfigTable":"_index-module__timeConfigTable__RtxeF","timeConfigAddBtn":"_index-module__timeConfigAddBtn__z7sOS","width100":"_index-module__width100__3YVQm","icon":"_index-module__icon__J9ThB","timeTips":"_index-module__timeTips__3yvG2","settingsModalContainer":"_index-module__settingsModalContainer__3rfkd","otherConfig":"_index-module__otherConfig__FPmvI","question":"_index-module__question__212e-","displayPopover":"_index-module__displayPopover__31Cvc","displayRow":"_index-module__displayRow__cYuLc","textAlignR":"_index-module__textAlignR__3mW_D","activeRotate":"_index-module__activeRotate__13Q7Y","collapse":"_index-module__collapse__ik7_-","extraHeader":"_index-module__extraHeader__2M_je","title":"_index-module__title__2tmi3","des":"_index-module__des__3U2u7"};
 
 var Option = antd.Select.Option;
 
@@ -3442,6 +3442,11 @@ var Time = function Time() {
       isDefault: true
     }];
   }, [ganttConfig === null || ganttConfig === void 0 ? void 0 : ganttConfig.time]);
+  var canAddConfig = React.useMemo(function () {
+    var _timeList$, _timeList$2;
+
+    return (timeList === null || timeList === void 0 ? void 0 : (_timeList$ = timeList[0]) === null || _timeList$ === void 0 ? void 0 : _timeList$.startDate) && (timeList === null || timeList === void 0 ? void 0 : (_timeList$2 = timeList[0]) === null || _timeList$2 === void 0 ? void 0 : _timeList$2.endDate);
+  }, [timeList]);
   var handleCancel = React.useCallback(function () {
     setVisible(false);
   }, []);
@@ -3502,6 +3507,8 @@ var Time = function Time() {
     }));
   };
 
+  console.log(timeList, "timeList");
+  console.log(canAddConfig, "canAddConfig");
   return React__default.createElement("div", null, React__default.createElement(ItemModal, {
     visible: visible,
     handleCancel: handleCancel,
@@ -3527,7 +3534,8 @@ var Time = function Time() {
   }, React__default.createElement(antd.Button, {
     icon: React__default.createElement(Icon.PlusOutlined, null),
     type: "link",
-    onClick: addTime
+    onClick: addTime,
+    disabled: !canAddConfig
   }, "\u65B0\u589E\u914D\u7F6E")));
 };
 
@@ -3747,7 +3755,7 @@ var IconComponent$3 = function IconComponent(props) {
   }, props));
 };
 
-var styles$b = {"list":"_3s_ej","activeBaseline":"_1G5xN","content":"_34gkh","name":"_3vW_9","time":"_1g8Mb","createTime":"_33-L9","handleIcon":"_VphrR","cursor":"_3VfsG","panel":"_3B5gw","createBaseline":"_1k5ei","dot":"_2Jsus","ml8":"_e5wsD","checkedIcon":"_1UH6O"};
+var styles$b = {"list":"_index__list__3s_ej","activeBaseline":"_index__activeBaseline__1G5xN","content":"_index__content__34gkh","name":"_index__name__3vW_9","time":"_index__time__1g8Mb","createTime":"_index__createTime__33-L9","handleIcon":"_index__handleIcon__VphrR","cursor":"_index__cursor__3VfsG","panel":"_index__panel__3B5gw","createBaseline":"_index__createBaseline__1k5ei","dot":"_index__dot__2Jsus","ml8":"_index__ml8__e5wsD","checkedIcon":"_index__checkedIcon__1UH6O"};
 
 var BaseLine = function BaseLine() {
   var _useContext = React.useContext(BaseLineContext),
