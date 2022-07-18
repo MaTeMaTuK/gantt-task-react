@@ -3227,8 +3227,6 @@ const Time = () => {
     });
   };
 
-  console.log(timeList, "timeList");
-  console.log(canAddConfig, "canAddConfig");
   return React.createElement("div", null, React.createElement(ItemModal, {
     visible: visible,
     handleCancel: handleCancel,

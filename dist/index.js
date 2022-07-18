@@ -3507,8 +3507,6 @@ var Time = function Time() {
     }));
   };
 
-  console.log(timeList, "timeList");
-  console.log(canAddConfig, "canAddConfig");
   return React__default.createElement("div", null, React__default.createElement(ItemModal, {
     visible: visible,
     handleCancel: handleCancel,
