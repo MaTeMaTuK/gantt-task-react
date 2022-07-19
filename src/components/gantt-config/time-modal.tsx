@@ -5,6 +5,7 @@ import { TimeItemProps, FieldAndItemProps } from "../../types/public-types";
 import styles from "./index.module.css";
 import { find, omit } from "lodash";
 import { OptionData, OptionGroupData } from "rc-select/lib/interface";
+import useI18n from "../../lib/hooks/useI18n";
 const { Option } = Select;
 
 const filterOption = (
@@ -44,6 +45,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
   currentItem,
   timeList,
 }) => {
+  const { t } = useI18n();
   const [form] = Form.useForm();
   const { itemTypeData, getCustomFields } = useContext(ConfigHandleContext);
   // 设置isSelected变量，避免切换事项类型变化时引起form.setFieldsValue触发
@@ -110,7 +112,9 @@ const ItemModal: React.FC<ItemModalProps> = ({
     if (value) {
       const itemFilter = timeList?.filter(item => item.itemType === value);
       if (itemFilter?.length && currentItem.itemType !== value) {
-        return Promise.reject(new Error("该事项类型已选择， 请重新选择"));
+        return Promise.reject(
+          new Error(`${t("errorMessage.itemTypeAlreadyExists")}`)
+        );
       }
       return Promise.resolve();
     } else {
@@ -129,12 +133,12 @@ const ItemModal: React.FC<ItemModalProps> = ({
   };
   return (
     <Modal
-      title="时间字段配置"
+      title={t("configuration.timeFieldConfiguration.timeFieldConfiguration")}
       visible={visible}
       onOk={handleConfirm}
       onCancel={handleCancel}
-      cancelText="取消"
-      okText="确定"
+      cancelText={t("global.cancle")}
+      okText={t("global.complete")}
       confirmLoading={confirmLoading}
     >
       <Form
@@ -146,16 +150,22 @@ const ItemModal: React.FC<ItemModalProps> = ({
       >
         {!currentItem?.isDefault && (
           <Form.Item
-            label="事项类型"
+            label={t("configuration.timeFieldConfiguration.itemType")}
             name="itemType"
             rules={[
-              { required: true, message: "请选择事项类型" },
+              {
+                required: true,
+                message: t("errorMessage.mattersTypeError"),
+              },
               {
                 validator: itemCheck,
               },
             ]}
           >
-            <Select placeholder="请选择" onChange={handelChange}>
+            <Select
+              placeholder={t("placeholder.pleaseSelect")}
+              onChange={handelChange}
+            >
               {itemTypeData.map((ele: FieldAndItemProps) => {
                 return (
                   <Option value={ele.value} key={ele.value}>
@@ -171,13 +181,15 @@ const ItemModal: React.FC<ItemModalProps> = ({
         )}
 
         <Form.Item
-          label="开始日期"
+          label={t("configuration.timeFieldConfiguration.startTime")}
           name="startDate"
-          rules={[{ required: true, message: "请选择开始日期字段" }]}
+          rules={[
+            { required: true, message: t("errorMessage.startTimeError") },
+          ]}
         >
           {/* 代码没有抽离，原因是会影响from的校验触发 */}
           <Select
-            placeholder="请选择"
+            placeholder={t("placeholder.pleaseSelect")}
             showSearch
             filterOption={filterOption}
             allowClear
@@ -192,12 +204,12 @@ const ItemModal: React.FC<ItemModalProps> = ({
           </Select>
         </Form.Item>
         <Form.Item
-          label="结束日期"
+          label={t("configuration.timeFieldConfiguration.endTime")}
           name="endDate"
-          rules={[{ required: true, message: "请选择结束日期字段" }]}
+          rules={[{ required: true, message: t("errorMessage.endTimeError") }]}
         >
           <Select
-            placeholder="请选择"
+            placeholder={t("placeholder.pleaseSelect")}
             allowClear
             showSearch
             filterOption={filterOption}
@@ -211,9 +223,14 @@ const ItemModal: React.FC<ItemModalProps> = ({
             })}
           </Select>
         </Form.Item>
-        <Form.Item label="完成占比" name="percentage">
+        <Form.Item
+          label={t(
+            "configuration.timeFieldConfiguration.percentageOfCompletion"
+          )}
+          name="percentage"
+        >
           <Select
-            placeholder="请选择"
+            placeholder={t("placeholder.pleaseSelect")}
             allowClear
             showSearch
             filterOption={filterOption}

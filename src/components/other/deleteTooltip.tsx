@@ -5,6 +5,7 @@ import ConnectionIcon from "../icons/connection";
 import { Tooltip } from "antd";
 import { dayFormat } from "../../helpers/dicts";
 import dayjs from "dayjs";
+import useI18n from "../../lib/hooks/useI18n";
 
 import styles from "./deleteTooltip.module.css";
 
@@ -26,6 +27,7 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
     setCurrentConnection,
     svgContainerHeight,
   }) => {
+    const { t } = useI18n();
     const path = window.location.origin;
     const tooltipRef = useRef<HTMLDivElement | null>(null);
     const [relatedY, setRelatedY] = useState(0);
@@ -96,10 +98,12 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
               <div className={styles.date}>
                 {currentConnection.connection?.endpoints?.[0].anchor
                   ?.cssClass === "Right"
-                  ? `结束日期：${dayjs(sourceTask[0]?.end).format(dayFormat)}`
-                  : `开始日期：${dayjs(sourceTask[0]?.start).format(
-                      dayFormat
-                    )}`}
+                  ? `${t("fields.startDate")}：${dayjs(
+                      sourceTask[0]?.end
+                    ).format(dayFormat)}`
+                  : `${t("fields.endDate")}：${dayjs(
+                      sourceTask[0]?.start
+                    ).format(dayFormat)}`}
               </div>
             </div>
             <div className={styles.connect}>
@@ -110,7 +114,10 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
                 </span>
                 <div className={styles.connectionLine} />
               </div>
-              <Tooltip title="解除事项链接" className={styles.unconnectionIcon}>
+              <Tooltip
+                title={t("fields.release")}
+                className={styles.unconnectionIcon}
+              >
                 <span onClick={removeConnection}>
                   <UnconnectionIcon />
                 </span>
@@ -127,10 +134,12 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
               <div className={styles.date}>
                 {currentConnection.connection?.endpoints[1]?.anchor
                   ?.cssClass === "Right"
-                  ? `结束日期：${dayjs(targetTask[0]?.end).format(dayFormat)}`
-                  : `开始日期：${dayjs(targetTask[0]?.start).format(
+                  ? `${t("fields.endDate")}：${dayjs(targetTask[0]?.end).format(
                       dayFormat
-                    )}`}
+                    )}`
+                  : `${t("fields.startDate")}：${dayjs(
+                      targetTask[0]?.start
+                    ).format(dayFormat)}`}
               </div>
             </div>
           </div>

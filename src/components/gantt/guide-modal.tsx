@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
 import { Modal } from "antd";
 import styles from "./gantt.module.css";
+import useI18n from "../../lib/hooks/useI18n";
 interface ModaProps {
   visible: boolean;
   toPanel: () => void;
@@ -11,6 +12,7 @@ export const GuideModal: React.FC<ModaProps> = ({
   toPanel,
   toCancel,
 }) => {
+  const { t } = useI18n();
   const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     setModalVisible(visible);
@@ -31,11 +33,11 @@ export const GuideModal: React.FC<ModaProps> = ({
       onCancel={handleCancel}
     >
       <span className={styles.guideInfor}>
-        还没有配置甘特图中卡片的时间字段，
+        {t("configuration.unconfigurationModal.unconfigurationTip")}，
         <span onClick={toConfig} className={styles.clickThis}>
-          点此
+          {t("configuration.unconfigurationModal.clickHere")}
         </span>
-        进行配置
+        {t("configuration.unconfigurationModal.performConfiguration")}
       </span>
     </Modal>
   );

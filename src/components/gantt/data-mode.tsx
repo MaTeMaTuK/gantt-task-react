@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Tabs } from "antd";
 import { viewModeOptions, ViewMode } from "../../types/public-types";
+import useI18n from "../../lib/hooks/useI18n";
 
 import styles from "./gantt.module.css";
 const { TabPane } = Tabs;
@@ -19,6 +20,7 @@ const DataMode: React.FC<DateModeProps> = ({
   svgContainerWidth,
   refScrollX,
 }) => {
+  const { t } = useI18n();
   const handleChange = (value: string) => {
     modeChange(value as ViewMode);
   };
@@ -31,7 +33,7 @@ const DataMode: React.FC<DateModeProps> = ({
     <div className={styles.viewMode}>
       {isShowToday && (
         <span className={styles.todayBtn} onClick={toToday}>
-          今天
+          {t("date.Today")}
         </span>
       )}
 
@@ -42,7 +44,7 @@ const DataMode: React.FC<DateModeProps> = ({
           onChange={handleChange}
         >
           {viewModeOptions.map(ele => (
-            <TabPane tab={ele.label} key={ele.value} />
+            <TabPane tab={t(`date.${ele.value}`)} key={ele.value} />
           ))}
         </Tabs>
       </div>
