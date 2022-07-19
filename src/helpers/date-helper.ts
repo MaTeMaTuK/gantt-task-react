@@ -12,7 +12,10 @@ type DateHelperScales =
   | "millisecond";
 
 const intlDTCache = {};
-const getCachedDateTimeFormat = (locString: string | string[], opts: DateTimeFormatOptions = {}): DateTimeFormat => {
+const getCachedDateTimeFormat = (
+  locString: string | string[],
+  opts: DateTimeFormatOptions = {}
+): DateTimeFormat => {
   const key = JSON.stringify([locString, opts]);
   let dtf = intlDTCache[key];
   if (!dtf) {
@@ -154,6 +157,13 @@ export const getLocaleMonth = (date: Date, locale: string) => {
     bottomValue[0],
     bottomValue[0].toLocaleUpperCase()
   );
+  return bottomValue;
+};
+export const getLocalYearMonth = (date: Date, locale: string) => {
+  const bottomValue = getCachedDateTimeFormat(locale, {
+    year: "numeric",
+    month: "long",
+  }).format(date);
   return bottomValue;
 };
 const getMonday = (date: Date) => {

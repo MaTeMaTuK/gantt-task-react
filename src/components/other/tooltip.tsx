@@ -3,6 +3,7 @@ import { Task, Assignee } from "../../types/public-types";
 import { dayFormat } from "../../helpers/dicts";
 import dayjs from "dayjs";
 import { BarTask } from "../../types/bar-task";
+import useI18n from "../../lib/hooks/useI18n";
 
 import styles from "./tooltip.module.css";
 
@@ -124,6 +125,7 @@ export const StandardTooltipContent: React.FC<{
   fontFamily: string;
   userAvatar?: JSX.Element;
 }> = ({ task, fontSize, fontFamily, userAvatar }) => {
+  const { t } = useI18n();
   const style = {
     fontSize,
     fontFamily,
@@ -137,26 +139,26 @@ export const StandardTooltipContent: React.FC<{
       {task.type === "milestone" ? (
         <div className={styles.item}>
           <div>
-            <span className={styles.lightColor}>状态：</span>
+            <span className={styles.lightColor}>{t("fields.status")}：</span>
             <span className={styles.status}>{task?.item?.status?.name}</span>
           </div>
           <div>
-            <span className={styles.lightColor}>负责人：</span>
+            <span className={styles.lightColor}>{t("fields.charge")}：</span>
             {userAvatar}
           </div>
           <div className={styles.lightColor}>
-            <span>计划完成时间：</span>
+            <span>{t("fields.completeTime")}：</span>
             <span>{dayjs(task.end).format(dayFormat)}</span>
           </div>
         </div>
       ) : (
         <div className={`${styles.lightColor} ${styles.item}`}>
           <div>
-            <span>开始日期：</span>
+            <span>{t("fields.startDate")}：</span>
             <span>{dayjs(task.start).format(dayFormat)}</span>
           </div>
           <div>
-            <span>结束日期：</span>
+            <span>{t("fields.endDate")}：</span>
             <span>{dayjs(task.end).format(dayFormat)}</span>
           </div>
         </div>
