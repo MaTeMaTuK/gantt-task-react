@@ -30,8 +30,18 @@ export interface Task {
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
-  assignedUser?:string;
-  description?:string;
+  assignedUser?: string;
+  approver?: string;
+  informed?: string;
+  duration?: number;
+  description?: string;
+  parent?: string;
+  estimatedAmount?: number;
+  spentAmount?: number;
+  code?: string;
+  createdBy?: string;
+  isCompleted?: boolean;
+
 }
 
 export interface EventOption {
@@ -141,6 +151,15 @@ export interface StylingOption {
   }>;
 }
 
+export type ColumnVisibility = {
+  columnName: string;
+  isVisible: boolean;
+  isDate?: boolean;
+  readonly toShow:(task: Task) => string | undefined | Date;
+  columnWithArrow?: boolean;
+};
+
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
+  columnList: ColumnVisibility[];
 }
