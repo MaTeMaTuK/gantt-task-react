@@ -6,12 +6,15 @@ import TimeModal from "./time-modal";
 import { ConfigHandleContext, GanttConfigContext } from "../../contsxt";
 import { TimeItemProps } from "../../types/public-types";
 import WarningIcon from "../icons/warning";
+import useI18n from "../../lib/hooks/useI18n";
+
 interface TimeProps {}
 const Time: React.FC<TimeProps> = () => {
+  const { t } = useI18n();
   const [visible, setVisible] = useState(false);
   const columns = [
     {
-      title: "关联事项",
+      title: t("configuration.timeFieldConfiguration.relatedItems"),
       dataIndex: "itemType",
       key: "name",
       render: (text: string) => {
@@ -22,8 +25,12 @@ const Time: React.FC<TimeProps> = () => {
           });
         return (
           res[0]?.label || (
-            <Tooltip title="没有配置的卡片类型将使用默认配置">
-              默认 &nbsp;
+            <Tooltip
+              title={t(
+                "configuration.timeFieldConfiguration.noConfigurationTip"
+              )}
+            >
+              {t("global.default")} &nbsp;
               <QuestionCircleOutlined />
             </Tooltip>
           )
@@ -31,17 +38,17 @@ const Time: React.FC<TimeProps> = () => {
       },
     },
     {
-      title: "操作",
+      title: t("configuration.timeFieldConfiguration.configuration"),
       key: "action",
       width: 120,
       render: (_text: string, record: TimeItemProps, index: number) => (
         <Space>
           <a type="link" onClick={() => editTime(index)}>
-            配置
+            {t("configuration.timeFieldConfiguration.configuration")}
           </a>
           {!record?.isDefault && (
             <a type="link" onClick={() => del(index)}>
-              删除
+              {t("global.delete")}
             </a>
           )}
         </Space>
@@ -97,10 +104,10 @@ const Time: React.FC<TimeProps> = () => {
   );
   const del = (index: number) => {
     Modal.confirm({
-      title: "删除该配置",
-      content: "删除后无法恢复。您确定删除吗？",
-      okText: "确认",
-      cancelText: "取消",
+      title: t("configuration.timeFieldConfiguration.deleteTitle"),
+      content: t("configuration.timeFieldConfiguration.deleteTip"),
+      okText: t("global:complete"),
+      cancelText: t("global:cancel"),
       onOk: () => delConfig(index),
     });
   };
@@ -125,7 +132,9 @@ const Time: React.FC<TimeProps> = () => {
         <em>
           <WarningIcon style={{ color: "red" }} />
         </em>
-        为了让甘特图正确显示，您需要设置甘特图中时间区块的起止时间对应事项的哪个时间字段
+        {t(
+          "configuration.timeFieldConfiguration.timeFieldConfigurationDescription"
+        )}
       </div>
       <Table
         columns={columns}
@@ -137,13 +146,8 @@ const Time: React.FC<TimeProps> = () => {
         }}
       />
       <div className={styles.timeConfigAddBtn}>
-        <Button
-          icon={<PlusOutlined />}
-          type="link"
-          onClick={addTime}
-          disabled={!canAddConfig}
-        >
-          新增配置
+        <Button icon={<PlusOutlined />} type="link" onClick={addTime} disabled={!canAddConfig}>
+          {t("configuration.timeFieldConfiguration.addConfiguration")}
         </Button>
       </div>
     </div>
