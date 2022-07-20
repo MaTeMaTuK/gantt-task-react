@@ -64,6 +64,10 @@ const Time: React.FC<TimeProps> = () => {
       ganttConfig?.time?.length ? ganttConfig?.time : [{ isDefault: true }],
     [ganttConfig?.time]
   );
+  // 添加事项类型配置前需要完成默认配置
+  const canAddConfig = useMemo(() => {
+    return timeList?.[0]?.startDate && timeList?.[0]?.endDate;
+  }, [timeList]);
   const handleCancel = useCallback(() => {
     setVisible(false);
   }, []);
@@ -142,7 +146,7 @@ const Time: React.FC<TimeProps> = () => {
         }}
       />
       <div className={styles.timeConfigAddBtn}>
-        <Button icon={<PlusOutlined />} type="link" onClick={addTime}>
+        <Button icon={<PlusOutlined />} type="link" onClick={addTime} disabled={!canAddConfig}>
           {t("configuration.timeFieldConfiguration.addConfiguration")}
         </Button>
       </div>
