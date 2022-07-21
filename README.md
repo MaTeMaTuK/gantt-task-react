@@ -1,4 +1,4 @@
-# gantt-task-react
+# gantt-chart-react
 
 ## Interactive Gantt Chart for React with TypeScript.
 
