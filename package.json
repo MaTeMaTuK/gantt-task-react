@@ -5,7 +5,7 @@
   "author": "derrickma",
   "homepage": "https://github.com/easyops-cn/gantt-chart-react",
   "license": "MIT",
-  "repository": "derrickma/gantt-chart-react",
+  "repository": "easyops-cn/gantt-chart-react",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
