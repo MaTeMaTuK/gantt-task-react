@@ -137,8 +137,6 @@ const ItemModal: React.FC<ItemModalProps> = ({
       visible={visible}
       onOk={handleConfirm}
       onCancel={handleCancel}
-      cancelText={t("global.cancle")}
-      okText={t("global.complete")}
       confirmLoading={confirmLoading}
     >
       <Form
