@@ -92,6 +92,7 @@ const zhCN = {
     },
   },
   errorMessage: {
+    commonError: "操作异常，请稍后重试",
     baselineNameError: "请输入基线名称",
     nameAlreadyExists: "该名称已存在",
     itemTypeAlreadyExists: "该事项类型已存在",
