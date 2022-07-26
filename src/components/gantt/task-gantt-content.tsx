@@ -495,32 +495,29 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           }
           return true;
         });
-        jsPlumbInstance.bind(
-          "connection",
-          async (infor: any, originalEvent: any) => {
-            const linkTypeId = getLinkTypeId(
-              infor.connection.endpoints[0].anchor.cssClass,
-              infor.connection.endpoints[1].anchor.cssClass
-            );
-            const params = {
-              source: infor?.sourceId,
-              destination: infor?.targetId,
-              linkType: linkTypeId,
-            };
-            if (originalEvent) {
-              addConnection?.(params)
-                .then(() => {
-                  infor.connection.setData(linkTypeId);
-                })
-                .catch((error: any) => {
-                  message.warning(
-                    error?.message || t("errorMessage.commonError")
-                  );
-                  jsPlumbInstance.deleteConnection(infor.connection);
-                });
-            }
+        jsPlumbInstance.bind("connection", (infor: any, originalEvent: any) => {
+          const linkTypeId = getLinkTypeId(
+            infor.connection.endpoints[0].anchor.cssClass,
+            infor.connection.endpoints[1].anchor.cssClass
+          );
+          const params = {
+            source: infor?.sourceId,
+            destination: infor?.targetId,
+            linkType: linkTypeId,
+          };
+          if (originalEvent) {
+            addConnection?.(params)
+              .then(() => {
+                infor.connection.setData(linkTypeId);
+              })
+              .catch((error: any) => {
+                message.warning(
+                  error?.message || t("errorMessage.commonError")
+                );
+                jsPlumbInstance.deleteConnection(infor.connection);
+              });
           }
-        );
+        });
         jsPlumbInstance.bind("click", (connection: any, originalEvent: any) => {
           jsPlumbInstance.select().removeClass("select-connection");
           connection.addClass("select-connection");
