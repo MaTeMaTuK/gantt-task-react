@@ -26,8 +26,6 @@ export const BaseLine: React.FC = () => {
     Modal.confirm({
       title: t("configuration.baseLineConfiguration.deleteBaseline"),
       content: `${t("configuration.baseLineConfiguration.deleteDescription")}?`,
-      okText: t("global.complete"),
-      cancelText: t("global.cancle"),
       onOk: () => baseLineHandle(currentBaseline),
     });
   };

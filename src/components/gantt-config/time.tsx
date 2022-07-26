@@ -106,8 +106,6 @@ const Time: React.FC<TimeProps> = () => {
     Modal.confirm({
       title: t("configuration.timeFieldConfiguration.deleteTitle"),
       content: t("configuration.timeFieldConfiguration.deleteTip"),
-      okText: t("global:complete"),
-      cancelText: t("global:cancel"),
       onOk: () => delConfig(index),
     });
   };

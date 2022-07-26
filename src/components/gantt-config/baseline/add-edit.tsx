@@ -83,8 +83,6 @@ export const AddEdit: React.FC<ModalProps> = ({
       visible={modalVisible}
       onCancel={handleCancel}
       onOk={confirmOk}
-      okText={t("global.complete")}
-      cancelText={t("global.cancel")}
       confirmLoading={confirmLoading}
     >
       <Form

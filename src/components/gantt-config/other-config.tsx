@@ -33,8 +33,6 @@ const OtherConfig: React.FC = () => {
     }
     confirm({
       title: t("configuration.otherConfiguration.automaticScheduling"),
-      okText: t("global.complete"),
-      cancelText: t("global.cancel"),
       content: t("configuration.otherConfiguration.otherConfigurationTips"),
       onOk() {
         setChecked(value);
