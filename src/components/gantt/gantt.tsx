@@ -685,7 +685,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     return null;
   }, [renderTaskListComponent]);
-  const [langBundle, antdLangEn] = useMemo(() => {
+  const [langBundle, antdLang] = useMemo(() => {
     return getMessages(locale);
   }, [locale]);
   const isHiddenShowTooltip = useMemo(() => {
@@ -838,7 +838,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   return (
     <div className={styles.box}>
       <I18n lngDict={langBundle} locale={locale}>
-        <ConfigProvider locale={antdLangEn}>
+        <ConfigProvider locale={antdLang}>
           <GuideModal
             visible={guideModalVisible}
             toPanel={toPanel}
