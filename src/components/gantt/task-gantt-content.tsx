@@ -505,10 +505,17 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             destination: infor?.targetId,
             linkType: linkTypeId,
           };
-          // init(infor.connection);
           if (originalEvent) {
-            infor.connection.setData(linkTypeId);
-            addConnection?.(params);
+            addConnection?.(params)
+              .then(() => {
+                infor.connection.setData(linkTypeId);
+              })
+              .catch((error: any) => {
+                message.warning(
+                  error?.message || t("errorMessage.commonError")
+                );
+                jsPlumbInstance.deleteConnection(infor.connection);
+              });
           }
         });
         jsPlumbInstance.bind("click", (connection: any, originalEvent: any) => {

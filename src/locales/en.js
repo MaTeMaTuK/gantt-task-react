@@ -97,6 +97,7 @@ const en = {
     },
   },
   errorMessage: {
+    commonError: "Unexpected operation, please try again later",
     baselineNameError: "Please enter the baseline name",
     nameAlreadyExists: "This name already exists",
     itemTypeAlreadyExists:
