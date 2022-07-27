@@ -175,7 +175,7 @@ export interface ConnectionProps {
     source: string;
     destination: string;
     linkType: string;
-  }) => Promise<any>;
+  }) => Promise<unknown>;
   itemLinks?: ItemLink[];
   setCurrentConnection?: (connection: any) => void;
   currentConnection?: any;
