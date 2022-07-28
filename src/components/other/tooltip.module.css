@@ -53,10 +53,9 @@
 .status {
   display: inline-block;
   padding: 2px 8px;
-  background: #e6f3ff;
   border-radius: 4px;
-  color: #0c62ff;
   font-size: 12px;
+  font-weight: 600;
 }
 .item div {
   margin-bottom: 10px;

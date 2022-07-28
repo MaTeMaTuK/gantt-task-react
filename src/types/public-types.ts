@@ -219,6 +219,13 @@ export interface BaselineProps {
   description?: string;
   [propName: string]: any;
 }
+export interface WorkFlowStatusColor {
+  [propName: string]: {
+    color: string;
+    bgColor: string;
+  };
+}
+
 export interface GanttProps
   extends EventOption,
     DisplayOption,
@@ -251,6 +258,7 @@ export interface GanttProps
   onClickEvent?: (type?: string, task?: Task) => void;
   configVisibleChange?: (val: boolean) => void;
   tableQuerySelector?: string;
+  workFlowStatusColor?: WorkFlowStatusColor;
 }
 
 export interface TabConfigProps {

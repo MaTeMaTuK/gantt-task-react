@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, memo, useMemo } from "react";
-import { Task, Assignee } from "../../types/public-types";
+import { Task, Assignee, WorkFlowStatusColor } from "../../types/public-types";
 import { dayFormat } from "../../helpers/dicts";
+
 import dayjs from "dayjs";
 import { BarTask } from "../../types/bar-task";
 import useI18n from "../../lib/hooks/useI18n";
@@ -24,8 +25,10 @@ export type TooltipProps = {
     fontSize: string;
     fontFamily: string;
     userAvatar?: JSX.Element;
+    workFlowStatusColor?: WorkFlowStatusColor;
   }>;
   renderUserAvatar?: (assignee: Assignee[]) => JSX.Element;
+  workFlowStatusColor?: WorkFlowStatusColor;
 };
 export const Tooltip: React.FC<TooltipProps> = memo(
   ({
@@ -42,6 +45,7 @@ export const Tooltip: React.FC<TooltipProps> = memo(
     taskListWidth,
     TooltipContent,
     renderUserAvatar,
+    workFlowStatusColor,
   }) => {
     const tooltipRef = useRef<HTMLDivElement | null>(null);
     const [relatedY, setRelatedY] = useState(0);
@@ -113,6 +117,7 @@ export const Tooltip: React.FC<TooltipProps> = memo(
           fontSize={fontSize}
           fontFamily={fontFamily}
           userAvatar={UserAvatar}
+          workFlowStatusColor={workFlowStatusColor}
         />
       </div>
     );
@@ -124,7 +129,11 @@ export const StandardTooltipContent: React.FC<{
   fontSize: string;
   fontFamily: string;
   userAvatar?: JSX.Element;
-}> = ({ task, fontSize, fontFamily, userAvatar }) => {
+  workFlowStatusColor?: WorkFlowStatusColor;
+}> = ({ task, fontSize, fontFamily, userAvatar, workFlowStatusColor }) => {
+  const statusColor = useMemo(() => {
+    return workFlowStatusColor?.[task?.item?.status?.type];
+  }, [task?.item?.status?.type, workFlowStatusColor]);
   const { t } = useI18n();
   const style = {
     fontSize,
@@ -140,7 +149,15 @@ export const StandardTooltipContent: React.FC<{
         <div className={styles.item}>
           <div>
             <span className={styles.lightColor}>{t("fields.status")}：</span>
-            <span className={styles.status}>{task?.item?.status?.name}</span>
+            <span
+              className={styles.status}
+              style={{
+                backgroundColor: statusColor?.bgColor,
+                color: statusColor?.color,
+              }}
+            >
+              {task?.item?.status?.name}
+            </span>
           </div>
           <div>
             <span className={styles.lightColor}>{t("fields.charge")}：</span>

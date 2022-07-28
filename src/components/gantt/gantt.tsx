@@ -111,6 +111,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onClickEvent,
   configVisibleChange, // 甘特图配置页面显示和隐藏
   tableQuerySelector = ".BaseTable__table-main .BaseTable__body",
+  workFlowStatusColor, // 状态颜色
 }) => {
   logger("locale", locale);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -981,6 +982,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
                   taskListWidth={taskListWidth}
                   TooltipContent={TooltipContent}
                   renderUserAvatar={renderUserAvatar}
+                  workFlowStatusColor={workFlowStatusColor}
                 />
               )}
               {currentConnection && (
