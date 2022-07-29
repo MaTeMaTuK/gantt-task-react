@@ -3,6 +3,7 @@ import React, {
   useState,
   useContext,
   useCallback,
+  useRef,
   memo,
 } from "react";
 import {
@@ -108,6 +109,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     const [jsPlumbInstance, setJsPlumbInstance] = useState<any>(null);
     const { ganttConfig } = useContext(GanttConfigContext);
     const [pointInited, setPointInited] = useState(false);
+    const taskLengthRef = useRef(0);
 
     useEffect(() => {
       const connectClickHandle = () => {
@@ -599,9 +601,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
       ganttConfig.relation,
       ganttConfig,
     ]);
-    useEffect(() => {
-      // pointInited是连接点初始化完成的标志，解决jsPlumbInstance.connect连线时，由于连接点未初始化完成导致连线加载不出来
-      if (jsPlumbInstance && connectUuids.length && pointInited) {
+    const drawConnection = useCallback(
+      (connectUuids: any[], jsPlumbInstance: any) => {
         jsPlumbInstance.setSuspendDrawing(true);
         for (let i = 0; i < connectUuids.length; i++) {
           const uuidObj = connectUuids[i];
@@ -638,15 +639,38 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             }
           }
         }
+        taskLengthRef.current = tasks.length;
         jsPlumbInstance.setSuspendDrawing(false, true);
+      },
+      [ganttConfig?.relation, tasks.length]
+    );
+    useEffect(() => {
+      // pointInited是连接点初始化完成的标志，解决jsPlumbInstance.connect连线时，由于连接点未初始化完成导致连线加载不出来
+      if (jsPlumbInstance && connectUuids.length && pointInited) {
+        // 添加或删除task时要先清除连线
+        if (taskLengthRef.current !== tasks.length) {
+          jsPlumbInstance.deleteEveryConnection();
+          // 使用setTimeout保证先清除连线
+          setTimeout(() => {
+            drawConnection(connectUuids, jsPlumbInstance);
+          });
+        } else {
+          drawConnection(connectUuids, jsPlumbInstance);
+        }
       }
-
       return () => {
         if (jsPlumbInstance) {
           jsPlumbInstance.deleteEveryConnection();
         }
       };
-    }, [jsPlumbInstance, ganttConfig?.relation, connectUuids, pointInited]);
+    }, [
+      jsPlumbInstance,
+      ganttConfig?.relation,
+      connectUuids,
+      pointInited,
+      tasks.length,
+      drawConnection,
+    ]);
     return (
       <g className="content">
         <g className="arrows" fill={arrowColor} stroke={arrowColor}>
