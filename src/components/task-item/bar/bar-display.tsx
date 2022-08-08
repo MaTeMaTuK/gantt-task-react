@@ -49,7 +49,6 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   isShowTaskTitle,
   isShowTaskLeftBar,
 }) => {
-  console.log(task, "task");
   const getBarColor = () => {
     return task?.isTimeErrorItem || task?.isOverdueItem
       ? barBackgroundColorTimeError
