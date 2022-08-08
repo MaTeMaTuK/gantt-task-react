@@ -226,11 +226,17 @@ export interface WorkFlowStatusColor {
   };
 }
 
+export interface TaskDisplayProps {
+  isShowTaskTitle?: boolean;
+  isShowTaskLeftBar: boolean;
+}
+
 export interface GanttProps
   extends EventOption,
     DisplayOption,
     StylingOption,
     ConfigOption,
+    TaskDisplayProps,
     ConnectionProps {
   tasks: Task[];
   baseLineLog?: Task[];

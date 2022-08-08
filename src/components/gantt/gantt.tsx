@@ -112,6 +112,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   configVisibleChange, // 甘特图配置页面显示和隐藏
   tableQuerySelector = ".BaseTable__table-main .BaseTable__body",
   workFlowStatusColor, // 状态颜色
+  isShowTaskTitle,
+  isShowTaskLeftBar,
 }) => {
   logger("locale", locale);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -650,6 +652,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       setCurrentConnection,
       currentConnection,
       currentLog,
+      isShowTaskTitle,
+      isShowTaskLeftBar,
     };
   }, [
     barTasks,
@@ -679,6 +683,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     isConnect,
     currentConnection,
     currentLog,
+    isShowTaskTitle,
+    isShowTaskLeftBar,
   ]);
   const TaskListComponent = useMemo(() => {
     if (typeof renderTaskListComponent === "function") {
