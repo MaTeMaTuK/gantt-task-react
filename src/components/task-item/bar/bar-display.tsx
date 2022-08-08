@@ -26,6 +26,8 @@ interface BarDisplayProps extends TaskDisplayProps {
     backgroundColor: string;
     backgroundSelectedColor: string;
     progressColor: string;
+    color?: string;
+    leftBarColor?: string;
     progressSelectedColor: string;
     opacity?: number;
   };
@@ -59,11 +61,11 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
       : styles.backgroundColor;
   };
   const getColor = useMemo(() => {
-    return task?.item?.color ?? defaultColor;
-  }, [task?.item?.color]);
+    return styles?.color ?? defaultColor;
+  }, [styles?.color]);
   const getLeftBarColor = useMemo(() => {
-    return task?.item?.leftBarColor ?? defaultLeftBarColor;
-  }, [task?.item?.leftBarColor]);
+    return styles?.leftBarColor ?? defaultLeftBarColor;
+  }, [styles?.leftBarColor]);
   return (
     <g onMouseDown={onMouseDown}>
       <rect
