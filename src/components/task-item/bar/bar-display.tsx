@@ -79,7 +79,16 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         fill={getBarColor()}
         className={style.barBackground}
       />
-      {isShowTaskTitle && (
+
+      <rect
+        x={x + progressWidth}
+        width={width - progressWidth}
+        y={y}
+        height={height}
+        style={{ opacity: isLog ? 0.8 : 0.4 }}
+        fill="#fff"
+      />
+      {isShowTaskLeftBar && (
         <TaskLeftBar
           x={x}
           y={y}
@@ -90,7 +99,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
           leftBarColor={getLeftBarColor}
         />
       )}
-      {isShowTaskLeftBar && (
+      {isShowTaskTitle && (
         <BarTitle
           x={x}
           y={y}
@@ -100,15 +109,6 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
           color={getColor}
         />
       )}
-
-      <rect
-        x={x + progressWidth}
-        width={width - progressWidth}
-        y={y}
-        height={height}
-        style={{ opacity: isLog ? 0.8 : 0.4 }}
-        fill="#fff"
-      />
     </g>
   );
 };

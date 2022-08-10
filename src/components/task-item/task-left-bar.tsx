@@ -29,7 +29,7 @@ export const TaskLeftBar: React.FC<TaskLeftBarProps> = ({
         fill={leftBarColor}
       />
       {/* 用一个没有圆角的矩形盖住上一个矩形的右上和右下的圆角 */}
-      <rect x={x + 2} width={2} y={y} height={height} fill={leftBarColor} />
+      <rect x={x + 2} width={1} y={y} height={height} fill={leftBarColor} />
     </g>
   );
 };

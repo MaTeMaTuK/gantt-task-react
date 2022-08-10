@@ -228,7 +228,7 @@ export interface WorkFlowStatusColor {
 
 export interface TaskDisplayProps {
   isShowTaskTitle?: boolean;
-  isShowTaskLeftBar: boolean;
+  isShowTaskLeftBar?: boolean;
 }
 
 export interface GanttProps

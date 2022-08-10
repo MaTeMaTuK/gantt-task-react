@@ -22,7 +22,7 @@ export const BarTitle: React.FC<TitleProps> = ({
       <div
         className={styles.overflow_ellipsis}
         style={{
-          lineHeight: `${height}px`,
+          lineHeight: `${Math.round(height)}px`,
           color: color,
         }}
       >
