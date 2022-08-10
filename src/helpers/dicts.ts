@@ -21,3 +21,6 @@ export const daySeconds = 24 * 60 * 60 * 1000;
 export const zhList = ["zh-Hant-HK", "zh-HK", "zh-Hans-CN", "zh-CN", "zh"];
 // 英文
 export const enList = ["en-GB", "en"];
+
+export const defaultColor = "#213053";
+export const defaultLeftBarColor = "#0c62ff";

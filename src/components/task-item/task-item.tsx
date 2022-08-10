@@ -9,8 +9,9 @@ import { BarSmall } from "./bar/bar-small";
 import { BarParent } from "./bar/bar-parent";
 import { Milestone } from "./milestone/milestone";
 import { Project } from "./project/project";
+import { TaskDisplayProps } from "../../../src/types/public-types";
 
-export type TaskItemProps = {
+export interface TaskItemProps extends TaskDisplayProps {
   task: BarTask;
   arrowIndent: number;
   taskHeight: number;
@@ -29,7 +30,7 @@ export type TaskItemProps = {
   setPointInited?: (value: boolean) => void;
   isMoving?: boolean;
   ganttEvent?: GanttEvent;
-};
+}
 
 export const TaskItem: React.FC<TaskItemProps> = props => {
   const { task, isDelete, isSelected, onEventStart, jsPlumb } = props;

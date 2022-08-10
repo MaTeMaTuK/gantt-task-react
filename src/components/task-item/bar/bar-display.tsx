@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useMemo } from "react";
 import style from "./bar.module.css";
 import { BarTask } from "../../../types/bar-task";
+import TaskLeftBar from "../task-left-bar";
+
 import {
   barBackgroundColorPivotalPath,
   barBackgroundColorTimeError,
+  defaultColor,
+  defaultLeftBarColor,
 } from "../../../helpers/dicts";
+import { TaskDisplayProps } from "../../../../src/types/public-types";
 
-type BarDisplayProps = {
+import BarTitle from "../title";
+
+interface BarDisplayProps extends TaskDisplayProps {
   x: number;
   y: number;
   task?: BarTask;
@@ -19,13 +26,15 @@ type BarDisplayProps = {
     backgroundColor: string;
     backgroundSelectedColor: string;
     progressColor: string;
+    color?: string;
+    leftBarColor?: string;
     progressSelectedColor: string;
     opacity?: number;
   };
   onMouseDown: (event: React.MouseEvent<SVGPolygonElement, MouseEvent>) => void;
   id: string;
   isLog?: boolean | undefined;
-};
+}
 export const BarDisplay: React.FC<BarDisplayProps> = ({
   x,
   y,
@@ -39,6 +48,8 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   id,
   task,
   isLog,
+  isShowTaskTitle,
+  isShowTaskLeftBar,
 }) => {
   const getBarColor = () => {
     return task?.isTimeErrorItem || task?.isOverdueItem
@@ -49,6 +60,12 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
       ? styles.backgroundSelectedColor
       : styles.backgroundColor;
   };
+  const getColor = useMemo(() => {
+    return styles?.color ?? defaultColor;
+  }, [styles?.color]);
+  const getLeftBarColor = useMemo(() => {
+    return styles?.leftBarColor ?? defaultLeftBarColor;
+  }, [styles?.leftBarColor]);
   return (
     <g onMouseDown={onMouseDown}>
       <rect
@@ -62,6 +79,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         fill={getBarColor()}
         className={style.barBackground}
       />
+
       <rect
         x={x + progressWidth}
         width={width - progressWidth}
@@ -70,6 +88,27 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         style={{ opacity: isLog ? 0.8 : 0.4 }}
         fill="#fff"
       />
+      {isShowTaskLeftBar && (
+        <TaskLeftBar
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          fill={getBarColor()}
+          barCornerRadius={barCornerRadius}
+          leftBarColor={getLeftBarColor}
+        />
+      )}
+      {isShowTaskTitle && (
+        <BarTitle
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          title={task?.name}
+          color={getColor}
+        />
+      )}
     </g>
   );
 };

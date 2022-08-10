@@ -10,6 +10,7 @@ import {
   EventOption,
   ConnectionProps,
   BaselineProps,
+  TaskDisplayProps,
 } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
@@ -63,6 +64,7 @@ export type TaskGanttContentProps = {
   containerRef?: React.MutableRefObject<any>;
   currentLog?: BaselineProps;
 } & EventOption &
+  TaskDisplayProps &
   ConnectionProps;
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
@@ -97,6 +99,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     currentConnection,
     containerRef,
     currentLog: currentLogSelect,
+    isShowTaskTitle,
+    isShowTaskLeftBar,
   }) => {
     const { t } = useI18n();
     const [connectUuids, setConnectUuids] = useState([]);
@@ -733,6 +737,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
                     setPointInited={setPointInited}
                     isMoving={isMoving}
                     ganttEvent={ganttEvent}
+                    isShowTaskTitle={isShowTaskTitle}
+                    isShowTaskLeftBar={isShowTaskLeftBar}
                   />
                 )}
               </g>

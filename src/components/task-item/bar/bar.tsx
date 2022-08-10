@@ -21,6 +21,8 @@ export const Bar: React.FC<TaskItemProps> = ({
   ganttEvent = {
     action: "",
   },
+  isShowTaskTitle,
+  isShowTaskLeftBar,
 }) => {
   const { action } = ganttEvent;
   const barRef = useRef<any>(null);
@@ -85,6 +87,8 @@ export const Bar: React.FC<TaskItemProps> = ({
           onMouseDown={e => {
             isDateChangeable && !isLog && onEventStart("move", task, e);
           }}
+          isShowTaskTitle={isShowTaskTitle}
+          isShowTaskLeftBar={isShowTaskLeftBar}
         />
         <g className="handleGroup">
           {isDateChangeable && !isLog && (
