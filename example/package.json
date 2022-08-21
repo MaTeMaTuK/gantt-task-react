@@ -24,7 +24,6 @@
     "react-scripts": "file:../node_modules/react-scripts"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
   },
   "browserslist": {
     "production": [

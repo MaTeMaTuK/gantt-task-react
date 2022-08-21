@@ -1,13 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": [
-    "standard",
-    "standard-react",
-    "plugin:prettier/recommended",
-    "prettier/standard",
-    "prettier/react",
-    "plugin:@typescript-eslint/eslint-recommended"
-  ],
+  "extends": ["react-app", "react-app/jest"],
   "plugins": ["@typescript-eslint"],
   "env": {
     "node": true
