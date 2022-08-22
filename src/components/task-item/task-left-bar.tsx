@@ -17,20 +17,27 @@ export const TaskLeftBar: React.FC<TaskLeftBarProps> = ({
   barCornerRadius,
   leftBarColor,
 }) => {
+  const leftBarWidth = 3;
   return (
-    <g>
-      <rect
-        x={x}
-        width={3} // 3为TaskLeftBar的固定宽度
-        y={y}
-        height={height}
-        ry={barCornerRadius}
-        rx={barCornerRadius}
-        fill={leftBarColor}
-      />
-      {/* 用一个没有圆角的矩形盖住上一个矩形的右上和右下的圆角 */}
-      <rect x={x + 2} width={1} y={y} height={height} fill={leftBarColor} />
-    </g>
+    <foreignObject x={x} width={leftBarWidth} y={y} height={height}>
+      <div
+        style={{
+          width: `${leftBarWidth}px`,
+          overflow: "hidden",
+          height: `${height}px`,
+        }}
+      >
+        <div
+          style={{
+            lineHeight: `${Math.round(height)}px`,
+            backgroundColor: leftBarColor,
+            width: barCornerRadius * 2,
+            borderRadius: barCornerRadius,
+            height: `${height}px`,
+          }}
+        />
+      </div>
+    </foreignObject>
   );
 };
 export default TaskLeftBar;
