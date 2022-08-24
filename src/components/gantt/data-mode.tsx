@@ -30,7 +30,7 @@ const DataMode: React.FC<DateModeProps> = ({
     );
   }, [refScrollX, svgContainerWidth, todayX]);
   return (
-    <div className={styles.viewMode}>
+    <div className={styles.viewMode} data-view-mode>
       {isShowToday && (
         <span className={styles.todayBtn} onClick={toToday}>
           {t("date.Today")}

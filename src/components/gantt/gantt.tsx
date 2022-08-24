@@ -371,6 +371,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const handleWheel = useCallback(
     (event: WheelEvent) => {
+      // 当鼠标滚动ViewwMode时，不滚动甘特图
+      const isViewwMode = (event?.target as Element)?.closest(
+        "[data-view-mode]"
+      );
+      if (isViewwMode) {
+        return;
+      }
       if (Math.abs(event.deltaX) >= Math.abs(event.deltaY)) {
         if (event.deltaX !== 0) {
           // @ts-ignore
