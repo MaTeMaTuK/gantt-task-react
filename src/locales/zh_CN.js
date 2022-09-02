@@ -44,7 +44,7 @@ const zhCN = {
   configuration: {
     title: "甘特图设置",
     baseLineConfiguration: {
-      baseline: "基线基线",
+      baseline: "基线",
       baseLineTitleDescription: "点击基线卡片可选择显示基线",
       createBaseline: "创建基线",
       newBaseline: "新建基线",
