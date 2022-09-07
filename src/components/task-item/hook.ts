@@ -1,19 +1,17 @@
 import { useEffect, useState, useMemo } from "react";
 import { commonConfig } from "../../helpers/jsPlumbConfig";
 import { ROW_TYPE } from "../../helpers/dicts";
-export const pointOverEvent = (barRef: any, jsPlumb: any, id: string) => {
+import { BarTask } from "../../types/bar-task";
+import { IRef } from "../../types/public-types";
+export const pointOverEvent = (barRef: IRef, jsPlumb: any, id: string) => {
   // 鼠标移入连接点时会触发barWrapper失去hover,从而导致barHandle和handleGroup消失，所以采用动态添加class的方式
-  barRef.current.classList.add("barHover");
+  barRef?.current?.classList.add("barHover");
   // 鼠标移入连接点时，使另外一个连接节点也显示出来
   if (jsPlumb) {
     jsPlumb.selectEndpoints({ element: id }).addClass("endpoint-hover");
   }
 };
-export const pointOutEvent = (
-  barRef: React.RefObject<Element>,
-  jsPlumb: any,
-  id: string
-) => {
+export const pointOutEvent = (barRef: IRef, jsPlumb: any, id: string) => {
   barRef?.current?.classList.remove("barHover");
   if (jsPlumb) {
     jsPlumb.selectEndpoints({ element: id }).removeClass("endpoint-hover");
@@ -30,16 +28,16 @@ export const barAnchor = {
   },
 };
 export const useHover = (
-  barRef: React.RefObject<Element>,
+  barRef: IRef,
   jsPlumb: any,
-  task: any,
+  task: BarTask,
   action: string
-): any => {
+) => {
   const id = task.id;
   const passiveAction = useMemo(() => {
     return ["start", "end", "progress", "move"].includes(action);
   }, [action]);
-  useEffect((): any => {
+  useEffect(() => {
     if (
       barRef.current &&
       jsPlumb &&
@@ -81,8 +79,8 @@ export const useHover = (
 
 export const useAddPoint = (
   jsPlumb: any,
-  task: any,
-  barRef: any,
+  task: BarTask,
+  barRef: IRef,
   type?: string
 ) => {
   const [addPointFinished, setAddPointFinished] = useState(false);

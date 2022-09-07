@@ -306,3 +306,4 @@ export interface Assignee {
   username: string;
   value: string;
 }
+export type IRef = React.RefObject<Element>;

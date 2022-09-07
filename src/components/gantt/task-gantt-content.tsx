@@ -590,10 +590,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             });
           });
         });
-        console.log(connectUuids, "connectUuids");
-        console.log(newConnectUuids, "newConnectUuids");
         if (!isEqual(connectUuids, newConnectUuids)) {
-          console.log("变化");
           setConnectUuids(newConnectUuids);
         }
       }
