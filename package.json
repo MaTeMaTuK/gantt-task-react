@@ -72,6 +72,7 @@
   ],
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
+    "@projectproxima/proxima-sdk-js": "^0.4.4",
     "antd": "4.16.13",
     "dayjs": "^1.10.5",
     "jsplumb": "^2.15.6",

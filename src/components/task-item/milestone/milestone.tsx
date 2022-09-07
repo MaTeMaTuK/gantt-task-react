@@ -23,7 +23,7 @@ export const Milestone: React.FC<TaskItemProps> = ({
       setPointInited?.(addPointFinished);
     }
   }, [addPointFinished, setPointInited]);
-  useHover(barRef, jsPlumb, task.id, action);
+  useHover(barRef, jsPlumb, task, action);
   useEffect(() => {
     if (jsPlumb) {
       // 重绘元素，解决拖动时间块连接点跟随

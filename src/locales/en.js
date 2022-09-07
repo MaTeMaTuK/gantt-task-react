@@ -42,35 +42,35 @@ const en = {
   global,
   date,
   configuration: {
-    title: "Gantt config",
+    title: "Gantt Config",
     baseLineConfiguration: {
       baseline: "Baseline",
       baseLineTitleDescription:
         "Click the Baseline card to choose to show the baseline",
-      createBaseline: "Create baseline",
-      newBaseline: "New baseline",
-      editBaseline: "Edit baseline",
-      baselineName: "Baseline name",
-      baselineDescription: "Baseline description",
+      createBaseline: "Create Baseline",
+      newBaseline: "New Baseline",
+      editBaseline: "Edit Baseline",
+      baselineName: "Baseline Name",
+      baselineDescription: "Baseline Description",
       loaded: "Loaded",
-      deleteBaseline: "Delete baseline",
+      deleteBaseline: "Delete Baseline",
       deleteDescription:
         "Deleted baselines cannot be recovered, confirm deletion",
     },
     displayItemsConfiguration: {
-      displayItems: "Display items",
-      criticalPath: "Critical path",
-      overdueItems: "Overdue items",
+      displayItems: "Display Items",
+      criticalPath: "Critical Path",
+      overdueItems: "Overdue Items",
     },
     timeFieldConfiguration: {
-      timeFieldConfigurationTitle: "Time field configuration",
+      timeFieldConfigurationTitle: "Time Field Configuration",
       timeFieldConfigurationDescription:
         "In order for the Gantt chart to display correctly, you need to set which time field of the matter corresponds to the start and end time of the time block in the Gantt chart",
-      relatedItems: "Related items",
+      relatedItems: "Related Items",
       operation: "Operation",
       default: "Default",
       configuration: "Configuration",
-      addConfiguration: "Add configuration",
+      addConfiguration: "Add Configuration",
       itemType: "Item type",
       startTime: "Start time",
       endTime: "End time",
@@ -82,7 +82,7 @@ const en = {
         "Item types that are not configured will use the default configuration",
     },
     otherConfiguration: {
-      otherConfigurationTitle: "Other configuration",
+      otherConfigurationTitle: "Other Configuration",
       automaticScheduling: "Automatic scheduling",
       otherConfigurationDescription:
         "Automatically adjusts card timing based on the relationship between cards to avoid logical errors",

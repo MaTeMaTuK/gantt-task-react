@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, memo, useMemo } from "react";
+import createProximaSdk from "@projectproxima/proxima-sdk-js";
 import { Task, ConnectionProps } from "../../types/public-types";
 import UnconnectionIcon from "../icons/unconnection";
 import ConnectionIcon from "../icons/connection";
@@ -28,6 +29,7 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
     svgContainerHeight,
   }) => {
     const { t } = useI18n();
+    const proxima = createProximaSdk();
     const path = window.location.origin;
     const tooltipRef = useRef<HTMLDivElement | null>(null);
     const [relatedY, setRelatedY] = useState(0);
@@ -76,6 +78,7 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
       });
       if (currentLink?.length) {
         await delConnection?.(currentLink?.[0]?.objectId);
+        proxima.execute("updateItemList");
         setCurrentConnection?.(null);
       }
     };
