@@ -51,7 +51,7 @@ export const BarParent: React.FC<TaskItemProps> = ({
       }
     };
   }, [jsPlumb, task?.id]);
-  useHover(barRef, jsPlumb, task.id, action);
+  useHover(barRef, jsPlumb, task, action);
   const handleHeight = task.height - 10;
   return (
     <g ref={barRef} className={styles.barWrapper} tabIndex={0}>

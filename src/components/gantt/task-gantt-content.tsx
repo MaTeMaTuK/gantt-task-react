@@ -36,6 +36,7 @@ import {
   GanttEvent,
 } from "../../types/gantt-task-actions";
 import useI18n from "../../lib/hooks/useI18n";
+import createProximaSdk from "@projectproxima/proxima-sdk-js";
 
 import { message } from "antd";
 
@@ -103,6 +104,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     isShowTaskLeftBar,
   }) => {
     const { t } = useI18n();
+    const proxima = createProximaSdk();
     const [connectUuids, setConnectUuids] = useState([]);
     const point = svg?.current?.createSVGPoint();
     const [xStep, setXStep] = useState(0);
@@ -399,15 +401,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           return flag;
         }
         // 父子存在关联关系
-        if ((task?.item?.ancestors || []).includes(target)) {
+        if ((subItems || []).includes(target)) {
           flag = true;
           return flag;
         }
-        subItems.forEach(item => {
-          if (needUpdateItems.includes(item)) {
-            flag = true;
-          }
-        });
         return flag;
       },
       [getHasLinkItems]
@@ -515,6 +512,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             addConnection?.(params)
               .then(() => {
                 infor.connection.setData(linkTypeId);
+                proxima.execute("updateItemList");
+                console.log(proxima);
               })
               .catch((error: any) => {
                 message.warning(
@@ -556,7 +555,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           setConnectUuids([]);
         }
       }
-
       if (itemLinks?.length && tasks.length && jsPlumbInstance) {
         const newConnectUuids: any = [];
         tasks.forEach((task: any) => {
@@ -588,10 +586,14 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
               relationType: relationType,
               isErrorLink: isErrorLink,
               isPivotalPathLink: isPivotalPathLink,
+              subItem: task.item.subItem, // 解决父卡片有连线时，折叠和展开层级连线不会更新
             });
           });
         });
+        console.log(connectUuids, "connectUuids");
+        console.log(newConnectUuids, "newConnectUuids");
         if (!isEqual(connectUuids, newConnectUuids)) {
+          console.log("变化");
           setConnectUuids(newConnectUuids);
         }
       }
@@ -700,7 +702,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
               currentLog.y = task.y;
             }
             return (
-              <g key={`g-${task.id}`}>
+              <g key={`g-${task.id || task.index}`}>
                 {!currentLog?.start ||
                 !currentLog?.end ||
                 !currentLogSelect ? null : (

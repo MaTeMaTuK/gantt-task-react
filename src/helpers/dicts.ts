@@ -24,3 +24,7 @@ export const enList = ["en-GB", "en"];
 
 export const defaultColor = "#213053";
 export const defaultLeftBarColor = "#0c62ff";
+export enum ROW_TYPE {
+  EMPTY_ROW = 3, // 占位的事项
+  LINK_ROW = 2, // 关联事项
+}

@@ -1573,6 +1573,13 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
+"@projectproxima/proxima-sdk-js@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.npmmirror.com/@projectproxima/proxima-sdk-js/-/proxima-sdk-js-0.4.4.tgz#0ce9029957e2343e9a3cc2861ee2e62bdf8ec88d"
+  integrity sha512-NkS9gU0OiOT4F46og/b/tQFpb269icG93JVvwGRm9PVGGNX/Uz8lKj3PIKOIK49PwPWTb66Oou9qhM1nF/3M2g==
+  dependencies:
+    react "^17.0.2"
+
 "@rollup/plugin-alias@^3.0.1":
   version "3.1.2"
   resolved "https://registry.npmjs.org/@rollup/plugin-alias/-/plugin-alias-3.1.2.tgz"
@@ -10365,6 +10372,14 @@ react@^16.14.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
+
+react@^17.0.2:
+  version "17.0.2"
+  resolved "https://registry.npmmirror.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
+  integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 read-pkg-up@^2.0.0:
   version "2.0.0"

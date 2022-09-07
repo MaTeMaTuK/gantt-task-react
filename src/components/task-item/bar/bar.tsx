@@ -54,7 +54,7 @@ export const Bar: React.FC<TaskItemProps> = ({
       }
     };
   }, [jsPlumb, task.id]);
-  useHover(barRef, jsPlumb, task.id, action);
+  useHover(barRef, jsPlumb, task, action);
   return (
     <svg>
       <g ref={barRef} className={styles.barWrapper} tabIndex={0}>

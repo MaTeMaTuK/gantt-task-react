@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { commonConfig } from "../../helpers/jsPlumbConfig";
+import { ROW_TYPE } from "../../helpers/dicts";
 export const pointOverEvent = (barRef: any, jsPlumb: any, id: string) => {
   // 鼠标移入连接点时会触发barWrapper失去hover,从而导致barHandle和handleGroup消失，所以采用动态添加class的方式
   barRef.current.classList.add("barHover");
@@ -31,14 +32,19 @@ export const barAnchor = {
 export const useHover = (
   barRef: React.RefObject<Element>,
   jsPlumb: any,
-  id: string,
+  task: any,
   action: string
 ): any => {
+  const id = task.id;
   const passiveAction = useMemo(() => {
     return ["start", "end", "progress", "move"].includes(action);
   }, [action]);
   useEffect((): any => {
-    if (barRef.current && jsPlumb) {
+    if (
+      barRef.current &&
+      jsPlumb &&
+      ![ROW_TYPE.EMPTY_ROW, ROW_TYPE.LINK_ROW].includes(task?.item?.rowType)
+    ) {
       const addHoverClass = () => {
         if (!passiveAction) {
           barRef?.current?.classList.add("barHover");
@@ -70,7 +76,7 @@ export const useHover = (
         }
       };
     }
-  }, [barRef, jsPlumb, id, passiveAction]);
+  }, [barRef, jsPlumb, id, passiveAction, task?.item?.rowType]);
 };
 
 export const useAddPoint = (
@@ -81,7 +87,10 @@ export const useAddPoint = (
 ) => {
   const [addPointFinished, setAddPointFinished] = useState(false);
   useEffect(() => {
-    if (jsPlumb) {
+    if (
+      jsPlumb &&
+      ![ROW_TYPE.EMPTY_ROW, ROW_TYPE.LINK_ROW].includes(task?.item?.rowType) // 占位的事项和关联事项不能连线
+    ) {
       // 生成新节点删除旧节点时需设置setIdChanged
       jsPlumb.setIdChanged(task.id, task.id);
       const rightPoint = jsPlumb.addEndpoint(
