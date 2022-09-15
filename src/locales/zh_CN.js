@@ -102,6 +102,7 @@ const zhCN = {
     noRelation: "未配置关联关系",
     connectionError: "连线有误",
     connectionErrorParent: "父子卡片之间不能存在关联关系",
+    disabledConnectMessage: "已禁止连线",
   },
   placeholder: {
     baselineNamePlaceholder: "请输入基线名称，最大长度32个字符",

@@ -11,6 +11,7 @@ import {
   ConnectionProps,
   BaselineProps,
   TaskDisplayProps,
+  ConfigOption,
 } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
@@ -61,12 +62,12 @@ export type TaskGanttContentProps = {
   setSelectedTask: (taskId: string) => void;
   taskListHeight?: number;
   clickBaselineItem?: (offsetX: number, currentLogItem: BarTask) => void;
-  isConnect?: boolean;
   containerRef?: React.MutableRefObject<any>;
   currentLog?: BaselineProps;
 } & EventOption &
   TaskDisplayProps &
-  ConnectionProps;
+  ConnectionProps &
+  ConfigOption;
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
   ({
@@ -96,6 +97,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     taskListHeight,
     clickBaselineItem,
     isConnect,
+    isDisabledConnect,
+    disabledConnectMessage,
     setCurrentConnection,
     currentConnection,
     containerRef,
@@ -439,6 +442,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
         jsPlumbInstance.setContainer("horizontalContainer");
         // 连线前校验
         jsPlumbInstance.bind("beforeDrop", (conn: any) => {
+          if (isDisabledConnect) {
+            message.warning(disabledConnectMessage);
+            return;
+          }
           const taskSource = filter(tasks, { id: conn.sourceId })[0];
           const taskTarget = filter(tasks, { id: conn.targetId })[0];
           if (!ganttConfig.relation) {
@@ -524,6 +531,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
           }
         });
         jsPlumbInstance.bind("click", (connection: any, originalEvent: any) => {
+          if (isDisabledConnect) {
+            return;
+          }
           jsPlumbInstance.select().removeClass("select-connection");
           connection.addClass("select-connection");
           setCurrentConnection?.({

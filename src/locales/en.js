@@ -109,6 +109,7 @@ const en = {
     connectionError: "The connection is wrong",
     connectionErrorParent:
       "There can be no relationship between parent and child items",
+    disabledConnectMessage: "Disconnected",
   },
   placeholder: {
     baselineNamePlaceholder:
