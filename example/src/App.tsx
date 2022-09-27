@@ -92,6 +92,8 @@ const App = () => {
       <Gantt
         tasks={tasks}
         viewMode={view}
+        monthCalendarFormat={"2-digit"}
+        monthTaskListFormat={"short"}
         onDateChange={handleTaskChange}
         onDelete={handleTaskDelete}
         onProgressChange={handleProgressChange}

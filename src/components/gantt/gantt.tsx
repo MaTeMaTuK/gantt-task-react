@@ -34,6 +34,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   viewMode = ViewMode.Day,
   preStepsCount = 1,
   locale = "en-GB",
+  monthCalendarFormat = "long",
+  monthTaskListFormat = "long",
   barFill = 60,
   barCornerRadius = 3,
   barProgressColor = "#a3a3ff",
@@ -70,7 +72,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
     const [startDate, endDate] = ganttDateRange(tasks, viewMode, preStepsCount);
-    return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
+    return {
+      viewMode,
+      monthCalendarFormat,
+      dates: seedDates(startDate, endDate, viewMode),
+    };
   });
   const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
     undefined
@@ -119,7 +125,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         setScrollX(newDates.length * columnWidth);
       }
     }
-    setDateSetup({ dates: newDates, viewMode });
+    setDateSetup({ dates: newDates, viewMode, monthCalendarFormat });
     setBarTasks(
       convertToBarTasks(
         filteredTasks,
@@ -399,7 +405,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const calendarProps: CalendarProps = {
     dateSetup,
     locale,
-    viewMode,
     headerHeight,
     columnWidth,
     fontFamily,
@@ -438,6 +443,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     fontSize,
     tasks: barTasks,
     locale,
+    monthFormat: monthTaskListFormat,
     headerHeight,
     scrollY,
     ganttHeight,
