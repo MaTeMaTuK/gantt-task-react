@@ -49,7 +49,6 @@ export const GridBody: React.FC<GridBodyProps> = ({
         key={"RowLine" + task.id}
         x="0"
         y1={y + rowHeight}
-        x2={svgWidth}
         y2={y + rowHeight}
         className={styles.gridRowLine}
       />
@@ -91,7 +90,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         <rect
           x={tickX}
           y={0}
-          width={columnWidth}
+          width='2px'
           height={y}
           fill={todayColor}
         />
@@ -108,7 +107,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         <rect
           x={tickX + columnWidth}
           y={0}
-          width={columnWidth}
+          width='2px'
           height={y}
           fill={todayColor}
         />

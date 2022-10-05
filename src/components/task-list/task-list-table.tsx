@@ -22,7 +22,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 };
 
 export const TaskListTableDefault: React.FC<{
-  rowHeight: number;
+  // rowHeight: number;
   rowWidth: string;
   fontFamily: string;
   fontSize: string;
@@ -32,7 +32,7 @@ export const TaskListTableDefault: React.FC<{
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
 }> = ({
-  rowHeight,
+  // rowHeight,
   rowWidth,
   tasks,
   fontFamily,
@@ -54,17 +54,18 @@ export const TaskListTableDefault: React.FC<{
       }}
     >
       {tasks.map(t => {
-        let expanderSymbol = "";
-        if (t.hideChildren === false) {
-          expanderSymbol = "▼";
-        } else if (t.hideChildren === true) {
-          expanderSymbol = "▶";
-        }
+        let expanderSymbol = <div className={styles.taskListCircle}></div>;
+        // if (t.hideChildren === false) {
+        //   expanderSymbol = <div className={styles.taskListCircle}></div>
+        // } else if (t.hideChildren === true) {
+        //   expanderSymbol = <div className={styles.taskListCircle}></div>
+        // }
 
         return (
+          <div style={{ marginBottom: '5px', minHeight: '44px' }}>
           <div
             className={styles.taskListTableRow}
-            style={{ height: rowHeight }}
+            style={{ padding: '12px 5px' }}
             key={`${t.id}row`}
           >
             <div
@@ -107,6 +108,7 @@ export const TaskListTableDefault: React.FC<{
             >
               &nbsp;{toLocaleDateString(t.end, dateTimeOptions)}
             </div>
+          </div>
           </div>
         );
       })}

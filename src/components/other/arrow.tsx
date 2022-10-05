@@ -18,9 +18,9 @@ export const Arrow: React.FC<ArrowProps> = ({
   rtl,
 }) => {
   let path: string;
-  let trianglePoints: string;
+  // let trianglePoints: string;
   if (rtl) {
-    [path, trianglePoints] = drownPathAndTriangleRTL(
+    [path] = drownPathAndTriangleRTL(
       taskFrom,
       taskTo,
       rowHeight,
@@ -28,7 +28,7 @@ export const Arrow: React.FC<ArrowProps> = ({
       arrowIndent
     );
   } else {
-    [path, trianglePoints] = drownPathAndTriangle(
+    [path] = drownPathAndTriangle(
       taskFrom,
       taskTo,
       rowHeight,
@@ -40,7 +40,7 @@ export const Arrow: React.FC<ArrowProps> = ({
   return (
     <g className="arrow">
       <path strokeWidth="1.5" d={path} fill="none" />
-      <polygon points={trianglePoints} />
+      {/* <circle cx="50" cy="50" r="25"/> */}
     </g>
   );
 };
@@ -99,8 +99,8 @@ const drownPathAndTriangleRTL = (
   V ${taskToEndPosition} 
   h ${taskToHorizontalOffsetValue}`;
 
-  const trianglePoints = `${taskTo.x2},${taskToEndPosition} 
-  ${taskTo.x2 + 5},${taskToEndPosition + 5} 
-  ${taskTo.x2 + 5},${taskToEndPosition - 5}`;
-  return [path, trianglePoints];
+  // const trianglePoints = `${taskTo.x2},${taskToEndPosition} 
+  // ${taskTo.x2 + 5},${taskToEndPosition + 5} 
+  // ${taskTo.x2 + 5},${taskToEndPosition - 5}`;
+  return [path];
 };

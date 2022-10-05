@@ -2,11 +2,15 @@
   display: table;
   border-bottom: #e6e4e4 1px solid;
   border-left: #e6e4e4 1px solid;
+  padding: 10px;
 }
 
 .taskListTableRow {
-  display: table-row;
   text-overflow: ellipsis;
+  border-radius: 300px;
+  background-color: #F7F7F7;
+  padding-bottom: 5px;
+  cursor: pointer;
 }
 
 .taskListTableRow:nth-of-type(even) {
@@ -35,4 +39,14 @@
   font-size: 0.6rem;
   padding-left: 1rem;
   user-select: none;
+}
+
+.taskListCircle {
+  width: 12px;
+  height: 12px;
+  margin-right: 10px;
+  background: red;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
 }
