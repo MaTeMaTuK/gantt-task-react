@@ -1,29 +1,43 @@
-import React, { useMemo } from "react";
+import React from "react";
 import styles from "./task-list-table.module.css";
 import { Task } from "../../types/public-types";
 
-const localeDateStringCache = {};
-const toLocaleDateStringFactory =
-  (locale: string) =>
-  (date: Date, dateTimeOptions: Intl.DateTimeFormatOptions) => {
-    const key = date.toString();
-    let lds = localeDateStringCache[key];
-    if (!lds) {
-      lds = date.toLocaleDateString(locale, dateTimeOptions);
-      localeDateStringCache[key] = lds;
-    }
-    return lds;
-  };
-const dateTimeOptions: Intl.DateTimeFormatOptions = {
-  weekday: "short",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-};
+// const localeDateStringCache = {};
+// const toLocaleDateStringFactory =
+//   (locale: string) =>
+//   (date: Date, dateTimeOptions: Intl.DateTimeFormatOptions) => {
+//     const key = date.toString();
+//     let lds = localeDateStringCache[key];
+//     if (!lds) {
+//       lds = date.toLocaleDateString(locale, dateTimeOptions);
+//       localeDateStringCache[key] = lds;
+//     }
+//     return lds;
+//   };
+// const dateTimeOptions: Intl.DateTimeFormatOptions = {
+//   weekday: "short",
+//   year: "numeric",
+//   month: "long",
+//   day: "numeric",
+// };
+
+const getDateDelta = (dateFrom: Date, dateTo: Date) => {
+  console.log(dateFrom, dateTo)
+  const differenceInTime = dateTo.getTime() - dateFrom.getTime() 
+  const differenceInDays = differenceInTime / (1000 * 3600 * 24)
+  
+  if(differenceInDays < 7 ){
+    return <p>{`${Math.floor(differenceInDays)} ds`}</p>
+  } else if ( differenceInDays >= 7 ){
+    return <p>{`${Math.floor(differenceInDays/7)} Wks`}</p>
+  }
+
+  return ''
+}
 
 export const TaskListTableDefault: React.FC<{
   // rowHeight: number;
-  rowWidth: string;
+  // rowWidth: string;
   fontFamily: string;
   fontSize: string;
   locale: string;
@@ -33,17 +47,17 @@ export const TaskListTableDefault: React.FC<{
   onExpanderClick: (task: Task) => void;
 }> = ({
   // rowHeight,
-  rowWidth,
+  // rowWidth,
   tasks,
   fontFamily,
   fontSize,
-  locale,
+  // locale,
   onExpanderClick,
 }) => {
-  const toLocaleDateString = useMemo(
-    () => toLocaleDateStringFactory(locale),
-    [locale]
-  );
+  // const toLocaleDateString = useMemo(
+  //   () => toLocaleDateStringFactory(locale),
+  //   [locale]
+  // );
 
   return (
     <div
@@ -55,63 +69,33 @@ export const TaskListTableDefault: React.FC<{
     >
       {tasks.map(t => {
         let expanderSymbol = <div className={styles.taskListCircle}></div>;
-        // if (t.hideChildren === false) {
-        //   expanderSymbol = <div className={styles.taskListCircle}></div>
-        // } else if (t.hideChildren === true) {
-        //   expanderSymbol = <div className={styles.taskListCircle}></div>
-        // }
 
+        
         return (
-          <div style={{ marginBottom: '5px', minHeight: '44px' }}>
-          <div
-            className={styles.taskListTableRow}
-            style={{ padding: '12px 5px' }}
-            key={`${t.id}row`}
-          >
+          <div style={{ maxHeight: '44px', display: 'flex', marginLeft: t.hideChildren === undefined ? '20px' : '0px', borderLeft:  t.hideChildren === undefined ? '1px solid black' : 'none', borderBottom: '5px solid white'}}>
+            { t.hideChildren === undefined ? 
+            <span style={{ display: 'flex', alignItems: 'center'}}>
+               <hr className={styles.taskListLine}/> 
+            </span>
+             : '' }
             <div
-              className={styles.taskListCell}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-              title={t.name}
+              className={styles.taskListTableRow}
+              style={{ padding: '12px 10px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+              key={`${t.id}row`}
+              onClick={() => onExpanderClick(t)}
             >
-              <div className={styles.taskListNameWrapper}>
-                <div
-                  className={
-                    expanderSymbol
-                      ? styles.taskListExpander
-                      : styles.taskListEmptyExpander
-                  }
-                  onClick={() => onExpanderClick(t)}
-                >
+              <div className={ expanderSymbol ? styles.taskListExpander : styles.taskListEmptyExpander} style={{ display: 'flex' }}>
                   {expanderSymbol}
-                </div>
-                <div>{t.name}</div>
+                  <div>{t.name}</div>
               </div>
+              <span style={{marginRight: '5px'}}>{getDateDelta(t.start, t.end)}</span>
             </div>
-            <div
-              className={styles.taskListCell}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-            >
-              &nbsp;{toLocaleDateString(t.start, dateTimeOptions)}
-            </div>
-            <div
-              className={styles.taskListCell}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-            >
-              &nbsp;{toLocaleDateString(t.end, dateTimeOptions)}
-            </div>
-          </div>
           </div>
         );
-      })}
+      })
+    }
     </div>
-  );
+  )
 };
+
+

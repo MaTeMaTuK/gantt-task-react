@@ -3,11 +3,12 @@
   border-bottom: #e6e4e4 1px solid;
   border-left: #e6e4e4 1px solid;
   padding: 10px;
+  width: 470px
 }
 
 .taskListTableRow {
   text-overflow: ellipsis;
-  border-radius: 300px;
+  border-radius: 5px;
   background-color: #F7F7F7;
   padding-bottom: 5px;
   cursor: pointer;
@@ -49,4 +50,12 @@
   -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
   border-radius: 50px;
+}
+
+.taskListLine {
+  width: 20px; 
+  height: 1px;
+  background-color: black;
+  margin-inline: 0;
+  border: none;
 }

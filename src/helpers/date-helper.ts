@@ -95,7 +95,7 @@ export const ganttDateRange = (
       newStartDate = addToDate(newStartDate, -1 * preStepsCount, "month");
       newStartDate = startOfDate(newStartDate, "month");
       newEndDate = addToDate(newEndDate, 1, "year");
-      newEndDate = startOfDate(newEndDate, "year");
+      // newEndDate = startOfDate(newEndDate, "year");
       break;
     case ViewMode.Week:
       newStartDate = startOfDate(newStartDate, "day");
@@ -173,8 +173,10 @@ export const seedDates = (
 
 export const getLocaleMonth = (date: Date, locale: string) => {
   let bottomValue = getCachedDateTimeFormat(locale, {
-    month: "long",
+    month: "short",
+    year: '2-digit'
   }).format(date);
+
   bottomValue = bottomValue.replace(
     bottomValue[0],
     bottomValue[0].toLocaleUpperCase()
