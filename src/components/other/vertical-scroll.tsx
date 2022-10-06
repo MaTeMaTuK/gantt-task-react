@@ -10,7 +10,7 @@ export const VerticalScroll: React.FC<{
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
 }> = ({
   scroll,
-  ganttHeight,
+  // ganttHeight,
   ganttFullHeight,
   headerHeight,
   rtl,
@@ -27,7 +27,7 @@ export const VerticalScroll: React.FC<{
   return (
     <div
       style={{
-        height: ganttHeight,
+        height: "100%",
         marginTop: headerHeight,
         marginLeft: rtl ? "" : "-1rem",
       }}

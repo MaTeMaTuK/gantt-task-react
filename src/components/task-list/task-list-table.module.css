@@ -2,8 +2,9 @@
   display: table;
   border-bottom: #e6e4e4 1px solid;
   border-left: #e6e4e4 1px solid;
-  padding: 10px;
-  width: 470px
+  width: 470px;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .taskListTableRow {
@@ -27,6 +28,7 @@
 }
 .taskListNameWrapper {
   display: flex;
+  height: 100%;
 }
 
 .taskListExpander {

@@ -21,7 +21,7 @@ export const TaskListHeaderDefault: React.FC<{
           height: headerHeight - 2,
         }}
       >
-        PHASES & ACTIVITIES
+        PHASES & ACTIVITIES & OUTCOMES
       </div>
     </div>
   );

@@ -44,6 +44,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         className={styles.gridRow}
       />
     );
+
     rowLines.push(
       <line
         key={"RowLine" + task.id}
@@ -138,7 +139,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     tickX += columnWidth;
   }
   return (
-    <g className="gridBody">
+    <g className="gridBody" height="900" >
       <g className="rows">{gridRows}</g>
       <g className="rowLines">{rowLines}</g>
       <g className="ticks">{ticks}</g>

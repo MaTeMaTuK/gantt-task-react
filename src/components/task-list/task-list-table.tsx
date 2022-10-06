@@ -58,6 +58,8 @@ export const TaskListTableDefault: React.FC<{
   //   [locale]
   // );
 
+  console.log(tasks)
+
   return (
     <div
       className={styles.taskListWrapper}
@@ -65,13 +67,39 @@ export const TaskListTableDefault: React.FC<{
         fontFamily: fontFamily,
         fontSize: fontSize,
       }}
-    >
-      {tasks.map(t => {
+    > 
+      {!tasks.length && 
+        <div style={{ height: '100%', display: 'flex', borderBottom: '5px solid white', textAlign: 'center', alignItems: 'center', borderRight: '1px solid #F2F2F2' }}>
+          <div style={{ padding: "50px" }}>
+            <span style={{ display: 'flex', justifyContent: 'center'}}>
+              <div style={{ height: '75px', width: '75px', borderRadius: '500px', backgroundColor:'#673F73', opacity: "0.1"}}/>
+            </span>
+            <strong><h5 style={{ fontSize: '18px' }}>No Items</h5></strong>
+            <p style={{ fontSize: '13px' }} >Your gantt plan is currenlty empty. Start by adding a phase, activity or outcome below</p>
+            <span>
+              {/* Import the plus icon from ui components */}
+              <button>
+                 Add a phase
+              </button>
+              {/* Import the plus icon from ui components */}
+              <button>
+                 Add an Activity
+              </button>
+              {/* Import the plus icon from ui components */}
+              <button>
+                 Add an outcome
+              </button>
+            </span>
+            </div>
+        </div>
+      }
+     
+      {tasks.length && tasks.map(t => {
         let expanderSymbol = <div className={styles.taskListCircle}></div>;
 
         
         return (
-          <div style={{ maxHeight: '44px', display: 'flex', marginLeft: t.hideChildren === undefined ? '20px' : '0px', borderLeft:  t.hideChildren === undefined ? '1px solid #F4F4F4' : 'none', borderBottom: '5px solid white'}}>
+          <div style={{ maxHeight: '44px', display: 'flex',  height: "100%", marginLeft: t.hideChildren === undefined ? '20px' : '0px', borderLeft:  t.hideChildren === undefined ? '1px solid #F4F4F4' : 'none', borderBottom: '5px solid white'}}>
             { t.hideChildren === undefined ? 
             <span style={{ display: 'flex', alignItems: 'center'}}>
                <hr className={styles.taskListLine}/> 

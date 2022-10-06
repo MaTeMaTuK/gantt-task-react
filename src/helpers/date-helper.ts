@@ -74,16 +74,23 @@ export const ganttDateRange = (
   viewMode: ViewMode,
   preStepsCount: number
 ) => {
-  let newStartDate: Date = tasks[0].start;
-  let newEndDate: Date = tasks[0].start;
-  for (const task of tasks) {
-    if (task.start < newStartDate) {
-      newStartDate = task.start;
+
+  let newStartDate: Date
+  let newEndDate: Date
+
+  if( tasks.length ){
+    newStartDate = tasks[0].start;
+    newEndDate = tasks[0].start;
+    for (const task of tasks) {
+      if (task.start < newStartDate) {
+        newStartDate = task.start;
+      }
+      if (task.end > newEndDate) {
+        newEndDate = task.end;
+      }
     }
-    if (task.end > newEndDate) {
-      newEndDate = task.end;
-    }
-  }
+
+
   switch (viewMode) {
     case ViewMode.Year:
       newStartDate = addToDate(newStartDate, -1, "year");
@@ -132,6 +139,14 @@ export const ganttDateRange = (
       newEndDate = addToDate(newEndDate, 1, "day");
       break;
   }
+
+} else {
+  newStartDate = new Date();
+  newStartDate = addToDate(newStartDate, -1, "month");
+  newEndDate = addToDate(newStartDate, 1, "year")
+}
+
+  console.log(newStartDate, newEndDate)
   return [newStartDate, newEndDate];
 };
 
