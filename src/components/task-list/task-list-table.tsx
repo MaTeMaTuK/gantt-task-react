@@ -22,7 +22,6 @@ import { Task } from "../../types/public-types";
 // };
 
 const getDateDelta = (dateFrom: Date, dateTo: Date) => {
-  console.log(dateFrom, dateTo)
   const differenceInTime = dateTo.getTime() - dateFrom.getTime() 
   const differenceInDays = differenceInTime / (1000 * 3600 * 24)
   
@@ -72,7 +71,7 @@ export const TaskListTableDefault: React.FC<{
 
         
         return (
-          <div style={{ maxHeight: '44px', display: 'flex', marginLeft: t.hideChildren === undefined ? '20px' : '0px', borderLeft:  t.hideChildren === undefined ? '1px solid black' : 'none', borderBottom: '5px solid white'}}>
+          <div style={{ maxHeight: '44px', display: 'flex', marginLeft: t.hideChildren === undefined ? '20px' : '0px', borderLeft:  t.hideChildren === undefined ? '1px solid #F4F4F4' : 'none', borderBottom: '5px solid white'}}>
             { t.hideChildren === undefined ? 
             <span style={{ display: 'flex', alignItems: 'center'}}>
                <hr className={styles.taskListLine}/> 
@@ -86,9 +85,14 @@ export const TaskListTableDefault: React.FC<{
             >
               <div className={ expanderSymbol ? styles.taskListExpander : styles.taskListEmptyExpander} style={{ display: 'flex' }}>
                   {expanderSymbol}
-                  <div>{t.name}</div>
+                  <div style={{textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', maxWidth:'400px', fontWeight: t.hideChildren === undefined ? 'lighter' : 'bold', fontSize: '13px' }}>
+                    {t.name}
+                  </div>
               </div>
-              <span style={{marginRight: '5px'}}>{getDateDelta(t.start, t.end)}</span>
+              <span style={{marginRight: '5px', display: 'flex', alignItems: 'center'}}>
+                <span style={{ padding: '5px', backgroundColor: 'blue', color: 'white', display:'flex', justifyContent: 'center', maxHeight:'30px', borderRadius:'5px', marginRight: '10px', width: '50p', fontSize: '13px' }}>DEC</span>
+                <span style={{ width: '50px', fontSize: '13px' }}>{getDateDelta(t.start, t.end)}</span>
+              </span>
             </div>
           </div>
         );

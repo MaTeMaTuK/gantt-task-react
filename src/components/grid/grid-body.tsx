@@ -87,6 +87,16 @@ export const GridBody: React.FC<GridBodyProps> = ({
         ).getTime() >= now.getTime())
     ) {
       today = (
+        <g>
+        <rect
+          x={tickX - 4}
+          y={0}
+          rx='50%'
+          ry='50%'
+          width='10px'
+          height='10px'
+          fill={todayColor}
+        />
         <rect
           x={tickX}
           y={0}
@@ -94,6 +104,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           height={y}
           fill={todayColor}
         />
+         </g>
       );
     }
     // rtl for today
@@ -104,6 +115,16 @@ export const GridBody: React.FC<GridBodyProps> = ({
       dates[i + 1].getTime() < now.getTime()
     ) {
       today = (
+        <g>
+        <rect
+          x={tickX - 4}
+          y={0}
+          rx='50%'
+          ry='50%'
+          width='10px'
+          height='10px'
+          fill={todayColor}
+        />
         <rect
           x={tickX + columnWidth}
           y={0}
@@ -111,6 +132,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           height={y}
           fill={todayColor}
         />
+        </g>
       );
     }
     tickX += columnWidth;

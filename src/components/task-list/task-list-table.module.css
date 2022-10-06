@@ -55,7 +55,7 @@
 .taskListLine {
   width: 20px; 
   height: 1px;
-  background-color: black;
+  background-color: #F4F4F4;
   margin-inline: 0;
   border: none;
 }
