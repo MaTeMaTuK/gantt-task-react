@@ -20,3 +20,11 @@
   position: relative;
   height: 100%;
 }
+
+
+.editGanttButton {
+  position: absolute; 
+  right: 50px; 
+  top: 75px;
+  padding: 10px;
+}

@@ -102,7 +102,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           x={tickX}
           y={0}
           width='2px'
-          height={y}
+          height="100%"
           fill={todayColor}
         />
          </g>
@@ -130,7 +130,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
           x={tickX + columnWidth}
           y={0}
           width='2px'
-          height={y}
+          height="100%"
           fill={todayColor}
         />
         </g>
@@ -138,6 +138,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     }
     tickX += columnWidth;
   }
+
   return (
     <g className="gridBody" height="900" >
       <g className="rows">{gridRows}</g>

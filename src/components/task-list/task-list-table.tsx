@@ -93,33 +93,32 @@ export const TaskListTableDefault: React.FC<{
             </div>
         </div>
       }
-     
       {tasks.length && tasks.map(t => {
         let expanderSymbol = <div className={styles.taskListCircle}></div>;
 
-        
+       
+
         return (
           <div style={{ maxHeight: '44px', display: 'flex',  height: "100%", marginLeft: t.hideChildren === undefined ? '20px' : '0px', borderLeft:  t.hideChildren === undefined ? '1px solid #F4F4F4' : 'none', borderBottom: '5px solid white'}}>
-            { t.hideChildren === undefined ? 
-            <span style={{ display: 'flex', alignItems: 'center'}}>
+            { t.hideChildren === undefined && t.project ? 
+            <div className={t.type === "milestone" ? styles.taskListLineWrapperHalfBorder : styles.taskListLineWrapperFullBorder} >
                <hr className={styles.taskListLine}/> 
-            </span>
+            </div>
              : '' }
             <div
               className={styles.taskListTableRow}
-              style={{ padding: '12px 10px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
               key={`${t.id}row`}
               onClick={() => onExpanderClick(t)}
             >
               <div className={ expanderSymbol ? styles.taskListExpander : styles.taskListEmptyExpander} style={{ display: 'flex' }}>
                   {expanderSymbol}
-                  <div style={{textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', maxWidth:'400px', fontWeight: t.hideChildren === undefined ? 'lighter' : 'bold', fontSize: '13px' }}>
+                  <div className={ styles.taskListTableRowTitle }style={{fontWeight: t.hideChildren === undefined ? 'lighter' : 'bold',}}>
                     {t.name}
                   </div>
               </div>
-              <span style={{marginRight: '5px', display: 'flex', alignItems: 'center'}}>
-                <span style={{ padding: '5px', backgroundColor: 'blue', color: 'white', display:'flex', justifyContent: 'center', maxHeight:'30px', borderRadius:'5px', marginRight: '10px', width: '50p', fontSize: '13px' }}>DEC</span>
-                <span style={{ width: '50px', fontSize: '13px' }}>{getDateDelta(t.start, t.end)}</span>
+              <span className={ styles.taskListTableRowMetaWrapper }>
+                <span className={ styles.taskListTableRowMetaItem } style={{backgroundColor: 'blue',}}>DEC</span>
+                <span className={ styles.taskListTableRowMetaTime }>{getDateDelta(t.start, t.end)}</span>
               </span>
             </div>
           </div>

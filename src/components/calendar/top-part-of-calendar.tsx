@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./calendar.module.css";
+// import styles from "./calendar.module.css";
 
 type TopPartOfCalendarProps = {
   value: string;
@@ -11,16 +11,16 @@ type TopPartOfCalendarProps = {
 };
 
 export const TopPartOfCalendar: React.FC<TopPartOfCalendarProps> = ({
-  value,
-  x1Line,
-  y1Line,
-  y2Line,
-  xText,
-  yText,
+  // value,
+  // x1Line,
+  // y1Line,
+  // y2Line,
+  // xText,
+  // yText,
 }) => {
   return (
     <g className="calendarTop">
-      <line
+      {/* <line
         x1={x1Line}
         y1={y1Line}
         x2={x1Line}
@@ -35,7 +35,7 @@ export const TopPartOfCalendar: React.FC<TopPartOfCalendarProps> = ({
         className={styles.calendarTopText}
       >
         {value}
-      </text>
+      </text> */}
     </g>
   );
 };

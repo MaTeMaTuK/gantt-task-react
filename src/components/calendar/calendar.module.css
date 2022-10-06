@@ -10,7 +10,7 @@
 }
 
 .calendarTopTick {
-  stroke: #e6e4e4;
+  stroke: #F2F2F2;
 }
 
 .calendarTopText {
@@ -26,6 +26,6 @@
 
 .calendarHeader {
   fill: #ffffff;
-  stroke: #e0e0e0;
+  stroke: #F2F2F2;
   stroke-width: 1.4;
 }

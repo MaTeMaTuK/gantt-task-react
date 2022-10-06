@@ -1,7 +1,6 @@
 .taskListWrapper {
   display: table;
   border-bottom: #e6e4e4 1px solid;
-  border-left: #e6e4e4 1px solid;
   width: 470px;
   height: 100%;
   overflow-y: scroll;
@@ -13,7 +12,42 @@
   background-color: #F7F7F7;
   padding-bottom: 5px;
   cursor: pointer;
+  padding: 12px 10px;
+  width: 100%; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+
+.taskListTableRowTitle {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 400px;
+  font-size: 13px;
+}
+
+.taskListTableRowMetaWrapper {
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.taskListTableRowMetaTime {
+ width: 50px;
+ font-size: 13px;
+}
+
+.taskListTableRowMetaItem {
+  padding: 5px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  max-height: 30px;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 13px;
+ }
 
 .taskListTableRow:nth-of-type(even) {
   background-color: #f5f5f5;
@@ -52,6 +86,17 @@
   -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
   border-radius: 50px;
+}
+
+.taskListLineWrapperFullBorder{
+  display: flex;
+  align-items: center;
+  border-left: 1px solid #F4F4F4;
+}
+
+.taskListLineWrapperHalfBorder{
+  display: flex;
+  align-items: center;
 }
 
 .taskListLine {

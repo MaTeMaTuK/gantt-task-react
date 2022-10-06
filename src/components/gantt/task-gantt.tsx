@@ -61,13 +61,14 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
             : { width: gridProps.svgWidth }
         }
       >
+        <button className={styles.editGanttButton}>Edit Gantt</button>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
           height="900"
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
-        >
+        > 
           <Grid {...gridProps} />
           <TaskGanttContent {...newBarProps} />
         </svg>

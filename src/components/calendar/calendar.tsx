@@ -73,7 +73,8 @@ export const Calendar: React.FC<CalendarProps> = ({
         );
       }
     }
-    return [topValues, bottomValues];
+    // return [topValues, bottomValues];
+    return  bottomValues;
   };
 
   const getCalendarValuesForMonth = () => {
@@ -314,7 +315,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   let bottomValues: ReactChild[] = [];
   switch (dateSetup.viewMode) {
     case ViewMode.Year:
-      [topValues, bottomValues] = getCalendarValuesForYear();
+      bottomValues = getCalendarValuesForYear();
       break;
     case ViewMode.Month:
         [topValues, bottomValues] = getCalendarValuesForMonth();
@@ -341,7 +342,8 @@ export const Calendar: React.FC<CalendarProps> = ({
         height={headerHeight}
         className={styles.calendarHeader}
       />
-      {bottomValues} {topValues}
+      {bottomValues} 
+      {topValues}
     </g>
   );
 };
