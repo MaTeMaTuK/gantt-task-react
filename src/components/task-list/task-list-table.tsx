@@ -35,8 +35,6 @@ const getDateDelta = (dateFrom: Date, dateTo: Date) => {
 }
 
 export const TaskListTableDefault: React.FC<{
-  // rowHeight: number;
-  // rowWidth: string;
   fontFamily: string;
   fontSize: string;
   locale: string;
@@ -45,20 +43,11 @@ export const TaskListTableDefault: React.FC<{
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
 }> = ({
-  // rowHeight,
-  // rowWidth,
   tasks,
   fontFamily,
   fontSize,
-  // locale,
   onExpanderClick,
 }) => {
-  // const toLocaleDateString = useMemo(
-  //   () => toLocaleDateStringFactory(locale),
-  //   [locale]
-  // );
-
-  console.log(tasks)
 
   return (
     <div
@@ -66,17 +55,19 @@ export const TaskListTableDefault: React.FC<{
       style={{
         fontFamily: fontFamily,
         fontSize: fontSize,
+        width: '100%'
       }}
     > 
       {!tasks.length && 
-        <div style={{ height: '100%', display: 'flex', borderBottom: '5px solid white', textAlign: 'center', alignItems: 'center', borderRight: '1px solid #F2F2F2' }}>
+        <div style={{ height: '100%', width: '100%', display: 'flex', justifyContent: 'center', borderBottom: '5px solid white', textAlign: 'center', alignItems: 'center', borderRight: '1px solid #F2F2F2' }}>
           <div style={{ padding: "50px" }}>
             <span style={{ display: 'flex', justifyContent: 'center'}}>
               <div style={{ height: '75px', width: '75px', borderRadius: '500px', backgroundColor:'#673F73', opacity: "0.1"}}/>
             </span>
             <strong><h5 style={{ fontSize: '18px' }}>No Items</h5></strong>
-            <p style={{ fontSize: '13px' }} >Your gantt plan is currenlty empty. Start by adding a phase, activity or outcome below</p>
-            <span>
+
+            <p style={{ fontSize: '13px', padding: '0 20% 10% 20%' }} >Your gantt plan is currenlty empty. Start by adding a phase, activity or outcome below</p>
+            <span style={{ display: 'flex', justifyContent: 'space-evenly' }}>
               {/* Import the plus icon from ui components */}
               <button>
                  Add a phase

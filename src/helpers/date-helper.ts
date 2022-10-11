@@ -145,8 +145,6 @@ export const ganttDateRange = (
   newStartDate = addToDate(newStartDate, -1, "month");
   newEndDate = addToDate(newStartDate, 1, "year")
 }
-
-  console.log(newStartDate, newEndDate)
   return [newStartDate, newEndDate];
 };
 

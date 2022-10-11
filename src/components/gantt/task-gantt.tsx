@@ -42,7 +42,7 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
       className={styles.ganttVerticalContainer}
       ref={verticalGanttContainerRef}
       dir="ltr"
-      style={{ height: "100%" }}
+      style={{ height: "100%", width: '50%' }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

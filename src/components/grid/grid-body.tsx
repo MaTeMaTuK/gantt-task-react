@@ -69,7 +69,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         x1={tickX}
         y1={0}
         x2={tickX}
-        y2={y}
+        y2={900}
         className={styles.gridTick}
       />
     );
