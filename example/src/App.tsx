@@ -1,24 +1,21 @@
 import React from "react";
-import { Task, ViewMode, Gantt } from "gantt-task-react";
-// import { ViewSwitcher } from "./components/view-switcher";
-import { getStartEndDateForProject, initTasks } from "./helper";
+import { Task, ViewMode, Gantt,  } from "gantt-task-react";
+import { getStartEndDateForProject,  } from "./helper";
 import "gantt-task-react/dist/index.css";
 
 // Init
 const App = () => {
-  // const [view, setView] = React.useState<ViewMode>(ViewMode.Month);
-  // const [isChecked, setIsChecked] = React.useState(true);
-  const [tasks, setTasks] = React.useState<Task[]>(initTasks());
-  // const [tasks, setTasks] = React.useState<Task[]>([]);
-  const columnWidth = 103;
+  const [view, setView] = React.useState<ViewMode>(ViewMode.Month);
+  const [tasks, setTasks] = React.useState<Task[]>([]);
+  let columnWidth = 103;
   const isChecked = true;
-  // if (view === ViewMode.Year) {
-  //   columnWidth = 350;
-  // } else if (view === ViewMode.Month) {
-  //   columnWidth = 300;
-  // } else if (view === ViewMode.Week) {
-  //   columnWidth = 250;
-  // }
+  if (view === ViewMode.Year) {
+    columnWidth = 350;
+  } else if (view === ViewMode.Month) {
+    columnWidth = 300;
+  } else if (view === ViewMode.Week) {
+    columnWidth = 250;
+  }
 
   const handleTaskChange = (task: Task) => {
     console.log("On date change Id:" + task.id);
@@ -76,21 +73,6 @@ const App = () => {
         onViewListChange={setIsChecked}
         isChecked={isChecked}
       /> */}
-      {/* <h3>Gantt With Unlimited Height</h3>
-      <Gantt
-        tasks={tasks}
-        viewMode={ViewMode.Month}
-        onDateChange={handleTaskChange}
-        onDelete={handleTaskDelete}
-        onProgressChange={handleProgressChange}
-        onDoubleClick={handleDblClick}
-        onClick={handleClick}
-        onSelect={handleSelect}
-        onExpanderClick={handleExpanderClick}
-        listCellWidth={isChecked ? "155px" : ""}
-        columnWidth={columnWidth}
-      /> */}
-      <h3>Gantt With Limited Height</h3>
       <Gantt
         tasks={tasks}
         viewMode={ViewMode.Month}
