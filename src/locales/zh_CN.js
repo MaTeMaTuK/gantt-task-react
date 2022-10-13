@@ -106,7 +106,7 @@ const zhCN = {
   },
   placeholder: {
     baselineNamePlaceholder: "请输入基线名称，最大长度32个字符",
-    baselineDescriptionPlaceholder: "请输入基线描述",
+    baselineDescriptionPlaceholder: "请输入基线描述, 最大长度300个字符",
     pleaseSelect: "请选择",
   },
   fields: {
