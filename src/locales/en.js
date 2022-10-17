@@ -109,11 +109,13 @@ const en = {
     connectionError: "The connection is wrong",
     connectionErrorParent:
       "There can be no relationship between parent and child items",
+    disabledConnectMessage: "Disconnected",
   },
   placeholder: {
     baselineNamePlaceholder:
       "Please enter the baseline name Maximum length 32 characters",
-    baselineDescriptionPlaceholder: "Please enter the baseline description",
+    baselineDescriptionPlaceholder:
+      "Please enter the baseline description Maximum length 300 characters",
     pleaseSelect: "Please select",
   },
   fields: {

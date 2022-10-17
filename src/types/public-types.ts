@@ -112,6 +112,9 @@ export interface ConfigOption {
   isSetting?: boolean; // 是否显示配置按钮
   isViewModeChange?: boolean; // 是否视图切换
   isToToday?: boolean; // 是否定位到当天
+  isConnect?: boolean; // 是否允许连线
+  isDisabledConnect?: boolean; // 禁用添加和删除连线
+  disabledConnectMessage?: string;
 }
 export interface StylingOption {
   headerHeight?: number;
@@ -259,7 +262,6 @@ export interface GanttProps
   actionRef?: React.MutableRefObject<any>;
   workspaceId?: string;
   getCustomFields?: (val: TimeItemProps) => Promise<any>;
-  isConnect?: boolean; // 是否允许连线
   onMouseEvent?: (type?: string, task?: Task) => void;
   onClickEvent?: (type?: string, task?: Task) => void;
   configVisibleChange?: (val: boolean) => void;

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, memo } from "react";
 import { Modal } from "antd";
 import styles from "./gantt.module.css";
 import useI18n from "../../lib/hooks/useI18n";
+import { debounce } from "lodash";
 interface ModaProps {
   visible: boolean;
   toPanel: () => void;
@@ -20,9 +21,13 @@ export const GuideModal: React.FC<ModaProps> = ({
   const toConfig = useCallback(() => {
     toPanel();
   }, [toPanel]);
-  const handleCancel = useCallback(() => {
-    toCancel();
-  }, [toCancel]);
+  const handleCancel = useCallback(
+    // 避免开始进入页面时，连续点击甘特图导致引导弹窗重复出现
+    debounce(() => {
+      toCancel();
+    }, 500),
+    [toCancel]
+  );
   return (
     <Modal
       closable={false}
