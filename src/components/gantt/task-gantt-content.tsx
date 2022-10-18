@@ -245,6 +245,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
         svg.current.addEventListener("mouseup", handleMouseUp);
         setIsMoving(true);
       }
+      return () => {
+        svg?.current?.removeEventListener("mousemove", handleMouseMove);
+        svg?.current?.removeEventListener("mouseup", handleMouseUp);
+      };
     }, [
       ganttEvent,
       xStep,
