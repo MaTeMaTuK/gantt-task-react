@@ -112,7 +112,8 @@ npm start
 | barBackgroundSelectedColor | string | Specifies the taskbar background fill color globally on select.                                |
 | arrowColor                 | string | Specifies the relationship arrow fill color.                                                   |
 | arrowIndent                | number | Specifies the relationship arrow right indent. Sets in px                                      |
-| todayColor                 | string | Specifies the current period column fill color.                                                |
+| todayColor                 | string | Specifies the current period column fill color.    
+| weekendColor                 | string | Specifies the current period column fill color.                                                |
 | TooltipContent             |        | Specifies the Tooltip view for selected taskbar.                                               |
 | TaskListHeader             |        | Specifies the task list Header view                                                            |
 | TaskListTable              |        | Specifies the task list Table view                                                             |
