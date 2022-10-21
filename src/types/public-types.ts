@@ -9,6 +9,13 @@ export enum ViewMode {
   Year = "Year",
 }
 export type TaskType = "task" | "milestone" | "project";
+
+export type LinkType = "EndToStart" | "EndToEnd" | "StartToStart" | "StartToEnd";
+
+export interface Link {
+  target: string;
+  type: LinkType;
+}
 export interface Task {
   id: string;
   type: TaskType;
@@ -28,6 +35,7 @@ export interface Task {
   isDisabled?: boolean;
   project?: string;
   dependencies?: string[];
+  links?: Array<Link>;
   hideChildren?: boolean;
   displayOrder?: number;
 }
