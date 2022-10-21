@@ -50,6 +50,10 @@ export interface EventOption {
    */
   onClick?: (task: Task) => void;
   /**
+   * Invokes on bar click.
+   */
+  onClickLine?: (tasks: Task[]) => void;
+  /**
    * Invokes on end and start time change. Chart undoes operation if method return false or error.
    */
   onDateChange?: (
