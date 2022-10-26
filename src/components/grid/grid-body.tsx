@@ -187,11 +187,7 @@ export const GridBody: React.FC<GridBodyProps> = memo(
         })
       );
     }, [
-      columnWidth,
-      currentIndex,
-      dates,
       ganttConfig?.time?.length,
-      onDateChange,
       remainderDays,
       rowHeight,
       tasks,
@@ -310,8 +306,6 @@ export const GridBody: React.FC<GridBodyProps> = memo(
       };
     }, [
       columnWidth,
-      handleInvalidColumnMouseMove,
-      handleMouseMove,
       invalidBarClick,
       isShow,
       parts,
@@ -432,7 +426,7 @@ export const GridBody: React.FC<GridBodyProps> = memo(
         <g className="ticks">{ticks}</g>
 
         <g className="rowLines">{rowLines}</g>
-        <g className="rows">{gridRows}</g>
+        {tasks.length && <g className="rows">{gridRows}</g>}
         {false && <g className="invalidColumn">{invalidColumn}</g>}
         {false && <g className="invalidBar">{invalidBar}</g>}
         <g className="today">{today}</g>
