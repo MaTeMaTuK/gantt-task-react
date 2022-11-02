@@ -80,6 +80,11 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     }
   };
 
+  const getTextColor = (): string => {
+    if (task.styles.textColor) return task.styles.textColor;
+    else return isTextInside ? "#FFF" : "#555";
+  };
+
   return (
     <g
       onKeyDown={e => {
@@ -116,6 +121,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
             ? style.barLabel
             : style.barLabel && style.barLabelOutside
         }
+        fill={getTextColor()}
         ref={textRef}
       >
         {task.name}

@@ -137,6 +137,7 @@ npm start
 |                |          | - **backgroundSelectedColor**: String. Specifies the taskbar background fill color locally on select. |
 |                |          | - **progressColor**: String. Specifies the taskbar progress fill color locally.                       |
 |                |          | - **progressSelectedColor**: String. Specifies the taskbar progress fill color globally on select.    |
+|                |          | - **textColor**: String. Specifies the taskbar text fill color locally.                               |
 | isDisabled     | bool     | Disables all action for current task.                                                                 |
 | fontSize       | string   | Specifies the taskbar font size locally.                                                              |
 | project        | string   | Task project name                                                                                     |
