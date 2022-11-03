@@ -1,6 +1,6 @@
 import React from "react";
 import { Task, ViewMode, Gantt,  } from "gantt-task-react";
-import { getStartEndDateForProject } from "./helper";
+import { getStartEndDateForProject, initTasks } from "./helper";
 import "gantt-task-react/dist/index.css";
 
 // initTasks
@@ -8,7 +8,7 @@ import "gantt-task-react/dist/index.css";
 // Init
 const App = () => {
   // const view = ViewMode.Month;
-  const [tasks, setTasks] = React.useState<Task[]>([]);
+  const [tasks, setTasks] = React.useState<Task[]>(initTasks());
   let columnWidth = 103;
   const isChecked = true;
   // if (view === ViewMode.Year) {

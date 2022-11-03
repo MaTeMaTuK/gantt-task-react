@@ -115,7 +115,8 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         y={task.y + taskHeight * 0.5}
         className={style.barLabel}
         ref={textRef}
-        font-size="11px"
+        fontSize="11px"
+        fontWeight="400"
       >
         {moment(task.start).format("D MMM")} - {moment(task.end).format("D MMM")}
       </text> :

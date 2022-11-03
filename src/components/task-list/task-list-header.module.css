@@ -9,6 +9,15 @@
   width: 100%;
   align-items: center;
   list-style: none;
+  padding-left: 10px;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 16px;
+  align-items: end;
+}
+
+.ganttTable_Header h4{
+  margin-bottom: 5px;
 }
 
 .ganttTable_HeaderSeparator {

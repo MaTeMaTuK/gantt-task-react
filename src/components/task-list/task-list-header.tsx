@@ -15,20 +15,8 @@ export const TaskListHeaderDefault: React.FC<{
         fontSize: fontSize,
       }}
     >
-      <div
-        className={styles.ganttTable_Header}
-        style={{
-          height: headerHeight - 2,
-          paddingLeft: "10px",
-          fontWeight: 700,
-          fontSize: "12px",
-          lineHeight: "16px",
-          alignItems: 'end'
-        }}
-      > 
-      <span style={{ marginBottom: "5px" }}>
-        PHASES & ACTIVITIES & OUTCOMES
-      </span>
+      <div className={styles.ganttTable_Header} style={{ height: headerHeight - 2 }}> 
+        <h4>PHASES & ACTIVITIES</h4>
       </div>
     </div>
   );

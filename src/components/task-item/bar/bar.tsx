@@ -64,14 +64,6 @@ export const Bar: React.FC<TaskItemProps> = ({
             />
           </g>
         )}
-        {/* {isProgressChangeable && (
-          <BarProgressHandle
-            progressPoint={progressPoint}
-            onMouseDown={e => {
-              onEventStart("progress", task, e);
-            }}
-          />
-        )} */}
       </g>
     </g>
   );

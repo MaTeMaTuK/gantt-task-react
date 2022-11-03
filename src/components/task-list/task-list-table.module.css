@@ -108,3 +108,32 @@
   margin-inline: 0;
   border: none;
 }
+
+.taskListEmptyContentWrapper {
+  height: 100%;
+  width: 374px; 
+  display: flex; 
+  justify-content: center; 
+  border-bottom: 2px solid white;
+  border-top: 2px solid white; 
+  text-align: center; 
+  align-items: center;
+}
+
+.taskListEmptyContentWrapper img {
+  height: 75px;
+  width: 75px;
+}
+
+.taskListEmptyContentWrapper h5 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.taskListEmptyContentWrapper p {
+  font-size: 13px;
+  padding: 0 5% 10% 5%;
+  font-weight: 400;
+  line-height: 20px;
+}

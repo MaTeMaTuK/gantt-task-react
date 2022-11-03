@@ -40,6 +40,8 @@ export const TaskListItemComponent = ({task, handleExpand} : Props ) => {
     
     const expanderSymbol = <div className={styles.taskListCircle}></div>;
 
+    console.log(task)
+
     return(
         <Fragment>
             <Expander task={task}/>
@@ -47,15 +49,17 @@ export const TaskListItemComponent = ({task, handleExpand} : Props ) => {
                 className={styles.taskListTableRow}
                 key={`${task.id}row`}
                 onClick={() => onExpand(task)}>
-            <div className={ expanderSymbol ? styles.taskListExpander : styles.taskListEmptyExpander} style={{ display: 'flex', alignItems: 'center' }}>
+            <div 
+                className={ expanderSymbol ? styles.taskListExpander : styles.taskListEmptyExpander}
+                style={{ display: 'flex', alignItems: 'center' }}>
                 {expanderSymbol}
                 <div className={ styles.taskListTableRowTitle } style={{fontWeight: task.hideChildren === undefined ? '400' : '700'}} >
                     {task.name}
                 </div>
             </div>
             <span className={ styles.taskListTableRowMetaWrapper }>
-                <span className={ styles.taskListTableRowMetaItem } style={{backgroundColor: '#330066'}}>
-                        DEC
+                <span className={ styles.taskListTableRowMetaItem } style={{backgroundColor: '#330066', visibility: (task.type !== 'milestone' && task.workStream) ? 'visible' : 'hidden'}}>
+                        {task.workStream}
                 </span>
                 <span className={ styles.taskListTableRowMetaTime }>
                     {getDateDelta(task.start, task.end)}

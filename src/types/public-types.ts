@@ -25,6 +25,7 @@ export interface Task {
     progressColor?: string;
     progressSelectedColor?: string;
   };
+  workStream?: string;
   isDisabled?: boolean;
   project?: string;
   dependencies?: string[];
