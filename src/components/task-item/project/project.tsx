@@ -2,7 +2,7 @@ import React from "react";
 import { TaskItemProps } from "../task-item";
 import styles from "./project.module.css";
 
-export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
+export const Project: React.FC<TaskItemProps> = ({ task, isSelected, onMouseDown }) => {
   const barColor = isSelected
     ? task.styles.backgroundSelectedColor
     : task.styles.backgroundColor;
@@ -29,7 +29,7 @@ export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
   ].join(",");
 
   return (
-    <g tabIndex={0} className={styles.projectWrapper}>
+    <g onMouseDown={onMouseDown} tabIndex={0} className={styles.projectWrapper}>
       <rect
         fill={barColor}
         x={task.x1}

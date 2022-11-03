@@ -16,11 +16,13 @@ export type TaskItemProps = {
   isDelete: boolean;
   isSelected: boolean;
   rtl: boolean;
+  allowProjectDateChange?: boolean;
   onEventStart: (
     action: GanttContentMoveAction,
     selectedTask: BarTask,
     event?: React.MouseEvent | React.KeyboardEvent
   ) => any;
+  onMouseDown?: (event: React.MouseEvent<SVGPolygonElement, MouseEvent>) => void;
 };
 
 export const TaskItem: React.FC<TaskItemProps> = props => {
@@ -30,7 +32,9 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     isDelete,
     taskHeight,
     isSelected,
+    isDateChangeable,
     rtl,
+    allowProjectDateChange,
     onEventStart,
   } = {
     ...props,
@@ -45,7 +49,9 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         setTaskItem(<Milestone {...props} />);
         break;
       case "project":
-        setTaskItem(<Project {...props} />);
+        setTaskItem(<Project  onMouseDown={e => 
+          isDateChangeable && allowProjectDateChange && onEventStart("move", task, e)
+        } {...props} />);
         break;
       case "smalltask":
         setTaskItem(<BarSmall {...props} />);

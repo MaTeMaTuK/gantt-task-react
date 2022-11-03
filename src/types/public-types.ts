@@ -71,6 +71,10 @@ export interface EventOption {
    * Invokes on expander on task list
    */
   onExpanderClick?: (task: Task) => void;
+  /**
+   * Allow project date change
+   */
+  allowProjectDateChange?: boolean;
 }
 
 export interface DisplayOption {
