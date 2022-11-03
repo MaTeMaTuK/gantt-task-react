@@ -17,10 +17,18 @@ export type TooltipProps = {
   rowHeight: number;
   fontSize: string;
   fontFamily: string;
+  locale: string;
+  days: string;
+  duration: string;
+  progress: string;
   TooltipContent: React.FC<{
     task: Task;
     fontSize: string;
     fontFamily: string;
+    locale: string;
+    days: string;
+    duration: string;
+    progress: string;
   }>;
 };
 export const Tooltip: React.FC<TooltipProps> = ({
@@ -34,6 +42,10 @@ export const Tooltip: React.FC<TooltipProps> = ({
   arrowIndent,
   fontSize,
   fontFamily,
+  locale,
+  days,
+  duration,
+  progress,
   headerHeight,
   taskListWidth,
   TooltipContent,
@@ -107,38 +119,63 @@ export const Tooltip: React.FC<TooltipProps> = ({
       }
       style={{ left: relatedX, top: relatedY }}
     >
-      <TooltipContent task={task} fontSize={fontSize} fontFamily={fontFamily} />
+      <TooltipContent 
+        task={task} 
+        fontSize={fontSize} 
+        fontFamily={fontFamily} 
+        locale={locale} 
+        days={days}
+        duration={duration}
+        progress={progress} />
     </div>
   );
 };
 
-export const StandardTooltipContent: React.FC<{
+export interface TooltipContentProps {
   task: Task;
   fontSize: string;
   fontFamily: string;
-}> = ({ task, fontSize, fontFamily }) => {
+  locale: string;
+  days: string;
+  duration: string;
+  progress: string;
+};
+
+export const StandardTooltipContent: React.FC<TooltipContentProps> = ({ 
+  task, 
+  fontSize, 
+  fontFamily, 
+  locale,
+  days,
+  duration,
+  progress 
+}) => {
   const style = {
     fontSize,
     fontFamily,
   };
+
+  const dateTimeOptions: Intl.DateTimeFormatOptions = {
+    weekday: "short",
+    year: "numeric",
+    month: "2-digit",
+    day: "numeric",
+  };
+
+  const formaDate = (date: Date) => date.toLocaleDateString(locale, dateTimeOptions);
+
   return (
     <div className={styles.tooltipDefaultContainer} style={style}>
-      <b style={{ fontSize: fontSize + 6 }}>{`${
-        task.name
-      }: ${task.start.getDate()}-${
-        task.start.getMonth() + 1
-      }-${task.start.getFullYear()} - ${task.end.getDate()}-${
-        task.end.getMonth() + 1
-      }-${task.end.getFullYear()}`}</b>
+      <b style={{ fontSize: fontSize + 6 }}>{formaDate(task.start)} - {formaDate(task.end)}</b>
       {task.end.getTime() - task.start.getTime() !== 0 && (
-        <p className={styles.tooltipDefaultContainerParagraph}>{`Duration: ${~~(
+        <p className={styles.tooltipDefaultContainerParagraph}>{`${duration}: ${(
           (task.end.getTime() - task.start.getTime()) /
           (1000 * 60 * 60 * 24)
-        )} day(s)`}</p>
+        )} ${days}(s)`}</p>
       )}
 
       <p className={styles.tooltipDefaultContainerParagraph}>
-        {!!task.progress && `Progress: ${task.progress} %`}
+        {!!task.progress && `${progress}: ${task.progress} %`}
       </p>
     </div>
   );
