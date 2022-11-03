@@ -6,7 +6,6 @@ import {
   getDaysInMonth,
   getLocalDayOfWeek,
   getLocaleMonth,
-  getWeekNumberISO8601,
 } from "../../helpers/date-helper";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./calendar.module.css";
@@ -131,10 +130,10 @@ export const Calendar: React.FC<CalendarProps> = ({
       let topValue = "";
       if (i === 0 || date.getMonth() !== dates[i - 1].getMonth()) {
         // top
-        topValue = `${getLocaleMonth(date, locale)}, ${date.getFullYear()}`;
+        topValue = `${getLocaleMonth(date, locale)} ${date.getFullYear()}`;
       }
       // bottom
-      const bottomValue = `W${getWeekNumberISO8601(date)}`;
+      const bottomValue = `${date.toISOString().split('T')[0]}`;
 
       bottomValues.push(
         <text
@@ -176,7 +175,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     const dates = dateSetup.dates;
     for (let i = 0; i < dates.length; i++) {
       const date = dates[i];
-      const bottomValue = `${getLocalDayOfWeek(date, locale, "short")}, ${date
+      const bottomValue = `${date
         .getDate()
         .toString()}`;
 
@@ -241,11 +240,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         </text>
       );
       if (i === 0 || date.getDate() !== dates[i - 1].getDate()) {
-        const topValue = `${getLocalDayOfWeek(
-          date,
-          locale,
-          "short"
-        )}, ${date.getDate()} ${getLocaleMonth(date, locale)}`;
+        const topValue = `${date.getDate()}/${date.getMonth()+1}`;
         topValues.push(
           <TopPartOfCalendar
             key={topValue + date.getFullYear()}
