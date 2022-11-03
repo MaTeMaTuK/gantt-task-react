@@ -24,8 +24,6 @@ export const TaskListTableDefault: React.FC<{
       style={{
         fontFamily: fontFamily,
         fontSize: fontSize,
-        width: '100%',
-        padding: '0px 16px 16px 0',
       }}
     > 
       {!tasks.length && 

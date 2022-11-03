@@ -4,6 +4,9 @@
   width: 470px;
   height: 100%;
   overflow-y: scroll;
+  padding: 0 16px 16px 0;
+  width: 100%;
+  border-left:#F7F7F7 1px solid;
 }
 
 .taskListTableRow {
