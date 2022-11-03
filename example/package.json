@@ -18,12 +18,11 @@
     "@types/react": "file:../node_modules/@types/react",
     "@types/react-dom": "file:../node_modules/@types/react-dom",
     "gantt-task-react": "file:..",
+    "moment": "^2.29.4",
     "postcss-preset-env": "file:../node_modules/postcss-preset-env",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "react-scripts": "file:../node_modules/react-scripts"
-  },
-  "devDependencies": {
   },
   "browserslist": {
     "production": [

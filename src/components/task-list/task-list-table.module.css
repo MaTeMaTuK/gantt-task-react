@@ -31,6 +31,7 @@
   margin-right: 5px;
   display: flex;
   align-items: center;
+  text-align: end;
 }
 
 .taskListTableRowMetaTime {
@@ -39,14 +40,15 @@
 }
 
 .taskListTableRowMetaItem {
-  padding: 5px;
+  padding: 3px;
   color: white;
   display: flex;
-  justify-content: center;
+  height: 16px;
   max-height: 30px;
-  border-radius: 5px;
-  margin-right: 10px;
+  border-radius: 4px;
   font-size: 13px;
+  justify-content: center;
+  align-items: center;
  }
 
 .taskListTableRow:nth-of-type(even) {
@@ -82,7 +84,7 @@
   width: 12px;
   height: 12px;
   margin-right: 10px;
-  background: red;
+  background: #43AC76;
   -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
   border-radius: 50px;

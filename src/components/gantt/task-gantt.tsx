@@ -42,7 +42,7 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
       className={styles.ganttVerticalContainer}
       ref={verticalGanttContainerRef}
       dir="ltr"
-      style={{ height: "100%", width: '50%' }}
+      style={{ height: "100%", width: '100%' }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,6 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
             : { width: gridProps.svgWidth }
         }
       >
-        <button className={styles.editGanttButton}>Edit Gantt</button>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
