@@ -1,14 +1,9 @@
-import React, {
-  useState,
-  SyntheticEvent,
-  useRef,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { useState, SyntheticEvent, useRef, useEffect, useMemo } from "react";
 import { ViewMode, GanttProps, Task } from "../../types/public-types";
+import { CalendarProps } from "../calendar/calendar";
 import { GridProps } from "../grid/grid";
 import { ganttDateRange, seedDates } from "../../helpers/date-helper";
-import { CalendarProps } from "../calendar/calendar";
+import { CalendarDefault } from "../calendar/calendar";
 import { TaskGanttContentProps } from "./task-gantt-content";
 import { TaskListHeaderDefault } from "../task-list/task-list-header";
 import { TaskListTableDefault } from "../task-list/task-list-table";
@@ -65,6 +60,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDelete,
   onSelect,
   onExpanderClick,
+  Calendar = CalendarDefault,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -448,6 +444,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onExpanderClick: handleExpanderClick,
     TaskListHeader,
     TaskListTable,
+    Calendar
   };
   return (
     <div>
@@ -465,6 +462,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           ganttHeight={ganttHeight}
           scrollY={scrollY}
           scrollX={scrollX}
+          Calendar={Calendar}
         />
         {ganttEvent.changedTask && (
           <Tooltip

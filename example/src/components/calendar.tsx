@@ -1,27 +1,10 @@
 import React, { ReactChild } from "react";
-import { ViewMode } from "../../types/public-types";
-import { TopPartOfCalendar } from "./top-part-of-calendar";
-import {
-  getCachedDateTimeFormat,
-  getDaysInMonth,
-  getLocalDayOfWeek,
-  getLocaleMonth,
-} from "../../helpers/date-helper";
-import { DateSetup } from "../../types/date-setup";
+import { ViewMode, CalendarProps } from "nka-gantt-task-react";
+import { TopPartOfCalendar } from "nka-gantt-task-react";
+import { getCachedDateTimeFormat, getDaysInMonth, getLocalDayOfWeek, getLocaleMonth } from "nka-gantt-task-react";
 import styles from "./calendar.module.css";
 
-export type CalendarProps = {
-  dateSetup: DateSetup;
-  locale: string;
-  viewMode: ViewMode;
-  rtl: boolean;
-  headerHeight: number;
-  columnWidth: number;
-  fontFamily: string;
-  fontSize: string;
-};
-
-export const CalendarDefault: React.FC<CalendarProps> = ({
+export const Calendar: React.FC<CalendarProps> = ({
   dateSetup,
   locale,
   viewMode,
@@ -173,7 +156,7 @@ export const CalendarDefault: React.FC<CalendarProps> = ({
     const bottomValues: ReactChild[] = [];
     const topDefaultHeight = headerHeight * 0.5;
     const dates = dateSetup.dates;
-    for (let i = 0; i < dates.length; i++) {
+    for (let i = 0; i < dates.length; i++) { 
       const date = dates[i];
       const bottomValue = `${date
         .getDate()
