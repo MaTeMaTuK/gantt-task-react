@@ -1,6 +1,6 @@
 {
   "name": "nka-gantt-task-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Interactive Gantt Chart for React with TypeScript.",
   "author": "MaTeMaTuK <maksym.vikarii@gmail.com>",
   "homepage": "https://github.com/MaTeMaTuK/gantt-task-react",
