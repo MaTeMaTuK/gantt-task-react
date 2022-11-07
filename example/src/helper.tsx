@@ -4,8 +4,8 @@ export function initTasks() {
   const currentDate = new Date();
   const tasks: Task[] = [
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 20),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 5),
       name: "Some Project",
       id: "ProjectSample",
       progress: 25,
@@ -14,14 +14,8 @@ export function initTasks() {
       displayOrder: 1,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-      end: new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        2,
-        12,
-        28
-      ),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 20),
+      end: new Date( currentDate.getFullYear(), currentDate.getMonth(), 21, 12, 28),
       name: "Idea",
       id: "Task 0",
       progress: 45,
@@ -30,8 +24,8 @@ export function initTasks() {
       displayOrder: 2,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4, 0, 0),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 22),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 24, 0, 0),
       name: "Research",
       id: "Task 1",
       progress: 25,
@@ -41,8 +35,8 @@ export function initTasks() {
       displayOrder: 3,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 24),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 28, 0, 0),
       name: "Discussion with team",
       id: "Task 2",
       progress: 10,
@@ -52,8 +46,8 @@ export function initTasks() {
       displayOrder: 4,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 9, 0, 0),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 28),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 29, 0, 0),
       name: "Developing",
       id: "Task 3",
       progress: 2,
@@ -63,8 +57,8 @@ export function initTasks() {
       displayOrder: 5,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 28),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 30),
       name: "Review",
       id: "Task 4",
       type: "task",
@@ -74,8 +68,8 @@ export function initTasks() {
       displayOrder: 6,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth() +1, 5),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth() +1, 5),
       name: "Release",
       id: "Task 6",
       progress: currentDate.getMonth(),
@@ -85,8 +79,8 @@ export function initTasks() {
       displayOrder: 7,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 19),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 8),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 9),
       name: "Party Time",
       id: "Task 9",
       progress: 0,
