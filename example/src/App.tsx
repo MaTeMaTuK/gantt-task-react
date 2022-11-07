@@ -1,7 +1,7 @@
 import React from "react"
 import { ViewMode, Task, Gantt } from "nka-gantt-task-react"
 import { ViewSwitcher } from "./components/view-switcher"
-import { getStartEndDateForProject, initTasks } from "./helper"
+import { getStartEndDateForProject, initTasks, initTasks2 } from "./helper"
 import { TaskListTable } from './components/task-list-table'
 import { TaskListHeader } from './components/task-list-header'
 import { TooltipContent } from './components/tooltip-content'
@@ -13,6 +13,7 @@ import "nka-gantt-task-react/dist/index.css";
 const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
+  const tasks2 = initTasks2();
   const [isChecked, setIsChecked] = React.useState(true);
   let columnWidth = 65;
   if (view === ViewMode.Year) {
@@ -78,8 +79,10 @@ const App = () => {
         isChecked={isChecked}
       />
       <h3>Gantt With Unlimited Height</h3>
+
+      
       <Gantt locale='pt'
-        tasks={tasks}
+        tasks={tasks2}
         viewMode={view}
         onDateChange={handleTaskChange}
         onDelete={handleTaskDelete}
@@ -95,7 +98,9 @@ const App = () => {
         TooltipContent={TooltipContent}
         Calendar={Calendar}
       />
+
     </div>
+    
   );
 };
 

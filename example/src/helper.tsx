@@ -91,6 +91,40 @@ export function initTasks() {
   return tasks;
 }
 
+export function initTasks2() {
+  const currentDate = new Date();
+  const tasks: Task[] = [
+    {
+      start: new Date(currentDate.getFullYear(), 11, 20, 9),
+      end: new Date(currentDate.getFullYear(), 11, 20, 14),
+      name: "Preparação de máquinas",
+      id: "Task 0",
+      progress: 45,
+      type: "task",
+      displayOrder: 1,
+    },
+    {
+      start: new Date(currentDate.getFullYear(), 11, 20, 14),
+      end: new Date(currentDate.getFullYear(), 11, 22, 14, 40),
+      name: "Cortar",
+      id: "Task 1",
+      progress: 55,
+      type: "task",
+      displayOrder: 2,
+    },
+    {
+      start: new Date(currentDate.getFullYear(), 11, 22, 14, 40),
+      end: new Date(currentDate.getFullYear(), 11, 29),
+      name: "Cortar",
+      id: "Task 2",
+      progress: 55,
+      type: "task",
+      displayOrder: 3,
+    }
+  ]
+  return tasks
+}
+
 export function getStartEndDateForProject(tasks: Task[], projectId: string) {
   const projectTasks = tasks.filter(t => t.project === projectId);
   let start = projectTasks[0].start;

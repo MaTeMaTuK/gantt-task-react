@@ -15,9 +15,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   fontSize,
 }) => {
   const getCalendarValuesForYear = () => {
-    const topValues: ReactChild[] = [];
     const bottomValues: ReactChild[] = [];
-    const topDefaultHeight = headerHeight * 0.5;
     for (let i = 0; i < dateSetup.dates.length; i++) {
       const date = dateSetup.dates[i];
       const bottomValue = date.getFullYear();
@@ -31,31 +29,8 @@ export const Calendar: React.FC<CalendarProps> = ({
           {bottomValue}
         </text>
       );
-      if (
-        i === 0 ||
-        date.getFullYear() !== dateSetup.dates[i - 1].getFullYear()
-      ) {
-        const topValue = date.getFullYear().toString();
-        let xText: number;
-        if (rtl) {
-          xText = (6 + i + date.getFullYear() + 1) * columnWidth;
-        } else {
-          xText = (6 + i - date.getFullYear()) * columnWidth;
-        }
-        topValues.push(
-          <TopPartOfCalendar
-            key={topValue}
-            value={topValue}
-            x1Line={columnWidth * i}
-            y1Line={0}
-            y2Line={headerHeight}
-            xText={xText}
-            yText={topDefaultHeight * 0.9}
-          />
-        );
-      }
     }
-    return [topValues, bottomValues];
+    return [bottomValues];
   };
 
   const getCalendarValuesForMonth = () => {
@@ -75,16 +50,18 @@ export const Calendar: React.FC<CalendarProps> = ({
           {bottomValue}
         </text>
       );
-      if (
-        i === 0 ||
-        date.getFullYear() !== dateSetup.dates[i - 1].getFullYear()
-      ) {
+
+      if ( i === 0 || date.getFullYear() !== dateSetup.dates[i - 1].getFullYear() || i === dateSetup.dates.length) {
         const topValue = date.getFullYear().toString();
         let xText: number;
         if (rtl) {
           xText = (6 + i + date.getMonth() + 1) * columnWidth;
         } else {
-          xText = (6 + i - date.getMonth()) * columnWidth;
+          if ( i === 0 )
+            xText = ((12 - date.getMonth()) / 2) * columnWidth;
+          else if ( i+1 === dateSetup.dates.length )
+            xText = columnWidth * (i + (date.getMonth()+1)/2);
+          else xText = columnWidth * (i + 6);
         }
         topValues.push(
           <TopPartOfCalendar
@@ -173,8 +150,6 @@ export const Calendar: React.FC<CalendarProps> = ({
 
       if (i + 1===dates.length || date.getMonth() !== dates[i + 1].getMonth()) {
         const topValue = getLocaleMonth(date, locale);
-
-        debugger
         topValues.push(
           <TopPartOfCalendar
             key={topValue + date.getFullYear()}
@@ -182,7 +157,8 @@ export const Calendar: React.FC<CalendarProps> = ({
             x1Line={columnWidth * (i + 1)}
             y1Line={0}
             y2Line={topDefaultHeight}
-            xText={ columnWidth * (i + 1) - (topValues.length===0 ? i : getDaysInMonth(date.getMonth(), date.getFullYear())) * columnWidth * 0.5
+            xText={ columnWidth * (i + 1 ) - (topValues.length===0 ? (i + 1 ) : i + 1===dates.length ? date.getDate() : 
+              getDaysInMonth(date.getMonth(), date.getFullYear())) * columnWidth * 0.5
             }
             yText={topDefaultHeight * 0.9}
           />
