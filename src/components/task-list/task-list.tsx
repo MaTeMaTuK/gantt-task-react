@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { BarTask } from "../../types/bar-task";
 import { Task } from "../../types/public-types";
+import { CalendarProps } from "../calendar/calendar";
 
 export type TaskListProps = {
   headerHeight: number;
@@ -34,6 +35,7 @@ export type TaskListProps = {
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
   }>;
+  Calendar: React.FC<CalendarProps>
 };
 
 export const TaskList: React.FC<TaskListProps> = ({
