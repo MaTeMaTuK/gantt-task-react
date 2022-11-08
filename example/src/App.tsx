@@ -88,7 +88,7 @@ const App = () => {
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
       />
-      <h3>Gantt With Limited Height</h3>
+      <h3>Gantt With Limited Height</h3> 
       <Gantt
         tasks={tasks}
         viewMode={view}

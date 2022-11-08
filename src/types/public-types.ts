@@ -1,3 +1,5 @@
+import { CalendarProps } from "../components/calendar/calendar";
+
 export enum ViewMode {
   Hour = "Hour",
   QuarterDay = "Quarter Day",
@@ -15,6 +17,7 @@ export interface Task {
   name: string;
   start: Date;
   end: Date;
+  duration?: string;
   /**
    * From 0 to 100
    */
@@ -137,6 +140,7 @@ export interface StylingOption {
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
   }>;
+  Calendar: React.FC<CalendarProps>
 }
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
