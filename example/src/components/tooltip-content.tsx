@@ -1,7 +1,7 @@
 import React from "react";
 import useTranslation from "next-translate/useTranslation"
 import moment from 'moment'
-import { Task } from "nka-gantt-task-react"
+import { Task } from "gantt-task-react"
 
 import styles from "./tooltip.module.css"
 

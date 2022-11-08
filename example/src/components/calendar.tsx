@@ -1,7 +1,7 @@
 import React, { ReactChild } from "react";
-import { ViewMode, CalendarProps } from "nka-gantt-task-react";
-import { TopPartOfCalendar } from "nka-gantt-task-react";
-import { getCachedDateTimeFormat, getDaysInMonth, getLocalDayOfWeek, getLocaleMonth } from "nka-gantt-task-react";
+import { ViewMode, CalendarProps } from "gantt-task-react";
+import { TopPartOfCalendar } from "gantt-task-react";
+import { getCachedDateTimeFormat, getDaysInMonth, getLocalDayOfWeek, getLocaleMonth } from "gantt-task-react";
 import styles from "./calendar.module.css";
 
 export const Calendar: React.FC<CalendarProps> = ({

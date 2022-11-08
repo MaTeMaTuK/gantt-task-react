@@ -1,5 +1,5 @@
 import React from "react"
-import { ViewMode, Task, Gantt } from "nka-gantt-task-react"
+import { ViewMode, Task, Gantt } from "gantt-task-react"
 import { ViewSwitcher } from "./components/view-switcher"
 import { getStartEndDateForProject, initTasks, initTasks2 } from "./helper"
 import { TaskListTable } from './components/task-list-table'
@@ -7,7 +7,7 @@ import { TaskListHeader } from './components/task-list-header'
 import { TooltipContent } from './components/tooltip-content'
 import { Calendar } from './components/calendar'
 
-import "nka-gantt-task-react/dist/index.css";
+import "gantt-task-react/dist/index.css";
 
 // Init
 const App = () => {
@@ -79,7 +79,6 @@ const App = () => {
         isChecked={isChecked}
       />
       <h3>Gantt With Unlimited Height</h3>
-<<<<<<< HEAD
       <Gantt
         tasks={tasks}
         viewMode={view}
@@ -96,12 +95,6 @@ const App = () => {
       <h3>Gantt With Limited Height</h3> 
       <Gantt
         tasks={tasks}
-=======
-
-      
-      <Gantt locale='pt'
-        tasks={tasks2}
->>>>>>> a33e7ee5c9be2ba935fdf2fe57b6133a87e137e2
         viewMode={view}
         onDateChange={handleTaskChange}
         onDelete={handleTaskDelete}
