@@ -79,7 +79,15 @@ const App = () => {
         isChecked={isChecked}
       />
       <h3>Gantt With Unlimited Height</h3>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+      <Gantt locale='pt'
+=======
+<<<<<<< HEAD
+>>>>>>> fd6789638e9a8ce8a8832accf442d716683c27d9
       <Gantt
+>>>>>>> 03e80b594b1b05f25d21761148886a5361951f13
         tasks={tasks}
         viewMode={view}
         onDateChange={handleTaskChange}
@@ -91,10 +99,27 @@ const App = () => {
         onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
+<<<<<<< HEAD
+        TaskListTable={TaskListTable}
+        TaskListHeader={TaskListHeader}
+        TooltipContent={TooltipContent}
+        Calendar={Calendar}
+      />
+=======
       />
       <h3>Gantt With Limited Height</h3> 
       <Gantt
         tasks={tasks}
+<<<<<<< HEAD
+=======
+=======
+
+>>>>>>> 03e80b594b1b05f25d21761148886a5361951f13
+      
+      <Gantt locale='pt'
+        tasks={tasks2}
+>>>>>>> a33e7ee5c9be2ba935fdf2fe57b6133a87e137e2
+>>>>>>> fd6789638e9a8ce8a8832accf442d716683c27d9
         viewMode={view}
         onDateChange={handleTaskChange}
         onDelete={handleTaskDelete}
