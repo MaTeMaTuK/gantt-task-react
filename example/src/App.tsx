@@ -1,5 +1,5 @@
 import React from "react"
-import { ViewMode, Task, Gantt } from "nka-gantt-task-react"
+import { ViewMode, Task, Gantt } from "gantt-task-react"
 import { ViewSwitcher } from "./components/view-switcher"
 import { getStartEndDateForProject, initTasks, initTasks2 } from "./helper"
 import { TaskListTable } from './components/task-list-table'
@@ -7,7 +7,7 @@ import { TaskListHeader } from './components/task-list-header'
 import { TooltipContent } from './components/tooltip-content'
 import { Calendar } from './components/calendar'
 
-import "nka-gantt-task-react/dist/index.css";
+import "gantt-task-react/dist/index.css";
 
 // Init
 const App = () => {
@@ -96,7 +96,7 @@ const App = () => {
         TooltipContent={TooltipContent}
         Calendar={Calendar}
       />
-      
+      <h3>Gantt With Limited Height</h3> 
       <Gantt locale='pt'
         tasks={tasks2}
         viewMode={view}
@@ -116,7 +116,6 @@ const App = () => {
       />
 
     </div>
-    
   );
 };
 

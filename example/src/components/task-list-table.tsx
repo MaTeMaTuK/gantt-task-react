@@ -1,5 +1,5 @@
 import React from "react";
-import { Task } from "nka-gantt-task-react";
+import { Task } from "gantt-task-react";
 import styles from "./task-list-table.module.css"
 
 export const TaskListTable: React.FC<{

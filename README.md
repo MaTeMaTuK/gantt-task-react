@@ -16,7 +16,7 @@ npm install gantt-task-react
 
 ```javascript
 import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from 'gantt-task-react';
-import "nka-gantt-task-react/dist/index.css";
+import "gantt-task-react/dist/index.css";
 
 let tasks: Task[] = [
     {
