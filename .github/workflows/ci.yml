@@ -1,0 +1,21 @@
+
+Raw Blame
+
+ 
+name: CI
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "16.x"
+      - run: yarn install
+      - run: yarn lint
+      - run: yarn test
