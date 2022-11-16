@@ -94,11 +94,9 @@ const drownPathAndTriangle = (
     return `M ${taskFrom.x1} ${taskFrom.y + taskHeight / 2} 
     h ${-arrowIndent} 
     v ${(indexCompare * rowHeight) / 2} 
-    ${taskFromEndPosition > taskTo.x2 + arrowIndent + 10 ? "" : `H ${taskTo.x2 + arrowIndent}`}
+    H ${taskTo.x2 + arrowIndent}
     V ${taskToEndPosition} 
-    h ${taskFromEndPosition < taskTo.x2
-      ? -arrowIndent
-      : taskTo.x2 - taskFrom.x1 - arrowIndent}`;
+    h ${-arrowIndent}`;
   }
   
   const endToEndPath = () => {
