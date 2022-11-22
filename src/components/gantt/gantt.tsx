@@ -382,6 +382,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     setSelectedTask(newSelectedTask);
   };
+  const handleSelectedTaskStartX = (x1: number | undefined) => {
+    setScrollX(x1??-1)
+  }
   const handleExpanderClick = (task: Task) => {
     if (onExpanderClick && task.hideChildren !== undefined) {
       onExpanderClick({ ...task, hideChildren: !task.hideChildren });
@@ -445,6 +448,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     selectedTask,
     taskListRef,
     setSelectedTask: handleSelectedTask,
+    setSelectedTaskStartX: handleSelectedTaskStartX,
     onExpanderClick: handleExpanderClick,
     TaskListHeader,
     TaskListTable,
