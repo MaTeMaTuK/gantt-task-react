@@ -7,6 +7,7 @@ export const getRelationCircleByCoordinates = (
   taskHalfHeight: number,
   relationCircleOffset: number,
   relationCircleRadius: number,
+  rtl: boolean,
 ): [BarTask, RelationMoveTarget] | null => {
   const {
     x,
@@ -24,14 +25,14 @@ export const getRelationCircleByCoordinates = (
         x >= task.x1 - relationCircleOffset - relationCircleRadius
         && y <= task.x1 - relationCircleOffset + relationCircleRadius
       ) {
-        return [task, "startOfTask"];
+        return [task, rtl ? "endOfTask" : "startOfTask"];
       }
 
       if (
         x >= task.x2 + relationCircleOffset - relationCircleRadius
         && y <= task.x2 + relationCircleOffset + relationCircleRadius
       ) {
-        return [task, "startOfTask"];
+        return [task, rtl ? "startOfTask" : "endOfTask"];
       }
     }
   }

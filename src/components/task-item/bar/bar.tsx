@@ -1,4 +1,6 @@
-import React from "react";
+import React, {
+  useCallback,
+} from "react";
 
 import cx from "classnames";
 
@@ -26,6 +28,28 @@ export const Bar: React.FC<TaskItemProps> = ({
   onRelationStart,
   isSelected,
 }) => {
+  const onLeftRelationTriggerMouseDown = useCallback(() => {
+    onRelationStart(
+      rtl ? "endOfTask" : "startOfTask",
+      task,
+    );
+  }, [
+    onRelationStart,
+    rtl,
+    task,
+  ]);
+
+  const onRightRelationTriggerMouseDown = useCallback(() => {
+    onRelationStart(
+      rtl ? "startOfTask" : "endOfTask",
+      task,
+    );
+  }, [
+    onRelationStart,
+    rtl,
+    task,
+  ]);
+
   const progressPoint = getProgressPoint(
     +!rtl * task.progressWidth + task.progressX,
     task.y,
@@ -87,9 +111,7 @@ export const Bar: React.FC<TaskItemProps> = ({
               x={task.x1 - relationCircleOffset}
               y={task.y + taskHalfHeight}
               radius={relationCircleRadius}
-              onMouseDown={() => {
-                onRelationStart("startOfTask", task);
-              }}
+              onMouseDown={onLeftRelationTriggerMouseDown}
             />
             {/* right */}
             <BarRelationHandle
@@ -97,9 +119,7 @@ export const Bar: React.FC<TaskItemProps> = ({
               x={task.x2 + relationCircleOffset}
               y={task.y + taskHalfHeight}
               radius={relationCircleRadius}
-              onMouseDown={() => {
-                onRelationStart("endOfTask", task);
-              }}
+              onMouseDown={onRightRelationTriggerMouseDown}
             />
           </g>
         )}
