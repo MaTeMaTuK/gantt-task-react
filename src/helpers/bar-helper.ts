@@ -94,6 +94,7 @@ const convertToBarTask = (
         taskHeight,
         barCornerRadius,
         handleWidth,
+        rtl,
         milestoneBackgroundColor,
         milestoneBackgroundSelectedColor
       );
@@ -209,10 +210,17 @@ const convertToMilestone = (
   taskHeight: number,
   barCornerRadius: number,
   handleWidth: number,
+  rtl: boolean,
   milestoneBackgroundColor: string,
   milestoneBackgroundSelectedColor: string
 ): BarTask => {
-  const x = taskXCoordinate(task.start, dates, columnWidth);
+  let x: number;
+  if (rtl) {
+    x = taskXCoordinateRTL(task.start, dates, columnWidth);
+  } else {
+    x = taskXCoordinate(task.start, dates, columnWidth);
+  }
+
   const y = taskYCoordinate(index, rowHeight, taskHeight);
 
   const x1 = x - taskHeight * 0.5;
@@ -260,10 +268,15 @@ const taskXCoordinateRTL = (
   dates: Date[],
   columnWidth: number
 ) => {
-  let x = taskXCoordinate(xDate, dates, columnWidth);
-  x += columnWidth;
+  const index = dates.findIndex(d => d.getTime() <= xDate.getTime()) - 1;
+
+  const remainderMillis = dates[index].getTime() - xDate.getTime();
+  const percentOfInterval =
+    remainderMillis / (dates[index + 1].getTime() - dates[index].getTime());
+  const x = index * columnWidth + percentOfInterval * columnWidth;
   return x;
 };
+
 const taskYCoordinate = (
   index: number,
   rowHeight: number,
