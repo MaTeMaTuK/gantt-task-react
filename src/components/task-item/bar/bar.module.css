@@ -3,8 +3,12 @@
   outline: none;
 }
 
-.barWrapper:hover .barHandle {
+.barWrapper:hover .barHandle, .barWrapper:hover .barRelationHandle {
   visibility: visible;
+  opacity: 1;
+}
+
+.barRelationHandle.barRelationHandle_drawMode {
   opacity: 1;
 }
 
@@ -13,6 +17,13 @@
   cursor: ew-resize;
   opacity: 0;
   visibility: hidden;
+}
+
+.barRelationHandle {
+  fill: #ddd;
+  stroke: #333;
+  cursor: pointer;
+  opacity: 0;
 }
 
 .barBackground {

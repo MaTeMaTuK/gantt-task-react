@@ -18,7 +18,7 @@ import { TaskListProps, TaskList } from "../task-list/task-list";
 import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
 import { convertToBarTasks } from "../../helpers/bar-helper";
-import { GanttEvent } from "../../types/gantt-task-actions";
+import { GanttEvent, GanttRelationEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
@@ -30,6 +30,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   columnWidth = 60,
   listCellWidth = "155px",
   rowHeight = 50,
+  relationCircleOffset = 10,
+  relationCircleRadius = 5,
   ganttHeight = 0,
   viewMode = ViewMode.Day,
   preStepsCount = 1,
@@ -61,6 +63,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
   onDateChange,
+  onRelationChange,
   onProgressChange,
   onDoubleClick,
   onClick,
@@ -89,9 +92,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
   });
+  const [ganttRelationEvent, setGanttRelationEvent] = useState<GanttRelationEvent | null>(null);
+
   const taskHeight = useMemo(
     () => (rowHeight * barFill) / 100,
     [rowHeight, barFill]
+  );
+
+  const taskHalfHeight = useMemo(
+    () => Math.round(taskHeight / 2),
+    [taskHeight],
   );
 
   const [selectedTask, setSelectedTask] = useState<BarTask>();
@@ -415,9 +425,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     tasks: barTasks,
     dates: dateSetup.dates,
     ganttEvent,
+    ganttRelationEvent,
     selectedTask,
     rowHeight,
     taskHeight,
+    taskHalfHeight,
+    relationCircleOffset,
+    relationCircleRadius,
     columnWidth,
     arrowColor,
     timeStep,
@@ -427,9 +441,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     svgWidth,
     rtl,
     setGanttEvent,
+    setGanttRelationEvent,
     setFailedTask,
     setSelectedTask: handleSelectedTask,
     onDateChange,
+    onRelationChange,
     onProgressChange,
     onDoubleClick,
     onClick,

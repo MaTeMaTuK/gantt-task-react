@@ -2,16 +2,23 @@ import React from "react";
 import { getProgressPoint } from "../../../helpers/bar-helper";
 import { BarDisplay } from "./bar-display";
 import { BarDateHandle } from "./bar-date-handle";
+import { BarRelationHandle } from "./bar-relation-handle";
 import { BarProgressHandle } from "./bar-progress-handle";
 import { TaskItemProps } from "../task-item";
 import styles from "./bar.module.css";
 
 export const Bar: React.FC<TaskItemProps> = ({
   task,
+  taskHalfHeight,
+  relationCircleOffset,
+  relationCircleRadius,
   isProgressChangeable,
   isDateChangeable,
+  isRelationChangeable,
+  isRelationDrawMode,
   rtl,
   onEventStart,
+  onRelationStart,
   isSelected,
 }) => {
   const progressPoint = getProgressPoint(
@@ -63,6 +70,32 @@ export const Bar: React.FC<TaskItemProps> = ({
             />
           </g>
         )}
+
+        {isRelationChangeable && (
+          <g>
+            {/* left */}
+            <BarRelationHandle
+              isRelationDrawMode={isRelationDrawMode}
+              x={task.x1 - relationCircleOffset}
+              y={task.y + taskHalfHeight}
+              radius={relationCircleRadius}
+              onMouseDown={() => {
+                onRelationStart("startOfTask", task);
+              }}
+            />
+            {/* right */}
+            <BarRelationHandle
+              isRelationDrawMode={isRelationDrawMode}
+              x={task.x2 + relationCircleOffset}
+              y={task.y + taskHalfHeight}
+              radius={relationCircleRadius}
+              onMouseDown={() => {
+                onRelationStart("endOfTask", task);
+              }}
+            />
+          </g>
+        )}
+
         {isProgressChangeable && (
           <BarProgressHandle
             progressPoint={progressPoint}

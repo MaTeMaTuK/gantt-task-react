@@ -1,3 +1,5 @@
+import { RelationMoveTarget } from "./gantt-task-actions";
+
 export enum ViewMode {
   Hour = "Hour",
   QuarterDay = "Quarter Day",
@@ -33,6 +35,11 @@ export interface Task {
   displayOrder?: number;
 }
 
+export type OnRelationChange = (
+  from: [Task, RelationMoveTarget],
+  to: [Task, RelationMoveTarget],
+) => void;
+
 export interface EventOption {
   /**
    * Time step value for date changes.
@@ -57,6 +64,10 @@ export interface EventOption {
     task: Task,
     children: Task[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
+  /**
+   * Invokes new relation between tasks
+   */
+  onRelationChange?: OnRelationChange;
   /**
    * Invokes on progress change. Chart undoes operation if method return false or error.
    */
@@ -92,6 +103,8 @@ export interface StylingOption {
   columnWidth?: number;
   listCellWidth?: string;
   rowHeight?: number;
+  relationCircleOffset?: number;
+  relationCircleRadius?: number;
   ganttHeight?: number;
   barCornerRadius?: number;
   handleWidth?: number;
