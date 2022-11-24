@@ -2,7 +2,7 @@ import React from "react";
 
 import cx from "classnames";
 
-import styles from "./bar.module.css";
+import styles from "./bar-relation-handle.module.css";
 
 type BarRelationHandleProps = {
   x: number;
