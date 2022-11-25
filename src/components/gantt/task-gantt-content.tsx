@@ -418,11 +418,13 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     useEffect(() => {
       if (isConnect) {
         import("jsplumb").then(({ jsPlumb }: any) => {
-          jsPlumb.ready(() => {
-            const instance = jsPlumb.getInstance();
-            instance.fire("jsPlumbDemoLoaded", instance);
-            setJsPlumbInstance(instance);
-          });
+          if (jsPlumb) {
+            jsPlumb.ready(() => {
+              const instance = jsPlumb.getInstance();
+              instance.fire("jsPlumbDemoLoaded", instance);
+              setJsPlumbInstance(instance);
+            });
+          }
         });
       }
     }, [isConnect]);
