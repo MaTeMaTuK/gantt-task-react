@@ -8,7 +8,7 @@ export enum ViewMode {
   Month = "Month",
   Year = "Year",
 }
-export type TaskType = "task" | "milestone" | "project";
+export type TaskType = "task" | "milestone" | "project" | "parentTask";
 export interface Task {
   id: string;
   type: TaskType;
@@ -27,6 +27,7 @@ export interface Task {
   };
   isDisabled?: boolean;
   project?: string;
+  parentTask?: string;
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
