@@ -195,7 +195,7 @@ const convertToBar = (
     barCornerRadius,
     handleWidth,
     hideChildren,
-    height: taskHeight,
+    height,
     barChildren: [],
     styles,
   };
