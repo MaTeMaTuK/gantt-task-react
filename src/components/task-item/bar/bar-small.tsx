@@ -12,10 +12,11 @@ export const BarSmall: React.FC<TaskItemProps> = ({
   onEventStart,
   isSelected,
 }) => {
+  const height = task.styles.height ?? task.height;
   const progressPoint = getProgressPoint(
     task.progressWidth + task.x1,
     task.y,
-    task.height
+    height
   );
   return (
     <g className={styles.barWrapper} tabIndex={0}>
@@ -23,7 +24,7 @@ export const BarSmall: React.FC<TaskItemProps> = ({
         x={task.x1}
         y={task.y}
         width={task.x2 - task.x1}
-        height={task.height}
+        height={height}
         progressX={task.progressX}
         progressWidth={task.progressWidth}
         barCornerRadius={task.barCornerRadius}
