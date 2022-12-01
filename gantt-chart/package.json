@@ -1,0 +1,66 @@
+{
+  "name": "gantt-task-react",
+  "version": "0.3.9",
+  "description": "Interactive Gantt Chart for React with TypeScript.",
+  "author": "MaTeMaTuK <maksym.vikarii@gmail.com>",
+  "homepage": "https://github.com/MaTeMaTuK/gantt-task-react",
+  "license": "MIT",
+  "repository": "MaTeMaTuK/gantt-task-react",
+  "main": "dist/index.js",
+  "module": "dist/index.modern.js",
+  "source": "src/index.tsx",
+  "engines": {
+    "node": ">=10"
+  },
+  "keywords": [
+    "react",
+    "gantt",
+    "typescript",
+    "chart",
+    "svg",
+    "gantt-chart",
+    "gantt chart",
+    "react-gantt",
+    "task"
+  ],
+  "scripts": {
+    "build": "microbundle-crl --no-compress --format modern,cjs",
+    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "prepare": "run-s build",
+    "test": "run-s test:unit test:lint test:build",
+    "test:build": "run-s build",
+    "test:lint": "eslint --ext .tsx src/**/*",
+    "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
+    "test:watch": "react-scripts test --env=jsdom",
+    "predeploy": "cd example && npm install && npm run build",
+    "deploy": "gh-pages -d example/build"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^14.2.1",
+    "@types/jest": "^27.5.1",
+    "@types/node": "^15.0.1",
+    "@types/react": "^18.0.5",
+    "@types/react-dom": "^18.0.5",
+    "cross-env": "^7.0.3",
+    "gh-pages": "^3.1.0",
+    "microbundle-crl": "^0.13.11",
+    "mini-css-extract-plugin": "^2.5.1",
+    "npm-run-all": "^4.1.5",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-normalize": "^10.0.1",
+    "postcss-preset-env": "^7.6.0",
+    "prettier": "^2.7.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
+    "typescript": "^4.7.4"
+  },
+  "files": [
+    "dist"
+  ]
+}
