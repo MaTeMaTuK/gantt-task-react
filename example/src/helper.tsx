@@ -93,6 +93,26 @@ export function initTasks() {
       isDisabled: true,
       type: "task",
     },
+    {
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 19),
+      name: "Parent Task",
+      id: "parentTask 1",
+      progress: 0,
+      isDisabled: true,
+      type: "parentTask",
+      hideChildren: false,
+    },
+    {
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 19),
+      name: "Sub Task",
+      id: "sub-task 1",
+      progress: 0,
+      isDisabled: true,
+      parentTask: "parentTask 1",
+      type: "task",
+    },
   ];
   return tasks;
 }
