@@ -174,7 +174,10 @@ const convertToBar = (
   );
   const height = task.styles?.height ?? taskHeight;
   const y = taskYCoordinate(index, rowHeight, height);
-  const hideChildren = task.type === "project" ? task.hideChildren : undefined;
+  const hideChildren =
+    task.type === "project" || task.type === "parentTask"
+      ? task.hideChildren
+      : undefined;
 
   const styles = {
     backgroundColor: barBackgroundColor,
