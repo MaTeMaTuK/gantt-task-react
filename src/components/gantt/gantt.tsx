@@ -743,9 +743,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           ).getTime() >= now.getTime())
       ) {
         // 当天的零点的时间戳（毫秒）
-        const currentStamp = new Date(
-          new Date().toLocaleDateString()
-        ).getTime();
+        const currentStamp = new Date(new Date().toDateString()).getTime();
         // 当天和上一个时间的差
         const currentMinus =
           (currentStamp + 86400000 - dateSetup.dates[i].getTime()) / 86400000;
