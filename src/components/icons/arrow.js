@@ -76,7 +76,7 @@ const Svg = () => (
       fill-rule="evenodd"
     >
       <g id="甘特图-未设置" transform="translate(-648.000000, -515.000000)">
-        <rect fill="#FFFFFF" x="0" y="0" width="1440" height="900"></rect>
+        <rect fill="#FFFFFF" x="0" y="0" width="24" height="24"></rect>
         <g id="矩形">
           <use
             fill="black"
@@ -93,8 +93,8 @@ const Svg = () => (
           stroke="#ECEDF0"
           x="260.5"
           y="225.5"
-          width="1159"
-          height="612"
+          width="24"
+          height="24"
         ></rect>
         <g id="编组-13" transform="translate(640.000000, 507.000000)">
           <circle
@@ -103,7 +103,7 @@ const Svg = () => (
             fill="#FFFFFF"
             cx="16"
             cy="16"
-            r="15.5"
+            r="12"
           ></circle>
           <g
             id="展开"
