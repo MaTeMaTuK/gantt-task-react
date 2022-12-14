@@ -971,7 +971,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
                     onMouseDown={e => e.stopPropagation()}
                     onClick={handleDividerClick}
                   >
-                    <ArrowIcon />
+                    <ArrowIcon className={styles.arrowIcon} />
                   </span>
                 </div>
               </div>
