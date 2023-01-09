@@ -188,6 +188,58 @@ export const getLocaleMonth = (date: Date, locale: string) => {
     bottomValue[0],
     bottomValue[0].toLocaleUpperCase()
   );
+  switch(bottomValue){
+    case "January":
+      bottomValue = "01";
+      break;
+
+    case "February":
+      bottomValue = "02";
+      break;
+    
+    case "March":
+      bottomValue = "03";
+      break;
+        
+    case "April":
+      bottomValue = "04";
+      break;
+
+    case "May":
+      bottomValue = "05";
+      break;
+
+    case "June":
+      bottomValue = "06";
+      break;
+    
+    case "July":
+      bottomValue = "07";
+      break;
+
+    case "August":
+      bottomValue = "08";
+      break;
+    
+    case "September":
+      bottomValue = "09";
+      break;
+        
+    case "October":
+      bottomValue = "10";
+      break;
+
+    case "November":
+      bottomValue = "11";
+      break;
+
+    case "December":
+      bottomValue = "12";
+      break;
+      
+    default :
+      break; 
+  }
   return bottomValue;
 };
 
