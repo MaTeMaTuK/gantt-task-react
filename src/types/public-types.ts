@@ -30,7 +30,6 @@ export interface Task {
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
-  x1?: number;
 }
 
 export interface EventOption {
@@ -136,7 +135,6 @@ export interface StylingOption {
      * Sets selected task by id
      */
     setSelectedTask: (taskId: string) => void;
-    setSelectedTaskStartX: (x1: number | undefined) => void;
     onExpanderClick: (task: Task) => void;
   }>;
 }

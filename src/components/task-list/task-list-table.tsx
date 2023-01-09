@@ -30,7 +30,6 @@ export const TaskListTableDefault: React.FC<{
   tasks: Task[];
   selectedTaskId: string;
   setSelectedTask: (taskId: string) => void;
-  setSelectedTaskStartX: (x1: number | undefined) => void;
   onExpanderClick: (task: Task) => void;
 }> = ({
   rowHeight,
@@ -39,7 +38,6 @@ export const TaskListTableDefault: React.FC<{
   fontFamily,
   fontSize,
   locale,
-  setSelectedTaskStartX,
   onExpanderClick,
 }) => {
   const toLocaleDateString = useMemo(
@@ -74,10 +72,8 @@ export const TaskListTableDefault: React.FC<{
               style={{
                 minWidth: rowWidth,
                 maxWidth: rowWidth,
-                cursor: "pointer",
               }}
               title={t.name}
-              onClick={() => setSelectedTaskStartX(t.x1)}
             >
               <div className={styles.taskListNameWrapper}>
                 <div
