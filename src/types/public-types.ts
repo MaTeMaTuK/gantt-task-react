@@ -6,6 +6,7 @@ export enum ViewMode {
   /** ISO-8601 week */
   Week = "Week",
   Month = "Month",
+  QuarterYear = "QuarterYear",
   Year = "Year",
 }
 export type MonthFormats = "numeric" | "2-digit" | "long" | "short" | "narrow";

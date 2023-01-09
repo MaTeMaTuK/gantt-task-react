@@ -39,7 +39,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       const bottomValue = date.getFullYear();
       bottomValues.push(
         <text
-          key={date.getFullYear()}
+          key={date.getTime()}
           y={headerHeight * 0.8}
           x={columnWidth * i + columnWidth * 0.5}
           className={styles.calendarBottomText}
@@ -66,6 +66,51 @@ export const Calendar: React.FC<CalendarProps> = ({
             y1Line={0}
             y2Line={headerHeight}
             xText={xText}
+            yText={topDefaultHeight * 0.9}
+          />
+        );
+      }
+    }
+    return [topValues, bottomValues];
+  };
+
+  const getCalendarValuesForQuarterYear = () => {
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
+    const topDefaultHeight = headerHeight * 0.5;
+    for (let i = 0; i < dateSetup.dates.length; i++) {
+      const date = dateSetup.dates[i];
+      // const bottomValue = getLocaleMonth(date, locale);
+      const quarter = "Q" + Math.floor((date.getMonth() + 3) / 3);
+      bottomValues.push(
+        <text
+          key={date.getTime()}
+          y={headerHeight * 0.8}
+          x={columnWidth * i + columnWidth * 0.5}
+          className={styles.calendarBottomText}
+        >
+          {quarter}
+        </text>
+      );
+      if (
+        i === 0 ||
+        date.getFullYear() !== dateSetup.dates[i - 1].getFullYear()
+      ) {
+        const topValue = date.getFullYear().toString();
+        let xText: number;
+        if (rtl) {
+          xText = (6 + i + date.getMonth() + 1) * columnWidth;
+        } else {
+          xText = (6 + i - date.getMonth()) * columnWidth;
+        }
+        topValues.push(
+          <TopPartOfCalendar
+            key={topValue}
+            value={topValue}
+            x1Line={columnWidth * i}
+            y1Line={0}
+            y2Line={topDefaultHeight}
+            xText={Math.abs(xText)}
             yText={topDefaultHeight * 0.9}
           />
         );
@@ -333,6 +378,9 @@ export const Calendar: React.FC<CalendarProps> = ({
   switch (dateSetup.viewMode) {
     case ViewMode.Year:
       [topValues, bottomValues] = getCalendarValuesForYear();
+      break;
+    case ViewMode.QuarterYear:
+      [topValues, bottomValues] = getCalendarValuesForQuarterYear();
       break;
     case ViewMode.Month:
       [topValues, bottomValues] = getCalendarValuesForMonth();
