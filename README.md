@@ -91,6 +91,9 @@ npm start
 | preStepsCount  | number  | Specifies empty space before the fist task                                                                  |
 | locale         | string  | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                                    |
 | rtl            | boolean | Sets rtl mode.                                                                                              |
+| days           | string  | Specifies the translation of the day                                                                        |
+| duration       | string  | Specifies the translation of the duration                                                                   |
+| progress       | string  | Specifies the progress translation                                                                          |
 
 ### StylingOption
 

@@ -83,6 +83,9 @@ export interface DisplayOption {
    */
   locale?: string;
   rtl?: boolean;
+  days?: string;
+  duration?: string;
+  progress?: string;
 }
 
 export interface StylingOption {
@@ -117,6 +120,10 @@ export interface StylingOption {
     task: Task;
     fontSize: string;
     fontFamily: string;
+    locale: string;
+    days: string;
+    duration: string;
+    progress: string;
   }>;
   TaskListHeader?: React.FC<{
     headerHeight: number;
