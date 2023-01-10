@@ -54,6 +54,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onProgressChange,
   onDoubleClick,
   onClick,
+  onClickLine,
   onDelete,
 }) => {
   const point = svg?.current?.createSVGPoint();
@@ -266,7 +267,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         {tasks.map(task => {
           return task.barChildren.map(child => {
             return (
-              <Arrow
+              <Arrow 
+                onClickLine={(tasks: BarTask[]) => onClickLine ? onClickLine(tasks) : null}
                 key={`Arrow from ${task.id} to ${tasks[child.index].id}`}
                 taskFrom={task}
                 taskTo={tasks[child.index]}
