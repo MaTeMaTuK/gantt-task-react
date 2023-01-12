@@ -352,7 +352,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
     const getLinkTypeId = useCallback(
       (start: string, end: string) => {
         const linkType = relationReverse(start, end);
-        return ganttConfig.relation[linkType];
+        return (ganttConfig.relation ?? {})[linkType];
       },
       [ganttConfig.relation]
     );
