@@ -8,7 +8,7 @@ import {
   getLocaleMonth,
   getWeekNumberISO8601,
 } from "../../helpers/date-helper";
-import { DateSetup } from "../../types/date-setup";
+import { CalendarRanges, DateSetup } from "../../types/date-setup";
 import styles from "./calendar.module.css";
 
 export type CalendarProps = {
@@ -20,6 +20,7 @@ export type CalendarProps = {
   columnWidth: number;
   fontFamily: string;
   fontSize: string;
+  calendarRanges: CalendarRanges,
 };
 
 export const Calendar: React.FC<CalendarProps> = ({
@@ -117,6 +118,41 @@ export const Calendar: React.FC<CalendarProps> = ({
         );
       }
     }
+    return [topValues, bottomValues];
+  };
+
+  const getCalendarValuesByRange = () => {
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
+    for (let i = 0; i < dateSetup.dates.length; i++) {
+      const startDate = dateSetup.ranges[i].startDate.toDateString();
+      const endDate = dateSetup.ranges[i].endDate.toDateString();
+      const sprint = dateSetup.ranges[i].sprint;
+      const rangeToShow = `${startDate} - ${endDate}`;
+      bottomValues.push(
+      <React.Fragment>
+        <text
+          key={`sprint-${rangeToShow}`}
+          y={headerHeight * 0.4}
+          x={columnWidth * i + columnWidth * 0.5}
+          className={styles.calendarBottomText}
+        >
+          {sprint}
+        </text>
+        {sprint && (
+        <text
+          key={rangeToShow}
+          y={headerHeight * 0.8}
+          x={columnWidth * i + columnWidth * 0.5}
+          className={styles.calendarBottomText}
+        >
+          {rangeToShow}
+        </text>
+        )}
+        </React.Fragment>
+      );
+    }
+
     return [topValues, bottomValues];
   };
 
@@ -331,6 +367,9 @@ export const Calendar: React.FC<CalendarProps> = ({
       break;
     case ViewMode.Hour:
       [topValues, bottomValues] = getCalendarValuesForHour();
+    case ViewMode.Range:
+        [topValues, bottomValues] = getCalendarValuesByRange();
+        break;
   }
   return (
     <g className="calendar" fontSize={fontSize} fontFamily={fontFamily}>

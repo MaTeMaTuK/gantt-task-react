@@ -1,3 +1,10 @@
+import { CalendarRanges } from "./date-setup";
+
+export interface TableHeader {
+  key: string;
+  title: string
+};
+
 export enum ViewMode {
   Hour = "Hour",
   QuarterDay = "Quarter Day",
@@ -7,6 +14,7 @@ export enum ViewMode {
   Week = "Week",
   Month = "Month",
   Year = "Year",
+  Range = "Range"
 }
 export type TaskType = "task" | "milestone" | "project";
 export interface Task {
@@ -142,6 +150,7 @@ export interface StylingOption {
   }>;
 }
 
-export interface GanttProps extends EventOption, DisplayOption, StylingOption {
+export interface GanttProps extends CalendarRanges, EventOption, DisplayOption, StylingOption {
   tasks: Task[];
+  headers?:TableHeader[]
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./task-list-table.module.css";
-import { Task } from "../../types/public-types";
+import { TableHeader, Task } from "../../types/public-types";
 
 // const localeDateStringCache = {};
 // const toLocaleDateStringFactory =
@@ -13,7 +13,7 @@ import { Task } from "../../types/public-types";
 //       localeDateStringCache[key] = lds;
 //     }
 //     return lds;
-  // };
+// };
 // const dateTimeOptions: Intl.DateTimeFormatOptions = {
 //   weekday: "short",
 //   year: "numeric",
@@ -28,6 +28,7 @@ export const TaskListTableDefault: React.FC<{
   fontSize: string;
   locale: string;
   tasks: Task[];
+  headers: TableHeader[],
   selectedTaskId: string;
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
@@ -37,88 +38,82 @@ export const TaskListTableDefault: React.FC<{
   tasks,
   fontFamily,
   fontSize,
+  headers,
   // locale, 
   onExpanderClick,
 }) => {
-  // const toLocaleDateString = useMemo(
-  //   () => toLocaleDateStringFactory(locale),
-  //   [locale]
-  // );
+    // const toLocaleDateString = useMemo(
+    //   () => toLocaleDateStringFactory(locale),
+    //   [locale]
+    // );
 
-  return (
-    <div
-      className={styles.taskListWrapper}
-      style={{
-        fontFamily: fontFamily,
-        fontSize: fontSize,
-      }}
-    >
-      {tasks.map(t => {
-        let expanderSymbol = "";
-        if (t.hideChildren === false) {
-          expanderSymbol = "▼";
-        } else if (t.hideChildren === true) {
-          expanderSymbol = "▶";
-        }
+    return (
+      <div
+        className={styles.taskListWrapper}
+        style={{
+          fontFamily: fontFamily,
+          fontSize: fontSize,
+        }}
+      >
+        {tasks.map(t => {
+          let expanderSymbol = "";
+          if (t.hideChildren === false) {
+            expanderSymbol = "▼";
+          } else if (t.hideChildren === true) {
+            expanderSymbol = "▶";
+          }
 
-        return (
-          <div
-            className={styles.taskListTableRow}
-            style={{ height: rowHeight }}
-            key={`${t.id}row`}
-          >
+          return (
             <div
-              className={styles.taskListCell}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-              title={t.stageName}
+              className={styles.taskListTableRow}
+              style={{ height: rowHeight }}
+              key={`${t.id}row`}
             >
-              <div className={styles.taskListNameWrapper}>
-                <div
-                  className={
-                    expanderSymbol
-                      ? styles.taskListExpander
-                      : styles.taskListEmptyExpander
+              {
+                headers.map((rowItem, rowItemIndex) => {
+                  if (rowItemIndex === 0) {
+                    return (
+                      <div
+                        className={styles.taskListCell}
+                        style={{
+                          minWidth: rowWidth,
+                          maxWidth: rowWidth,
+                        }}
+                        title={t[rowItem.key]}
+                      >
+                        <div className={styles.taskListNameWrapper}>
+                          <div
+                            className={
+                              expanderSymbol
+                                ? styles.taskListExpander
+                                : styles.taskListEmptyExpander
+                            }
+                            onClick={() => onExpanderClick(t)}
+                          >
+                            {expanderSymbol}
+                          </div>
+                          <div>{t[rowItem.key] || ''}</div>
+                        </div>
+                      </div>
+                    )
+                  } else {
+                    return (
+                    <div
+                      className={styles.taskListCell}
+                      style={{
+                        minWidth: rowWidth,
+                        maxWidth: rowWidth,
+                      }}
+                    >
+                      &nbsp;{t[rowItem.key] || ''}
+                    </div>
+                    )
                   }
-                  onClick={() => onExpanderClick(t)}
-                >
-                  {expanderSymbol}
-                </div>
-                <div>{t.stageName||''}</div>
-              </div>
+                })
+              }
             </div>
-            <div
-              className={styles.taskListCell}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-            >
-              &nbsp;{t.subStageName||''}
-            </div>
-            <div
-              className={styles.taskListCell}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-            >
-              &nbsp;{t.team||''}
-            </div>
-            <div
-              className={styles.taskListCell}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-            >
-              &nbsp;{t.jiraEpics||''}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+          );
+        })}
+      </div>
+    );
+  };

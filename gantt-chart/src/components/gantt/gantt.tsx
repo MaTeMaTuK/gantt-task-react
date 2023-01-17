@@ -58,6 +58,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
+  headers = [{ key: 'stageName', title: 'Stage Name' }, { key: 'subStageName', title: 'SubStage Name' }, { key: 'team', title: 'Team' }, { key: 'jiraEpics', title: 'Jira Epics' }],
+  ranges = {},
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -70,7 +72,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
     const [startDate, endDate] = ganttDateRange(tasks, viewMode, preStepsCount);
-    return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
+    const { dates, ranges: dateRanges } = seedDates(startDate, endDate, viewMode, { ranges });
+    return { viewMode, dates, ranges: dateRanges };
   });
   const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
     undefined
@@ -112,14 +115,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       viewMode,
       preStepsCount
     );
-    let newDates = seedDates(startDate, endDate, viewMode);
+    let { dates: newDates, ranges: dateRanges } = seedDates(startDate, endDate, viewMode, { ranges });
+
     if (rtl) {
       newDates = newDates.reverse();
       if (scrollX === -1) {
         setScrollX(newDates.length * columnWidth);
       }
     }
-    setDateSetup({ dates: newDates, viewMode });
+    setDateSetup({ dates: newDates, viewMode, ranges: dateRanges });
     setBarTasks(
       convertToBarTasks(
         filteredTasks,
@@ -241,7 +245,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   }, [taskListRef, listCellWidth]);
 
   useEffect(() => {
-    if (wrapperRef.current) {
+    if (wrapperRef?.current) {
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
     }
   }, [wrapperRef, taskListWidth]);
@@ -284,11 +288,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     };
 
     // subscribe if scroll is necessary
-    wrapperRef.current?.addEventListener("wheel", handleWheel, {
+    wrapperRef?.current?.addEventListener("wheel", handleWheel, {
       passive: false,
     });
     return () => {
-      wrapperRef.current?.removeEventListener("wheel", handleWheel);
+      wrapperRef?.current?.removeEventListener("wheel", handleWheel);
     };
   }, [
     wrapperRef,
@@ -405,6 +409,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     fontFamily,
     fontSize,
     rtl,
+    calendarRanges: { ranges }
   };
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,
@@ -448,6 +453,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onExpanderClick: handleExpanderClick,
     TaskListHeader,
     TaskListTable,
+    headers
   };
   return (
     <div>

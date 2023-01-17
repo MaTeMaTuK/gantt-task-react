@@ -1,4 +1,5 @@
 import React from "react";
+import { TableHeader } from "../../types/public-types";
 import styles from "./task-list-header.module.css";
 
 export const TaskListHeaderDefault: React.FC<{
@@ -6,7 +7,9 @@ export const TaskListHeaderDefault: React.FC<{
   rowWidth: string;
   fontFamily: string;
   fontSize: string;
-}> = ({ headerHeight, fontFamily, fontSize, rowWidth }) => {
+  headers: TableHeader[],
+}> = ({ headerHeight, fontFamily, fontSize, rowWidth, headers }) => {
+
   return (
     <div
       className={styles.ganttTable}
@@ -22,59 +25,33 @@ export const TaskListHeaderDefault: React.FC<{
           height: headerHeight - 2,
         }}
       >
-        <div
-          className={styles.ganttTable_HeaderItem}
-          style={{
-            minWidth: rowWidth,
-          }}
-        >
-          &nbsp;Stage Name
-        </div>
-        <div
-          className={styles.ganttTable_HeaderSeparator}
-          style={{
-            height: headerHeight * 0.5,
-            marginTop: headerHeight * 0.2,
-          }}
-        />
-        <div
-          className={styles.ganttTable_HeaderItem}
-          style={{
-            minWidth: rowWidth,  
-          }}
-        >
-          &nbsp;SubStage Name
-        </div>
-        <div
-          className={styles.ganttTable_HeaderSeparator}
-          style={{
-            height: headerHeight * 0.5,
-            marginTop: headerHeight * 0.25,
-          }}
-        />
-        <div
-          className={styles.ganttTable_HeaderItem}
-          style={{
-            minWidth: rowWidth,
-          }}
-        >
-          &nbsp;Team
-        </div>  
-        <div
-          className={styles.ganttTable_HeaderSeparator}
-          style={{
-            height: headerHeight * 0.5,
-            marginTop: headerHeight * 0.2,
-          }}
-        />
-        <div
-          className={styles.ganttTable_HeaderItem}
-          style={{
-            minWidth: rowWidth,  
-          }}
-        >
-          &nbsp;JIRA Epics
-        </div>
+        {
+          headers.map((headerItem, headerIndex) => {
+            return (
+              <React.Fragment>
+                <div
+                  className={styles.ganttTable_HeaderItem}
+                  style={{
+                    minWidth: rowWidth,
+                  }}
+                >
+                  &nbsp;{headerItem.title}
+                </div>
+                {
+                  headerIndex !== headers.length - 1 && (
+                    <div
+                      className={styles.ganttTable_HeaderSeparator}
+                      style={{
+                        height: headerHeight * 0.5,
+                        marginTop: headerHeight * 0.2,
+                      }}
+                    />
+                  )
+                }
+              </React.Fragment>
+            )
+          })
+        }
       </div>
     </div>
   );

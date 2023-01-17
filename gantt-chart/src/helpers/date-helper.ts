@@ -1,3 +1,4 @@
+import { CalendarDateRange, CalendarRanges } from "../types/date-setup";
 import { Task, ViewMode } from "../types/public-types";
 import DateTimeFormatOptions = Intl.DateTimeFormatOptions;
 import DateTimeFormat = Intl.DateTimeFormat;
@@ -131,44 +132,70 @@ export const ganttDateRange = (
       newEndDate = startOfDate(newEndDate, "day");
       newEndDate = addToDate(newEndDate, 1, "day");
       break;
-  }
+    case ViewMode.Range:
+      newStartDate = startOfDate(newStartDate, "day");
+      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
+      newEndDate = startOfDate(newEndDate, "day");
+      newEndDate = addToDate(newEndDate, 19, "day");
+        break;
+  };
+
   return [newStartDate, newEndDate];
 };
 
 export const seedDates = (
   startDate: Date,
   endDate: Date,
-  viewMode: ViewMode
+  viewMode: ViewMode,
+  calendarRanges: CalendarRanges
 ) => {
   let currentDate: Date = new Date(startDate);
+  const ranges:CalendarDateRange[] = [{startDate: currentDate, endDate: currentDate, sprint: ''}];
+  
   const dates: Date[] = [currentDate];
-  while (currentDate < endDate) {
-    switch (viewMode) {
-      case ViewMode.Year:
-        currentDate = addToDate(currentDate, 1, "year");
-        break;
-      case ViewMode.Month:
-        currentDate = addToDate(currentDate, 1, "month");
-        break;
-      case ViewMode.Week:
-        currentDate = addToDate(currentDate, 7, "day");
-        break;
-      case ViewMode.Day:
-        currentDate = addToDate(currentDate, 1, "day");
-        break;
-      case ViewMode.HalfDay:
-        currentDate = addToDate(currentDate, 12, "hour");
-        break;
-      case ViewMode.QuarterDay:
-        currentDate = addToDate(currentDate, 6, "hour");
-        break;
-      case ViewMode.Hour:
-        currentDate = addToDate(currentDate, 1, "hour");
-        break;
+
+  if(viewMode === ViewMode.Range) {
+
+    Object.keys(calendarRanges.ranges || {}).forEach((sprint) => {
+      const startDate = new Date(calendarRanges.ranges?.[sprint].startDate || '');
+      const endDate = new Date(calendarRanges.ranges?.[sprint].endDate || '');
+      ranges.push({startDate, endDate, sprint});
+      dates.push(startDate);
+    });
+    const emptyColumn = { startDate: addToDate(ranges[ranges.length - 1].startDate, 7, "day"), endDate: addToDate(ranges[ranges.length - 1].endDate, 7, "day"), sprint: ''};
+
+    ranges.push(emptyColumn);
+    dates.push(emptyColumn.startDate);
+  } else {
+
+    while (currentDate < endDate) {
+      switch (viewMode) {
+        case ViewMode.Year:
+          currentDate = addToDate(currentDate, 1, "year");
+          break;
+        case ViewMode.Month:
+          currentDate = addToDate(currentDate, 1, "month");
+          break;
+        case ViewMode.Week:
+          currentDate = addToDate(currentDate, 7, "day");
+          break;
+        case ViewMode.Day:
+          currentDate = addToDate(currentDate, 1, "day");
+          break;
+        case ViewMode.HalfDay:
+          currentDate = addToDate(currentDate, 12, "hour");
+          break;
+        case ViewMode.QuarterDay:
+          currentDate = addToDate(currentDate, 6, "hour");
+          break;
+        case ViewMode.Hour:
+          currentDate = addToDate(currentDate, 1, "hour");
+          break;
+      }
+      dates.push(currentDate);
     }
-    dates.push(currentDate);
   }
-  return dates;
+  return { dates, ranges };
 };
 
 export const getLocaleMonth = (date: Date, locale: string) => {
