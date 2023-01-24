@@ -24,6 +24,14 @@ import { HorizontalScroll } from "../other/horizontal-scroll";
 import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
 import styles from "./gantt.module.css";
 
+const COLUMNLIST = [
+  { columnName: 'Code', isVisible: true, columnWithArrow: true, toShow: (task:Task) => {return task.id} },
+  { columnName: 'Nom', isVisible: true, toShow: (task:Task) => {return task.name} },
+  { columnName: 'Début', isVisible: true, isDate:true, toShow: (task:Task) => {return task.start} },
+  { columnName: 'Fin', isVisible: true, isDate:true, toShow: (task:Task) => {return task.end} },
+  { columnName: 'Assigné à', isVisible: true, toShow: (task:Task) => {return task.assignedUser} },
+];
+
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   headerHeight = 50,
@@ -58,6 +66,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
+  columnList = COLUMNLIST,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -444,6 +453,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     horizontalContainerClass: styles.horizontalContainer,
     selectedTask,
     taskListRef,
+    columnList,
     setSelectedTask: handleSelectedTask,
     onExpanderClick: handleExpanderClick,
     TaskListHeader,
