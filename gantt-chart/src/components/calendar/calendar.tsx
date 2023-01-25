@@ -130,9 +130,8 @@ export const Calendar: React.FC<CalendarProps> = ({
       const sprint = dateSetup.ranges[i].sprint;
       const rangeToShow = `${startDate} - ${endDate}`;
       bottomValues.push(
-      <React.Fragment>
+      <React.Fragment  key={`sprint-${rangeToShow}`}>
         <text
-          key={`sprint-${rangeToShow}`}
           y={headerHeight * 0.4}
           x={columnWidth * i + columnWidth * 0.5}
           className={styles.calendarBottomText}

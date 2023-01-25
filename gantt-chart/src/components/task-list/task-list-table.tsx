@@ -80,6 +80,7 @@ export const TaskListTableDefault: React.FC<{
                           maxWidth: rowWidth,
                         }}
                         title={t[rowItem.key]}
+                        key={`${t.id}-first-row-${t[rowItem.key]}`}
                       >
                         <div className={styles.taskListNameWrapper}>
                           <div
@@ -104,6 +105,7 @@ export const TaskListTableDefault: React.FC<{
                         minWidth: rowWidth,
                         maxWidth: rowWidth,
                       }}
+                      key={`${t.id}-${t[rowItem.key]}`}
                     >
                       &nbsp;{t[rowItem.key] || ''}
                     </div>
