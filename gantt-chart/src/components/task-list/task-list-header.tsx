@@ -28,7 +28,7 @@ export const TaskListHeaderDefault: React.FC<{
         {
           headers.map((headerItem, headerIndex) => {
             return (
-              <React.Fragment>
+              <React.Fragment key={headerItem.title}>
                 <div
                   className={styles.ganttTable_HeaderItem}
                   style={{
