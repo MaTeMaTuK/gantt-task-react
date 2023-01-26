@@ -67,6 +67,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDelete,
   onSelect,
   onExpanderClick,
+  onRowClick
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -391,6 +392,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       onExpanderClick({ ...task, hideChildren: !task.hideChildren });
     }
   };
+  
+  const handleOnRowClick = (task: Task) => {
+    if (onRowClick) {
+      onRowClick(task);
+    }
+  };
+  
   const gridProps: GridProps = {
     columnWidth,
     svgWidth,
@@ -451,6 +459,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     taskListRef,
     setSelectedTask: handleSelectedTask,
     onExpanderClick: handleExpanderClick,
+    onRowClick: handleOnRowClick,
     TaskListHeader,
     TaskListTable,
     headers

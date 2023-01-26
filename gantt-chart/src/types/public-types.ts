@@ -82,6 +82,7 @@ export interface EventOption {
    * Invokes on expander on task list
    */
   onExpanderClick?: (task: Task) => void;
+  onRowClick?: (task: Task) => void;
 }
 
 export interface DisplayOption {
