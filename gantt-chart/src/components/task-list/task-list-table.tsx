@@ -32,7 +32,8 @@ export const TaskListTableDefault: React.FC<{
   selectedTaskId: string;
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
-  onRowClick: (task: Task) => void
+  onRowClick: (task: Task) => void,
+  addRecord: (item: string) => void
 }> = ({
   rowHeight,
   rowWidth,
@@ -42,7 +43,8 @@ export const TaskListTableDefault: React.FC<{
   headers,
   // locale, 
   onExpanderClick,
-  onRowClick
+  onRowClick,
+  addRecord
 }) => {
     // const toLocaleDateString = useMemo(
     //   () => toLocaleDateStringFactory(locale),
@@ -96,7 +98,7 @@ export const TaskListTableDefault: React.FC<{
                           >
                             {expanderSymbol}
                           </div>
-                          <div>{t[rowItem.key] || ''}</div>
+                          <div>{t[rowItem.key] ? t[rowItem.key] : rowItem.showAddButton ? <a onClick={() => addRecord(rowItem.key)}>{`Add ${rowItem.title}`}</a> : ''}</div>
                         </div>
                       </div>
                     )
@@ -110,7 +112,7 @@ export const TaskListTableDefault: React.FC<{
                       }}
                       key={`${t.id}-${t[rowItem.key]}`}
                     >
-                      &nbsp;{t[rowItem.key] || ''}
+                      &nbsp;{t[rowItem.key] ? t[rowItem.key] : rowItem.showAddButton ? <a onClick={() => addRecord(rowItem.key)}>{`Add ${rowItem.title}`}</a> : ''}
                     </div>
                     )
                   }

@@ -20,6 +20,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.taskListCell a {
+  cursor: pointer;
+  color: rgb(62, 121, 247);
+}
 .taskListCursorPointer {
   cursor: pointer;
 }

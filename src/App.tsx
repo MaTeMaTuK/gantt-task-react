@@ -94,7 +94,7 @@ function initTasks() {
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 19),
-      stageName: "Party Time",
+      // stageName: "Party Time",
       id: "Task 9",
       progress: 0,
       isDisabled: true,
@@ -109,6 +109,15 @@ function App() {
   const handleExpanderClick = (task: Task) => {
     setTasks(tasks.map(t => (t.id === task.id ? task : t)));
   };
+
+  const handlRowClick = (task: Task) => {
+    console.log(task);
+  };
+
+  const handleAddRecord = (itemToAdd: string) => {
+    console.log(itemToAdd,'=====>>>')
+  };
+
   return (
     <Gantt
       tasks={tasks}
@@ -117,6 +126,7 @@ function App() {
       columnWidth={380}
       headerHeight={80}
       listCellWidth='200px'
+      onRowClick={handlRowClick}
       ranges={{
         "1": {
           startDate: '1/1/2023',
@@ -136,8 +146,9 @@ function App() {
         },
       }}
 
-      headers={[{ key: 'stageName', title: 'Stage Name' }, { key: 'team', title: 'Team Name' }]}
-      onExpanderClick={handleExpanderClick}
+      headers={[{ key: 'stageName', title: 'Stage Name', showAddButton: true }, { key: 'team', title: 'Team Name', showAddButton: true }]}
+      addRecord={handleAddRecord}
+      // onExpanderClick={handleExpanderClick}
     />
   );
 }
