@@ -3,7 +3,6 @@ import Icon from "@ant-design/icons";
 
 const Svg = () => (
   <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1">
-    <title>切片</title>
     <g id="方案" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g
         id="#18-甘特图-初次提醒时间字段配置"

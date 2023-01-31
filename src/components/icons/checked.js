@@ -9,7 +9,6 @@ const Svg = () => (
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <title>编组 13</title>
     <g id="方案" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <g id="#17-甘特图配置" transform="translate(-864.000000, -336.000000)">
         <g id="编组-12" transform="translate(840.000000, 201.000000)">
