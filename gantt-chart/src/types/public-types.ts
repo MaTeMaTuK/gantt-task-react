@@ -2,7 +2,8 @@ import { CalendarRanges } from "./date-setup";
 
 export interface TableHeader {
   key: string;
-  title: string
+  title: string,
+  showAddButton?: boolean
 };
 
 export enum ViewMode {
@@ -83,6 +84,7 @@ export interface EventOption {
    */
   onExpanderClick?: (task: Task) => void;
   onRowClick?: (task: Task) => void;
+  addRecord?: (item: string) => void;
 }
 
 export interface DisplayOption {
