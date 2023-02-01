@@ -9,7 +9,6 @@ const Svg = () => (
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <title>切片</title>
     <g id="方案" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <g
         id="#6.详情页间距标注"
