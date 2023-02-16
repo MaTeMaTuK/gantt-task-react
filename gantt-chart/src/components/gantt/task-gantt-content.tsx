@@ -281,6 +281,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       </g>
       <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
         {tasks.map(task => {
+          if(task?.hide) return (null)
           return (
             <TaskItem
               task={task}
