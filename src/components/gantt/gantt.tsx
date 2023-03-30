@@ -451,6 +451,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
   return (
     <div>
+      <p>Tessst</p>
       <div
         className={styles.wrapper}
         onKeyDown={handleKeyDown}
