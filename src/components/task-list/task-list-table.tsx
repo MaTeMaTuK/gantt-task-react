@@ -106,8 +106,8 @@ export const TaskListTableDefault: React.FC<{
               }}
             >
               &nbsp;{toLocaleDateString(t.end, dateTimeOptions)}
-            </div>
             <h4>hola</h4>
+            </div>
           </div>
         );
       })}
