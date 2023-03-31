@@ -67,6 +67,12 @@ const App = () => {
     console.log("On expander click Id:" + task.id);
   };
 
+  const cb = (task: Task,nort:string):boolean => {
+    console.log("hola")
+    console.log(task)
+    console.log(nort)
+    return true
+  }
   return (
     <div className="Wrapper">
       <ViewSwitcher
@@ -83,13 +89,14 @@ const App = () => {
         onProgressChange={handleProgressChange}
         onDoubleClick={handleDblClick}
         onClick={handleClick}
+        onInputPro={cb}
         onSelect={handleSelect}
         onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
       />
       <h3>Gantt With Limited Height</h3>
-      <Gantt
+      {/* <Gantt
         tasks={tasks}
         viewMode={view}
         onDateChange={handleTaskChange}
@@ -102,7 +109,7 @@ const App = () => {
         listCellWidth={isChecked ? "155px" : ""}
         ganttHeight={300}
         columnWidth={columnWidth}
-      />
+      /> */}
     </div>
   );
 };

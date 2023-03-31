@@ -60,6 +60,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   TaskListTable = TaskListTableDefault,
   onDateChange,
   onProgressChange,
+  onInputPro,
   onDoubleClick,
   onClick,
   onDelete,
@@ -426,6 +427,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setSelectedTask: handleSelectedTask,
     onDateChange,
     onProgressChange,
+    onInputPro,
     onDoubleClick,
     onClick,
     onDelete,
@@ -447,11 +449,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setSelectedTask: handleSelectedTask,
     onExpanderClick: handleExpanderClick,
     TaskListHeader,
+    onInputPro,
     TaskListTable,
   };
   return (
     <div>
-      <p>Tessst</p>
       <div
         className={styles.wrapper}
         onKeyDown={handleKeyDown}

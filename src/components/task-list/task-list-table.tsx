@@ -31,6 +31,8 @@ export const TaskListTableDefault: React.FC<{
   selectedTaskId: string;
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
+  onInputPro?: (task: Task,nort:string) => boolean | Promise<boolean> | undefined;
+
 }> = ({
   rowHeight,
   rowWidth,
@@ -39,7 +41,12 @@ export const TaskListTableDefault: React.FC<{
   fontSize,
   locale,
   onExpanderClick,
+  onInputPro
 }) => {
+
+
+    //const [pro, setPro] = useState<number>(0)
+
     const toLocaleDateString = useMemo(
       () => toLocaleDateStringFactory(locale),
       [locale]
@@ -98,7 +105,7 @@ export const TaskListTableDefault: React.FC<{
               >
                 &nbsp;{toLocaleDateString(t.start, dateTimeOptions)}
               </div>
-              
+
               <div
                 className={styles.taskListCell}
                 style={{
@@ -114,9 +121,21 @@ export const TaskListTableDefault: React.FC<{
                   minWidth: rowWidth,
                   maxWidth: rowWidth,
                 }}>
-                <input type="text" 
+                <button onClick={() =>{
+                   onInputPro? onInputPro(t,"right") : null
+                }}>{"<"}</button>
+                <input
+                type="text"
+                style={{width:30}}
                 value={t.progress}
                 />
+                <button onClick={() =>{
+                   onInputPro? onInputPro(t,"left") : null
+                }}>{">"}</button>
+                <div>
+
+
+                </div>
               </div>
             </div>
           );

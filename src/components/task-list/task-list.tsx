@@ -12,6 +12,7 @@ export type TaskListProps = {
   scrollY: number;
   locale: string;
   tasks: Task[];
+  onInputPro?: (task: Task,nort:string) => boolean | Promise<boolean> | undefined;
   taskListRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
   selectedTask: BarTask | undefined;
@@ -33,6 +34,7 @@ export type TaskListProps = {
     selectedTaskId: string;
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
+    onInputPro?: (task: Task,nort:string) => boolean | Promise<boolean> | undefined;
   }>;
 };
 
@@ -47,6 +49,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   selectedTask,
   setSelectedTask,
   onExpanderClick,
+  onInputPro,
   locale,
   ganttHeight,
   taskListRef,
@@ -78,6 +81,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     selectedTaskId: selectedTaskId,
     setSelectedTask,
     onExpanderClick,
+    onInputPro,
   };
 
   return (
