@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { Fragment, useMemo } from "react";
 import styles from "./task-list-table.module.css";
 import { Task } from "../../types/public-types";
 
@@ -53,6 +53,13 @@ export const TaskListTableDefault: React.FC<{
       () => toLocaleDateStringFactory(locale),
       [locale]
     );
+
+    const btnStyles = {
+      // all: "unset",
+      border: "solid 0.5px gray",
+      borderRadius: 3,
+      padding: 5
+    }
 
     return (
       <div
@@ -125,16 +132,16 @@ export const TaskListTableDefault: React.FC<{
                       minWidth: rowWidth,
                       maxWidth: rowWidth,
                     }}>
-                    <div>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
                       {showProgress &&
-                        <div>
-                          <button onClick={() => {
+                        <Fragment>
+                          <button style={btnStyles} onClick={() => {
                             onInputPro ? onInputPro(t, "left5") : null
                           }}>{"-5"}</button>
-                          <button onClick={() => {
+                          <button  style={btnStyles} onClick={() => {
                             onInputPro ? onInputPro(t, "left") : null
                           }}>{"<"}</button>
-                        </div>
+                        </Fragment>
                       }
 
 
@@ -145,14 +152,14 @@ export const TaskListTableDefault: React.FC<{
                       />
 
                       {showProgress &&
-                        <div>
-                          <button onClick={() => {
+                        <Fragment>
+                          <button style={btnStyles} onClick={() => {
                             onInputPro ? onInputPro(t, "right") : null
                           }}>{">"}</button>
-                          <button onClick={() => {
+                          <button style={btnStyles} onClick={() => {
                             onInputPro ? onInputPro(t, "right5") : null
                           }}>{"+5"}</button>
-                        </div>
+                        </Fragment>
                       }
                     </div>
 

@@ -94,9 +94,10 @@ const App = () => {
         onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
+        showProgress={true}
       />
       <h3>Gantt With Limited Height</h3>
-      {/* <Gantt
+      <Gantt
         tasks={tasks}
         viewMode={view}
         onDateChange={handleTaskChange}
@@ -109,7 +110,8 @@ const App = () => {
         listCellWidth={isChecked ? "155px" : ""}
         ganttHeight={300}
         columnWidth={columnWidth}
-      /> */}
+        showProgress={false}
+      />
     </div>
   );
 };
