@@ -116,12 +116,17 @@ export const TaskListTableDefault: React.FC<{
                 &nbsp;{toLocaleDateString(t.end, dateTimeOptions)}
               </div>
 
-              <div className={styles.taskListCell}
+              {
+                (t.type != "project")?
+              (<div className={styles.taskListCell}
                 style={{
                   minWidth: rowWidth,
                   maxWidth: rowWidth,
                 }}>
                 <div>
+                  <button onClick={() => {
+                    onInputPro ? onInputPro(t, "left5") : null
+                  }}>{"-5"}</button>
                   <button onClick={() => {
                     onInputPro ? onInputPro(t, "left") : null
                   }}>{"<"}</button>
@@ -135,9 +140,14 @@ export const TaskListTableDefault: React.FC<{
                   <button onClick={() => {
                     onInputPro ? onInputPro(t, "right") : null
                   }}>{">"}</button>
+                  <button onClick={() => {
+                    onInputPro ? onInputPro(t, "right5") : null
+                  }}>{"+5"}</button>
                 </div>
 
-              </div>
+              </div>): null
+
+              }
             </div>
           );
         })}
