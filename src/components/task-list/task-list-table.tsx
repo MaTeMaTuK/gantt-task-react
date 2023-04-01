@@ -121,22 +121,22 @@ export const TaskListTableDefault: React.FC<{
                   minWidth: rowWidth,
                   maxWidth: rowWidth,
                 }}>
-                <button onClick={() => {
-                  onInputPro ? onInputPro(t, "left") : null
-                }}>{"<"}</button>
-
                 <div>
+                  <button onClick={() => {
+                    onInputPro ? onInputPro(t, "left") : null
+                  }}>{"<"}</button>
+
                   <input
                     type="text"
-                    style={{ width: 30 }}
+                    style={{ width: 30, textAlign: 'center' }}
                     value={t.progress}
                   />
 
                   <button onClick={() => {
                     onInputPro ? onInputPro(t, "right") : null
                   }}>{">"}</button>
-
                 </div>
+
               </div>
             </div>
           );
