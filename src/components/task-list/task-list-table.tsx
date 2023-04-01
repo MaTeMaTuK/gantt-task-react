@@ -32,6 +32,7 @@ export const TaskListTableDefault: React.FC<{
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
   onInputPro?: (task: Task, nort: string) => boolean | Promise<boolean> | undefined;
+  showProgress?: boolean;
 
 }> = ({
   rowHeight,
@@ -41,7 +42,8 @@ export const TaskListTableDefault: React.FC<{
   fontSize,
   locale,
   onExpanderClick,
-  onInputPro
+  onInputPro,
+  showProgress
 }) => {
 
 
@@ -117,7 +119,7 @@ export const TaskListTableDefault: React.FC<{
               </div>
 
               {
-                ( t.type != "project" || (t.styles == undefined) )?
+                ( t.type != "project" || showProgress )?
               (<div className={styles.taskListCell}
                 style={{
                   minWidth: rowWidth,

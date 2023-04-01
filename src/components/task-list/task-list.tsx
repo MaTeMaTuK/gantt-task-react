@@ -13,6 +13,7 @@ export type TaskListProps = {
   locale: string;
   tasks: Task[];
   onInputPro?: (task: Task,nort:string) => boolean | Promise<boolean> | undefined;
+  showProgress?: boolean;
   taskListRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
   selectedTask: BarTask | undefined;
@@ -35,6 +36,7 @@ export type TaskListProps = {
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
     onInputPro?: (task: Task,nort:string) => boolean | Promise<boolean> | undefined;
+    showProgress?: boolean;
   }>;
 };
 
@@ -50,6 +52,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   setSelectedTask,
   onExpanderClick,
   onInputPro,
+  showProgress,
   locale,
   ganttHeight,
   taskListRef,
@@ -82,6 +85,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     setSelectedTask,
     onExpanderClick,
     onInputPro,
+    showProgress,
   };
 
   return (
