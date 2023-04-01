@@ -72,7 +72,7 @@ export const TaskListHeaderDefault: React.FC<{
             minWidth: rowWidth,
           }}
         >
-          &nbsp;Progress
+          &nbsp;Progress in %
         </div>
       </div>
     </div>

@@ -133,7 +133,7 @@ export const TaskListTableDefault: React.FC<{
 
                   <input
                     type="text"
-                    style={{ width: 30, textAlign: 'center' }}
+                    style={{ width: 33, textAlign: 'center', paddingLeft: 3, paddingRight: 3}}
                     value={t.progress}
                   />
 
