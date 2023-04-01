@@ -117,7 +117,7 @@ export const TaskListTableDefault: React.FC<{
               </div>
 
               {
-                (t.type != "project" || (!t.styles))?
+                ( t.type != "project" || (t.styles == undefined) )?
               (<div className={styles.taskListCell}
                 style={{
                   minWidth: rowWidth,
