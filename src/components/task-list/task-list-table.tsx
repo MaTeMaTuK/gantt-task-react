@@ -31,7 +31,7 @@ export const TaskListTableDefault: React.FC<{
   selectedTaskId: string;
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
-  onInputPro?: (task: Task,nort:string) => boolean | Promise<boolean> | undefined;
+  onInputPro?: (task: Task, nort: string) => boolean | Promise<boolean> | undefined;
 
 }> = ({
   rowHeight,
@@ -121,19 +121,18 @@ export const TaskListTableDefault: React.FC<{
                   minWidth: rowWidth,
                   maxWidth: rowWidth,
                 }}>
-                <button onClick={() =>{
-                   onInputPro? onInputPro(t,"right") : null
-                }}>{"<"}</button>
-                <input
-                type="text"
-                style={{width:30}}
-                value={t.progress}
-                />
-                <button onClick={() =>{
-                   onInputPro? onInputPro(t,"left") : null
+                <button onClick={() => {
+                  onInputPro ? onInputPro(t, "left") : null
                 }}>{">"}</button>
                 <div>
-
+                  <input
+                    type="text"
+                    style={{ width: 30 }}
+                    value={t.progress}
+                  />
+                  <button onClick={() => {
+                    onInputPro ? onInputPro(t, "right") : null
+                  }}>{"<"}</button>
 
                 </div>
               </div>
