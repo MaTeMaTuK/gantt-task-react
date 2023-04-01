@@ -119,35 +119,44 @@ export const TaskListTableDefault: React.FC<{
               </div>
 
               {
-                ( t.type != "project" || showProgress )?
-              (<div className={styles.taskListCell}
-                style={{
-                  minWidth: rowWidth,
-                  maxWidth: rowWidth,
-                }}>
-                <div>
-                  <button onClick={() => {
-                    onInputPro ? onInputPro(t, "left5") : null
-                  }}>{"-5"}</button>
-                  <button onClick={() => {
-                    onInputPro ? onInputPro(t, "left") : null
-                  }}>{"<"}</button>
+                (t.type != "project") ?
+                  (<div className={styles.taskListCell}
+                    style={{
+                      minWidth: rowWidth,
+                      maxWidth: rowWidth,
+                    }}>
+                    <div>
+                      {showProgress &&
+                        <div>
+                          <button onClick={() => {
+                            onInputPro ? onInputPro(t, "left5") : null
+                          }}>{"-5"}</button>
+                          <button onClick={() => {
+                            onInputPro ? onInputPro(t, "left") : null
+                          }}>{"<"}</button>
+                        </div>
+                      }
 
-                  <input
-                    type="text"
-                    style={{ width: 33, textAlign: 'center', paddingLeft: 3, paddingRight: 3}}
-                    value={t.progress}
-                  />
 
-                  <button onClick={() => {
-                    onInputPro ? onInputPro(t, "right") : null
-                  }}>{">"}</button>
-                  <button onClick={() => {
-                    onInputPro ? onInputPro(t, "right5") : null
-                  }}>{"+5"}</button>
-                </div>
+                      <input
+                        type="text"
+                        style={{ width: 33, textAlign: 'center', paddingLeft: 3, paddingRight: 3 }}
+                        value={t.progress}
+                      />
 
-              </div>): null
+                      {showProgress &&
+                        <div>
+                          <button onClick={() => {
+                            onInputPro ? onInputPro(t, "right") : null
+                          }}>{">"}</button>
+                          <button onClick={() => {
+                            onInputPro ? onInputPro(t, "right5") : null
+                          }}>{"+5"}</button>
+                        </div>
+                      }
+                    </div>
+
+                  </div>) : null
 
               }
             </div>
