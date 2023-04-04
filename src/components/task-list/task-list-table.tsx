@@ -47,19 +47,12 @@ export const TaskListTableDefault: React.FC<{
 }) => {
 
 
-    //const [pro, setPro] = useState<number>(0)
 
     const toLocaleDateString = useMemo(
       () => toLocaleDateStringFactory(locale),
       [locale]
     );
 
-    const btnStyles = {
-      // all: "unset",
-      border: "solid 0.5px gray",
-      borderRadius: 3,
-      padding: 5
-    }
 
     return (
       <div
@@ -132,15 +125,23 @@ export const TaskListTableDefault: React.FC<{
                       minWidth: rowWidth,
                       maxWidth: rowWidth,
                     }}>
-                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
                       {showProgress &&
                         <Fragment>
-                          <button style={btnStyles} onClick={() => {
-                            onInputPro ? onInputPro(t, "left5") : null
-                          }}>{"-5"}</button>
-                          <button  style={btnStyles} onClick={() => {
-                            onInputPro ? onInputPro(t, "left") : null
-                          }}>{"<"}</button>
+                          <button
+                            className={styles.btn_style}
+                            onClick={() => {
+                              onInputPro ? onInputPro(t, "left5") : null
+                            }}>
+                            {"-5"}
+                          </button>
+                          <button
+                            className={styles.btn_style}
+                            onClick={() => {
+                              onInputPro ? onInputPro(t, "left") : null
+                            }}>
+                            {"<"}
+                          </button>
                         </Fragment>
                       }
 
@@ -153,12 +154,20 @@ export const TaskListTableDefault: React.FC<{
 
                       {showProgress &&
                         <Fragment>
-                          <button style={btnStyles} onClick={() => {
-                            onInputPro ? onInputPro(t, "right") : null
-                          }}>{">"}</button>
-                          <button style={btnStyles} onClick={() => {
-                            onInputPro ? onInputPro(t, "right5") : null
-                          }}>{"+5"}</button>
+                          <button
+                            className={styles.btn_style}
+                            onClick={() => {
+                              onInputPro ? onInputPro(t, "right") : null
+                            }}>
+                            {">"}
+                          </button>
+                          <button
+                            className={styles.btn_style}
+                            onClick={() => {
+                              onInputPro ? onInputPro(t, "right5") : null
+                            }}>
+                            {"+5"}
+                          </button>
                         </Fragment>
                       }
                     </div>
