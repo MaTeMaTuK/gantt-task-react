@@ -75,7 +75,7 @@ export const TaskListTableDefault: React.FC<{
           return (
             <div
               className={styles.taskListTableRow}
-              style={{ height: rowHeight }}
+              style={{ height: rowHeight, fontSize: 12 }}
               key={`${t.id}row`}
             >
               <div
@@ -124,21 +124,21 @@ export const TaskListTableDefault: React.FC<{
                 (t.type != "project") ?
                   (<div className={styles.taskListCell}
                     style={{
-                      minWidth: rowWidth,
+                      minWidth: 90,
                       maxWidth: rowWidth,
                     }}>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                       {showProgress &&
                         <Fragment>
                           <Input
-                            style={{ width: 100 }}
+                            style={{ width: 85, fontSize: 12 }}
                             type="select" onChange={(e) => {
                               // console.log(e.target.value)
                               onInputPro ? onInputPro(t, parseInt(e?.target?.value)) : null
                             }}
                           >
                             <option selected={t.progress == 0} value={0}>0 %</option>
-                            <option selected={t.progress == 12} value={12}>12 %</option>
+                            <option selected={t.progress == 12} value={12}>12%</option>
                             <option selected={t.progress == 25} value={25}>25 %</option>
                             <option selected={t.progress == 37} value={37}>37 %</option>
                             <option selected={t.progress == 50} value={50}>50 %</option>

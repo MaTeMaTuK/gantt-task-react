@@ -69,10 +69,11 @@ export const TaskListHeaderDefault: React.FC<{
         <div
           className={styles.ganttTable_HeaderItem}
           style={{
-            minWidth: rowWidth,
+            // minWidth: rowWidth,
+            minWidth: 90,
           }}
         >
-          &nbsp;Progress in %
+          &nbsp;Progress
         </div>
       </div>
     </div>
