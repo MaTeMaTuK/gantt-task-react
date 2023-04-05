@@ -67,10 +67,10 @@ const App = () => {
     console.log("On expander click Id:" + task.id);
   };
 
-  const cb = (task: Task,nort:string):boolean => {
+  const cb = (task: Task, progress:number):boolean => {
     console.log("hola")
     console.log(task)
-    console.log(nort)
+    console.log(progress)
     return true
   }
   return (

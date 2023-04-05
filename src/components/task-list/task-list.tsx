@@ -12,7 +12,7 @@ export type TaskListProps = {
   scrollY: number;
   locale: string;
   tasks: Task[];
-  onInputPro?: (task: Task,nort:string) => boolean | Promise<boolean> | undefined;
+  onInputPro?: (task: Task, progress:number) => boolean | Promise<boolean> | undefined;
   showProgress?: boolean;
   taskListRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
@@ -35,7 +35,7 @@ export type TaskListProps = {
     selectedTaskId: string;
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
-    onInputPro?: (task: Task,nort:string) => boolean | Promise<boolean> | undefined;
+    onInputPro?: (task: Task, progress:number) => boolean | Promise<boolean> | undefined;
     showProgress?: boolean;
   }>;
 };

@@ -1,6 +1,8 @@
 import React, { Fragment, useMemo } from "react";
 import styles from "./task-list-table.module.css";
 import { Task } from "../../types/public-types";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Input } from "reactstrap";
 
 const localeDateStringCache = {};
 const toLocaleDateStringFactory =
@@ -31,7 +33,7 @@ export const TaskListTableDefault: React.FC<{
   selectedTaskId: string;
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
-  onInputPro?: (task: Task, nort: string) => boolean | Promise<boolean> | undefined;
+  onInputPro?: (task: Task, progress: number) => boolean | Promise<boolean> | undefined;
   showProgress?: boolean;
 
 }> = ({
@@ -128,46 +130,23 @@ export const TaskListTableDefault: React.FC<{
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                       {showProgress &&
                         <Fragment>
-                          <button
-                            className={styles.btn_style}
-                            onClick={() => {
-                              onInputPro ? onInputPro(t, "left5") : null
-                            }}>
-                            {"-5"}
-                          </button>
-                          <button
-                            className={styles.btn_style}
-                            onClick={() => {
-                              onInputPro ? onInputPro(t, "left") : null
-                            }}>
-                            {"<"}
-                          </button>
-                        </Fragment>
-                      }
-
-
-                      <input
-                        type="text"
-                        style={{ width: 33, textAlign: 'center', paddingLeft: 3, paddingRight: 3 }}
-                        value={t.progress}
-                      />
-
-                      {showProgress &&
-                        <Fragment>
-                          <button
-                            className={styles.btn_style}
-                            onClick={() => {
-                              onInputPro ? onInputPro(t, "right") : null
-                            }}>
-                            {">"}
-                          </button>
-                          <button
-                            className={styles.btn_style}
-                            onClick={() => {
-                              onInputPro ? onInputPro(t, "right5") : null
-                            }}>
-                            {"+5"}
-                          </button>
+                          <Input
+                            style={{ width: 100 }}
+                            type="select" onChange={(e) => {
+                              // console.log(e.target.value)
+                              onInputPro ? onInputPro(t, parseInt(e?.target?.value)) : null
+                            }}
+                          >
+                            <option selected={t.progress == 0} value={0}>0 %</option>
+                            <option selected={t.progress == 12} value={12}>12 %</option>
+                            <option selected={t.progress == 12} value={25}>25 %</option>
+                            <option selected={t.progress == 37} value={37}>37 %</option>
+                            <option selected={t.progress == 50} value={50}>50 %</option>
+                            <option selected={t.progress == 62} value={62}>62 %</option>
+                            <option selected={t.progress == 75} value={75}>75 %</option>
+                            <option selected={t.progress == 87} value={87}>87 %</option>
+                            <option selected={t.progress == 100} value={100}>100 %</option>
+                          </Input>
                         </Fragment>
                       }
                     </div>
@@ -178,6 +157,6 @@ export const TaskListTableDefault: React.FC<{
             </div>
           );
         })}
-      </div>
+      </div >
     );
   };
