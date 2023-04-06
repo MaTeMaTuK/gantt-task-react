@@ -138,13 +138,9 @@ export const TaskListTableDefault: React.FC<{
                             }}
                           >
                             <option selected={t.progress == 0} value={0}>0 %</option>
-                            <option selected={t.progress == 12} value={12}>12%</option>
                             <option selected={t.progress == 25} value={25}>25 %</option>
-                            <option selected={t.progress == 37} value={37}>37 %</option>
                             <option selected={t.progress == 50} value={50}>50 %</option>
-                            <option selected={t.progress == 62} value={62}>62 %</option>
                             <option selected={t.progress == 75} value={75}>75 %</option>
-                            <option selected={t.progress == 87} value={87}>87 %</option>
                             <option selected={t.progress == 100} value={100}>100 %</option>
                           </Input>
                         </Fragment>
