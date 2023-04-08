@@ -16,7 +16,7 @@ export interface Task {
   name: string;
   start: Date;
   end: Date;
-  user: string;
+  user: any;
   urlImg: string;
   /**
    * From 0 to 100

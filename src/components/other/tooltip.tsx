@@ -129,7 +129,7 @@ export const StandardTooltipContent: React.FC<{
         alignItems: 'center'
       }}>
         <img
-          src={task.urlImg}
+          src={task.urlImg ||'https://w7.pngwing.com/pngs/754/2/png-transparent-samsung-galaxy-a8-a8-user-login-telephone-avatar-pawn-blue-angle-sphere-thumbnail.png'}
           style={{
             width: '50px',
             height: '50px',
@@ -139,7 +139,7 @@ export const StandardTooltipContent: React.FC<{
             marginTop: '15px',
           }}
           />
-          <h3>{`${task.user}`}</h3>
+          <h3>{`${task.user.firstName} ${task.user.lastName}`}</h3>
       </div>
 
       <b style={{ fontSize: fontSize + 6 }}>{`${
