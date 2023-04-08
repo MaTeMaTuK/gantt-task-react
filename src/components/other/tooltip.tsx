@@ -139,7 +139,7 @@ export const StandardTooltipContent: React.FC<{
             marginTop: '15px',
           }}
           />
-          <h3>{`${task.user.firstName} ${task.user.lastName}`}</h3>
+          <h3>{`${task?.user?.firstName || ''} ${task?.user?.lastName || ''}`}</h3>
       </div>
 
       <b style={{ fontSize: fontSize + 6 }}>{`${
