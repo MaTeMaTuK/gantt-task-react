@@ -65,6 +65,7 @@
   ],
   "dependencies": {
     "bootstrap": "^5.2.3",
+    "react-feather": "^2.0.10",
     "reactstrap": "^9.1.8"
   }
 }

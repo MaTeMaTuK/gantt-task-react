@@ -3,6 +3,7 @@ import styles from "./task-list-table.module.css";
 import { Task } from "../../types/public-types";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Input } from "reactstrap";
+import { Edit3 } from 'react-feather';
 
 const localeDateStringCache = {};
 const toLocaleDateStringFactory =
@@ -34,6 +35,7 @@ export const TaskListTableDefault: React.FC<{
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
   onInputPro?: (task: Task, progress: number) => boolean | Promise<boolean> | undefined;
+  onEditNameTask? : (task: Task) => undefined;
   showProgress?: boolean;
 
 }> = ({
@@ -45,6 +47,7 @@ export const TaskListTableDefault: React.FC<{
   locale,
   onExpanderClick,
   onInputPro,
+  onEditNameTask,
   showProgress
 }) => {
 
@@ -97,6 +100,16 @@ export const TaskListTableDefault: React.FC<{
                   >
                     {expanderSymbol}
                   </div>
+                  <Edit3
+                    color={'blue'}
+                    size={17}
+                    className='mx-1'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      // alert(`${t.id}row`);
+                      onEditNameTask ? onEditNameTask(t) : null
+                    }}
+                  />
                   <div>{t.name}</div>
                 </div>
               </div>

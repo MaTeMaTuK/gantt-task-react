@@ -64,6 +64,8 @@ export interface EventOption {
    * Invokes on progress change. Chart undoes operation if method return false or error.
    */
   onInputPro?: (task: Task, progress: number) => boolean | Promise<boolean> | undefined;
+
+  onEditNameTask?: (task: Task) => undefined;
   
   showProgress?: boolean;
 
