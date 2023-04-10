@@ -52,7 +52,7 @@ export function initTasks() {
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
-      name: "Discussion with team",
+      name: "Discussion with team and more items",
       id: "Task 2",
       user: "Juan Flores",
       urlImg: "https://pyxis.nymag.com/v1/imgs/ae1/f57/8418213aa60777d7a7389b34972f3569d5-Stephen-Lang-chatroom.1x.rsquare.w1400.jpg",

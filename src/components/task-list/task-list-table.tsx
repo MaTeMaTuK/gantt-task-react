@@ -3,7 +3,7 @@ import styles from "./task-list-table.module.css";
 import { Task } from "../../types/public-types";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Input } from "reactstrap";
-import { Edit3 } from 'react-feather';
+import { Edit2 } from 'react-feather';
 
 const localeDateStringCache = {};
 const toLocaleDateStringFactory =
@@ -45,7 +45,7 @@ export const TaskListTableDefault: React.FC<{
   fontFamily,
   fontSize,
   locale,
-  onExpanderClick,
+  // onExpanderClick,
   onInputPro,
   onEditNameTask,
   showProgress
@@ -68,12 +68,12 @@ export const TaskListTableDefault: React.FC<{
         }}
       >
         {tasks.map(t => {
-          let expanderSymbol = "";
-          if (t.hideChildren === false) {
-            expanderSymbol = "▼";
-          } else if (t.hideChildren === true) {
-            expanderSymbol = "▶";
-          }
+          // let expanderSymbol = "";
+          // if (t.hideChildren === false) {
+          //   expanderSymbol = "▼";
+          // } else if (t.hideChildren === true) {
+          //   expanderSymbol = "▶";
+          // }
 
           return (
             <div
@@ -90,7 +90,7 @@ export const TaskListTableDefault: React.FC<{
                 title={t.name}
               >
                 <div className={styles.taskListNameWrapper}>
-                  <div
+                  {/* <div
                     className={
                       expanderSymbol
                         ? styles.taskListExpander
@@ -99,20 +99,23 @@ export const TaskListTableDefault: React.FC<{
                     onClick={() => onExpanderClick(t)}
                   >
                     {expanderSymbol}
+                  </div> */}
+
+                  <div style={{ display: "flex", alignItems: 'center' }}>
+                    {(t.type != "project") &&
+                      <Edit2
+                        color={'#a3a3ff'}
+                        size={17}
+                        className='mx-0'
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          // alert(`${t.id}row`);
+                          onEditNameTask ? onEditNameTask(t) : null
+                        }}
+                      />
+                    }
+                    <div>{t.name}</div>
                   </div>
-                  {(t.type != "project") &&
-                    <Edit3
-                    color={'blue'}
-                    size={17}
-                    className='mx-1'
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      // alert(`${t.id}row`);
-                      onEditNameTask ? onEditNameTask(t) : null
-                    }}
-                  />
-                  }
-                  <div>{t.name}</div>
                 </div>
               </div>
               <div
