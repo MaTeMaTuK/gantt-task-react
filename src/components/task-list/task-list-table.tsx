@@ -101,12 +101,12 @@ export const TaskListTableDefault: React.FC<{
                     {expanderSymbol}
                   </div> */}
 
-                  <div style={{ display: "flex", alignItems: 'center'}}>
+                  <div style={{ display: "flex", alignItems: 'center', paddingLeft: 5}}>
                     {(t.type != "project") &&
                       <Edit2
                         color={'#a3a3ff'}
                         size={12}
-                        className='mx-1'
+                        className='mx-0'
                         style={{ cursor: 'pointer' }}
                         onClick={() => {
                           // alert(`${t.id}row`);
@@ -114,7 +114,7 @@ export const TaskListTableDefault: React.FC<{
                         }}
                       />
                     }
-                    <div>{t.name}</div>
+                    <div style={{ marginLeft: 3}}>{t.name}</div>
                   </div>
                 </div>
               </div>
