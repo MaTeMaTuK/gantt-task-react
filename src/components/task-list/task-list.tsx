@@ -13,6 +13,7 @@ export type TaskListProps = {
   locale: string;
   tasks: Task[];
   onInputPro?: (task: Task, progress:number) => boolean | Promise<boolean> | undefined;
+  onEditNameTask?: (task: Task) => boolean | undefined;
   showProgress?: boolean;
   taskListRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
@@ -36,6 +37,7 @@ export type TaskListProps = {
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
     onInputPro?: (task: Task, progress:number) => boolean | Promise<boolean> | undefined;
+    onEditNameTask?: (task: Task) => boolean | undefined;
     showProgress?: boolean;
   }>;
 };
@@ -52,6 +54,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   setSelectedTask,
   onExpanderClick,
   onInputPro,
+  onEditNameTask,
   showProgress,
   locale,
   ganttHeight,
@@ -85,6 +88,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     setSelectedTask,
     onExpanderClick,
     onInputPro,
+    onEditNameTask,
     showProgress,
   };
 

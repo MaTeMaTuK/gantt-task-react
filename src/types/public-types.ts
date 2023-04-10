@@ -65,7 +65,7 @@ export interface EventOption {
    */
   onInputPro?: (task: Task, progress: number) => boolean | Promise<boolean> | undefined;
 
-  onEditNameTask?: (task: Task) => undefined;
+  onEditNameTask?: (task: Task) => boolean | undefined;
   
   showProgress?: boolean;
 

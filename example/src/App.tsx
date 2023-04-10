@@ -73,6 +73,12 @@ const App = () => {
     console.log(progress)
     return true
   }
+  const cbTaskName = (task: Task):boolean | undefined => {
+    console.log("hola task edit")
+    console.log(task);
+    return true;
+  }
+
   return (
     <div className="Wrapper">
       <ViewSwitcher
@@ -90,6 +96,7 @@ const App = () => {
         onDoubleClick={handleDblClick}
         onClick={handleClick}
         onInputPro={cb}
+        onEditNameTask={cbTaskName}
         onSelect={handleSelect}
         onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}

@@ -61,6 +61,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDateChange,
   onProgressChange,
   onInputPro,
+  onEditNameTask,
   showProgress,
   onDoubleClick,
   onClick,
@@ -429,6 +430,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onDateChange,
     onProgressChange,
     onInputPro,
+    onEditNameTask,
     showProgress,
     onDoubleClick,
     onClick,
@@ -452,6 +454,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onExpanderClick: handleExpanderClick,
     TaskListHeader,
     onInputPro,
+    onEditNameTask,
     showProgress,
     TaskListTable,
   };

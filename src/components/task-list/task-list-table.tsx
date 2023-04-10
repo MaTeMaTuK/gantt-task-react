@@ -35,7 +35,7 @@ export const TaskListTableDefault: React.FC<{
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
   onInputPro?: (task: Task, progress: number) => boolean | Promise<boolean> | undefined;
-  onEditNameTask? : (task: Task) => undefined;
+  onEditNameTask?: (task: Task) => boolean | undefined;
   showProgress?: boolean;
 
 }> = ({
@@ -100,7 +100,8 @@ export const TaskListTableDefault: React.FC<{
                   >
                     {expanderSymbol}
                   </div>
-                  <Edit3
+                  {(t.type != "project") &&
+                    <Edit3
                     color={'blue'}
                     size={17}
                     className='mx-1'
@@ -110,6 +111,7 @@ export const TaskListTableDefault: React.FC<{
                       onEditNameTask ? onEditNameTask(t) : null
                     }}
                   />
+                  }
                   <div>{t.name}</div>
                 </div>
               </div>
