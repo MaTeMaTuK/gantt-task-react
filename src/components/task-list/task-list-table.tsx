@@ -107,7 +107,7 @@ export const TaskListTableDefault: React.FC<{
                         color={'#a3a3ff'}
                         size={12}
                         className='mx-0'
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: 'pointer', border: 'solid #a3a3ff 1px', padding: 1, borderRadius: 2 }}
                         onClick={() => {
                           // alert(`${t.id}row`);
                           onEditNameTask ? onEditNameTask(t) : null
