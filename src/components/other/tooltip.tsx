@@ -123,6 +123,25 @@ export const StandardTooltipContent: React.FC<{
   };
   return (
     <div className={styles.tooltipDefaultContainer} style={style}>
+
+       <div style={{
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        <img
+          src={task.urlImg ||'https://w7.pngwing.com/pngs/754/2/png-transparent-samsung-galaxy-a8-a8-user-login-telephone-avatar-pawn-blue-angle-sphere-thumbnail.png'}
+          style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '50%',
+            marginRight: '15px',
+            marginBottom: '15px',
+            marginTop: '15px',
+          }}
+          />
+          <h3>{`${task?.userInfo?.firstName || ''} ${task?.userInfo?.lastName || ''}`}</h3>
+      </div>
+
       <b style={{ fontSize: fontSize + 6 }}>{`${
         task.name
       }: ${task.start.getDate()}-${

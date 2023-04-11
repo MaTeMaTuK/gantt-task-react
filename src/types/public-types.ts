@@ -16,6 +16,9 @@ export interface Task {
   name: string;
   start: Date;
   end: Date;
+  user: string;
+  userInfo: any;
+  urlImg: string;
   /**
    * From 0 to 100
    */
@@ -60,6 +63,12 @@ export interface EventOption {
   /**
    * Invokes on progress change. Chart undoes operation if method return false or error.
    */
+  onInputPro?: (task: Task, progress: number) => boolean | Promise<boolean> | undefined;
+
+  onEditNameTask?: (task: Task) => boolean | undefined;
+  
+  showProgress?: boolean;
+
   onProgressChange?: (
     task: Task,
     children: Task[]

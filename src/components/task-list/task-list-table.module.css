@@ -20,6 +20,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .taskListNameWrapper {
   display: flex;
 }
@@ -31,8 +32,25 @@
   user-select: none;
   cursor: pointer;
 }
+
 .taskListEmptyExpander {
   font-size: 0.6rem;
   padding-left: 1rem;
   user-select: none;
+}
+
+
+.btn_style {
+  border: solid 1px gray;
+  border-radius: 3px;
+  background-color: #f1f1f1;
+  padding: 5
+}
+
+.btn_style:hover {
+  background-color: #E7E7E7
+}
+
+.btn_style:active {
+  background-color: #f1f1f1
 }
