@@ -6,7 +6,12 @@ export const TaskListHeaderDefault: React.FC<{
   rowWidth: string;
   fontFamily: string;
   fontSize: string;
-}> = ({ headerHeight, fontFamily, fontSize, rowWidth }) => {
+  headerTitle: string;
+  headerStartTitle: string;
+  headerEndTitle: string;
+  isShowStartTime: boolean;
+  isShowEndTime: boolean;
+}> = ({ headerHeight, fontFamily, fontSize, rowWidth, headerTitle, headerStartTitle, headerEndTitle, isShowStartTime, isShowEndTime}) => {
   return (
     <div
       className={styles.ganttTable}
@@ -27,8 +32,9 @@ export const TaskListHeaderDefault: React.FC<{
             minWidth: rowWidth,
           }}
         >
-          &nbsp;Name
+          &nbsp;{headerTitle}
         </div>
+        {isShowStartTime && <div>
         <div
           className={styles.ganttTable_HeaderSeparator}
           style={{
@@ -42,23 +48,28 @@ export const TaskListHeaderDefault: React.FC<{
             minWidth: rowWidth,
           }}
         >
-          &nbsp;From
+          &nbsp;{headerStartTitle}
         </div>
-        <div
-          className={styles.ganttTable_HeaderSeparator}
-          style={{
-            height: headerHeight * 0.5,
-            marginTop: headerHeight * 0.25,
-          }}
-        />
-        <div
-          className={styles.ganttTable_HeaderItem}
-          style={{
-            minWidth: rowWidth,
-          }}
-        >
-          &nbsp;To
         </div>
+}
+        {isShowEndTime && <div>
+          <div
+            className={styles.ganttTable_HeaderSeparator}
+            style={{
+              height: headerHeight * 0.5,
+              marginTop: headerHeight * 0.25,
+            }}
+          />
+          <div
+            className={styles.ganttTable_HeaderItem}
+            style={{
+              minWidth: rowWidth,
+            }}
+          >
+            &nbsp;{headerEndTitle}
+          </div>
+        </div>
+        }
       </div>
     </div>
   );

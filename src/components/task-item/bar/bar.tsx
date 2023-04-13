@@ -21,7 +21,7 @@ export const Bar: React.FC<TaskItemProps> = ({
   );
   const handleHeight = task.height - 2;
   return (
-    <g className={styles.barWrapper} tabIndex={0}>
+    <g className={styles.barWrapper} tabIndex={0} key="bar-wrapper">
       <BarDisplay
         x={task.x1}
         y={task.y}
@@ -36,7 +36,7 @@ export const Bar: React.FC<TaskItemProps> = ({
           isDateChangeable && onEventStart("move", task, e);
         }}
       />
-      <g className="handleGroup">
+      <g className="handleGroup" key="handleGroup">
         {isDateChangeable && (
           <g>
             {/* left */}

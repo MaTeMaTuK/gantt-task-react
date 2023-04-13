@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { EventOption } from "../../types/public-types";
+import { EventOption, ViewMode } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
@@ -12,6 +12,7 @@ import {
 } from "../../types/gantt-task-actions";
 
 export type TaskGanttContentProps = {
+  viewMode: ViewMode | string,
   tasks: BarTask[];
   dates: Date[];
   ganttEvent: GanttEvent;
@@ -27,12 +28,15 @@ export type TaskGanttContentProps = {
   fontSize: string;
   fontFamily: string;
   rtl: boolean;
+  rightLabelColor: string;
+  leftLabelColor: string;
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
 } & EventOption;
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
+  viewMode,
   tasks,
   dates,
   ganttEvent,
@@ -47,6 +51,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   fontFamily,
   fontSize,
   rtl,
+  rightLabelColor,
+  leftLabelColor,
   setGanttEvent,
   setFailedTask,
   setSelectedTask,
@@ -54,6 +60,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onProgressChange,
   onDoubleClick,
   onDelete,
+  onClick
 }) => {
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
@@ -231,6 +238,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     } else if (action === "dblclick") {
       !!onDoubleClick && onDoubleClick(task);
     }
+    else if(action === 'click'){
+      !!onClick && onClick(task)
+    }
     // Change task event start
     else if (action === "move") {
       if (!svg?.current || !point) return;
@@ -255,7 +265,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   return (
     <g className="content">
-      <g className="arrows" fill={arrowColor} stroke={arrowColor}>
+      <g className="arrows" fill={arrowColor} stroke={arrowColor} key="arrows">
         {tasks.map(task => {
           return task.barChildren.map(child => {
             return (
@@ -272,10 +282,12 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           });
         })}
       </g>
-      <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
+      <g className="bar" fontFamily={fontFamily} fontSize={fontSize} key="bar">
         {tasks.map(task => {
           return (
-            <TaskItem
+              <TaskItem
+              columnWidth={columnWidth}
+              viewMode={viewMode}
               task={task}
               arrowIndent={arrowIndent}
               taskHeight={taskHeight}
@@ -286,6 +298,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               key={task.id}
               isSelected={!!selectedTask && task.id === selectedTask.id}
               rtl={rtl}
+              rightLabelColor={rightLabelColor}
+              leftLabelColor={leftLabelColor}
             />
           );
         })}

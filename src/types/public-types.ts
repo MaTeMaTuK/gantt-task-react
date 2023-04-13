@@ -7,7 +7,7 @@ export enum ViewMode {
   Week = "Week",
   Month = "Month",
 }
-export type TaskType = "task" | "milestone" | "project";
+export type TaskType = "task" | "milestone" | "project" | "smalltask";
 export interface Task {
   id: string;
   type: TaskType;
@@ -29,6 +29,10 @@ export interface Task {
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
+  rightLabel?: string;
+  leftLabel?: string;
+  title?: string;
+  isShowTableTooltip?: boolean;
 }
 
 export interface EventOption {
@@ -49,14 +53,14 @@ export interface EventOption {
    */
   onDateChange?: (
     task: Task,
-    children: Task[]
+    newTasks?: Task[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Invokes on progress change. Chart undoes operation if method return false or error.
    */
   onProgressChange?: (
     task: Task,
-    children: Task[]
+    newTasks?: Task[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Invokes on delete selected task. Chart undoes operation if method return false or error.
@@ -66,19 +70,28 @@ export interface EventOption {
    * Invokes on expander on task list
    */
   onExpanderClick?: (task: Task) => void;
+  onClick?: (task: Task) => void;
 }
 
 export interface DisplayOption {
-  viewMode?: ViewMode;
+  viewMode?: ViewMode | string;
   viewDate?: Date;
   /**
    * Specifies the month name language. Able formats: ISO 639-2, Java Locale
    */
   locale?: string;
   rtl?: boolean;
+  beforeRange?: number;
+  afterRange?: number;
+  headerTitle?: string;
+  headerStartTitle?: string;
+  headerEndTitle?: string;
+  isShowStartTime?: boolean;
+  isShowEndTime?: boolean;
 }
 
 export interface StylingOption {
+  todayLineColor?: string;
   headerHeight?: number;
   columnWidth?: number;
   listCellWidth?: string;
@@ -106,6 +119,8 @@ export interface StylingOption {
   arrowColor?: string;
   arrowIndent?: number;
   todayColor?: string;
+  rightLabelColor?: string;
+  leftLabelColor?: string;
   TooltipContent?: React.FC<{
     task: Task;
     fontSize: string;

@@ -59,6 +59,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           newRelatedY += rowHeight;
         }
       } else {
+        
         newRelatedX = task.x2 + arrowIndent * 1.5 + taskListWidth - scrollX;
         const tooltipLeftmostPoint = tooltipWidth + newRelatedX;
         const fullChartWidth = taskListWidth + svgContainerWidth;
@@ -95,7 +96,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
     svgContainerHeight,
     svgContainerWidth,
   ]);
-
   return (
     <div
       ref={tooltipRef}
@@ -122,22 +122,20 @@ export const StandardTooltipContent: React.FC<{
   };
   return (
     <div className={styles.tooltipDefaultContainer} style={style}>
-      <b style={{ fontSize: fontSize + 6 }}>{`${
-        task.name
-      }: ${task.start.getDate()}-${
-        task.start.getMonth() + 1
-      }-${task.start.getFullYear()} - ${task.end.getDate()}-${
-        task.end.getMonth() + 1
-      }-${task.end.getFullYear()}`}</b>
+      <b style={{ fontSize: fontSize + 6 }}>
+        {`${ task.name }: 
+        ${task.start.getFullYear()}-${ task.start.getMonth() + 1}-${task.start.getDate()}-
+        ${task.end.getFullYear()}-${task.end.getMonth() + 1}-${task.end.getDate()}`}
+      </b>
       {task.end.getTime() - task.start.getTime() !== 0 && (
-        <p className={styles.tooltipDefaultContainerParagraph}>{`Duration: ${~~(
+        <p className={styles.tooltipDefaultContainerParagraph}>{`时长: ${(
           (task.end.getTime() - task.start.getTime()) /
           (1000 * 60 * 60 * 24)
-        )} day(s)`}</p>
+        ).toFixed(1)} day(s)`}</p>
       )}
 
       <p className={styles.tooltipDefaultContainerParagraph}>
-        {!!task.progress && `Progress: ${task.progress} %`}
+        {!!task.progress && `进度: ${task.progress} %`}
       </p>
     </div>
   );

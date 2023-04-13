@@ -3,11 +3,18 @@
 }
 
 .gridRow:nth-child(even) {
-  fill: #f5f5f5;
+  /* fill: #f5f5f5; */
+  fill: #fff;
 }
 
 .gridRowLine {
   stroke: #ebeff2;
+}
+
+.gridRowTodayLine {
+    stroke: orange;
+    stroke-width: 3px;
+    stroke-opacity: 0.6;
 }
 
 .gridTick {

@@ -28,3 +28,14 @@
   display: flex;
   pointer-events: none;
 }
+
+.todayTooltipDefaultContainer {
+  background: #000;
+  padding: 4px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.todayTooltipText {
+  color: #fff;
+  font-size: 12px;
+}

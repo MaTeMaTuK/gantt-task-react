@@ -22,6 +22,8 @@
 }
 .taskListNameWrapper {
   display: flex;
+  align-items: center;
+  position: relative;
 }
 
 .taskListExpander {
@@ -32,7 +34,23 @@
   cursor: pointer;
 }
 .taskListEmptyExpander {
-  font-size: 0.6rem;
-  padding-left: 1rem;
-  user-select: none;
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgb(86 86 86);
+  margin: 0 6px;
+}
+
+.tooltipDefaultContainer {
+  position: absolute;
+  left: 0;
+  background: #fff;
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.tooltipText {
+  color: #000;
+  font-size: 12px;
 }

@@ -18,4 +18,5 @@
   list-style: none;
   outline: none;
   position: relative;
+  overscroll-behavior-x: none;
 }

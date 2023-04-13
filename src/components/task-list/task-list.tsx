@@ -3,6 +3,11 @@ import { BarTask } from "../../types/bar-task";
 import { Task } from "../../types/public-types";
 
 export type TaskListProps = {
+  headerTitle: string;
+  headerStartTitle: string;
+  headerEndTitle: string;
+  isShowStartTime: boolean;
+  isShowEndTime: boolean;
   headerHeight: number;
   rowWidth: string;
   fontFamily: string;
@@ -22,8 +27,15 @@ export type TaskListProps = {
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
+    headerTitle: string;
+    headerStartTitle: string;
+    headerEndTitle: string;
+    isShowStartTime: boolean;
+    isShowEndTime: boolean;
   }>;
   TaskListTable: React.FC<{
+    isShowStartTime: boolean;
+    isShowEndTime: boolean;
     rowHeight: number;
     rowWidth: string;
     fontFamily: string;
@@ -37,6 +49,11 @@ export type TaskListProps = {
 };
 
 export const TaskList: React.FC<TaskListProps> = ({
+  headerTitle,
+  headerStartTitle,
+  headerEndTitle,
+  isShowStartTime,
+  isShowEndTime,
   headerHeight,
   fontFamily,
   fontSize,
@@ -66,9 +83,16 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontFamily,
     fontSize,
     rowWidth,
+    headerTitle,
+    headerStartTitle,
+    headerEndTitle,
+    isShowStartTime,
+    isShowEndTime,
   };
   const selectedTaskId = selectedTask ? selectedTask.id : "";
   const tableProps = {
+    isShowStartTime,
+    isShowEndTime,
     rowHeight,
     rowWidth,
     fontFamily,
