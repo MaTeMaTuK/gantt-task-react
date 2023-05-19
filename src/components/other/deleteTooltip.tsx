@@ -135,7 +135,7 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
                 <span>{targetTask[0]?.name}</span>
               </div>
               <div className={styles.date}>
-                {currentConnection.connection?.endpoints[1]?.anchor
+                {currentConnection.connection?.endpoints?.[1]?.anchor
                   ?.cssClass === "Right"
                   ? `${t("fields.endDate")}：${dayjs(targetTask[0]?.end).format(
                       dayFormat
