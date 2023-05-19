@@ -101,10 +101,10 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
               <div className={styles.date}>
                 {currentConnection.connection?.endpoints?.[0].anchor
                   ?.cssClass === "Right"
-                  ? `${t("fields.startDate")}：${dayjs(
-                      sourceTask[0]?.end
-                    ).format(dayFormat)}`
-                  : `${t("fields.endDate")}：${dayjs(
+                  ? `${t("fields.endDate")}：${dayjs(sourceTask[0]?.end).format(
+                      dayFormat
+                    )}`
+                  : `${t("fields.startDate")}：${dayjs(
                       sourceTask[0]?.start
                     ).format(dayFormat)}`}
               </div>
@@ -135,7 +135,7 @@ export const DeleteTooltip: React.FC<TooltipProps> = memo(
                 <span>{targetTask[0]?.name}</span>
               </div>
               <div className={styles.date}>
-                {currentConnection.connection?.endpoints[1]?.anchor
+                {currentConnection.connection?.endpoints?.[1]?.anchor
                   ?.cssClass === "Right"
                   ? `${t("fields.endDate")}：${dayjs(targetTask[0]?.end).format(
                       dayFormat
