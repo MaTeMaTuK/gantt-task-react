@@ -68,7 +68,8 @@
     "typescript": "^3.9.9"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
@@ -79,5 +80,8 @@
     "lodash": "^4.17.21",
     "rosetta": "^1.1.0",
     "debug": "^4.3.3"
+  },
+  "publishConfig": {
+    "registry": "https://npm.gitee.work/repository/gitee-npm-hosted"
   }
 }
