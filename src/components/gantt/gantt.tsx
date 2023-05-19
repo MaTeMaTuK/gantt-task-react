@@ -853,8 +853,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     },
     [renderOverflowTooltip]
   );
+
   // 打开了连线弹窗后，如果事项折叠后需要关闭弹窗
-  const hideDeleteTooltip = useMemo(() => {
+  useEffect(() => {
     if (currentConnection) {
       const source = tasks.find(
         task => task.id === currentConnection.connection?.sourceId
@@ -863,11 +864,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         task => task.id === currentConnection.connection?.targetId
       );
       if (!(source && target)) {
-        return true;
+        setCurrentConnection(null);
       }
     }
-    return false;
   }, [currentConnection, tasks]);
+
   return (
     <div className={styles.box}>
       <I18n lngDict={langBundle} locale={locale}>
@@ -1017,7 +1018,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
                   workFlowStatusColor={workFlowStatusColor}
                 />
               )}
-              {currentConnection && !hideDeleteTooltip && (
+              {currentConnection && (
                 <DeleteTooltip
                   tasks={tasks}
                   taskListWidth={taskListWidth}
