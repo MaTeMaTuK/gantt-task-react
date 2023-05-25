@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { BarTask } from "../../types/bar-task";
-import { Task } from "../../types/public-types";
+import { MonthFormats, Task } from "../../types/public-types";
 
 export type TaskListProps = {
   headerHeight: number;
@@ -11,6 +11,7 @@ export type TaskListProps = {
   ganttHeight: number;
   scrollY: number;
   locale: string;
+  monthFormat: MonthFormats;
   tasks: Task[];
   taskListRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
@@ -29,6 +30,7 @@ export type TaskListProps = {
     fontFamily: string;
     fontSize: string;
     locale: string;
+    monthFormat: MonthFormats;
     tasks: Task[];
     selectedTaskId: string;
     setSelectedTask: (taskId: string) => void;
@@ -48,6 +50,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   setSelectedTask,
   onExpanderClick,
   locale,
+  monthFormat,
   ganttHeight,
   taskListRef,
   horizontalContainerClass,
@@ -75,6 +78,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontSize,
     tasks,
     locale,
+    monthFormat,
     selectedTaskId: selectedTaskId,
     setSelectedTask,
     onExpanderClick,

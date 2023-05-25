@@ -1,4 +1,4 @@
-import { Task, ViewMode } from "../types/public-types";
+import { MonthFormats, Task, ViewMode } from "../types/public-types";
 import DateTimeFormatOptions = Intl.DateTimeFormatOptions;
 import DateTimeFormat = Intl.DateTimeFormat;
 
@@ -174,15 +174,22 @@ export const seedDates = (
       case ViewMode.Hour:
         currentDate = addToDate(currentDate, 1, "hour");
         break;
+      default:
+        currentDate = addToDate(currentDate, 1, "day");
+        break;
     }
     dates.push(currentDate);
   }
   return dates;
 };
 
-export const getLocaleMonth = (date: Date, locale: string) => {
+export const getLocaleMonth = (
+  date: Date,
+  locale: string,
+  monthFormat: MonthFormats
+) => {
   let bottomValue = getCachedDateTimeFormat(locale, {
-    month: "long",
+    month: monthFormat,
   }).format(date);
   bottomValue = bottomValue.replace(
     bottomValue[0],

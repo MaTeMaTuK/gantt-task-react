@@ -9,6 +9,7 @@ export enum ViewMode {
   QuarterYear = "QuarterYear",
   Year = "Year",
 }
+export type MonthFormats = "numeric" | "2-digit" | "long" | "short" | "narrow";
 export type TaskType = "task" | "milestone" | "project";
 export interface Task {
   id: string;
@@ -82,6 +83,8 @@ export interface DisplayOption {
    * Specifies the month name language. Able formats: ISO 639-2, Java Locale
    */
   locale?: string;
+  monthCalendarFormat?: MonthFormats;
+  monthTaskListFormat?: MonthFormats;
   rtl?: boolean;
 }
 
