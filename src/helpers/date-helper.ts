@@ -174,6 +174,9 @@ export const seedDates = (
       case ViewMode.Hour:
         currentDate = addToDate(currentDate, 1, "hour");
         break;
+      default:
+        currentDate = addToDate(currentDate, 1, "day");
+        break;
     }
     dates.push(currentDate);
   }
