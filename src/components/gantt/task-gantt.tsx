@@ -25,21 +25,14 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
   const newBarProps = { ...barProps, svg: ganttSVGRef };
 
-  useEffect(() => {
-    if (horizontalContainerRef.current) {
-      horizontalContainerRef.current.scrollTop = scrollY;
-    }
-  }, [scrollY]);
+  useEffect(() => {}, [scrollY]);
 
-  useEffect(() => {
-    if (verticalGanttContainerRef.current) {
-      verticalGanttContainerRef.current.scrollLeft = scrollX;
-    }
-  }, [scrollX]);
+  useEffect(() => {}, [scrollX]);
 
   return (
     <div
       className={styles.ganttVerticalContainer}
+      style={{ overflow: "auto" }}
       ref={verticalGanttContainerRef}
       dir="ltr"
     >

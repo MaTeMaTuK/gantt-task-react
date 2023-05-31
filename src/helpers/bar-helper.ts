@@ -153,6 +153,7 @@ const convertToBar = (
 ): BarTask => {
   let x1: number;
   let x2: number;
+
   if (rtl) {
     x2 = taskXCoordinateRTL(task.start, dates, columnWidth);
     x1 = taskXCoordinateRTL(task.end, dates, columnWidth);
@@ -173,6 +174,7 @@ const convertToBar = (
     rtl
   );
   const y = taskYCoordinate(index, rowHeight, taskHeight);
+
   const hideChildren = task.type === "project" ? task.hideChildren : undefined;
 
   const styles = {
@@ -253,6 +255,7 @@ const taskXCoordinate = (xDate: Date, dates: Date[], columnWidth: number) => {
   const percentOfInterval =
     remainderMillis / (dates[index + 1].getTime() - dates[index].getTime());
   const x = index * columnWidth + percentOfInterval * columnWidth;
+
   return x;
 };
 const taskXCoordinateRTL = (
