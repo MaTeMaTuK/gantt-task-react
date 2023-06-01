@@ -103,6 +103,22 @@ const App = () => {
         ganttHeight={300}
         columnWidth={columnWidth}
       />
+      <h3>Gantt With Post Steps Count defined</h3>
+      <Gantt
+        tasks={tasks}
+        viewMode={view}
+        onDateChange={handleTaskChange}
+        onDelete={handleTaskDelete}
+        onProgressChange={handleProgressChange}
+        onDoubleClick={handleDblClick}
+        onClick={handleClick}
+        onSelect={handleSelect}
+        postStepsCount={1}
+        preStepsCount={1}
+        onExpanderClick={handleExpanderClick}
+        listCellWidth={isChecked ? "155px" : ""}
+        columnWidth={columnWidth}
+      />
     </div>
   );
 };
