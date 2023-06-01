@@ -30,6 +30,8 @@ export const addToDate = (
   quantity: number,
   scale: DateHelperScales
 ) => {
+  console.log(quantity)
+  console.log(`Year: ${date.getFullYear()}, Month: ${date.getMonth()}, Date: ${date.getDate()}, Hours: ${date.getHours()}`)
   const newDate = new Date(
     date.getFullYear() + (scale === "year" ? quantity : 0),
     date.getMonth() + (scale === "month" ? quantity : 0),
@@ -72,7 +74,8 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
 export const ganttDateRange = (
   tasks: Task[],
   viewMode: ViewMode,
-  preStepsCount: number
+  preStepsCount: number,
+  postStepsCount?: number
 ) => {
   let newStartDate: Date = tasks[0].start;
   let newEndDate: Date = tasks[0].start;
@@ -86,56 +89,68 @@ export const ganttDateRange = (
   }
   switch (viewMode) {
     case ViewMode.Year:
-      newStartDate = addToDate(newStartDate, -1, "year");
       newStartDate = startOfDate(newStartDate, "year");
-      newEndDate = addToDate(newEndDate, 1, "year");
-      newEndDate = startOfDate(newEndDate, "year");
+      newStartDate = addToDate(newStartDate, -1, "year");
+      if (!postStepsCount) {
+        newEndDate = startOfDate(newEndDate, "year");
+      }
+      newEndDate = addToDate(newEndDate, postStepsCount! || 12, "month");
       break;
     case ViewMode.QuarterYear:
-      newStartDate = addToDate(newStartDate, -3, "month");
       newStartDate = startOfDate(newStartDate, "month");
-      newEndDate = addToDate(newEndDate, 3, "year");
-      newEndDate = startOfDate(newEndDate, "year");
+      newStartDate = addToDate(newStartDate, -3, "month");
+      if (!postStepsCount) {
+        newEndDate = startOfDate(newEndDate, "year");
+      }
+      newEndDate = addToDate(newEndDate, postStepsCount! * 3 || 36, "month");
       break;
     case ViewMode.Month:
-      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "month");
       newStartDate = startOfDate(newStartDate, "month");
-      newEndDate = addToDate(newEndDate, 1, "year");
-      newEndDate = startOfDate(newEndDate, "year");
+      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "month");
+      if (!postStepsCount) {
+        newEndDate = startOfDate(newEndDate, "year");
+      }
+      newEndDate = addToDate(newEndDate, postStepsCount! || 12, "month");
       break;
     case ViewMode.Week:
       newStartDate = startOfDate(newStartDate, "day");
-      newStartDate = addToDate(
-        getMonday(newStartDate),
-        -7 * preStepsCount,
-        "day"
-      );
-      newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 1.5, "month");
+      newStartDate = addToDate(getMonday(newStartDate), -7 * preStepsCount, "day");
+      if (!postStepsCount) {
+        newEndDate = startOfDate(newEndDate, "day");
+      }
+      newEndDate = addToDate(newEndDate, postStepsCount! * 7 || 45, "day");
       break;
     case ViewMode.Day:
       newStartDate = startOfDate(newStartDate, "day");
       newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
-      newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 19, "day");
+      if (!postStepsCount) {
+        newEndDate = startOfDate(newEndDate, "day");
+      }
+      newEndDate = addToDate(newEndDate, postStepsCount! || 19, "day");
       break;
     case ViewMode.QuarterDay:
       newStartDate = startOfDate(newStartDate, "day");
       newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
-      newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 66, "hour"); // 24(1 day)*3 - 6
+      if (!postStepsCount) {
+        newEndDate = startOfDate(newEndDate, "day");
+      }
+      newEndDate = addToDate(newEndDate, postStepsCount! || 66, "hour"); // 24(1 day)*3 - 6
       break;
     case ViewMode.HalfDay:
       newStartDate = startOfDate(newStartDate, "day");
       newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
-      newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 108, "hour"); // 24(1 day)*5 - 12
+      if (!postStepsCount) {
+        newEndDate = startOfDate(newEndDate, "day");
+      }
+      newEndDate = addToDate(newEndDate, postStepsCount! || 108, "hour"); // 24(1 day)*5 - 12
       break;
     case ViewMode.Hour:
       newStartDate = startOfDate(newStartDate, "hour");
       newStartDate = addToDate(newStartDate, -1 * preStepsCount, "hour");
-      newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 1, "day");
+      if (!postStepsCount) {
+        newEndDate = startOfDate(newEndDate, "day");
+      }
+      newEndDate = addToDate(newEndDate, postStepsCount! || 24, "hour");
       break;
   }
   return [newStartDate, newEndDate];

@@ -79,6 +79,10 @@ export interface DisplayOption {
   viewDate?: Date;
   preStepsCount?: number;
   /**
+   * Specifies how many columns will follow the end date, overrides default behavior.
+   */
+  postStepsCount?: number;
+  /**
    * Specifies the month name language. Able formats: ISO 639-2, Java Locale
    */
   locale?: string;
