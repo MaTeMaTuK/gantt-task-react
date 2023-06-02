@@ -1,5 +1,5 @@
 import React from "react";
-import { Task, ViewMode, Gantt } from "gantt-task-react";
+import {Task, ViewMode, Gantt} from "gantt-task-react";
 import { ViewSwitcher } from "./components/view-switcher";
 import { getStartEndDateForProject, initTasks } from "./helper";
 import "gantt-task-react/dist/index.css";
@@ -101,6 +101,7 @@ const App = () => {
         onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         ganttHeight={300}
+        ganttWidth={1000}
         columnWidth={columnWidth}
       />
     </div>

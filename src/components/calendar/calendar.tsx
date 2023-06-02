@@ -17,6 +17,7 @@ export type CalendarProps = {
   viewMode: ViewMode;
   rtl: boolean;
   headerHeight: number;
+  svgWidth: number;
   columnWidth: number;
   fontFamily: string;
   fontSize: string;
@@ -29,6 +30,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   rtl,
   headerHeight,
   columnWidth,
+  svgWidth,
   fontFamily,
   fontSize,
 }) => {
@@ -148,6 +150,15 @@ export const Calendar: React.FC<CalendarProps> = ({
           xText = (6 + i + date.getMonth() + 1) * columnWidth;
         } else {
           xText = (6 + i - date.getMonth()) * columnWidth;
+
+          // When Gantt chart start in the July
+          // Only half of year is visible
+          if (i === 0 && date.getMonth() === 6) {
+            // If default font family and size is used
+            // year label is circa 32px wide
+            // half of it is 16 so moving it by 20 make it fully visible with margin.
+            xText += 20;
+          }
         }
         topValues.push(
           <TopPartOfCalendar
@@ -385,7 +396,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       <rect
         x={0}
         y={0}
-        width={columnWidth * dateSetup.dates.length}
+        width={svgWidth}
         height={headerHeight}
         className={styles.calendarHeader}
       />
