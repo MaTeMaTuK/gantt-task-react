@@ -258,26 +258,31 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
       if (event.shiftKey || event.deltaX) {
-        const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
-        let newScrollX = scrollX + scrollMove;
-        if (newScrollX < 0) {
-          newScrollX = 0;
-        } else if (newScrollX > svgWidth) {
-          newScrollX = svgWidth;
-        }
-        setScrollX(newScrollX);
+        setScrollX((prevScrollX: number) => {
+          const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
+          let newScrollX = prevScrollX + scrollMove;
+          if (newScrollX < 0) {
+            newScrollX = 0;
+          } else if (newScrollX > svgWidth) {
+            newScrollX = svgWidth;
+          }
+          return newScrollX;
+        })
         event.preventDefault();
       } else if (ganttHeight) {
-        let newScrollY = scrollY + event.deltaY;
-        if (newScrollY < 0) {
-          newScrollY = 0;
-        } else if (newScrollY > ganttFullHeight - ganttHeight) {
-          newScrollY = ganttFullHeight - ganttHeight;
-        }
-        if (newScrollY !== scrollY) {
-          setScrollY(newScrollY);
-          event.preventDefault();
-        }
+        setScrollY((prevScrollY: number) => {
+          let newScrollY = prevScrollY + event.deltaY;
+          if (newScrollY < 0) {
+            newScrollY = 0;
+          } else if (newScrollY > ganttFullHeight - ganttHeight) {
+            newScrollY = ganttFullHeight - ganttHeight;
+          }
+          if (newScrollY !== scrollY) {
+            event.preventDefault();
+            return newScrollY;
+          }
+          return prevScrollY;
+        })
       }
 
       setIgnoreScrollEvent(true);
@@ -323,43 +328,48 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
    */
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     event.preventDefault();
-    let newScrollY = scrollY;
-    let newScrollX = scrollX;
     let isX = true;
+    let ajustment = 0;
     switch (event.key) {
       case "Down": // IE/Edge specific value
       case "ArrowDown":
-        newScrollY += rowHeight;
+        ajustment += rowHeight;
         isX = false;
         break;
       case "Up": // IE/Edge specific value
       case "ArrowUp":
-        newScrollY -= rowHeight;
+        ajustment -= rowHeight;
         isX = false;
         break;
       case "Left":
       case "ArrowLeft":
-        newScrollX -= columnWidth;
+        ajustment -= columnWidth;
         break;
       case "Right": // IE/Edge specific value
       case "ArrowRight":
-        newScrollX += columnWidth;
+        ajustment += columnWidth;
         break;
     }
     if (isX) {
-      if (newScrollX < 0) {
-        newScrollX = 0;
-      } else if (newScrollX > svgWidth) {
-        newScrollX = svgWidth;
-      }
-      setScrollX(newScrollX);
+      setScrollX((prevScrollX: number) => {
+        let newScrollX = prevScrollX + ajustment;
+        if (newScrollX < 0) {
+          newScrollX = 0;
+        } else if (newScrollX > svgWidth) {
+          newScrollX = svgWidth;
+        }
+        return newScrollX;
+      });
     } else {
-      if (newScrollY < 0) {
-        newScrollY = 0;
-      } else if (newScrollY > ganttFullHeight - ganttHeight) {
-        newScrollY = ganttFullHeight - ganttHeight;
-      }
-      setScrollY(newScrollY);
+      setScrollY((prevScrollY: number) => {
+        let newScrollY = prevScrollY + ajustment;
+        if (newScrollY < 0) {
+          newScrollY = 0;
+        } else if (newScrollY > ganttFullHeight - ganttHeight) {
+          newScrollY = ganttFullHeight - ganttHeight;
+        }
+        return newScrollY;
+      });
     }
     setIgnoreScrollEvent(true);
   };
