@@ -18,32 +18,35 @@ import { TaskListProps, TaskList } from "../task-list/task-list";
 import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
 import { convertToBarTasks } from "../../helpers/bar-helper";
-import { GanttEvent } from "../../types/gantt-task-actions";
+import { GanttEvent, GanttRulerEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
 import styles from "./gantt.module.css";
+import { convertToRulerLine } from "../../helpers/ruler-helper";
+import { rulerTask } from "../../types/ruler";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
+  rulerLines,
   headerHeight = 50,
   columnWidth = 60,
   listCellWidth = "155px",
-  rowHeight = 50,
+  rowHeight = 55,
   ganttHeight = 0,
   viewMode = ViewMode.Day,
   preStepsCount = 1,
   locale = "en-GB",
-  barFill = 60,
+  barFill = 80,
   barCornerRadius = 3,
-  barProgressColor = "#a3a3ff",
-  barProgressSelectedColor = "#8282f5",
-  barBackgroundColor = "#b8c2cc",
-  barBackgroundSelectedColor = "#aeb8c2",
-  projectProgressColor = "#7db59a",
-  projectProgressSelectedColor = "#59a985",
-  projectBackgroundColor = "#fac465",
-  projectBackgroundSelectedColor = "#f7bb53",
+  barProgressColor = "#1EA1F1",
+  barProgressSelectedColor = "#1EA1F1",
+  barBackgroundColor = "#B7D9F8",
+  barBackgroundSelectedColor = "#B7D9F8",
+  projectProgressColor = "#1EA1F1",
+  projectProgressSelectedColor = "#1EA1F1",
+  projectBackgroundColor = "#B7D9F8",
+  projectBackgroundSelectedColor = "#B7D9F8",
   milestoneBackgroundColor = "#f1c453",
   milestoneBackgroundSelectedColor = "#f29e4c",
   rtl = false,
@@ -59,6 +62,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
   onDateChange,
+  onRulerDateChange,
   onProgressChange,
   onDoubleClick,
   onClick,
@@ -80,7 +84,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [svgContainerWidth, setSvgContainerWidth] = useState(0);
   const [svgContainerHeight, setSvgContainerHeight] = useState(ganttHeight);
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
+  const [rulerTasks, setRulerTasks] = useState<rulerTask[]>([]);
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
+    action: "",
+  });
+  const [ganttRulerEvent, setGanttRulerEvent] = useState<GanttRulerEvent>({
     action: "",
   });
   const taskHeight = useMemo(
@@ -97,6 +105,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(-1);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
+
+  // header rular event
+  useEffect(() => {
+    if(dateSetup.dates){
+      setRulerTasks(convertToRulerLine(rulerLines, dateSetup.dates, columnWidth, taskHeight))
+    }
+  }, [columnWidth, dateSetup, rulerLines, taskHeight]);
 
   // task change events
   useEffect(() => {
@@ -395,6 +410,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     dates: dateSetup.dates,
     todayColor,
     rtl,
+    rulerTasks,
   };
   const calendarProps: CalendarProps = {
     dateSetup,
@@ -405,6 +421,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     fontFamily,
     fontSize,
     rtl,
+    timeStep,
+    rulerTasks,
+    ganttRulerEvent,
+    onRulerDateChange,
+    setGanttRulerEvent
   };
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,
@@ -421,6 +442,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     arrowIndent,
     svgWidth,
     rtl,
+    rulerTasks,
     setGanttEvent,
     setFailedTask,
     setSelectedTask: handleSelectedTask,

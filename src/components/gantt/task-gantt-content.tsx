@@ -10,6 +10,7 @@ import {
   GanttContentMoveAction,
   GanttEvent,
 } from "../../types/gantt-task-actions";
+import { rulerTask } from "../../types/ruler";
 
 export type TaskGanttContentProps = {
   tasks: BarTask[];
@@ -27,6 +28,7 @@ export type TaskGanttContentProps = {
   fontSize: string;
   fontFamily: string;
   rtl: boolean;
+  rulerTasks: rulerTask[];
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
@@ -74,6 +76,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   useEffect(() => {
     const handleMouseMove = async (event: MouseEvent) => {
+      
       if (!ganttEvent.changedTask || !point || !svg?.current) return;
       event.preventDefault();
 
@@ -97,6 +100,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     };
 
     const handleMouseUp = async (event: MouseEvent) => {
+      
       const { action, originalSelectedTask, changedTask } = ganttEvent;
       if (!changedTask || !point || !svg?.current || !originalSelectedTask)
         return;

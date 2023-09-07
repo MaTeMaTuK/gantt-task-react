@@ -2,13 +2,14 @@
   fill: #fff;
 }
 
-.gridRow:nth-child(even) {
-  fill: #f5f5f5;
+.gridRowLineParent {
+  stroke: grey;
 }
 
 .gridRowLine {
-  stroke: #ebeff2;
+  stroke: transparent;
 }
+
 
 .gridTick {
   stroke: #e6e4e4;

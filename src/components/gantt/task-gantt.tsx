@@ -21,9 +21,11 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   scrollX,
 }) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
+  const ganttSVGCalenderRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
   const newBarProps = { ...barProps, svg: ganttSVGRef };
+  const newcalendarProps = { ...calendarProps, svg: ganttSVGCalenderRef };
 
   useEffect(() => {
     if (horizontalContainerRef.current) {
@@ -48,8 +50,9 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
         width={gridProps.svgWidth}
         height={calendarProps.headerHeight}
         fontFamily={barProps.fontFamily}
+        ref={ganttSVGCalenderRef}
       >
-        <Calendar {...calendarProps} />
+        <Calendar {...newcalendarProps} />
       </svg>
       <div
         ref={horizontalContainerRef}

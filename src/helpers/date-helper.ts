@@ -84,6 +84,7 @@ export const ganttDateRange = (
       newEndDate = task.end;
     }
   }
+
   switch (viewMode) {
     case ViewMode.Year:
       newStartDate = addToDate(newStartDate, -1, "year");
@@ -100,8 +101,8 @@ export const ganttDateRange = (
     case ViewMode.Month:
       newStartDate = addToDate(newStartDate, -1 * preStepsCount, "month");
       newStartDate = startOfDate(newStartDate, "month");
-      newEndDate = addToDate(newEndDate, 1, "year");
-      newEndDate = startOfDate(newEndDate, "year");
+      newEndDate = addToDate(newEndDate, 1, "month");
+      newEndDate = startOfDate(newEndDate, "month");
       break;
     case ViewMode.Week:
       newStartDate = startOfDate(newStartDate, "day");
@@ -147,6 +148,7 @@ export const seedDates = (
   viewMode: ViewMode
 ) => {
   let currentDate: Date = new Date(startDate);
+
   const dates: Date[] = [currentDate];
   while (currentDate < endDate) {
     switch (viewMode) {
@@ -180,9 +182,13 @@ export const seedDates = (
   return dates;
 };
 
-export const getLocaleMonth = (date: Date, locale: string) => {
+export const getLocaleMonth = (
+  date: Date,
+  locale: string,
+  type: "long" | "numeric" | "2-digit" | "short" | "narrow" | undefined = "long"
+) => {
   let bottomValue = getCachedDateTimeFormat(locale, {
-    month: "long",
+    month: type,
   }).format(date);
   bottomValue = bottomValue.replace(
     bottomValue[0],

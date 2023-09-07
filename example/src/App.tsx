@@ -1,13 +1,15 @@
 import React from "react";
-import { Task, ViewMode, Gantt } from "gantt-task-react";
+import { Task, ViewMode, Gantt, rulerLine } from "gantt-task-react";
 import { ViewSwitcher } from "./components/view-switcher";
-import { getStartEndDateForProject, initTasks } from "./helper";
+import { getStartEndDateForProject, initTasks, rulerInitTask } from "./helper";
 import "gantt-task-react/dist/index.css";
 
 // Init
 const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
+  const [rulerLines, setRulerLines] = React.useState<rulerLine[]>(rulerInitTask());
+
   const [isChecked, setIsChecked] = React.useState(true);
   let columnWidth = 65;
   if (view === ViewMode.Year) {
@@ -16,6 +18,12 @@ const App = () => {
     columnWidth = 300;
   } else if (view === ViewMode.Week) {
     columnWidth = 250;
+  }
+
+  const handleRulerChange =(ruler: rulerLine) => {
+    console.log("On ruler date change Id:" + ruler.id);
+    let newTasks = rulerLines.map(t => (t.id === ruler.id ? ruler : t));
+    setRulerLines(newTasks)
   }
 
   const handleTaskChange = (task: Task) => {
@@ -77,6 +85,7 @@ const App = () => {
       <h3>Gantt With Unlimited Height</h3>
       <Gantt
         tasks={tasks}
+        rulerLines={rulerLines}
         viewMode={view}
         onDateChange={handleTaskChange}
         onDelete={handleTaskDelete}
@@ -84,6 +93,7 @@ const App = () => {
         onDoubleClick={handleDblClick}
         onClick={handleClick}
         onSelect={handleSelect}
+        onRulerDateChange={handleRulerChange}
         onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
@@ -91,8 +101,10 @@ const App = () => {
       <h3>Gantt With Limited Height</h3>
       <Gantt
         tasks={tasks}
+        rulerLines={rulerLines}
         viewMode={view}
         onDateChange={handleTaskChange}
+        onRulerDateChange={handleRulerChange}
         onDelete={handleTaskDelete}
         onProgressChange={handleProgressChange}
         onDoubleClick={handleDblClick}

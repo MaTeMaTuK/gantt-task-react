@@ -29,3 +29,10 @@
   stroke: #e0e0e0;
   stroke-width: 1.4;
 }
+
+.calendarHeaderIndicator{
+  fill: #4D6FFF;
+  stroke: #e0e0e0;
+  stroke-width: 1.4;
+  /* clip-path: inset(0px 0px 0px 25px); */
+}

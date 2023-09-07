@@ -2,6 +2,7 @@ import React, { ReactChild } from "react";
 import { Task } from "../../types/public-types";
 import { addToDate } from "../../helpers/date-helper";
 import styles from "./grid.module.css";
+import { rulerTask } from "../../types/ruler";
 
 export type GridBodyProps = {
   tasks: Task[];
@@ -11,6 +12,7 @@ export type GridBodyProps = {
   columnWidth: number;
   todayColor: string;
   rtl: boolean;
+  rulerTasks: rulerTask[];
 };
 export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
@@ -20,6 +22,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   columnWidth,
   todayColor,
   rtl,
+  rulerTasks,
 }) => {
   let y = 0;
   const gridRows: ReactChild[] = [];
@@ -33,7 +36,24 @@ export const GridBody: React.FC<GridBodyProps> = ({
       className={styles.gridRowLine}
     />,
   ];
+  let i: number = 0;
   for (const task of tasks) {
+    const rowLinestyle = task.project
+      ? styles.gridRowLine
+      : styles.gridRowLineParent;
+
+    if (i) {
+      rowLines.push(
+        <line
+          key={"RowLineFront" + task.id}
+          x="0"
+          y1={y}
+          x2={svgWidth}
+          y2={y}
+          className={rowLinestyle}
+        />
+      );
+    }
     gridRows.push(
       <rect
         key={"Row" + task.id}
@@ -51,10 +71,11 @@ export const GridBody: React.FC<GridBodyProps> = ({
         y1={y + rowHeight}
         x2={svgWidth}
         y2={y + rowHeight}
-        className={styles.gridRowLine}
+        className={rowLinestyle}
       />
     );
     y += rowHeight;
+    i++;
   }
 
   const now = new Date();
@@ -119,9 +140,22 @@ export const GridBody: React.FC<GridBodyProps> = ({
   return (
     <g className="gridBody">
       <g className="rows">{gridRows}</g>
-      <g className="rowLines">{rowLines}</g>
+      {/* <g className="rowLines">{rowLines}</g> */}
       <g className="ticks">{ticks}</g>
       <g className="today">{today}</g>
+      <g className="dashedLine">
+        {rulerTasks.map((rulerTask, index) => {
+          return (
+            <path
+              key={index}
+              strokeDasharray="10,10"
+              stroke="#4D6FFF"
+              strokeWidth={2}
+              d={`M${rulerTask.x} 0 V${y}`}
+            />
+          );
+        })}
+      </g>
     </g>
   );
 };

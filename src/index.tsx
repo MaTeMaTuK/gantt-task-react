@@ -6,4 +6,5 @@ export type {
   StylingOption,
   DisplayOption,
   EventOption,
+  rulerLine
 } from "./types/public-types";

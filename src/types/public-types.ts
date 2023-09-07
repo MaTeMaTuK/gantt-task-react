@@ -28,6 +28,7 @@ export interface Task {
   };
   isDisabled?: boolean;
   project?: string;
+  dependenciesNumber?: number;
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
@@ -56,6 +57,9 @@ export interface EventOption {
   onDateChange?: (
     task: Task,
     children: Task[]
+  ) => void | boolean | Promise<void> | Promise<boolean>;
+  onRulerDateChange?: (
+    task: rulerLine
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Invokes on progress change. Chart undoes operation if method return false or error.
@@ -140,6 +144,13 @@ export interface StylingOption {
   }>;
 }
 
+export interface rulerLine {
+  start: Date;
+  title: string;
+  id: string;
+}
+
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
+  rulerLines: rulerLine[];
 }
