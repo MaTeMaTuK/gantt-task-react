@@ -91,6 +91,7 @@ npm start
 | preStepsCount  | number  | Specifies empty space before the fist task                                                                  |
 | locale         | string  | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                                    |
 | rtl            | boolean | Sets rtl mode.                                                                                              |
+| weekPrefix      | string  | Set the prefix of the week (Default 'W').                                                                                              |
 
 ### StylingOption
 
