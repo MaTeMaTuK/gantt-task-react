@@ -14,6 +14,7 @@ import styles from "./calendar.module.css";
 export type CalendarProps = {
   dateSetup: DateSetup;
   locale: string;
+  weekPrefix: string;
   viewMode: ViewMode;
   rtl: boolean;
   headerHeight: number;
@@ -31,6 +32,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   columnWidth,
   fontFamily,
   fontSize,
+  weekPrefix,
 }) => {
   const getCalendarValuesForYear = () => {
     const topValues: ReactChild[] = [];
@@ -179,7 +181,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         topValue = `${getLocaleMonth(date, locale)}, ${date.getFullYear()}`;
       }
       // bottom
-      const bottomValue = `W${getWeekNumberISO8601(date)}`;
+      const bottomValue = `${weekPrefix}${getWeekNumberISO8601(date)}`;
 
       bottomValues.push(
         <text
