@@ -631,7 +631,15 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
             isErrorLink,
             isPivotalPathLink,
           } = uuidObj;
-          if (source && destination && relationType) {
+          // 当修改了甘特图的时间字段配置后，之前的item的开始时间和结束时间就会无效，甘特图上也不会显示，如果此时事项还有连线，jsplumb会由于找不到dom而报错，应该把这些无用的连线过滤
+          const sourceItem = tasks.find(item => item.id === source);
+          const destinationItem = tasks.find(item => item.id === destination);
+          const isDom =
+            sourceItem?.start &&
+            sourceItem?.end &&
+            destinationItem?.start &&
+            destinationItem?.end;
+          if (source && destination && relationType && isDom) {
             const uuid = [
               `${source}-${relationInit[relationType]?.[0]}`,
               `${destination}-${relationInit[relationType]?.[1]}`,
@@ -660,7 +668,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = memo(
         taskLengthRef.current = tasks.length;
         jsPlumbInstance.setSuspendDrawing(false, true);
       },
-      [ganttConfig?.relation, tasks.length]
+      [ganttConfig?.relation, tasks]
     );
     useEffect(() => {
       // pointInited是连接点初始化完成的标志，解决jsPlumbInstance.connect连线时，由于连接点未初始化完成导致连线加载不出来

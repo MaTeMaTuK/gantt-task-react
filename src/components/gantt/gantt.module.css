@@ -24,7 +24,10 @@
   height: 100%;
   /* position: relative; */
 }
-
+.box :global(.ant-drawer-content-wrapper) {
+  box-shadow: 0 0 1px 0 rgba(9, 25, 64, 0.32),
+    0 8px 16px -8px rgba(9, 25, 64, 0.24), 0 12px 24px 8px rgba(9, 25, 64, 0.08);
+}
 .wrapper {
   position: relative;
   display: flex;
