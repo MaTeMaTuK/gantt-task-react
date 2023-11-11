@@ -438,6 +438,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     fontSize,
     tasks: barTasks,
     locale,
+    rtl,
     headerHeight,
     scrollY,
     ganttHeight,
@@ -450,7 +451,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     TaskListTable,
   };
   return (
-    <div>
+    <div dir={rtl?'rtl':'ltr'}>
       <div
         className={styles.wrapper}
         onKeyDown={handleKeyDown}

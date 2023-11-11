@@ -11,6 +11,7 @@ export type TaskListProps = {
   ganttHeight: number;
   scrollY: number;
   locale: string;
+  rtl?:boolean;
   tasks: Task[];
   taskListRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
@@ -48,6 +49,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   setSelectedTask,
   onExpanderClick,
   locale,
+  rtl,
   ganttHeight,
   taskListRef,
   horizontalContainerClass,
@@ -75,6 +77,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontSize,
     tasks,
     locale,
+    rtl,
     selectedTaskId: selectedTaskId,
     setSelectedTask,
     onExpanderClick,
