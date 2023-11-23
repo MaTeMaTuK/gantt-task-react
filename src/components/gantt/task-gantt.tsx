@@ -25,6 +25,11 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   const verticalGanttContainerRef = useRef<HTMLDivElement>(null);
   const newBarProps = { ...barProps, svg: ganttSVGRef };
 
+  const handleMouseMove = (e?: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    if (!e) return;
+    e.clientX
+  };
+
   useEffect(() => {
     if (horizontalContainerRef.current) {
       horizontalContainerRef.current.scrollTop = scrollY;
@@ -66,6 +71,7 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
           height={barProps.rowHeight * barProps.tasks.length}
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
+          onMouseMove={handleMouseMove}
         >
           <Grid {...gridProps} />
           <TaskGanttContent {...newBarProps} />

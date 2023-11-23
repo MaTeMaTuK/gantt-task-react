@@ -96,75 +96,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       }
     };
 
-    const handleMouseUp = async (event: MouseEvent) => {
-      const { action, originalSelectedTask, changedTask } = ganttEvent;
-      if (!changedTask || !point || !svg?.current || !originalSelectedTask)
-        return;
-      event.preventDefault();
-
-      point.x = event.clientX;
-      const cursor = point.matrixTransform(
-        svg?.current.getScreenCTM()?.inverse()
-      );
-      const { changedTask: newChangedTask } = handleTaskBySVGMouseEvent(
-        cursor.x,
-        action as BarMoveAction,
-        changedTask,
-        xStep,
-        timeStep,
-        initEventX1Delta,
-        rtl
-      );
-
-      const isNotLikeOriginal =
-        originalSelectedTask.start !== newChangedTask.start ||
-        originalSelectedTask.end !== newChangedTask.end ||
-        originalSelectedTask.progress !== newChangedTask.progress;
-
-      // remove listeners
-      svg.current.removeEventListener("mousemove", handleMouseMove);
-      svg.current.removeEventListener("mouseup", handleMouseUp);
-      setGanttEvent({ action: "" });
-      setIsMoving(false);
-
-      // custom operation start
-      let operationSuccess = true;
-      if (
-        (action === "move" || action === "end" || action === "start") &&
-        onDateChange &&
-        isNotLikeOriginal
-      ) {
-        try {
-          const result = await onDateChange(
-            newChangedTask,
-            newChangedTask.barChildren
-          );
-          if (result !== undefined) {
-            operationSuccess = result;
-          }
-        } catch (error) {
-          operationSuccess = false;
-        }
-      } else if (onProgressChange && isNotLikeOriginal) {
-        try {
-          const result = await onProgressChange(
-            newChangedTask,
-            newChangedTask.barChildren
-          );
-          if (result !== undefined) {
-            operationSuccess = result;
-          }
-        } catch (error) {
-          operationSuccess = false;
-        }
-      }
-
-      // If operation is failed - return old state
-      if (!operationSuccess) {
-        setFailedTask(originalSelectedTask);
-      }
-    };
-
     if (
       !isMoving &&
       (ganttEvent.action === "move" ||
@@ -174,7 +105,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       svg?.current
     ) {
       svg.current.addEventListener("mousemove", handleMouseMove);
-      svg.current.addEventListener("mouseup", handleMouseUp);
       setIsMoving(true);
     }
   }, [
@@ -191,6 +121,74 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     setFailedTask,
     setGanttEvent,
   ]);
+
+  const handleMouseUp = async (event: MouseEvent) => {
+    const { action, originalSelectedTask, changedTask } = ganttEvent;
+    if (!changedTask || !point || !svg?.current || !originalSelectedTask)
+      return;
+    event.preventDefault();
+
+    point.x = event.clientX;
+    const cursor = point.matrixTransform(
+      svg?.current.getScreenCTM()?.inverse()
+    );
+    const { changedTask: newChangedTask } = handleTaskBySVGMouseEvent(
+      cursor.x,
+      action as BarMoveAction,
+      changedTask,
+      xStep,
+      timeStep,
+      initEventX1Delta,
+      rtl
+    );
+
+    const isNotLikeOriginal =
+      originalSelectedTask.start !== newChangedTask.start ||
+      originalSelectedTask.end !== newChangedTask.end ||
+      originalSelectedTask.progress !== newChangedTask.progress;
+
+    // remove listeners
+    svg.current.removeEventListener("mousemove", handleMouseMove);
+    setGanttEvent({ action: "" });
+    setIsMoving(false);
+
+    // custom operation start
+    let operationSuccess = true;
+    if (
+      (action === "move" || action === "end" || action === "start") &&
+      onDateChange &&
+      isNotLikeOriginal
+    ) {
+      try {
+        const result = await onDateChange(
+          newChangedTask,
+          newChangedTask.barChildren
+        );
+        if (result !== undefined) {
+          operationSuccess = result;
+        }
+      } catch (error) {
+        operationSuccess = false;
+      }
+    } else if (onProgressChange && isNotLikeOriginal) {
+      try {
+        const result = await onProgressChange(
+          newChangedTask,
+          newChangedTask.barChildren
+        );
+        if (result !== undefined) {
+          operationSuccess = result;
+        }
+      } catch (error) {
+        operationSuccess = false;
+      }
+    }
+
+    // If operation is failed - return old state
+    if (!operationSuccess) {
+      setFailedTask(originalSelectedTask);
+    }
+  };
 
   /**
    * Method is Start point of task change
