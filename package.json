@@ -1,6 +1,6 @@
 {
   "name": "gantt-task-react",
-  "version": "0.3.9",
+  "version": "0.4.0-rc1",
   "description": "Interactive Gantt Chart for React with TypeScript.",
   "author": "MaTeMaTuK <maksym.vikarii@gmail.com>",
   "license": "MIT",
@@ -63,6 +63,6 @@
     "dist"
   ],
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "@nikmaxott:registry": "https://npm.pkg.github.com/"
   }
 }
