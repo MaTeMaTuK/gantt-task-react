@@ -6,10 +6,10 @@ const localeDateStringCache = {};
 const toLocaleDateStringFactory =
   (locale: string) =>
     (date: Date, dateTimeOptions: Intl.DateTimeFormatOptions) => {
-      const key = date.toString();
+      const key = date.toString()+'_'+locale;
       let lds = localeDateStringCache[key];
       if (!lds) {
-        lds = date.toLocaleDateString(locale, dateTimeOptions);
+        lds = date.toLocaleDateString(locale, locale!=="fa"?dateTimeOptions:{});
         localeDateStringCache[key] = lds;
       }
       return lds;
