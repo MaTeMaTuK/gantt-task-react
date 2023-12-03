@@ -9,6 +9,7 @@ const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
   const [isChecked, setIsChecked] = React.useState(true);
+  const [isDark, setDark] = React.useState(true);
   let columnWidth = 65;
   if (view === ViewMode.Year) {
     columnWidth = 350;
@@ -68,13 +69,17 @@ const App = () => {
   };
 
   return (
+    <div className={isDark?"dark":""}>
     <div className="Wrapper">
       <ViewSwitcher
         onViewModeChange={viewMode => setView(viewMode)}
         onViewListChange={setIsChecked}
         isChecked={isChecked}
+        setDark={setDark}
+        isDark={isDark}
       />
       <h3>Gantt With Unlimited Height</h3>
+      
       <Gantt
         tasks={tasks}
         viewMode={view}
@@ -119,6 +124,7 @@ const App = () => {
         locale="fa"
         rtl
       />
+    </div>
     </div>
   );
 };

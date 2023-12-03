@@ -4,12 +4,15 @@ import { ViewMode } from "gantt-task-react";
 type ViewSwitcherProps = {
   isChecked: boolean;
   onViewListChange: (isChecked: boolean) => void;
+  isDark: boolean;
+  setDark: (isDark: boolean) => void;
   onViewModeChange: (viewMode: ViewMode) => void;
 };
 export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
   onViewModeChange,
   onViewListChange,
   isChecked,
+  isDark,setDark
 }) => {
   return (
     <div className="ViewContainer">
@@ -68,6 +71,17 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
           <span className="Slider" />
         </label>
         Show Task List
+      </div>
+      <div className="Switch">
+        <label className="Switch_Toggle">
+          <input
+            type="checkbox"
+            defaultChecked={isDark}
+            onClick={() => setDark(!isDark)}
+          />
+          <span className="Slider" />
+        </label>
+        Dark Mode
       </div>
     </div>
   );
