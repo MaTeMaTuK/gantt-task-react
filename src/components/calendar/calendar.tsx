@@ -6,10 +6,10 @@ import {
   getDaysInMonth,
   getLocalDayOfWeek,
   getLocaleMonth,
-  getWeekNumberISO8601,
 } from "../../helpers/date-helper";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./calendar.module.css";
+import { farsiDigitToEnglish } from "../../helpers/other-helper";
 
 export type CalendarProps = {
   dateSetup: DateSetup;
@@ -38,7 +38,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     const topDefaultHeight = headerHeight * 0.5;
     for (let i = 0; i < dateSetup.dates.length; i++) {
       const date = dateSetup.dates[i];
-      const bottomValue = date.getFullYear();
+      const bottomValue = date.toLocaleDateString(locale, { year: 'numeric' });
       bottomValues.push(
         <text
           key={date.getTime()}
@@ -83,7 +83,14 @@ export const Calendar: React.FC<CalendarProps> = ({
     for (let i = 0; i < dateSetup.dates.length; i++) {
       const date = dateSetup.dates[i];
       // const bottomValue = getLocaleMonth(date, locale);
-      const quarter = "Q" + Math.floor((date.getMonth() + 3) / 3);
+      const qNumber = Math.floor((date.getMonth() + 3) / 3);
+
+      let quarter;
+      if (locale === 'fa') {
+        const seasons = ['بهار', 'تابستان', 'پاییز', 'زمستان'];
+        quarter = seasons[qNumber - 1];
+      } else
+        quarter = 'Q' + qNumber;
       bottomValues.push(
         <text
           key={date.getTime()}
@@ -98,7 +105,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         i === 0 ||
         date.getFullYear() !== dateSetup.dates[i - 1].getFullYear()
       ) {
-        const topValue = date.getFullYear().toString();
+        const topValue = date.toLocaleDateString(locale, { year: 'numeric' });
         let xText: number;
         if (rtl) {
           xText = (6 + i + date.getMonth() + 1) * columnWidth;
@@ -142,7 +149,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         i === 0 ||
         date.getFullYear() !== dateSetup.dates[i - 1].getFullYear()
       ) {
-        const topValue = date.getFullYear().toString();
+        const topValue = date.toLocaleDateString(locale, { year: 'numeric' });
         let xText: number;
         if (rtl) {
           xText = (6 + i + date.getMonth() + 1) * columnWidth;
@@ -176,10 +183,12 @@ export const Calendar: React.FC<CalendarProps> = ({
       let topValue = "";
       if (i === 0 || date.getMonth() !== dates[i - 1].getMonth()) {
         // top
-        topValue = `${getLocaleMonth(date, locale)}, ${date.getFullYear()}`;
+        topValue = `${getLocaleMonth(date, locale)}, ${date.toLocaleDateString(locale, { year: 'numeric' })}`;
       }
+      const weekNumber = Math.floor(farsiDigitToEnglish(date.toLocaleDateString(locale, { day: 'numeric' })) / 7) + 1;
+
       // bottom
-      const bottomValue = `W${getWeekNumberISO8601(date)}`;
+      const bottomValue = `${locale === 'fa' ? 'هفته' : 'Week'} ${weekNumber}`;
 
       bottomValues.push(
         <text
@@ -221,9 +230,9 @@ export const Calendar: React.FC<CalendarProps> = ({
     const dates = dateSetup.dates;
     for (let i = 0; i < dates.length; i++) {
       const date = dates[i];
-      const bottomValue = `${getLocalDayOfWeek(date, locale, "short")}, ${date
+      const bottomValue = `${getLocalDayOfWeek(date, locale, (rtl ? "narrow" : "short"))} (${date
         .getDate()
-        .toString()}`;
+        .toString()})`;
 
       bottomValues.push(
         <text
@@ -251,8 +260,8 @@ export const Calendar: React.FC<CalendarProps> = ({
             xText={
               columnWidth * (i + 1) -
               getDaysInMonth(date.getMonth(), date.getFullYear()) *
-                columnWidth *
-                0.5
+              columnWidth *
+              0.5
             }
             yText={topDefaultHeight * 0.9}
           />

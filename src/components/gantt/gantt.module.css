@@ -1,10 +1,10 @@
-
-
 .ganttVerticalContainer {
   overflow: hidden;
   font-size: 0;
   margin: 0;
   padding: 0;
+  border: 1px solid var(--gtr-border);
+  border-width: 0 1px;
 }
 
 .horizontalContainer {
@@ -20,4 +20,5 @@
   list-style: none;
   outline: none;
   position: relative;
+  border-bottom: 1px solid var(--gtr-border);
 }

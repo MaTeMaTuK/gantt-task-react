@@ -1,7 +1,10 @@
 .taskListWrapper {
   display: table;
-  border-bottom: var(--gtr-border) 1px solid;
-  border-left: var(--gtr-border) 1px solid;
+  border-color:var(--gtr-border);
+  border-style: solid;
+  border-width: 0;
+  /* border-bottom-width: 1px; */
+  /* border-left: var(--gtr-border) 1px solid; */
 }
 
 .taskListTableRow {
@@ -33,6 +36,6 @@
 }
 .taskListEmptyExpander {
   font-size: 0.6rem;
-  padding-left: 1rem;
+  /* padding-left: 1rem; */
   user-select: none;
 }

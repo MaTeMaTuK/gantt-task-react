@@ -43,7 +43,7 @@ function getChildren(taskList: Task[], task: Task) {
   var taskChildren: Task[] = [];
   tasks.forEach(t => {
     taskChildren.push(...getChildren(taskList, t));
-  })
+  });
   tasks = tasks.concat(tasks, taskChildren);
   return tasks;
 }
@@ -58,4 +58,13 @@ export const sortTasks = (taskA: Task, taskB: Task) => {
   } else {
     return 0;
   }
+};
+
+export const farsiDigitToEnglish = (farsiNumber: string): number => {
+  const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+  const convertedNumber = farsiNumber.replace(/[۰-۹]/g, match =>
+    farsiDigits.indexOf(match).toString()
+  );
+  if (/\d+/.test(convertedNumber)) return Number(convertedNumber);
+  else return 0;
 };

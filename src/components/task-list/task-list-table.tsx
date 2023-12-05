@@ -6,10 +6,10 @@ const localeDateStringCache = {};
 const toLocaleDateStringFactory =
   (locale: string) =>
     (date: Date, dateTimeOptions: Intl.DateTimeFormatOptions) => {
-      const key = date.toString()+'_'+locale;
+      const key = date.toString() + '_' + locale;
       let lds = localeDateStringCache[key];
       if (!lds) {
-        lds = date.toLocaleDateString(locale, locale!=="fa"?dateTimeOptions:{});
+        lds = date.toLocaleDateString(locale, locale !== "fa" ? dateTimeOptions : {});
         localeDateStringCache[key] = lds;
       }
       return lds;
@@ -53,6 +53,7 @@ export const TaskListTableDefault: React.FC<{
         style={{
           fontFamily: fontFamily,
           fontSize: fontSize,
+          [`border-${rtl ? 'right' : 'left'}-width`]: '1px'
         }}
       >
         {tasks.map(t => {
@@ -61,7 +62,7 @@ export const TaskListTableDefault: React.FC<{
             expanderSymbol = "▼";
           } else if (t.hideChildren === true) {
 
-            expanderSymbol = rtl?"◀":"▶";
+            expanderSymbol = rtl ? "◀" : "▶";
           }
 
           return (
@@ -85,6 +86,9 @@ export const TaskListTableDefault: React.FC<{
                         ? styles.taskListExpander
                         : styles.taskListEmptyExpander
                     }
+                    style={!expanderSymbol ? {
+                      [`padding-${rtl ? 'right' : 'left'}`]: '1rem'
+                    } : {}}
                     onClick={() => onExpanderClick(t)}
                   >
                     {expanderSymbol}

@@ -69,62 +69,68 @@ const App = () => {
   };
 
   return (
-    <div className={isDark?"dark":""}>
-    <div className="Wrapper">
-      <ViewSwitcher
-        onViewModeChange={viewMode => setView(viewMode)}
-        onViewListChange={setIsChecked}
-        isChecked={isChecked}
-        setDark={setDark}
-        isDark={isDark}
-      />
-      <h3>Gantt With Unlimited Height</h3>
-      
-      <Gantt
-        tasks={tasks}
-        viewMode={view}
-        onDateChange={handleTaskChange}
-        onDelete={handleTaskDelete}
-        onProgressChange={handleProgressChange}
-        onDoubleClick={handleDblClick}
-        onClick={handleClick}
-        onSelect={handleSelect}
-        onExpanderClick={handleExpanderClick}
-        listCellWidth={isChecked ? "155px" : ""}
-        columnWidth={columnWidth}
-      />
-      <h3>Gantt With Limited Height</h3>
-      <Gantt
-        tasks={tasks}
-        viewMode={view}
-        onDateChange={handleTaskChange}
-        onDelete={handleTaskDelete}
-        onProgressChange={handleProgressChange}
-        onDoubleClick={handleDblClick}
-        onClick={handleClick}
-        onSelect={handleSelect}
-        onExpanderClick={handleExpanderClick}
-        listCellWidth={isChecked ? "155px" : ""}
-        ganttHeight={300}
-        columnWidth={columnWidth}
-      />
-      <h3>RTL Gantt</h3>
-      <Gantt
-        tasks={tasks}
-        viewMode={view}
-        onDateChange={handleTaskChange}
-        onDelete={handleTaskDelete}
-        onProgressChange={handleProgressChange}
-        onDoubleClick={handleDblClick}
-        onClick={handleClick}
-        onSelect={handleSelect}
-        onExpanderClick={handleExpanderClick}
-        listCellWidth={isChecked ? "155px" : ""}
-        columnWidth={columnWidth}
-        locale="fa"
-        rtl
-      />
-    </div>
+    <div className={isDark ? "dark" : ""}>
+      <div className="Wrapper">
+        <ViewSwitcher
+          onViewModeChange={viewMode => setView(viewMode)}
+          onViewListChange={setIsChecked}
+          isChecked={isChecked}
+          setDark={setDark}
+          isDark={isDark}
+        />
+        <h3>Gantt With Unlimited Height</h3>
+
+        <Gantt
+          tasks={tasks}
+          viewMode={view}
+          onDateChange={handleTaskChange}
+          onDelete={handleTaskDelete}
+          onProgressChange={handleProgressChange}
+          onDoubleClick={handleDblClick}
+          onClick={handleClick}
+          onSelect={handleSelect}
+          onExpanderClick={handleExpanderClick}
+          listCellWidth={isChecked ? "155px" : ""}
+          columnWidth={columnWidth}
+        />
+        <h3>Gantt With Limited Height</h3>
+        <Gantt
+          tasks={tasks}
+          viewMode={view}
+          onDateChange={handleTaskChange}
+          onDelete={handleTaskDelete}
+          onProgressChange={handleProgressChange}
+          onDoubleClick={handleDblClick}
+          onClick={handleClick}
+          onSelect={handleSelect}
+          onExpanderClick={handleExpanderClick}
+          listCellWidth={isChecked ? "155px" : ""}
+          ganttHeight={300}
+          columnWidth={columnWidth}
+        />
+        <h3>RTL Gantt</h3>
+        <Gantt
+          tasks={tasks}
+          viewMode={view}
+          onDateChange={handleTaskChange}
+          onDelete={handleTaskDelete}
+          onProgressChange={handleProgressChange}
+          onDoubleClick={handleDblClick}
+          onClick={handleClick}
+          onSelect={handleSelect}
+          onExpanderClick={handleExpanderClick}
+          listCellWidth={isChecked ? "155px" : ""}
+          columnWidth={columnWidth}
+          locale="fa"
+          headerTextAlign="center"
+          headerLabels={{
+            name: 'نام',
+            from: 'از تاریخ',
+            to: 'تا تاریخ'
+          }}
+          rtl
+        />
+      </div>
     </div>
   );
 };
