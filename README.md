@@ -48,6 +48,31 @@ You may handle actions
 />
 ```
 
+You can override colors to make it compatible with your theme
+
+```css
+
+.dark {
+  --gtr-back: #000;
+  --gtr-even-back: #0a0a0a;
+  --gtr-grid-row-line: #14100d;
+  --gtr-border: #191b1b;
+  --gtr-label: #aaa;
+  --gtr-calendar-bottom-text:#ccc;
+  --gtr-calendar-stroke: #1f1f1f;
+  --gtr-tooltip-default-container-paragraph: #999999;
+  --gtr-bar-handle: #222222;
+
+  --gtr-scroll-wrapper: rgba(255,255,255, 0.2);
+  --gtr-scroll-wrapper-hover: rgba(255,255,255, 0.3);
+  --gtr-tooltip-default-container-shadow-first: rgba(255,255,255, 0.16);
+  --gtr-tooltip-default-container-shadow-second: rgba(255,255,255, 0.23);
+
+  --gtr-gantt-header-separator:rgb(59, 59, 59);
+  --gtr-task-list-expander: rgb(169 169 169);
+}
+```
+
 ## How to run example
 
 ```
@@ -115,7 +140,8 @@ npm start
 | todayColor                 | string | Specifies the current period column fill color.                                                |
 | TooltipContent             |        | Specifies the Tooltip view for selected taskbar.                                               |
 | TaskListHeader             |        | Specifies the task list Header view                                                            |
-| TaskListTable              |        | Specifies the task list Table view                                                             |
+| TaskListTable              |        | Specifies the task list Table view   
+
 
 - TooltipContent: [`React.FC<{ task: Task; fontSize: string; fontFamily: string; }>;`](https://github.com/MaTeMaTuK/gantt-task-react/blob/main/src/components/other/tooltip.tsx#L56)
 - TaskListHeader: `React.FC<{ headerHeight: number; rowWidth: string; fontFamily: string; fontSize: string;}>;`
