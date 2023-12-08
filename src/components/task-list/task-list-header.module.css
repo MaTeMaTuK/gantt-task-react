@@ -2,7 +2,7 @@
   display: table;
   border-bottom: var(--gtr-border) 1px solid;
   border-top: var(--gtr-border) 1px solid;
-  border-left: var(--gtr-border) 1px solid;
+  /* border-left: var(--gtr-border) 1px solid; */
 }
 
 .ganttTable_Header {

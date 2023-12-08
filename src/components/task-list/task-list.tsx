@@ -29,6 +29,7 @@ export type TaskListProps = {
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
+    rtl?:boolean;
     textAlign?: 'left' | 'center' | 'right';
     labels?: {
       name?: string,
@@ -81,6 +82,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontFamily,
     fontSize,
     rowWidth,
+    rtl,
     textAlign: headerTextAlign,
     labels: headerLabels
   };

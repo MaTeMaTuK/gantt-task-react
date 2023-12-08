@@ -6,19 +6,21 @@ export const TaskListHeaderDefault: React.FC<{
   rowWidth: string;
   fontFamily: string;
   fontSize: string;
+  rtl?: boolean;
   textAlign?: 'left' | 'center' | 'right';
   labels?: {
     name?: string,
     from?: string,
     to?: string;
   };
-}> = ({ headerHeight, fontFamily, fontSize, rowWidth, textAlign, labels }) => {
+}> = ({ headerHeight, fontFamily, fontSize, rowWidth, textAlign, labels, rtl }) => {
   return (
     <div
       className={styles.ganttTable}
       style={{
         fontFamily: fontFamily,
-        fontSize: fontSize
+        fontSize: fontSize,
+        [`border${rtl ? 'Right' : 'Left'}`]: 'var(--gtr-border) 1px solid'
       }}
     >
       <div
