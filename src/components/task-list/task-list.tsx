@@ -11,10 +11,17 @@ export type TaskListProps = {
   ganttHeight: number;
   scrollY: number;
   locale: string;
+  rtl?: boolean;
   tasks: Task[];
   taskListRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
   selectedTask: BarTask | undefined;
+  headerTextAlign?: 'left' | 'center' | 'right';
+  headerLabels?: {
+    name?: string,
+    from?: string,
+    to?: string;
+  };
   setSelectedTask: (task: string) => void;
   onExpanderClick: (task: Task) => void;
   TaskListHeader: React.FC<{
@@ -22,6 +29,13 @@ export type TaskListProps = {
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
+    rtl?:boolean;
+    textAlign?: 'left' | 'center' | 'right';
+    labels?: {
+      name?: string,
+      from?: string,
+      to?: string;
+    };
   }>;
   TaskListTable: React.FC<{
     rowHeight: number;
@@ -48,6 +62,8 @@ export const TaskList: React.FC<TaskListProps> = ({
   setSelectedTask,
   onExpanderClick,
   locale,
+  rtl,
+  headerLabels, headerTextAlign,
   ganttHeight,
   taskListRef,
   horizontalContainerClass,
@@ -66,6 +82,9 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontFamily,
     fontSize,
     rowWidth,
+    rtl,
+    textAlign: headerTextAlign,
+    labels: headerLabels
   };
   const selectedTaskId = selectedTask ? selectedTask.id : "";
   const tableProps = {
@@ -75,6 +94,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontSize,
     tasks,
     locale,
+    rtl,
     selectedTaskId: selectedTaskId,
     setSelectedTask,
     onExpanderClick,

@@ -58,6 +58,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
+  headerLabels,
+  headerTextAlign,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -438,19 +440,21 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     fontSize,
     tasks: barTasks,
     locale,
+    rtl,
     headerHeight,
     scrollY,
     ganttHeight,
     horizontalContainerClass: styles.horizontalContainer,
     selectedTask,
     taskListRef,
+    headerLabels,headerTextAlign,
     setSelectedTask: handleSelectedTask,
     onExpanderClick: handleExpanderClick,
     TaskListHeader,
     TaskListTable,
   };
   return (
-    <div>
+    <div dir={rtl?'rtl':'ltr'}>
       <div
         className={styles.wrapper}
         onKeyDown={handleKeyDown}

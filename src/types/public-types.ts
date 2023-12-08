@@ -138,6 +138,12 @@ export interface StylingOption {
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
   }>;
+  headerTextAlign?: 'left' | 'center' | 'right';
+  headerLabels?: {
+    name?: string,
+    from?: string,
+    to?: string;
+  };
 }
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {

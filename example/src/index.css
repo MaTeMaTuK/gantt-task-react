@@ -1,5 +1,39 @@
+:root {
+  --back: #fff;
+  --button-back: #e7e7e7;
+  --fore:#000;
+  --gray:#ccc;
+  --inputSlider: #2196f3;
+}
+
+.dark {
+  --back: #000;
+  --button-back: #181818;
+  --fore:#fff;
+  --gray:#333;
+  --inputSlider: #2196f3;
+  --gtr-back: #000;
+  --gtr-even-back: #0a0a0a;
+  --gtr-grid-row-line: #14100d;
+  --gtr-border: #191b1b;
+  --gtr-label: #aaa;
+  --gtr-calendar-bottom-text:#ccc;
+  --gtr-calendar-stroke: #1f1f1f;
+  --gtr-tooltip-default-container-paragraph: #999999;
+  --gtr-bar-handle: #222222;
+
+  --gtr-scroll-wrapper: rgba(255,255,255, 0.2);
+  --gtr-scroll-wrapper-hover: rgba(255,255,255, 0.3);
+  --gtr-tooltip-default-container-shadow-first: rgba(255,255,255, 0.16);
+  --gtr-tooltip-default-container-shadow-second: rgba(255,255,255, 0.23);
+
+  --gtr-gantt-header-separator:rgb(59, 59, 59);
+  --gtr-task-list-expander: rgb(169 169 169);
+}
 .Wrapper {
   margin-bottom: 2rem;
+  background-color: var(--back);
+  color: var(--fore)
 }
 .ViewContainer {
   list-style: none;
@@ -11,8 +45,8 @@
 }
 
 .Button {
-  background-color: #e7e7e7;
-  color: black;
+  background-color: var(--button-back);
+  color: var(--fore);
   border: none;
   padding: 7px 16px;
   text-decoration: none;
@@ -50,7 +84,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--gray);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -62,17 +96,17 @@
   width: 21px;
   left: 6px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--back);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
 input:checked + .Slider {
-  background-color: #2196f3;
+  background-color: var(--inputSlider);
 }
 
 input:focus + .Slider {
-  box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 1px var(--inputSlider);
 }
 
 input:checked + .Slider:before {
@@ -80,3 +114,4 @@ input:checked + .Slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
+

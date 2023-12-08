@@ -16,26 +16,26 @@ export const VerticalScroll: React.FC<{
   rtl,
   onScroll,
 }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scroll;
-    }
-  }, [scroll]);
+    useEffect(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTop = scroll;
+      }
+    }, [scroll]);
 
-  return (
-    <div
-      style={{
-        height: ganttHeight,
-        marginTop: headerHeight,
-        marginLeft: rtl ? "" : "-1rem",
-      }}
-      className={styles.scroll}
-      onScroll={onScroll}
-      ref={scrollRef}
-    >
-      <div style={{ height: ganttFullHeight, width: 1 }} />
-    </div>
-  );
-};
+    return (
+      <div
+        style={{
+          height: ganttHeight,
+          marginTop: headerHeight,
+          [`margin${rtl ? "Right" : "Left"}`]: "-1rem"
+        }}
+        className={styles.scroll}
+        onScroll={onScroll}
+        ref={scrollRef}
+      >
+        <div style={{ height: ganttFullHeight, width: 1 }} />
+      </div>
+    );
+  };
