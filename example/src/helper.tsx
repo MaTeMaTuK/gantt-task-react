@@ -36,6 +36,10 @@ export function initTasks() {
       id: "Task 1",
       progress: 25,
       dependencies: ["Task 0"],
+      links: [{
+        target: "Task 0",
+        type: "EndToStart"
+      }],
       type: "task",
       project: "ProjectSample",
       displayOrder: 3,
@@ -47,6 +51,10 @@ export function initTasks() {
       id: "Task 2",
       progress: 10,
       dependencies: ["Task 1"],
+      links: [{
+        target: "Task 1",
+        type: "StartToEnd"
+      }],
       type: "task",
       project: "ProjectSample",
       displayOrder: 4,
@@ -58,6 +66,10 @@ export function initTasks() {
       id: "Task 3",
       progress: 2,
       dependencies: ["Task 2"],
+      links: [{
+        target: "Task 2",
+        type: "EndToEnd"
+      }],
       type: "task",
       project: "ProjectSample",
       displayOrder: 5,
@@ -70,6 +82,10 @@ export function initTasks() {
       type: "task",
       progress: 70,
       dependencies: ["Task 2"],
+      links: [{
+        target: "Task 2",
+        type: "StartToStart"
+      }],
       project: "ProjectSample",
       displayOrder: 6,
     },
