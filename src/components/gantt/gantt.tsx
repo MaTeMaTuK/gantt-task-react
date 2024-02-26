@@ -26,6 +26,8 @@ import styles from "./gantt.module.css";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
+  useTooltip,
+  nonCollapsedTasks,
   headerHeight = 50,
   columnWidth = 60,
   listCellWidth = "155px",
@@ -62,6 +64,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onProgressChange,
   onDoubleClick,
   onClick,
+  onMouseUp,
   onDelete,
   onSelect,
   onExpanderClick,
@@ -391,6 +394,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     columnWidth,
     svgWidth,
     tasks: tasks,
+    nonCollapsedTasks,
     rowHeight,
     dates: dateSetup.dates,
     todayColor,
@@ -427,6 +431,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onDateChange,
     onProgressChange,
     onDoubleClick,
+    onMouseUp,
     onClick,
     onDelete,
   };
@@ -466,7 +471,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           scrollY={scrollY}
           scrollX={scrollX}
         />
-        {ganttEvent.changedTask && (
+        {ganttEvent.changedTask && useTooltip && (
           <Tooltip
             arrowIndent={arrowIndent}
             rowHeight={rowHeight}

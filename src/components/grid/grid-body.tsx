@@ -5,6 +5,7 @@ import styles from "./grid.module.css";
 
 export type GridBodyProps = {
   tasks: Task[];
+  nonCollapsedTasks: Task[];
   dates: Date[];
   svgWidth: number;
   rowHeight: number;
@@ -13,6 +14,7 @@ export type GridBodyProps = {
   rtl: boolean;
 };
 export const GridBody: React.FC<GridBodyProps> = ({
+  nonCollapsedTasks,
   tasks,
   dates,
   rowHeight,
@@ -33,7 +35,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
       className={styles.gridRowLine}
     />,
   ];
-  for (const task of tasks) {
+  for (const task of nonCollapsedTasks ?? tasks) {
     gridRows.push(
       <rect
         key={"Row" + task.id}
@@ -41,7 +43,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         y={y}
         width={svgWidth}
         height={rowHeight}
-        className={styles.gridRow}
+        className={task.isSelected ? styles.selectedRow : styles.gridRow}
       />
     );
     rowLines.push(

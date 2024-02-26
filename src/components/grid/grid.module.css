@@ -2,6 +2,10 @@
   fill: #fff;
 }
 
+.selectedRow {
+  fill: #1890ff33;
+}
+
 .gridRow:nth-child(even) {
   fill: #f5f5f5;
 }

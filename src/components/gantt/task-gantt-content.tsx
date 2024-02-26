@@ -13,6 +13,7 @@ import {
 
 export type TaskGanttContentProps = {
   tasks: BarTask[];
+  nonCollapsedTasks?: BarTask[];
   dates: Date[];
   ganttEvent: GanttEvent;
   selectedTask: BarTask | undefined;
@@ -55,6 +56,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onDoubleClick,
   onClick,
   onDelete,
+  onMouseUp
 }) => {
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
@@ -237,6 +239,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       !!onDoubleClick && onDoubleClick(task);
     } else if (action === "click") {
       !!onClick && onClick(task);
+    } else if (action === "mouseup") {
+      !!onMouseUp && onMouseUp(task);
     }
     // Change task event start
     else if (action === "move") {
