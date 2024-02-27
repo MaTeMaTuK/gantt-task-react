@@ -28,12 +28,15 @@ export interface Task {
   };
   isDisabled?: boolean;
   project?: string;
+  isSelected?: boolean;
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
 }
 
 export interface EventOption {
+
+  onMouseUp?:(task: Task) => void;
   /**
    * Time step value for date changes.
    */
@@ -142,4 +145,6 @@ export interface StylingOption {
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
+  nonCollapsedTasks: Task[];
+  useTooltip?: boolean;
 }

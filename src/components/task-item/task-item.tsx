@@ -103,6 +103,9 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       onClick={e => {
         onEventStart("click", task, e);
       }}
+      onMouseUp={e => {
+        onEventStart("mouseup", task, e);
+      }}
       onFocus={() => {
         onEventStart("select", task);
       }}

@@ -6,6 +6,10 @@
   fill: #f5f5f5;
 }
 
+.selectedRow {
+  fill: #1890ff33;
+}
+
 .gridRowLine {
   stroke: #ebeff2;
 }

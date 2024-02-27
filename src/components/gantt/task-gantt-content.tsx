@@ -13,6 +13,7 @@ import {
 
 export type TaskGanttContentProps = {
   tasks: BarTask[];
+  nonCollapsedTasks?: BarTask[];
   dates: Date[];
   ganttEvent: GanttEvent;
   selectedTask: BarTask | undefined;
@@ -33,29 +34,30 @@ export type TaskGanttContentProps = {
 } & EventOption;
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
-  tasks,
-  dates,
-  ganttEvent,
-  selectedTask,
-  rowHeight,
-  columnWidth,
-  timeStep,
-  svg,
-  taskHeight,
-  arrowColor,
-  arrowIndent,
-  fontFamily,
-  fontSize,
-  rtl,
-  setGanttEvent,
-  setFailedTask,
-  setSelectedTask,
-  onDateChange,
-  onProgressChange,
-  onDoubleClick,
-  onClick,
-  onDelete,
-}) => {
+                                                                    tasks,
+                                                                    dates,
+                                                                    ganttEvent,
+                                                                    selectedTask,
+                                                                    rowHeight,
+                                                                    columnWidth,
+                                                                    timeStep,
+                                                                    svg,
+                                                                    taskHeight,
+                                                                    arrowColor,
+                                                                    arrowIndent,
+                                                                    fontFamily,
+                                                                    fontSize,
+                                                                    rtl,
+                                                                    setGanttEvent,
+                                                                    setFailedTask,
+                                                                    setSelectedTask,
+                                                                    onDateChange,
+                                                                    onProgressChange,
+                                                                    onDoubleClick,
+                                                                    onClick,
+                                                                    onDelete,
+                                                                    onMouseUp
+                                                                  }) => {
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
   const [initEventX1Delta, setInitEventX1Delta] = useState(0);
@@ -237,6 +239,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       !!onDoubleClick && onDoubleClick(task);
     } else if (action === "click") {
       !!onClick && onClick(task);
+    } else if (action === "mouseup") {
+      !!onMouseUp && onMouseUp(task);
     }
     // Change task event start
     else if (action === "move") {
