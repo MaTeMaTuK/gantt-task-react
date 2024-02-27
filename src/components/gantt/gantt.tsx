@@ -394,7 +394,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     columnWidth,
     svgWidth,
     tasks: tasks,
-    nonCollapsedTasks,
+    nonCollapsedTasks: nonCollapsedTasks,
     rowHeight,
     dates: dateSetup.dates,
     todayColor,

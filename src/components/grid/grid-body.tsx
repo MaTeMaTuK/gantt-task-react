@@ -5,7 +5,7 @@ import styles from "./grid.module.css";
 
 export type GridBodyProps = {
   tasks: Task[];
-  nonCollapsedTasks: Task[];
+  nonCollapsedTasks?: Task[];
   dates: Date[];
   svgWidth: number;
   rowHeight: number;

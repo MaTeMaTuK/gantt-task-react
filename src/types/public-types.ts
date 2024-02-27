@@ -145,6 +145,6 @@ export interface StylingOption {
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
-  nonCollapsedTasks: Task[];
+  nonCollapsedTasks?: Task[];
   useTooltip?: boolean;
 }
