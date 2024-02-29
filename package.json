@@ -12,9 +12,6 @@
   "engines": {
     "node": ">=10"
   },
-  "dist-tags": {
-    "latest": "0.3.12"
-  },
   "keywords": [
     "react",
     "gantt",
