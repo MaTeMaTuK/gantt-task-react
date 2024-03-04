@@ -88,6 +88,11 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
             if (isDelete) onEventStart("delete", task, e);
             break;
           }
+          case "Backspace": {
+            const isMac = navigator.userAgent.toUpperCase().indexOf('MAC') >= 0;
+            if (isMac && isDelete) onEventStart("delete", task, e);
+            break;
+          }
         }
         e.stopPropagation();
       }}
