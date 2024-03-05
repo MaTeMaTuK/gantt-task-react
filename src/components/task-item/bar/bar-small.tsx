@@ -17,7 +17,7 @@ export const BarSmall: React.FC<TaskItemProps> = ({
     task.y,
     task.height
   );
-  return (
+  return (<g>
     <g className={styles.barWrapper} tabIndex={0}>
       <BarDisplay
         x={task.x1}
@@ -43,6 +43,16 @@ export const BarSmall: React.FC<TaskItemProps> = ({
           />
         )}
       </g>
+    </g>
+      {task.priority === "BLOCKER" && (
+        <g>
+          <rect x={task.x2 + 3} y={task.y + 1} width="81" height="28" rx="4" fill="none" stroke="#FFD591"
+                strokeWidth="1"/>
+          <rect x={task.x2 + 3} y={task.y + 1} width="81" height="28" rx="4" fill="#FFF7E6"/>
+          <text x={task.x2 + 41} y={task.y + 15} dominantBaseline="middle" textAnchor="middle" fill="#FA8C16">Blocker
+          </text>
+        </g>
+      )}
     </g>
   );
 };
