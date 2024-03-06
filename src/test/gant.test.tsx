@@ -10,7 +10,7 @@ describe("gantt", () => {
       <Gantt
         tasks={[
           {
-            start: new Date(2020, 0, 1),
+            start: new Date(2020, 0, 2),
             end: new Date(2020, 2, 2),
             name: "Redesign website",
             id: "Task 0",
