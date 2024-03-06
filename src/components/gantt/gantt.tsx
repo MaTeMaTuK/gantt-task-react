@@ -257,7 +257,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // scroll events
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      console.log(" flying");
       if (event.shiftKey || event.deltaX) {
         const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
         let newScrollX = scrollX + scrollMove;
@@ -285,9 +284,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     };
 
     // subscribe if scroll is necessary
-    wrapperRef.current?.addEventListener("wheel", handleWheel, {
-      passive: false,
-    });
+    const addEventListenerOptions = { passive: ganttHeight ? false : true };
+    wrapperRef.current?.addEventListener(
+      "wheel",
+      handleWheel,
+      addEventListenerOptions
+    );
+
     return () => {
       wrapperRef.current?.removeEventListener("wheel", handleWheel);
     };
