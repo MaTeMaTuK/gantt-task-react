@@ -255,51 +255,51 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   }, [ganttHeight, tasks, headerHeight, rowHeight]);
 
   // scroll events
-  useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      console.log("Ula I am flying");
-      if (event.shiftKey || event.deltaX) {
-        const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
-        let newScrollX = scrollX + scrollMove;
-        if (newScrollX < 0) {
-          newScrollX = 0;
-        } else if (newScrollX > svgWidth) {
-          newScrollX = svgWidth;
-        }
-        setScrollX(newScrollX);
-        event.preventDefault();
-      } else if (ganttHeight) {
-        let newScrollY = scrollY + event.deltaY;
-        if (newScrollY < 0) {
-          newScrollY = 0;
-        } else if (newScrollY > ganttFullHeight - ganttHeight) {
-          newScrollY = ganttFullHeight - ganttHeight;
-        }
-        if (newScrollY !== scrollY) {
-          setScrollY(newScrollY);
-          event.preventDefault();
-        }
-      }
+  // useEffect(() => {
+  //   const handleWheel = (event: WheelEvent) => {
+  //     console.log("Ula I am flying");
+  //     if (event.shiftKey || event.deltaX) {
+  //       const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
+  //       let newScrollX = scrollX + scrollMove;
+  //       if (newScrollX < 0) {
+  //         newScrollX = 0;
+  //       } else if (newScrollX > svgWidth) {
+  //         newScrollX = svgWidth;
+  //       }
+  //       setScrollX(newScrollX);
+  //       event.preventDefault();
+  //     } else if (ganttHeight) {
+  //       let newScrollY = scrollY + event.deltaY;
+  //       if (newScrollY < 0) {
+  //         newScrollY = 0;
+  //       } else if (newScrollY > ganttFullHeight - ganttHeight) {
+  //         newScrollY = ganttFullHeight - ganttHeight;
+  //       }
+  //       if (newScrollY !== scrollY) {
+  //         setScrollY(newScrollY);
+  //         event.preventDefault();
+  //       }
+  //     }
 
-      setIgnoreScrollEvent(true);
-    };
+  //     setIgnoreScrollEvent(true);
+  //   };
 
-    // subscribe if scroll is necessary
-    wrapperRef.current?.addEventListener("wheel", handleWheel, {
-      passive: false,
-    });
-    return () => {
-      wrapperRef.current?.removeEventListener("wheel", handleWheel);
-    };
-  }, [
-    wrapperRef,
-    scrollY,
-    scrollX,
-    ganttHeight,
-    svgWidth,
-    rtl,
-    ganttFullHeight,
-  ]);
+  //   // subscribe if scroll is necessary
+  //   wrapperRef.current?.addEventListener("wheel", handleWheel, {
+  //     passive: false,
+  //   });
+  //   return () => {
+  //     wrapperRef.current?.removeEventListener("wheel", handleWheel);
+  //   };
+  // }, [
+  //   wrapperRef,
+  //   scrollY,
+  //   scrollX,
+  //   ganttHeight,
+  //   svgWidth,
+  //   rtl,
+  //   ganttFullHeight,
+  // ]);
 
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
@@ -311,6 +311,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
+    console.log("naaa naaa ");
     if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
       setScrollX(event.currentTarget.scrollLeft);
       setIgnoreScrollEvent(true);
