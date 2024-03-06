@@ -258,6 +258,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
       console.log("Anika");
+      console.log(event);
 
       setIgnoreScrollEvent(true);
     };
