@@ -257,6 +257,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // scroll events
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
+      console.log("Ula I am flying");
       if (event.shiftKey || event.deltaX) {
         const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
         let newScrollX = scrollX + scrollMove;
