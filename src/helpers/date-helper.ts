@@ -111,7 +111,7 @@ export const ganttDateRange = (
         "day"
       );
       newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 1.5, "month");
+      newEndDate = addToDate(newEndDate, 2, "month");
       break;
     case ViewMode.Day:
       newStartDate = startOfDate(newStartDate, "day");
