@@ -11,7 +11,7 @@ type DateHelperScales =
   | "second"
   | "millisecond";
 
-const intlDTCache = {};
+const intlDTCache: any = {};
 export const getCachedDateTimeFormat = (
   locString: string | string[],
   opts: DateTimeFormatOptions = {}

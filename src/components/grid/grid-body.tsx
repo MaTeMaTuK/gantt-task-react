@@ -11,6 +11,7 @@ export type GridBodyProps = {
   columnWidth: number;
   todayColor: string;
   rtl: boolean;
+  weekendColor: string;
 };
 export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
@@ -20,6 +21,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   columnWidth,
   todayColor,
   rtl,
+  weekendColor,
 }) => {
   let y = 0;
   const gridRows: ReactChild[] = [];
@@ -60,6 +62,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   const now = new Date();
   let tickX = 0;
   const ticks: ReactChild[] = [];
+  const weekends: ReactChild[] = [];
   let today: ReactChild = <rect />;
   for (let i = 0; i < dates.length; i++) {
     const date = dates[i];
@@ -73,6 +76,26 @@ export const GridBody: React.FC<GridBodyProps> = ({
         className={styles.gridTick}
       />
     );
+
+    // Add Weekend Color
+    if (
+      weekendColor !== "transparent" &&
+      dates[i + 1] &&
+      [0, 6].includes(dates[i + 1].getDay())
+    ) {
+      weekends.push(
+        <rect
+          key={"WeekendColumn" + i}
+          x={tickX + columnWidth}
+          y={0}
+          width={columnWidth}
+          height={y}
+          fill={weekendColor}
+          className={styles.weekendStroke}
+        />
+      );
+    }
+
     if (
       (i + 1 !== dates.length &&
         date.getTime() < now.getTime() &&
@@ -122,6 +145,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
       <g className="rowLines">{rowLines}</g>
       <g className="ticks">{ticks}</g>
       <g className="today">{today}</g>
+      <g className="weekends">{weekends}</g>
     </g>
   );
 };

@@ -10,9 +10,6 @@
     "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
-    "@testing-library/jest-dom": "file:../node_modules/@testing-library/jest-dom",
-    "@testing-library/react": "file:../node_modules/@testing-library/react",
-    "@testing-library/user-event": "file:../node_modules/@testing-library/user-event",
     "@types/jest": "file:../node_modules/@types/jest",
     "@types/node": "file:../node_modules/@types/node",
     "@types/react": "file:../node_modules/@types/react",
@@ -23,8 +20,7 @@
     "react-dom": "file:../node_modules/react-dom",
     "react-scripts": "file:../node_modules/react-scripts"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "browserslist": {
     "production": [
       ">0.2%",

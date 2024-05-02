@@ -225,6 +225,14 @@ export const Calendar: React.FC<CalendarProps> = ({
         .getDate()
         .toString()}`;
 
+      console.log(
+        "calendar",
+        bottomValue,
+        date,
+        locale,
+        getLocalDayOfWeek(date, locale, "short"),
+        date.getDate().toString()
+      );
       bottomValues.push(
         <text
           key={date.getTime()}
@@ -259,6 +267,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         );
       }
     }
+
     return [topValues, bottomValues];
   };
 
@@ -380,6 +389,9 @@ export const Calendar: React.FC<CalendarProps> = ({
     case ViewMode.Hour:
       [topValues, bottomValues] = getCalendarValuesForHour();
   }
+
+  console.log("calendar", bottomValues, topValues);
+
   return (
     <g className="calendar" fontSize={fontSize} fontFamily={fontFamily}>
       <rect
