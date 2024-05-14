@@ -116,6 +116,16 @@ export const GridBody: React.FC<GridBodyProps> = ({
     }
     tickX += columnWidth;
   }
+  const terminalX = dates.length * columnWidth;
+  ticks.push(
+  <line
+    key="terminal"
+    x1={terminalX}
+    y1={0}
+    x2={terminalX}
+    y2={y}
+    className={styles.gridTick}
+  />);
   return (
     <g className="gridBody">
       <g className="rows">{gridRows}</g>

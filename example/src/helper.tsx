@@ -1,7 +1,7 @@
 import { Task } from "../../dist/types/public-types";
 
 export function initTasks() {
-  const currentDate = new Date();
+  const currentDate = new Date(2023, 7, 1);
   const tasks: Task[] = [
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
