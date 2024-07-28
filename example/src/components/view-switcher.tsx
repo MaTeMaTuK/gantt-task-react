@@ -15,48 +15,27 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
     <div className="ViewContainer">
       <button
         className="Button"
+        onClick={() => onViewModeChange(ViewMode.Minute)}
+      >
+        Minute
+      </button>
+      <button
+        className="Button"
+        onClick={() => onViewModeChange(ViewMode.QuarterHour)}
+      >
+        QuarterHour
+      </button>
+      <button
+        className="Button"
+        onClick={() => onViewModeChange(ViewMode.HalfHour)}
+      >
+        HalfHour
+      </button>
+      <button
+        className="Button"
         onClick={() => onViewModeChange(ViewMode.Hour)}
       >
         Hour
-      </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.QuarterDay)}
-      >
-        Quarter of Day
-      </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.HalfDay)}
-      >
-        Half of Day
-      </button>
-      <button className="Button" onClick={() => onViewModeChange(ViewMode.Day)}>
-        Day
-      </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.Week)}
-      >
-        Week
-      </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.Month)}
-      >
-        Month
-      </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.Year)}
-      >
-        Year
-      </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.QuarterYear)}
-      >
-        Year
       </button>
       <div className="Switch">
         <label className="Switch_Toggle">
