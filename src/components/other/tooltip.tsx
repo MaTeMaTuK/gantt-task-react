@@ -123,13 +123,18 @@ export const StandardTooltipContent: React.FC<{
   };
   return (
     <div className={styles.tooltipDefaultContainer} style={style}>
-      <b style={{ fontSize: fontSize + 6 }}>{`${
-        task.name
-      }: ${task.start.getDate()}-${
-        task.start.getMonth() + 1
-      }-${task.start.getFullYear()} - ${task.end.getDate()}-${
-        task.end.getMonth() + 1
-      }-${task.end.getFullYear()}`}</b>
+      <b style={{ fontSize: fontSize + 6 }}>{`${task.name}`}</b>
+      <p></p>
+      <p
+        className={styles.tooltipDefaultContainerParagraph}
+        style={{ marginTop: 4 }}
+      >
+        {`date : ${task.start.getFullYear()}-${
+          task.start.getMonth() + 1
+        }-${task.start.getDate()} ~ ${task.end.getFullYear()}-${
+          task.end.getMonth() + 1
+        }-${task.end.getDate()}`}
+      </p>
       {task.end.getTime() - task.start.getTime() !== 0 && (
         <p className={styles.tooltipDefaultContainerParagraph}>{`Duration: ${~~(
           (task.end.getTime() - task.start.getTime()) /

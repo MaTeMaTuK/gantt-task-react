@@ -6,7 +6,7 @@ import {
   getDaysInMonth,
   getLocalDayOfWeek,
   getLocaleMonth,
-  getWeekNumberISO8601,
+  getWeekOfMonth,
 } from "../../helpers/date-helper";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./calendar.module.css";
@@ -40,14 +40,24 @@ export const Calendar: React.FC<CalendarProps> = ({
       const date = dateSetup.dates[i];
       const bottomValue = date.getFullYear();
       bottomValues.push(
-        <text
-          key={date.getTime()}
-          y={headerHeight * 0.8}
-          x={columnWidth * i + columnWidth * 0.5}
-          className={styles.calendarBottomText}
-        >
-          {bottomValue}
-        </text>
+        <g key={date.getTime()}>
+          <line
+            x1={columnWidth * i}
+            y1={headerHeight * 0.6}
+            x2={columnWidth * i}
+            y2={headerHeight}
+            style={{ stroke: "black", strokeWidth: 1 }}
+          />
+          <text
+            y={headerHeight * 0.8}
+            x={columnWidth * i + columnWidth * 0.5}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            className={styles.calendarBottomText}
+          >
+            {bottomValue}
+          </text>
+        </g>
       );
       if (
         i === 0 ||
@@ -129,14 +139,24 @@ export const Calendar: React.FC<CalendarProps> = ({
       const date = dateSetup.dates[i];
       const bottomValue = getLocaleMonth(date, locale);
       bottomValues.push(
-        <text
-          key={bottomValue + date.getFullYear()}
-          y={headerHeight * 0.8}
-          x={columnWidth * i + columnWidth * 0.5}
-          className={styles.calendarBottomText}
-        >
-          {bottomValue}
-        </text>
+        <g key={date.getTime()}>
+          <line
+            x1={columnWidth * i}
+            y1={headerHeight * 0.6}
+            x2={columnWidth * i}
+            y2={headerHeight}
+            style={{ stroke: "black", strokeWidth: 1 }}
+          />
+          <text
+            y={headerHeight * 0.8}
+            x={columnWidth * i + columnWidth * 0.5}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            className={styles.calendarBottomText}
+          >
+            {bottomValue}
+          </text>
+        </g>
       );
       if (
         i === 0 ||
@@ -176,20 +196,37 @@ export const Calendar: React.FC<CalendarProps> = ({
       let topValue = "";
       if (i === 0 || date.getMonth() !== dates[i - 1].getMonth()) {
         // top
-        topValue = `${getLocaleMonth(date, locale)}, ${date.getFullYear()}`;
+        if (locale === "kor") {
+          topValue = `${date.getFullYear()}년 ${getLocaleMonth(date, locale)}`;
+        } else {
+          topValue = `${getLocaleMonth(date, locale)}, ${date.getFullYear()}`;
+        }
       }
       // bottom
-      const bottomValue = `W${getWeekNumberISO8601(date)}`;
+      const bottomValue =
+        locale === "kor"
+          ? `${getLocaleMonth(date, locale)} ${getWeekOfMonth(date)}주`
+          : `W${getWeekOfMonth(date)}`;
 
       bottomValues.push(
-        <text
-          key={date.getTime()}
-          y={headerHeight * 0.8}
-          x={columnWidth * (i + +rtl)}
-          className={styles.calendarBottomText}
-        >
-          {bottomValue}
-        </text>
+        <g key={date.getTime()}>
+          <line
+            x1={columnWidth * i}
+            y1={headerHeight * 0.6}
+            x2={columnWidth * i}
+            y2={headerHeight}
+            style={{ stroke: "black", strokeWidth: 1 }}
+          />
+          <text
+            y={headerHeight * 0.8}
+            x={columnWidth * i + columnWidth * 0.5}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            className={styles.calendarBottomText}
+          >
+            {bottomValue}
+          </text>
+        </g>
       );
 
       if (topValue) {
@@ -221,19 +258,39 @@ export const Calendar: React.FC<CalendarProps> = ({
     const dates = dateSetup.dates;
     for (let i = 0; i < dates.length; i++) {
       const date = dates[i];
-      const bottomValue = `${getLocalDayOfWeek(date, locale, "short")}, ${date
-        .getDate()
-        .toString()}`;
+      const bottomValue =
+        locale === "kor"
+          ? `${getLocaleMonth(
+              date,
+              locale
+            )} ${date.getDate()}일 (${getLocalDayOfWeek(
+              date,
+              locale,
+              "short"
+            )})`
+          : `${getLocalDayOfWeek(date, locale, "short")}, ${date
+              .getDate()
+              .toString()}`;
 
       bottomValues.push(
-        <text
-          key={date.getTime()}
-          y={headerHeight * 0.8}
-          x={columnWidth * i + columnWidth * 0.5}
-          className={styles.calendarBottomText}
-        >
-          {bottomValue}
-        </text>
+        <g key={date.getTime()}>
+          <line
+            x1={columnWidth * i}
+            y1={headerHeight * 0.6}
+            x2={columnWidth * i}
+            y2={headerHeight}
+            style={{ stroke: "black", strokeWidth: 1 }}
+          />
+          <text
+            y={headerHeight * 0.8}
+            x={columnWidth * i + columnWidth * 0.5}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            className={styles.calendarBottomText}
+          >
+            {bottomValue}
+          </text>
+        </g>
       );
       if (
         i + 1 !== dates.length &&
@@ -275,22 +332,41 @@ export const Calendar: React.FC<CalendarProps> = ({
       }).format(date);
 
       bottomValues.push(
-        <text
-          key={date.getTime()}
-          y={headerHeight * 0.8}
-          x={columnWidth * (i + +rtl)}
-          className={styles.calendarBottomText}
-          fontFamily={fontFamily}
-        >
-          {bottomValue}
-        </text>
+        <g key={date.getTime()}>
+          <line
+            x1={columnWidth * i}
+            y1={headerHeight * 0.6}
+            x2={columnWidth * i}
+            y2={headerHeight}
+            style={{ stroke: "black", strokeWidth: 1 }}
+          />
+          <text
+            y={headerHeight * 0.8}
+            x={columnWidth * i + columnWidth * 0.5}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            className={styles.calendarBottomText}
+          >
+            {bottomValue}
+          </text>
+        </g>
       );
       if (i === 0 || date.getDate() !== dates[i - 1].getDate()) {
-        const topValue = `${getLocalDayOfWeek(
-          date,
-          locale,
-          "short"
-        )}, ${date.getDate()} ${getLocaleMonth(date, locale)}`;
+        const topValue =
+          locale === "kor"
+            ? `${getLocaleMonth(
+                date,
+                locale
+              )} ${date.getDate()}일 (${getLocalDayOfWeek(
+                date,
+                locale,
+                "short"
+              )})`
+            : `${getLocalDayOfWeek(
+                date,
+                locale,
+                "short"
+              )}, ${date.getDate()} ${getLocaleMonth(date, locale)}`;
         topValues.push(
           <TopPartOfCalendar
             key={topValue + date.getFullYear()}
@@ -320,23 +396,42 @@ export const Calendar: React.FC<CalendarProps> = ({
       }).format(date);
 
       bottomValues.push(
-        <text
-          key={date.getTime()}
-          y={headerHeight * 0.8}
-          x={columnWidth * (i + +rtl)}
-          className={styles.calendarBottomText}
-          fontFamily={fontFamily}
-        >
-          {bottomValue}
-        </text>
+        <g key={date.getTime()}>
+          <line
+            x1={columnWidth * i}
+            y1={headerHeight * 0.6}
+            x2={columnWidth * i}
+            y2={headerHeight}
+            style={{ stroke: "black", strokeWidth: 1 }}
+          />
+          <text
+            y={headerHeight * 0.8}
+            x={columnWidth * i + columnWidth * 0.5}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            className={styles.calendarBottomText}
+          >
+            {bottomValue}
+          </text>
+        </g>
       );
       if (i !== 0 && date.getDate() !== dates[i - 1].getDate()) {
         const displayDate = dates[i - 1];
-        const topValue = `${getLocalDayOfWeek(
-          displayDate,
-          locale,
-          "long"
-        )}, ${displayDate.getDate()} ${getLocaleMonth(displayDate, locale)}`;
+        const topValue =
+          locale === "kor"
+            ? `${getLocaleMonth(
+                displayDate,
+                locale
+              )} ${displayDate.getDate()}일 (${getLocalDayOfWeek(
+                displayDate,
+                locale,
+                "long"
+              )})`
+            : `${getLocalDayOfWeek(
+                date,
+                locale,
+                "long"
+              )}, ${date.getDate()} ${getLocaleMonth(date, locale)}`;
         const topPosition = (date.getHours() - 24) / 2;
         topValues.push(
           <TopPartOfCalendar

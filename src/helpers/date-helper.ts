@@ -216,6 +216,30 @@ const getMonday = (date: Date) => {
   return new Date(date.setDate(diff));
 };
 
+export const getWeekOfMonth = (date: any) => {
+  // 주어진 날짜의 첫 번째 날을 가져옵니다.
+  const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+
+  // 주어진 날짜의 첫 번째 월요일을 가져옵니다.
+  const firstMonday: any = new Date(startOfMonth);
+  while (firstMonday.getDay() !== 1) {
+    firstMonday.setDate(firstMonday.getDate() + 1);
+  }
+
+  // 주어진 날짜와 첫 번째 월요일 사이의 일수를 계산합니다.
+  const diffDays = Math.ceil((date - firstMonday) / (24 * 60 * 60 * 1000));
+
+  // 주 수를 계산합니다. 주어진 날짜가 첫 번째 월요일 이전이면 1주차로 간주합니다.
+  const weekNumber = Math.ceil((diffDays + 1) / 7);
+
+  // 만약 주어진 날짜가 첫 번째 월요일보다 앞에 있다면 첫 번째 주로 간주합니다.
+  if (diffDays < 0) {
+    return 1;
+  }
+
+  return weekNumber;
+};
+
 export const getWeekNumberISO8601 = (date: Date) => {
   const tmpDate = new Date(date.valueOf());
   const dayNumber = (tmpDate.getDay() + 6) % 7;

@@ -1,4 +1,4 @@
-# gantt-task-react
+# gantt-task-react (한국식 날짜 표기 적용)
 
 ## Interactive Gantt Chart for React with TypeScript.
 
@@ -9,7 +9,15 @@
 ## Install
 
 ```
-npm install gantt-task-react
+npm install gantt-task-react-korea
+yarn add gantt-task-react-korea
+```
+
+## Updates
+
+```
+locale값에 kor을 사용하면 한국식 날짜 표기를 사용합니다.
+Today에 Jira 스타일 노란색 화살표를 추가했습니다!
 ```
 
 ## How to use it
@@ -84,13 +92,13 @@ npm start
 
 ### DisplayOption
 
-| Parameter Name | Type    | Description                                                                                                 |
-| :------------- | :------ | :---------------------------------------------------------------------------------------------------------- |
+| Parameter Name | Type    | Description                                                                                                              |
+| :------------- | :------ | :----------------------------------------------------------------------------------------------------------------------- |
 | viewMode       | enum    | Specifies the time scale. Hour, Quarter Day, Half Day, Day, Week(ISO-8601, 1st day is Monday), Month, QuarterYear, Year. |
-| viewDate       | date    | Specifies display date and time for display.                                                                |
-| preStepsCount  | number  | Specifies empty space before the fist task                                                                  |
-| locale         | string  | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                                    |
-| rtl            | boolean | Sets rtl mode.                                                                                              |
+| viewDate       | date    | Specifies display date and time for display.                                                                             |
+| preStepsCount  | number  | Specifies empty space before the fist task                                                                               |
+| locale         | string  | Specifies the month name language. Able formats: ISO 639-2, Java Locale.                                                 |
+| rtl            | boolean | Sets rtl mode.                                                                                                           |
 
 ### StylingOption
 
