@@ -87,7 +87,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
             y1={y + height / 2}
             x2={x3}
             y2={y + height / 2}
-            stroke="black"
+            stroke="lightgray"
             strokeWidth="2"
             strokeDasharray="4 2"
           />
