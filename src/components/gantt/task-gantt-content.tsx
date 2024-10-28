@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { EventOption, ViewType } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
-// import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
 import { isKeyboardEvent } from "../../helpers/other-helper";
 import { TaskItem } from "../task-item/task-item";
@@ -38,12 +37,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   dates,
   ganttEvent,
   selectedTask,
-  // rowHeight,
   columnWidth,
   timeStep,
   svg,
   taskHeight,
-  // arrowColor,
   arrowIndent,
   fontFamily,
   fontSize,

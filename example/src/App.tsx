@@ -75,6 +75,7 @@ const App = () => {
         listCellWidth="50px"
         ganttHeight={600}
         columnWidth={columnWidth}
+        barFill={25}
       />
     </div>
   );
