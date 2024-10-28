@@ -11,8 +11,8 @@ export const Milestone: React.FC<TaskItemProps> = ({
     ${task.y + task.height * 0.85})`;
   const getBarColor = () => {
     return isSelected
-      ? task.styles.backgroundSelectedColor
-      : task.styles.backgroundColor;
+      ? task?.styles?.backgroundSelectedColor
+      : task?.styles?.backgroundColor;
   };
 
   const isDateChangeable = false;
