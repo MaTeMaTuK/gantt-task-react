@@ -24,7 +24,6 @@ export const convertToBarTasks = (
   redTeamBarColor: string
 ) => {
   let barTasks = tasks.map((t, i) => {
-    console.log("t", t);
     return convertToBarTask(
       t,
       i,
@@ -143,7 +142,6 @@ const convertToBarTask = (
       );
       break;
   }
-  console.log("barTask", barTask);
   return barTask;
 };
 

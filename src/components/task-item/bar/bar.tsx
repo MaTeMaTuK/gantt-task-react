@@ -23,8 +23,6 @@ export const Bar: React.FC<TaskItemProps> = ({
   const isDateChangeable = false;
   const taskStyles = { ...defaultStyles, ...task.styles };
 
-  console.log("Bar", task, viewType);
-
   return (
     <g className={styles.barWrapper} tabIndex={0}>
       <BarDisplay
