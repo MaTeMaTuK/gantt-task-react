@@ -258,6 +258,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       const date = dates[i];
       const bottomValue = getCachedDateTimeFormat(locale, {
         hour: "numeric",
+        hour12: true,
       }).format(date);
 
       bottomValues.push(
