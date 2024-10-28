@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { EventOption, ViewType } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
-// import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
 import { isKeyboardEvent } from "../../helpers/other-helper";
 import { TaskItem } from "../task-item/task-item";
@@ -38,12 +37,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   dates,
   ganttEvent,
   selectedTask,
-  // rowHeight,
   columnWidth,
   timeStep,
   svg,
   taskHeight,
-  // arrowColor,
   arrowIndent,
   fontFamily,
   fontSize,
@@ -208,22 +205,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   return (
     <g className="content">
-      {/* <g className="arrows" fill={arrowColor} stroke={arrowColor}>
-        {tasks.map(task => {
-          return task.barChildren.map(child => {
-            return (
-              <Arrow
-                key={`Arrow from ${task.id} to ${tasks[child.index].id}`}
-                taskFrom={task}
-                taskTo={tasks[child.index]}
-                rowHeight={rowHeight}
-                taskHeight={taskHeight}
-                arrowIndent={arrowIndent}
-              />
-            );
-          });
-        })}
-      </g> */}
       <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
         {tasks.map(task => {
           return (
