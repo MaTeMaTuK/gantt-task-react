@@ -22,6 +22,17 @@ const getBarColor = (task: TaskItemProps["task"]) => {
   return barBackgroundColor;
 };
 
+const getSectionColor = (sectionType: string) => {
+  switch (sectionType) {
+    case "task":
+      return greenBarColor;
+    case "gap":
+      return "lightgray";
+    default:
+      return barBackgroundColor;
+  }
+};
+
 export const Provider: React.FC<TaskItemProps> = ({
   task /* , isSelected */,
 }) => {
@@ -29,18 +40,41 @@ export const Provider: React.FC<TaskItemProps> = ({
 
   const providerWith = task.x2 - task.x1;
 
-  return (
-    <g tabIndex={0} className={styles.providerWrapper}>
+  console.log("Provider", task);
+
+  const sectionRects = task.barSections?.map((section, index) => {
+    const currentWidth = section.x2 - section.x1;
+    return (
       <rect
-        fill={barColor}
-        x={task.x1}
-        width={providerWith}
-        y={task.y}
-        height={task.height}
-        rx={task.barCornerRadius}
-        ry={task.barCornerRadius}
+        key={index}
+        fill={getSectionColor(section.sectionType)}
+        x={section.x1}
+        width={currentWidth}
+        y={section.y}
+        height={section.height}
+        rx={section.barCornerRadius}
+        ry={section.barCornerRadius}
         className={styles.providerTop}
       />
+    );
+  });
+
+  return (
+    <g tabIndex={0} className={styles.providerWrapper}>
+      {sectionRects ? (
+        sectionRects
+      ) : (
+        <rect
+          fill={barColor}
+          x={task.x1}
+          width={providerWith}
+          y={task.y}
+          height={task.height}
+          rx={task.barCornerRadius}
+          ry={task.barCornerRadius}
+          className={styles.providerTop}
+        />
+      )}
     </g>
   );
 };

@@ -12,6 +12,7 @@ export enum ViewMode {
 export type TaskType = "task" | "milestone" | "provider";
 export type SubType = "red_team" | "live_call" | "dictation";
 export type ViewType = "call_type" | "tat";
+export type TimeSection = { start: Date; end: Date };
 export interface Task {
   id: string;
   type: TaskType;
@@ -32,6 +33,7 @@ export interface Task {
   total_count?: number;
   hideChildren?: boolean;
   displayOrder?: number;
+  sections?: TimeSection[];
   styles?: {
     backgroundColor?: string;
     backgroundSelectedColor?: string;

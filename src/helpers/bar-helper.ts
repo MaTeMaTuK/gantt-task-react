@@ -1,5 +1,5 @@
 import { Task } from "../types/public-types";
-import { BarTask, TaskTypeInternal } from "../types/bar-task";
+import { BarSection, BarTask, TaskTypeInternal } from "../types/bar-task";
 import { BarMoveAction } from "../types/gantt-task-actions";
 
 export const convertToBarTasks = (
@@ -168,6 +168,47 @@ const convertToBar = (
   let x3: number;
   let x4: number;
 
+  let barSections: BarSection[] = [];
+
+  if (task.sections) {
+    let currentSectionIndex = 0;
+    const sectionsLength = task.sections.length;
+    let totalBarSectionCount = 0;
+    for (const section of task.sections) {
+      const x1 = taskXCoordinate(section.start, dates, columnWidth);
+      const x2 = taskXCoordinate(section.end, dates, columnWidth);
+      const y = taskYCoordinate(index, rowHeight, taskHeight);
+      const height = taskHeight;
+      barSections.push({
+        sectionIndex: totalBarSectionCount,
+        sectionType: "task",
+        x1,
+        x2,
+        y,
+        height,
+        barCornerRadius,
+      });
+      totalBarSectionCount++;
+      if (currentSectionIndex < sectionsLength - 1) {
+        barSections.push({
+          sectionIndex: totalBarSectionCount,
+          sectionType: "gap",
+          x1: x2,
+          x2: taskXCoordinate(
+            task.sections[currentSectionIndex + 1].start,
+            dates,
+            columnWidth
+          ),
+          y,
+          height,
+          barCornerRadius,
+        });
+        totalBarSectionCount++;
+      }
+      currentSectionIndex++;
+    }
+  }
+
   x1 = taskXCoordinate(task.start, dates, columnWidth);
   x2 = taskXCoordinate(task.end, dates, columnWidth);
   if (task.transcriptionStart) {
@@ -214,6 +255,7 @@ const convertToBar = (
     hideChildren,
     height: taskHeight,
     barChildren: [],
+    barSections,
     styles,
   };
 };

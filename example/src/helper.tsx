@@ -13,9 +13,39 @@ export function initTasks() {
       dictation_count: 3,
       live_call_count: 3,
       start: new Date(2024, 7, 16, 10, 58),
-      end: new Date(2024, 7, 16, 17, 45),
+      end: new Date(2024, 7, 16, 17, 48),
       hideChildren: false,
       displayOrder: 1,
+      sections: [
+        {
+          start: new Date(2024, 7, 16, 10, 58),
+          end: new Date(2024, 7, 16, 11, 35),
+        },
+        {
+          start: new Date(2024, 7, 16, 12, 33),
+          end: new Date(2024, 7, 16, 12, 39),
+        },
+        {
+          start: new Date(2024, 7, 16, 13, 11),
+          end: new Date(2024, 7, 16, 13, 20),
+        },
+        {
+          start: new Date(2024, 7, 16, 14, 50),
+          end: new Date(2024, 7, 16, 15, 12),
+        },
+        {
+          start: new Date(2024, 7, 16, 15, 8),
+          end: new Date(2024, 7, 16, 15, 38),
+        },
+        {
+          start: new Date(2024, 7, 16, 16, 30),
+          end: new Date(2024, 7, 16, 17, 6),
+        },
+        {
+          start: new Date(2024, 7, 16, 17, 5),
+          end: new Date(2024, 7, 16, 17, 48),
+        },
+      ],
     },
     {
       id: "event1",
@@ -78,7 +108,7 @@ export function initTasks() {
       subType: "live_call",
       name: "Live Call session at 08/16/2024 03.08 PM",
       provider: "doc1",
-      start: new Date(2024, 7, 16, 15, 8),
+      start: new Date(2024, 7, 16, 15, 18),
       end: new Date(2024, 7, 16, 15, 38),
       transcriptionStart: new Date(2024, 7, 16, 17, 20),
       transcriptionEnd: new Date(2024, 7, 16, 18, 18),
@@ -104,7 +134,7 @@ export function initTasks() {
       subType: "live_call",
       name: "Live Call session at 08/16/2024 05.05 PM",
       provider: "doc1",
-      start: new Date(2024, 7, 16, 17, 5),
+      start: new Date(2024, 7, 16, 17, 15),
       end: new Date(2024, 7, 16, 17, 48),
       transcriptionStart: new Date(2024, 7, 16, 21, 5),
       transcriptionEnd: new Date(2024, 7, 16, 22, 45),
