@@ -8,8 +8,8 @@ type ViewSwitcherProps = {
 };
 export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
   onViewModeChange,
-  onViewListChange,
-  isChecked,
+  // onViewListChange,
+  // isChecked,
 }) => {
   return (
     <div className="ViewContainer">
@@ -56,9 +56,9 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
         className="Button"
         onClick={() => onViewModeChange(ViewMode.QuarterYear)}
       >
-        Year
+        Quarter Year
       </button>
-      <div className="Switch">
+      {/* <div className="Switch">
         <label className="Switch_Toggle">
           <input
             type="checkbox"
@@ -68,7 +68,7 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
           <span className="Slider" />
         </label>
         Show Task List
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -71,7 +71,7 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
 
 export const ganttDateRange = (
   tasks: Task[],
-  viewMode: ViewMode,
+  viewMode: string,
   preStepsCount: number
 ) => {
   let newStartDate: Date = tasks[0].start;
@@ -144,7 +144,7 @@ export const ganttDateRange = (
 export const seedDates = (
   startDate: Date,
   endDate: Date,
-  viewMode: ViewMode
+  viewMode: string
 ) => {
   let currentDate: Date = new Date(startDate);
   const dates: Date[] = [currentDate];

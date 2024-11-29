@@ -35,6 +35,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
   } = {
     ...props,
   };
+  const Icon = task?.icon;
   const textRef = useRef<SVGTextElement>(null);
   const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
   const [isTextInside, setIsTextInside] = useState(true);
@@ -63,11 +64,13 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
   }, [textRef, task]);
 
   const getX = () => {
-    const width = task.x2 - task.x1;
-    const hasChild = task.barChildren.length > 0;
+    const hasChild = task.barChildren.length > 0; // Check for children
+    const width = task.x2 - task.x1; // Width of the bar
+
     if (isTextInside) {
-      return task.x1 + width * 0.5;
+      return task.x1 + 10; // Align text to the starting point of the bar
     }
+
     if (rtl && textRef.current) {
       return (
         task.x1 -
@@ -108,9 +111,14 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       }}
     >
       {taskItem}
+      {task.typeInternal === 'task' && <svg x={getX() + 10}
+        y={task.typeInternal === 'task' ? task.y + 12 : task.y} width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {Icon}
+      </svg>
+      }
       <text
-        x={getX()}
-        y={task.y + taskHeight * 0.5}
+        x={task.typeInternal === 'task' ? getX() + 35 : getX()}
+        y={task.typeInternal === 'task' ? task.y + taskHeight * 0.5 + 5 : task.y + taskHeight * 0.5}
         className={
           isTextInside
             ? style.barLabel
@@ -120,6 +128,20 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       >
         {task.name}
       </text>
-    </g>
+      <text
+        x={task.x2 - 100}
+        y={task.typeInternal === 'task' ? task.y + taskHeight * 0.5 + 5 : task.y + taskHeight * 0.5}
+        className={
+          isTextInside
+            ? style.barLabel
+            : style.barLabel && style.barLabelOutside
+        }
+        style={{
+          fill: 'rgba(179, 182, 195, 1)'
+        }}
+      >
+        {task.start.toLocaleString("en-US", { month: "short" }) + ' ' + task.start.getDate()} - {task.end.toLocaleString("en-US", { month: "short" }) + ' ' + task.end.getDate()}
+      </text>
+    </g >
   );
 };

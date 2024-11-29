@@ -14,7 +14,7 @@ import styles from "./calendar.module.css";
 export type CalendarProps = {
   dateSetup: DateSetup;
   locale: string;
-  viewMode: ViewMode;
+  viewMode: string;
   rtl: boolean;
   headerHeight: number;
   columnWidth: number;
@@ -135,7 +135,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           x={columnWidth * i + columnWidth * 0.5}
           className={styles.calendarBottomText}
         >
-          {bottomValue}
+          {bottomValue.substring(0, 3).toUpperCase()}
         </text>
       );
       if (
@@ -251,8 +251,8 @@ export const Calendar: React.FC<CalendarProps> = ({
             xText={
               columnWidth * (i + 1) -
               getDaysInMonth(date.getMonth(), date.getFullYear()) *
-                columnWidth *
-                0.5
+              columnWidth *
+              0.5
             }
             yText={topDefaultHeight * 0.9}
           />
@@ -385,7 +385,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       <rect
         x={0}
         y={0}
-        width={columnWidth * dateSetup.dates.length}
+        width={columnWidth * dateSetup.dates.length + 'vw'}
         height={headerHeight}
         className={styles.calendarHeader}
       />

@@ -1,11 +1,11 @@
 .projectWrapper {
   cursor: pointer;
-  outline: none;
+  outline: 1px solid var(--colour-brand-tints-transparent-10, rgba(254, 254, 254, 0.1));
+  border-radius: 5px;
 }
 
 .projectBackground {
   user-select: none;
-  opacity: 0.6;
 }
 
 .projectTop {

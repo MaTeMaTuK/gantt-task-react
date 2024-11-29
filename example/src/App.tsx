@@ -9,11 +9,11 @@ const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
   const [isChecked, setIsChecked] = React.useState(true);
-  let columnWidth = 65;
+  let columnWidth = 350;
   if (view === ViewMode.Year) {
     columnWidth = 350;
   } else if (view === ViewMode.Month) {
-    columnWidth = 300;
+    columnWidth = 350;
   } else if (view === ViewMode.Week) {
     columnWidth = 250;
   }
@@ -74,7 +74,6 @@ const App = () => {
         onViewListChange={setIsChecked}
         isChecked={isChecked}
       />
-      <h3>Gantt With Unlimited Height</h3>
       <Gantt
         tasks={tasks}
         viewMode={view}
@@ -85,23 +84,24 @@ const App = () => {
         onClick={handleClick}
         onSelect={handleSelect}
         onExpanderClick={handleExpanderClick}
-        listCellWidth={isChecked ? "155px" : ""}
+        // listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
-      />
-      <h3>Gantt With Limited Height</h3>
-      <Gantt
-        tasks={tasks}
-        viewMode={view}
-        onDateChange={handleTaskChange}
-        onDelete={handleTaskDelete}
-        onProgressChange={handleProgressChange}
-        onDoubleClick={handleDblClick}
-        onClick={handleClick}
-        onSelect={handleSelect}
-        onExpanderClick={handleExpanderClick}
-        listCellWidth={isChecked ? "155px" : ""}
-        ganttHeight={300}
-        columnWidth={columnWidth}
+        arrowColor='rgba(237, 255, 0, 1)'
+        barProgressColor='rgba(237, 255, 0, 1)'
+        barProgressSelectedColor='rgba(237, 255, 0, 1)'
+        barBackgroundColor='#242424'
+        barBackgroundSelectedColor='#242424'
+        projectProgressColor='rgba(237, 255, 0, 1)'
+        projectProgressSelectedColor='rgba(237, 255, 0, 1)'
+        projectBackgroundColor='rgba(37, 36, 36, 1)'
+        projectBackgroundSelectedColor='rgba(37, 36, 36, 1)'
+        barFill={60}
+        barCornerRadius={5}
+        fontSize='12px'
+        fontFamily='Monospace'
+        listCellWidth=""
+        // columnWidth={120}
+        rowHeight={60}
       />
     </div>
   );

@@ -12,14 +12,14 @@ export enum ViewMode {
 export type TaskType = "task" | "milestone" | "project";
 export interface Task {
   id: string;
-  type: TaskType;
+  type: string;
   name: string;
   start: Date;
   end: Date;
   /**
    * From 0 to 100
    */
-  progress: number;
+  progress?: number;
   styles?: {
     backgroundColor?: string;
     backgroundSelectedColor?: string;
@@ -75,7 +75,7 @@ export interface EventOption {
 }
 
 export interface DisplayOption {
-  viewMode?: ViewMode;
+  viewMode?: string;
   viewDate?: Date;
   preStepsCount?: number;
   /**
@@ -83,6 +83,7 @@ export interface DisplayOption {
    */
   locale?: string;
   rtl?: boolean;
+  icon?: HTMLAnchorElement
 }
 
 export interface StylingOption {

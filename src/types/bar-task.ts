@@ -6,6 +6,7 @@ export interface BarTask extends Task {
   x1: number;
   x2: number;
   y: number;
+  icon?: any;
   height: number;
   progressX: number;
   progressWidth: number;

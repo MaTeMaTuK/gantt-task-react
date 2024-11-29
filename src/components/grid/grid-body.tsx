@@ -40,20 +40,20 @@ export const GridBody: React.FC<GridBodyProps> = ({
         x="0"
         y={y}
         width={svgWidth}
-        height={rowHeight}
+        height={rowHeight + 1}
         className={styles.gridRow}
       />
     );
-    rowLines.push(
-      <line
-        key={"RowLine" + task.id}
-        x="0"
-        y1={y + rowHeight}
-        x2={svgWidth}
-        y2={y + rowHeight}
-        className={styles.gridRowLine}
-      />
-    );
+    // rowLines.push(
+    //   <line
+    //     key={"RowLine" + task.id}
+    //     x="0"
+    //     y1={y + rowHeight}
+    //     x2={svgWidth}
+    //     y2={y + rowHeight}
+    //     className={styles.gridRowLine}
+    //   />
+    // );
     y += rowHeight;
   }
 
