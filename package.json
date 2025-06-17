@@ -1,17 +1,23 @@
 {
-  "name": "gantt-task-react",
-  "version": "0.3.9",
-  "description": "Interactive Gantt Chart for React with TypeScript.",
-  "author": "MaTeMaTuK <maksym.vikarii@gmail.com>",
-  "homepage": "https://github.com/MaTeMaTuK/gantt-task-react",
+  "name": "@scharinger/gantt-task-react",
+  "version": "0.4.0-beta.2",
+  "description": "Interactive Gantt Chart for React with TypeScript and Extra Columns Support. Based on gantt-task-react by MaTeMaTuK.",
+  "author": "scharinger <din-email@example.com>",
+  "homepage": "https://github.com/scharinger/gantt-task-react",
   "license": "MIT",
-  "repository": "MaTeMaTuK/gantt-task-react",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scharinger/gantt-task-react.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
   "engines": {
     "node": ">=10"
   },
+  "contributors": [
+    "MaTeMaTuK <maksym.vikarii@gmail.com> (original author)"
+  ],
   "keywords": [
     "react",
     "gantt",
@@ -21,7 +27,8 @@
     "gantt-chart",
     "gantt chart",
     "react-gantt",
-    "task"
+    "task",
+    "configurable-columns"
   ],
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs",

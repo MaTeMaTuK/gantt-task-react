@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { BarTask } from "../../types/bar-task";
-import { Task } from "../../types/public-types";
+import { Task, ExtraColumn, DateFormat } from "../../types/public-types";
 
 export type TaskListProps = {
   headerHeight: number;
@@ -17,11 +17,20 @@ export type TaskListProps = {
   selectedTask: BarTask | undefined;
   setSelectedTask: (task: string) => void;
   onExpanderClick: (task: Task) => void;
+  extraColumns?: ExtraColumn[];
+  nameColumnWidth?: string;
+  fromColumnWidth?: string;
+  toColumnWidth?: string;
+  dateFormat?: DateFormat;
   TaskListHeader: React.FC<{
     headerHeight: number;
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
+    extraColumns?: ExtraColumn[];
+    nameColumnWidth?: string;
+    fromColumnWidth?: string;
+    toColumnWidth?: string;
   }>;
   TaskListTable: React.FC<{
     rowHeight: number;
@@ -33,6 +42,11 @@ export type TaskListProps = {
     selectedTaskId: string;
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
+    extraColumns?: ExtraColumn[];
+    nameColumnWidth?: string;
+    fromColumnWidth?: string;
+    toColumnWidth?: string;
+    dateFormat?: DateFormat;
   }>;
 };
 
@@ -51,6 +65,11 @@ export const TaskList: React.FC<TaskListProps> = ({
   ganttHeight,
   taskListRef,
   horizontalContainerClass,
+  extraColumns,
+  nameColumnWidth,
+  fromColumnWidth,
+  toColumnWidth,
+  dateFormat,
   TaskListHeader,
   TaskListTable,
 }) => {
@@ -66,6 +85,10 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontFamily,
     fontSize,
     rowWidth,
+    extraColumns,
+    nameColumnWidth,
+    fromColumnWidth,
+    toColumnWidth,
   };
   const selectedTaskId = selectedTask ? selectedTask.id : "";
   const tableProps = {
@@ -78,6 +101,11 @@ export const TaskList: React.FC<TaskListProps> = ({
     selectedTaskId: selectedTaskId,
     setSelectedTask,
     onExpanderClick,
+    extraColumns,
+    nameColumnWidth,
+    fromColumnWidth,
+    toColumnWidth,
+    dateFormat,
   };
 
   return (

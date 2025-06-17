@@ -10,6 +10,16 @@ export enum ViewMode {
   Year = "Year",
 }
 export type TaskType = "task" | "milestone" | "project";
+
+export type DateFormat = "locale" | "iso8601";
+
+export interface ExtraColumn {
+  key: string;
+  title: string;
+  width?: string;
+  render?: (task: Task) => React.ReactNode;
+}
+
 export interface Task {
   id: string;
   type: TaskType;
@@ -31,6 +41,10 @@ export interface Task {
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
+  /**
+   * Extra column data - key-value pairs for additional columns
+   */
+  extraColumns?: { [key: string]: string | number };
 }
 
 export interface EventOption {
@@ -123,6 +137,10 @@ export interface StylingOption {
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
+    extraColumns?: ExtraColumn[];
+    nameColumnWidth?: string;
+    fromColumnWidth?: string;
+    toColumnWidth?: string;
   }>;
   TaskListTable?: React.FC<{
     rowHeight: number;
@@ -137,9 +155,34 @@ export interface StylingOption {
      */
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
+    extraColumns?: ExtraColumn[];
+    nameColumnWidth?: string;
+    fromColumnWidth?: string;
+    toColumnWidth?: string;
+    dateFormat?: DateFormat;
   }>;
 }
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
+  /**
+   * Extra columns to display in the task list
+   */
+  extraColumns?: ExtraColumn[];
+  /**
+   * Width of the Name column
+   */
+  nameColumnWidth?: string;
+  /**
+   * Width of the From column
+   */
+  fromColumnWidth?: string;
+  /**
+   * Width of the To column
+   */
+  toColumnWidth?: string;
+  /**
+   * Date format for start and end dates. "locale" uses locale formatting, "iso8601" uses yyyy-MM-dd format
+   */
+  dateFormat?: DateFormat;
 }

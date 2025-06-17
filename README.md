@@ -15,7 +15,7 @@ npm install gantt-task-react
 ## How to use it
 
 ```javascript
-import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from 'gantt-task-react';
+import { Gantt, Task, ExtraColumn, DateFormat, EventOption, StylingOption, ViewMode, DisplayOption } from 'gantt-task-react';
 import "gantt-task-react/dist/index.css";
 
 let tasks: Task[] = [
@@ -40,6 +40,7 @@ You may handle actions
 <Gantt
   tasks={tasks}
   viewMode={view}
+  dateFormat="iso8601"
   onDateChange={onTaskChange}
   onTaskDelete={onTaskDelete}
   onProgressChange={onProgressChange}
@@ -143,6 +144,112 @@ npm start
 | hideChildren   | bool     | Hide children items. Parameter works with project type only                                           |
 
 \*Required
+
+## Extra Columns Support
+
+You can add custom columns to the task list by using the `extraColumns` prop:
+
+```javascript
+import { Gantt, Task, ExtraColumn } from 'gantt-task-react';
+
+// Define extra columns
+const extraColumns: ExtraColumn[] = [
+  {
+    key: "status",
+    title: "Status",
+    width: "100px",
+  },
+  {
+    key: "assignee", 
+    title: "Assignee",
+    width: "120px",
+  },
+  {
+    key: "priority",
+    title: "Priority", 
+    width: "80px",
+    render: (task) => (
+      <span className={`priority-${task.extraColumns?.priority}`}>
+        {task.extraColumns?.priority}
+      </span>
+    ),
+  },
+];
+
+// Add extra data to your tasks
+const tasks: Task[] = [
+  {
+    id: "1",
+    name: "Task 1",
+    start: new Date(),
+    end: new Date(),
+    progress: 50,
+    type: "task",
+    extraColumns: {
+      status: "In Progress",
+      assignee: "John Doe", 
+      priority: "High",
+    },
+  },
+];
+
+<Gantt 
+  tasks={tasks} 
+  extraColumns={extraColumns}
+  nameColumnWidth="200px"
+  fromColumnWidth="130px"
+  toColumnWidth="130px"
+  dateFormat="iso8601"
+/>
+```
+
+### ExtraColumn Interface
+
+| Parameter Name | Type                                    | Description                                                              |
+| :------------- | :-------------------------------------- | :----------------------------------------------------------------------- |
+| key\*          | string                                  | Unique key for the column, used to access data in task.extraColumns     |
+| title\*        | string                                  | Column header title                                                      |
+| width          | string                                  | Column width (e.g., "100px", "120px"). Defaults to listCellWidth        |
+| render         | `(task: Task) => React.ReactNode`       | Optional custom render function for complex column content               |
+
+### Column Width Configuration
+
+You can customize the width of the default columns:
+
+| Parameter Name    | Type   | Description                                      |
+| :---------------- | :----- | :----------------------------------------------- |
+| nameColumnWidth   | string | Width of the Name column (e.g., "200px")        |
+| fromColumnWidth   | string | Width of the From/Start date column (e.g., "130px") |
+| toColumnWidth     | string | Width of the To/End date column (e.g., "130px")     |
+
+### Date Format Configuration
+
+You can choose how dates are displayed in the From and To columns:
+
+```javascript
+import { Gantt, DateFormat } from 'gantt-task-react';
+
+<Gantt 
+  tasks={tasks}
+  dateFormat="iso8601"  // Options: "locale" or "iso8601"
+/>
+```
+
+| Parameter Name | Type       | Description                                                          |
+| :------------- | :--------- | :------------------------------------------------------------------- |
+| dateFormat     | DateFormat | Date display format. "locale" uses locale formatting (e.g., "Fri, June 15, 2025"), "iso8601" uses ISO 8601 format (YYYY-MM-DD) |
+
+**DateFormat Options:**
+- `"locale"` (default): Displays dates in locale-specific format (e.g., "Fri, June 15, 2025")
+- `"iso8601"`: Displays dates in ISO 8601 format (e.g., "2025-06-15")
+
+\*Required
+
+## Contributing
+
+For development setup and contributing guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+For maintainers: Publishing instructions are in [PUBLISHING.md](PUBLISHING.md).
 
 ## License
 

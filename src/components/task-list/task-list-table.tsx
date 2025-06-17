@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import styles from "./task-list-table.module.css";
-import { Task } from "../../types/public-types";
+import { Task, ExtraColumn, DateFormat } from "../../types/public-types";
 
 const localeDateStringCache = {};
 const toLocaleDateStringFactory =
@@ -14,6 +14,11 @@ const toLocaleDateStringFactory =
     }
     return lds;
   };
+
+const toISODateString = (date: Date): string => {
+  return date.toISOString().split("T")[0]; // Returns yyyy-MM-dd format
+};
+
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
   weekday: "short",
   year: "numeric",
@@ -31,6 +36,11 @@ export const TaskListTableDefault: React.FC<{
   selectedTaskId: string;
   setSelectedTask: (taskId: string) => void;
   onExpanderClick: (task: Task) => void;
+  extraColumns?: ExtraColumn[];
+  nameColumnWidth?: string;
+  fromColumnWidth?: string;
+  toColumnWidth?: string;
+  dateFormat?: DateFormat;
 }> = ({
   rowHeight,
   rowWidth,
@@ -39,11 +49,23 @@ export const TaskListTableDefault: React.FC<{
   fontSize,
   locale,
   onExpanderClick,
+  extraColumns = [],
+  nameColumnWidth,
+  fromColumnWidth,
+  toColumnWidth,
+  dateFormat = "locale",
 }) => {
   const toLocaleDateString = useMemo(
     () => toLocaleDateStringFactory(locale),
     [locale]
   );
+
+  const formatDate = useMemo(() => {
+    if (dateFormat === "iso8601") {
+      return toISODateString;
+    }
+    return (date: Date) => toLocaleDateString(date, dateTimeOptions);
+  }, [dateFormat, toLocaleDateString]);
 
   return (
     <div
@@ -70,8 +92,8 @@ export const TaskListTableDefault: React.FC<{
             <div
               className={styles.taskListCell}
               style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
+                minWidth: nameColumnWidth || rowWidth,
+                maxWidth: nameColumnWidth || rowWidth,
               }}
               title={t.name}
             >
@@ -92,21 +114,38 @@ export const TaskListTableDefault: React.FC<{
             <div
               className={styles.taskListCell}
               style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
+                minWidth: fromColumnWidth || rowWidth,
+                maxWidth: fromColumnWidth || rowWidth,
               }}
             >
-              &nbsp;{toLocaleDateString(t.start, dateTimeOptions)}
+              &nbsp;{formatDate(t.start)}
             </div>
             <div
               className={styles.taskListCell}
               style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
+                minWidth: toColumnWidth || rowWidth,
+                maxWidth: toColumnWidth || rowWidth,
               }}
             >
-              &nbsp;{toLocaleDateString(t.end, dateTimeOptions)}
+              &nbsp;{formatDate(t.end)}
             </div>
+            {/* Render extra column values */}
+            {extraColumns.map((column) => (
+              <div
+                key={column.key}
+                className={styles.taskListCell}
+                style={{
+                  minWidth: column.width || rowWidth,
+                  maxWidth: column.width || rowWidth,
+                }}
+                title={column.render ? undefined : String(t.extraColumns?.[column.key] || "")}
+              >
+                {column.render 
+                  ? column.render(t)
+                  : t.extraColumns?.[column.key] || ""
+                }
+              </div>
+            ))}
           </div>
         );
       })}

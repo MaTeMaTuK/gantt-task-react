@@ -80,3 +80,51 @@ input:checked + .Slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
+
+/* Extra columns styles */
+.status-badge, .priority-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  min-width: 60px;
+}
+
+/* Status badge styles */
+.status-completed {
+  background-color: #28a745;
+}
+
+.status-in-progress {
+  background-color: #007bff;
+}
+
+.status-not-started {
+  background-color: #6c757d;
+}
+
+.status-pending {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+/* Priority badge styles */
+.priority-critical {
+  background-color: #dc3545;
+}
+
+.priority-high {
+  background-color: #fd7e14;
+}
+
+.priority-medium {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.priority-low {
+  background-color: #28a745;
+}
