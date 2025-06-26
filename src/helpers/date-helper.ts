@@ -11,7 +11,7 @@ type DateHelperScales =
   | "second"
   | "millisecond";
 
-const intlDTCache = {};
+const intlDTCache: Record<string, DateTimeFormat> = {};
 export const getCachedDateTimeFormat = (
   locString: string | string[],
   opts: DateTimeFormatOptions = {}
@@ -69,11 +69,49 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
   return newDate;
 };
 
+export const countSteps = (
+  startDate: Date,
+  endDate: Date,
+  viewMode: ViewMode
+) => {
+  let count = 0;
+  const { scale, count: stepCount } = getScaleAndCount(viewMode);
+  while (startDate < endDate) {
+    startDate = addToDate(startDate, stepCount, scale);
+    count++;
+  }
+  return count;
+};
+
+const getScaleAndCount = (
+  viewMode: ViewMode
+): { scale: DateHelperScales; count: number } => {
+  switch (viewMode) {
+    case ViewMode.Year:
+      return { scale: "year", count: 1 };
+    case ViewMode.QuarterYear:
+      return { scale: "month", count: 3 };
+    case ViewMode.Month:
+      return { scale: "month", count: 1 };
+    case ViewMode.Week:
+      return { scale: "day", count: 7 };
+    case ViewMode.Day:
+      return { scale: "day", count: 1 };
+    case ViewMode.HalfDay:
+      return { scale: "hour", count: 12 };
+    case ViewMode.QuarterDay:
+      return { scale: "hour", count: 6 };
+    case ViewMode.Hour:
+      return { scale: "hour", count: 1 };
+  }
+};
+
 export const ganttDateRange = (
   tasks: Task[],
   viewMode: ViewMode,
-  preStepsCount: number
-) => {
+  preStepsCount: number,
+  minStepsCount: number
+): [Date, Date, number, number] => {
   let newStartDate: Date = tasks[0].start;
   let newEndDate: Date = tasks[0].start;
   for (const task of tasks) {
@@ -84,61 +122,23 @@ export const ganttDateRange = (
       newEndDate = task.end;
     }
   }
-  switch (viewMode) {
-    case ViewMode.Year:
-      newStartDate = addToDate(newStartDate, -1, "year");
-      newStartDate = startOfDate(newStartDate, "year");
-      newEndDate = addToDate(newEndDate, 1, "year");
-      newEndDate = startOfDate(newEndDate, "year");
-      break;
-    case ViewMode.QuarterYear:
-      newStartDate = addToDate(newStartDate, -3, "month");
-      newStartDate = startOfDate(newStartDate, "month");
-      newEndDate = addToDate(newEndDate, 3, "year");
-      newEndDate = startOfDate(newEndDate, "year");
-      break;
-    case ViewMode.Month:
-      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "month");
-      newStartDate = startOfDate(newStartDate, "month");
-      newEndDate = addToDate(newEndDate, 1, "year");
-      newEndDate = startOfDate(newEndDate, "year");
-      break;
-    case ViewMode.Week:
-      newStartDate = startOfDate(newStartDate, "day");
-      newStartDate = addToDate(
-        getMonday(newStartDate),
-        -7 * preStepsCount,
-        "day"
-      );
-      newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 1.5, "month");
-      break;
-    case ViewMode.Day:
-      newStartDate = startOfDate(newStartDate, "day");
-      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
-      newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 19, "day");
-      break;
-    case ViewMode.QuarterDay:
-      newStartDate = startOfDate(newStartDate, "day");
-      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
-      newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 66, "hour"); // 24(1 day)*3 - 6
-      break;
-    case ViewMode.HalfDay:
-      newStartDate = startOfDate(newStartDate, "day");
-      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
-      newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 108, "hour"); // 24(1 day)*5 - 12
-      break;
-    case ViewMode.Hour:
-      newStartDate = startOfDate(newStartDate, "hour");
-      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "hour");
-      newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 1, "day");
-      break;
-  }
-  return [newStartDate, newEndDate];
+
+  const { scale, count: stepCount } = getScaleAndCount(viewMode);
+
+  newStartDate = addToDate(newStartDate, -1 * preStepsCount * stepCount, scale);
+  newStartDate = startOfDate(newStartDate, scale);
+
+  const stepsBetweenDates = countSteps(newStartDate, newEndDate, viewMode);
+  const maxStepsCount = Math.max(stepsBetweenDates, minStepsCount);
+
+  newEndDate = addToDate(
+    newStartDate,
+    maxStepsCount * stepCount,
+    scale
+  );
+  newEndDate = startOfDate(newEndDate, scale);
+
+  return [newStartDate, newEndDate, minStepsCount, preStepsCount];
 };
 
 export const seedDates = (
@@ -182,7 +182,7 @@ export const seedDates = (
 
 export const getLocaleMonth = (date: Date, locale: string) => {
   let bottomValue = getCachedDateTimeFormat(locale, {
-    month: "long",
+    month: "short",
   }).format(date);
   bottomValue = bottomValue.replace(
     bottomValue[0],
@@ -210,7 +210,7 @@ export const getLocalDayOfWeek = (
  * Returns monday of current week
  * @param date date for modify
  */
-const getMonday = (date: Date) => {
+export const getMonday = (date: Date) => {
   const day = date.getDay();
   const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
   return new Date(date.setDate(diff));

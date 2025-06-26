@@ -4,6 +4,7 @@ import React, {
   useRef,
   useEffect,
   useMemo,
+  JSX,
 } from "react";
 import { ViewMode, GanttProps, Task } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
@@ -21,11 +22,13 @@ import { convertToBarTasks } from "../../helpers/bar-helper";
 import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import { HorizontalScroll } from "../other/horizontal-scroll";
-import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
+import { removeHiddenTasks } from "../../helpers/other-helper";
 import styles from "./gantt.module.css";
+import { useMeasure } from "@uidotdev/usehooks";
 
-export const Gantt: React.FunctionComponent<GanttProps> = ({
+export const Gantt = ({
   tasks,
+  componentWidth,
   headerHeight = 50,
   columnWidth = 60,
   listCellWidth = "155px",
@@ -65,11 +68,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDelete,
   onSelect,
   onExpanderClick,
-}) => {
+}: GanttProps): JSX.Element => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
-    const [startDate, endDate] = ganttDateRange(tasks, viewMode, preStepsCount);
+    const [startDate, endDate] = ganttDateRange(
+      tasks,
+      viewMode,
+      preStepsCount,
+      componentWidth ? componentWidth / columnWidth : 0
+    );
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
   const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
@@ -106,11 +114,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     } else {
       filteredTasks = tasks;
     }
-    filteredTasks = filteredTasks.sort(sortTasks);
+    // filteredTasks = filteredTasks.sort(sortTasks);
     const [startDate, endDate] = ganttDateRange(
       filteredTasks,
       viewMode,
-      preStepsCount
+      preStepsCount,
+      componentWidth ? componentWidth / columnWidth : 0
     );
     let newDates = seedDates(startDate, endDate, viewMode);
     if (rtl) {
@@ -164,6 +173,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     rtl,
     scrollX,
     onExpanderClick,
+    componentWidth,
   ]);
 
   useEffect(() => {
@@ -387,6 +397,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       onExpanderClick({ ...task, hideChildren: !task.hideChildren });
     }
   };
+
   const gridProps: GridProps = {
     columnWidth,
     svgWidth,
@@ -500,6 +511,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         rtl={rtl}
         onScroll={handleScrollX}
       />
+    </div>
+  );
+};
+
+export const FullWidthGantt = (props: GanttProps): JSX.Element => {
+  const [wrapperRef, { width }] = useMeasure();
+  return (
+    <div style={{ width: "100%" }} ref={wrapperRef}>
+      {width && <Gantt {...props} componentWidth={width} />}
     </div>
   );
 };

@@ -12,7 +12,7 @@ export type TaskListProps = {
   scrollY: number;
   locale: string;
   tasks: Task[];
-  taskListRef: React.RefObject<HTMLDivElement>;
+  taskListRef: React.RefObject<HTMLDivElement | null>;
   horizontalContainerClass?: string;
   selectedTask: BarTask | undefined;
   setSelectedTask: (task: string) => void;
