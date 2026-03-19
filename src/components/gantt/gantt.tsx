@@ -272,7 +272,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         if (newScrollY < 0) {
           newScrollY = 0;
         } else if (newScrollY > ganttFullHeight - ganttHeight) {
-          newScrollY = ganttFullHeight - ganttHeight;
+          newScrollY = Math.max(0, ganttFullHeight - ganttHeight);
         }
         if (newScrollY !== scrollY) {
           setScrollY(newScrollY);
@@ -357,7 +357,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       if (newScrollY < 0) {
         newScrollY = 0;
       } else if (newScrollY > ganttFullHeight - ganttHeight) {
-        newScrollY = ganttFullHeight - ganttHeight;
+        newScrollY = Math.max(0, ganttFullHeight - ganttHeight);
       }
       setScrollY(newScrollY);
     }
