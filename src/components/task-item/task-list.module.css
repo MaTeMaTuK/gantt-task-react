@@ -1,5 +1,5 @@
 .barLabel {
-  fill: #fff;
+  /* 1.2 — fill removido daqui; agora vem como prop inline calculada por getLabelFill() */
   text-anchor: middle;
   font-weight: lighter;
   dominant-baseline: central;
@@ -11,8 +11,9 @@
   pointer-events: none;
 }
 
+/* 1.1 — classe separada e correta, aplicada via array no tsx */
 .barLabelOutside {
-  fill: #555;
+  /* 1.2 — fill removido; labelFill inline usa CSS custom property com fallback */
   text-anchor: start;
   -webkit-touch-callout: none;
   -webkit-user-select: none;

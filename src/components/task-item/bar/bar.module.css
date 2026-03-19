@@ -8,11 +8,13 @@
   opacity: 1;
 }
 
+/* 1.3 — transição suave: sem isso o handle aparece em flash abrupto */
 .barHandle {
   fill: #ddd;
   cursor: ew-resize;
   opacity: 0;
   visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
 }
 
 .barBackground {
