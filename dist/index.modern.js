@@ -599,7 +599,13 @@ var GridBody = function GridBody(_ref) {
       svgWidth = _ref.svgWidth,
       columnWidth = _ref.columnWidth,
       todayColor = _ref.todayColor,
+      customDates = _ref.customDates,
       rtl = _ref.rtl;
+
+  var getDateOnlyTimestamp = function getDateOnlyTimestamp(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+  };
+
   var y = 0;
   var gridRows = [];
   var rowLines = [React.createElement("line", {
@@ -635,10 +641,39 @@ var GridBody = function GridBody(_ref) {
   var now = new Date();
   var tickX = 0;
   var ticks = [];
+  var customDateHighlights = [];
   var today = React.createElement("rect", null);
 
-  for (var i = 0; i < dates.length; i++) {
+  var _loop = function _loop(i) {
     var date = dates[i];
+    var intervalStart = getDateOnlyTimestamp(date);
+    var intervalEnd = intervalStart;
+
+    if (i + 1 !== dates.length) {
+      intervalEnd = getDateOnlyTimestamp(dates[i + 1]);
+    } else if (i !== 0) {
+      var nextDate = addToDate(date, date.getTime() - dates[i - 1].getTime(), "millisecond");
+      intervalEnd = getDateOnlyTimestamp(nextDate);
+    }
+
+    var minInterval = Math.min(intervalStart, intervalEnd);
+    var maxInterval = Math.max(intervalStart, intervalEnd);
+    var matchedCustomDate = customDates === null || customDates === void 0 ? void 0 : customDates.find(function (customDate) {
+      var currentDate = getDateOnlyTimestamp(customDate.date);
+      return currentDate >= minInterval && currentDate < maxInterval;
+    });
+
+    if (matchedCustomDate) {
+      customDateHighlights.push(React.createElement("rect", {
+        key: "CustomDate-" + i,
+        x: tickX,
+        y: 0,
+        width: columnWidth,
+        height: y,
+        fill: matchedCustomDate.color
+      }));
+    }
+
     ticks.push(React.createElement("line", {
       key: date.getTime(),
       x1: tickX,
@@ -669,6 +704,10 @@ var GridBody = function GridBody(_ref) {
     }
 
     tickX += columnWidth;
+  };
+
+  for (var i = 0; i < dates.length; i++) {
+    _loop(i);
   }
 
   return React.createElement("g", {
@@ -676,6 +715,8 @@ var GridBody = function GridBody(_ref) {
   }, React.createElement("g", {
     className: "rows"
   }, gridRows), React.createElement("g", {
+    className: "customDates"
+  }, customDateHighlights), React.createElement("g", {
     className: "rowLines"
   }, rowLines), React.createElement("g", {
     className: "ticks"
@@ -2314,6 +2355,7 @@ var Gantt = function Gantt(_ref) {
       arrowIndent = _ref$arrowIndent === void 0 ? 20 : _ref$arrowIndent,
       _ref$todayColor = _ref.todayColor,
       todayColor = _ref$todayColor === void 0 ? "rgba(252, 248, 227, 0.5)" : _ref$todayColor,
+      customDates = _ref.customDates,
       viewDate = _ref.viewDate,
       _ref$TooltipContent = _ref.TooltipContent,
       TooltipContent = _ref$TooltipContent === void 0 ? StandardTooltipContent : _ref$TooltipContent,
@@ -2647,6 +2689,7 @@ var Gantt = function Gantt(_ref) {
     rowHeight: rowHeight,
     dates: dateSetup.dates,
     todayColor: todayColor,
+    customDates: customDates,
     rtl: rtl
   };
   var calendarProps = {

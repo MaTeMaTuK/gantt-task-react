@@ -1,5 +1,5 @@
 import React, { ReactChild } from "react";
-import { Task } from "../../types/public-types";
+import { CalendarColor, Task } from "../../types/public-types";
 import { addToDate } from "../../helpers/date-helper";
 import styles from "./grid.module.css";
 
@@ -10,6 +10,7 @@ export type GridBodyProps = {
   rowHeight: number;
   columnWidth: number;
   todayColor: string;
+  customDates?: CalendarColor[];
   rtl: boolean;
 };
 export const GridBody: React.FC<GridBodyProps> = ({
@@ -19,8 +20,12 @@ export const GridBody: React.FC<GridBodyProps> = ({
   svgWidth,
   columnWidth,
   todayColor,
+  customDates,
   rtl,
 }) => {
+  const getDateOnlyTimestamp = (date: Date) =>
+    new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+
   let y = 0;
   const gridRows: ReactChild[] = [];
   const rowLines: ReactChild[] = [
@@ -60,9 +65,43 @@ export const GridBody: React.FC<GridBodyProps> = ({
   const now = new Date();
   let tickX = 0;
   const ticks: ReactChild[] = [];
+  const customDateHighlights: ReactChild[] = [];
   let today: ReactChild = <rect />;
   for (let i = 0; i < dates.length; i++) {
     const date = dates[i];
+
+    const intervalStart = getDateOnlyTimestamp(date);
+    let intervalEnd = intervalStart;
+    if (i + 1 !== dates.length) {
+      intervalEnd = getDateOnlyTimestamp(dates[i + 1]);
+    } else if (i !== 0) {
+      const nextDate = addToDate(
+        date,
+        date.getTime() - dates[i - 1].getTime(),
+        "millisecond"
+      );
+      intervalEnd = getDateOnlyTimestamp(nextDate);
+    }
+    const minInterval = Math.min(intervalStart, intervalEnd);
+    const maxInterval = Math.max(intervalStart, intervalEnd);
+
+    const matchedCustomDate = customDates?.find(customDate => {
+      const currentDate = getDateOnlyTimestamp(customDate.date);
+      return currentDate >= minInterval && currentDate < maxInterval;
+    });
+    if (matchedCustomDate) {
+      customDateHighlights.push(
+        <rect
+          key={`CustomDate-${i}`}
+          x={tickX}
+          y={0}
+          width={columnWidth}
+          height={y}
+          fill={matchedCustomDate.color}
+        />
+      );
+    }
+
     ticks.push(
       <line
         key={date.getTime()}
@@ -119,6 +158,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   return (
     <g className="gridBody">
       <g className="rows">{gridRows}</g>
+      <g className="customDates">{customDateHighlights}</g>
       <g className="rowLines">{rowLines}</g>
       <g className="ticks">{ticks}</g>
       <g className="today">{today}</g>
