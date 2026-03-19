@@ -54,6 +54,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   fontSize = "14px",
   arrowIndent = 20,
   todayColor = "rgba(252, 248, 227, 0.5)",
+  customDates,
   viewDate,
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
@@ -272,7 +273,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         if (newScrollY < 0) {
           newScrollY = 0;
         } else if (newScrollY > ganttFullHeight - ganttHeight) {
-          newScrollY = ganttFullHeight - ganttHeight;
+          newScrollY = Math.max(0, ganttFullHeight - ganttHeight);
         }
         if (newScrollY !== scrollY) {
           setScrollY(newScrollY);
@@ -357,7 +358,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       if (newScrollY < 0) {
         newScrollY = 0;
       } else if (newScrollY > ganttFullHeight - ganttHeight) {
-        newScrollY = ganttFullHeight - ganttHeight;
+        newScrollY = Math.max(0, ganttFullHeight - ganttHeight);
       }
       setScrollY(newScrollY);
     }
@@ -394,6 +395,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     rowHeight,
     dates: dateSetup.dates,
     todayColor,
+    customDates,
     rtl,
   };
   const calendarProps: CalendarProps = {

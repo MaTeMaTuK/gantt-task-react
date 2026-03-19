@@ -33,6 +33,11 @@ export interface Task {
   displayOrder?: number;
 }
 
+export interface CalendarColor {
+  date: Date;
+  color: string;
+}
+
 export interface EventOption {
   /**
    * Time step value for date changes.
@@ -142,4 +147,5 @@ export interface StylingOption {
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
+  customDates?: CalendarColor[];
 }
